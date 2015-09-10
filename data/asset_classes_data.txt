@@ -1,0 +1,27 @@
+0;
+30;Aggressive 1
+12;Cash
+13;Equity
+15;Fixed Income
+42;Global Public REITs
+32;Growth 1
+31;Growth and Income 1
+36;High Yield Bonds
+33;Income 1
+34;International 1
+37;International Debt
+41;International Equity
+24;Intl. Dev. Mkt. Stocks
+25;Intl. Emg. Mkt. Stocks
+38;Large Cap Equity
+39;Mid Cap Equity
+14;Mutual Fund
+16;Other
+43;Private Real Estate
+40;Small Cap Equity
+35;Taxable Bonds
+26;U.S. Bonds
+21;U.S. Core Stocks
+22;U.S. Growth Stocks
+27;U.S. TIPS
+23;U.S. Value Stocks
