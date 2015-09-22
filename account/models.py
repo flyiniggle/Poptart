@@ -23,3 +23,4 @@ class Holding(models.Model):
 
     def __unicode__(self):
         return unicode("%s, %s" % (self.security, self.quantity))
+
