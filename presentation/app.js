@@ -2,23 +2,35 @@ var http = require('http');
 var express = require('express');
 var app = express();
 
-var options = {
-	host: "127.0.0.1",
-	port: 8000
+var RequestOptions = function(){
+	return {
+		host: "127.0.0.1",
+		port: 8000
+	};
 };
 
 app.get('/account', function(req, res){
+	var options = new RequestOptions(),
+		request;
 
-	http.get("http://127.0.0.1:8000/account/", function(response){
+	options.path = "/account/";
+	options.method = "GET";
+	options.headers = {Accept: "application:json"};
+	request = http.request(options, function(response){
 		response.setEncoding('utf8');
 		response.on('data', function(chunk) {
 			res.send(chunk);
 			console.log(chunk);
+		});
+		response.on('error', function(e){
+			console.log(e.message);
 		})
-	}).on('error', function(e){
+	});
+	request.on('error', function(e){
 		res.send("An error occurred");
 		console.log("An error occurred: %s", e.message);
 	});
+	request.end();
 });
 
 app.get('/account/:acct_id', function(req, res) {
