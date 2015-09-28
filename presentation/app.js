@@ -1,10 +1,9 @@
 var express = require('express');
 var app = express();
 
-var AccountService = require('./services/AccountService.js');
+var accountRoutes = require('./routes/AccountRouter.js')(express);
 
-app.get('/account', AccountService.getAccounts);
-app.get('/account/:acct_id', AccountService.getAccount);
+app.use("/account", accountRoutes);
 
 var server = app.listen(3000, function(){
 	var host = server.address().address;
