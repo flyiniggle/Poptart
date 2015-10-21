@@ -29,7 +29,7 @@ AccountsService.getAccounts = function(req, res) {
 	request.end();
 };
 
-AccountsService.getAccount= function(req, res) {
+AccountsService.getAccount = function(req, res) {
 	var options = new AccountsService.getBaseRequestOptions(),
 		acct_id = req.params.acct_id,
 		request;
