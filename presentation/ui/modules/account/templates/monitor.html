@@ -1,0 +1,13 @@
+<p>yo</p>
+<table>
+	{% for row in data %}
+		<tr>
+			<td>{{ row.pk }}</td>
+			<td>{{ row.name }}</td>
+			<td>{{ row.description }}</td>
+		</tr>
+	{% endfor %}
+</table>
+<script type="text/javascript">
+	console.log({{data}});
+</script>
