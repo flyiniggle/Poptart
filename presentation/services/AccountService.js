@@ -20,7 +20,7 @@ var AccountsService = function(){
 			});
 			response.on('end', function() {
 				var templateData = {
-					data: JSON.parse(data)
+					data: data
 				};
 				callback(templateData);
 			});

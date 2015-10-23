@@ -16,8 +16,9 @@ env = nunjucks.configure(path.join(__dirname, "ui"), {
 });
 
 // Routes for static files
-app.use("/scripts", express.static("./ui/scripts"));
-app.use("/scripts", express.static("./ui/css"));
+app.use("/scripts", express.static(path.join(__dirname, "ui", "scripts")));
+app.use("/modules", express.static(path.join(__dirname, "ui", "modules")));
+app.use("/css", express.static(path.join(__dirname, "ui", "css")));
 
 // Routes for modules
 app.use("/index", express.static("./ui/index.html"));
