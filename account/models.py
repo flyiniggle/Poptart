@@ -4,6 +4,13 @@ from django.db import models
 class Account(models.Model):
     name = models.CharField(unique=True, max_length=100)
     description = models.CharField(max_length=255, null=True)
+    inception_date = models.DateTimeField(null=True)
+    total_cash = models.DecimalField(null=True, decimal_places=2, max_digits=17)
+    max_pos_drift = models.DecimalField(null=True, decimal_places=4, max_digits=10)
+    last_update = models.DateTimeField(null=True)
+    client_1_id = models.IntegerField(null=True)
+    manager = models.IntegerField(null=True)
+    solution_name = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return str(self.name)

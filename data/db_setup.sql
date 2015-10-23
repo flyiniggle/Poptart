@@ -29,9 +29,16 @@ CREATE TABLE IF NOT EXISTS securitymanager_security (
 
 DROP TABLE IF EXISTS account_account;
 CREATE TABLE IF NOT EXISTS account_account (
-  id int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  description varchar(255),
+  `description` varchar(255) DEFAULT NULL,
+  `inception_date` datetime,
+  `total_cash` decimal(17,2),
+  `max_pos_drift` decimal(10,4),
+  `last_update` datetime,
+  `client_1_id` int(11),
+  `manager` int(11),
+  `solution_name` varchar(255),
   PRIMARY KEY (id),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
