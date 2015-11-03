@@ -1,0 +1,31 @@
+<Grid>
+	<Cfg id="gridMain"/>
+	<Cols>
+		<C Name="acct_num"/>
+		<C Name="name"/>
+		<C Name="desc"/>
+		<C Name="cash"/>
+		<C Name="client"/>
+		<C Name="mgr"/>
+		<C Name="start"/>
+		<C Name="mdrift"/>
+		<C Name="sol"/>
+		<C Name="updated"/>
+	</Cols>
+	<Header acct_num="Account Number" name="Name"
+			desc="Description" cash="Cash"
+			client="Client" mgr="Manager"
+			start="Start Date" mdrift="Max Drift"
+			sol="Solution" updated="Last Updated"/>
+	<Body>
+		<B>
+			{% for row in data %}
+				<I acct_num="{{row.pk}}" name="{{row.name}}"
+				   desc="{{row.description}}" cash="{{row.total_cash}}"
+				   client="{{row.client_1_id}}" mgr="{{row.manager}}"
+				   start="row.inception_date" mdrift="{{row.max_pos_drift}}"
+				   sol="{{row.solution_name}}" updated="{{row.last_update}}"/>
+			{% endfor %}
+		</B>
+	</Body>
+</Grid>
