@@ -44,5 +44,15 @@ Poptart.Account.Monitor = function(){
 		});
 	};
 
+	ReturnObj.initTreeGrid = function() {
+		var grid = TreeGrid(Poptart.Account.Monitor.treeGridData, "gridMain");
+		$("#grouper").on("click", function(){
+			grid.DoGrouping("mgr");
+		});
+		$("#unGrouper").on("click", function() {
+			grid.DoGrouping();
+		});
+	};
+
 	return ReturnObj;
 }();

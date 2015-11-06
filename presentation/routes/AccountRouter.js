@@ -10,6 +10,7 @@ module.exports = function(express) {
 
 	router.get('/', accountController.getAccounts);
 	router.get('/:acct_id', accountController.getAccount);
+	router.get('/grids/:grid_type', accountController.getGrids);
 
 	return router;
 };
