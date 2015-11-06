@@ -1,523 +1,0 @@
-<Grid>
-	<Cfg id="gridMain"/>
-	<Cols>
-		<C Name="acct_num"/>
-		<C Name="name"/>
-		<C Name="desc"/>
-		<C Name="cash"/>
-		<C Name="client"/>
-		<C Name="mgr"/>
-		<C Name="start"/>
-		<C Name="mdrift"/>
-		<C Name="sol"/>
-		<C Name="updated"/>
-	</Cols>
-	<Header acct_num="Account Number" name="Name"
-			desc="Description" cash="Cash"
-			client="Client" mgr="Manager"
-			start="Start Date" mdrift="Max Drift"
-			sol="Solution" updated="Last Updated"/>
-	<Body>
-		<B>
-			
-				<I acct_num="1" name="acct1"
-				   desc="The very first account." cash="500000.00"
-				   client="6" mgr="1"
-				   start="row.inception_date" mdrift="7.1000"
-				   sol="Growth" updated="2015-10-23T10:20:14Z"/>
-			
-				<I acct_num="2" name="MRGaccount0001"
-				   desc="account for MRGaccount0001" cash="500000.00"
-				   client="6" mgr="1"
-				   start="row.inception_date" mdrift="8.5440"
-				   sol="Growth" updated="2015-10-23T10:20:14Z"/>
-			
-				<I acct_num="3" name="MRGaccount0002"
-				   desc="account for MRGaccount0002" cash="800000.00"
-				   client="6" mgr="5"
-				   start="row.inception_date" mdrift="5.0000"
-				   sol="Strategy2" updated="2015-10-23T09:47:28Z"/>
-			
-				<I acct_num="4" name="MRLaccount0001"
-				   desc="account for MRLaccount0001" cash="500000.00"
-				   client="5" mgr="5"
-				   start="row.inception_date" mdrift="8.4150"
-				   sol="Strategy1" updated="2015-10-23T10:15:22Z"/>
-			
-				<I acct_num="5" name="MRLaccount0002"
-				   desc="account for MRLaccount0002" cash="800000.00"
-				   client="5" mgr="5"
-				   start="row.inception_date" mdrift="5.3080"
-				   sol="Strategy3" updated="2015-10-23T10:15:22Z"/>
-			
-				<I acct_num="6" name="account0001"
-				   desc="account for account0001" cash="1000000.00"
-				   client="4" mgr="5"
-				   start="row.inception_date" mdrift="5.0000"
-				   sol="Strategy4" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="7" name="account0002"
-				   desc="account for account0002" cash="1000000.00"
-				   client="4" mgr="5"
-				   start="row.inception_date" mdrift="5.0000"
-				   sol="Strategy4" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="8" name="SMBaccount0001"
-				   desc="account for SMBaccount0001" cash="1000000.00"
-				   client="8" mgr="5"
-				   start="row.inception_date" mdrift="5.0490"
-				   sol="Strategy5" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="9" name="SMBaccount0002"
-				   desc="account for SMBaccount0002" cash="500000.00"
-				   client="8" mgr="5"
-				   start="row.inception_date" mdrift="4.7040"
-				   sol="Strategy6" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="10" name="UBSaccount0001"
-				   desc="account for UBSaccount0001" cash="9692.60"
-				   client="9" mgr="5"
-				   start="row.inception_date" mdrift="3.1550"
-				   sol="Strategy3" updated="2015-10-23T10:15:22Z"/>
-			
-				<I acct_num="11" name="UBSaccount0002"
-				   desc="account for UBSaccount0002" cash="505608.40"
-				   client="9" mgr="5"
-				   start="row.inception_date" mdrift="4.9010"
-				   sol="Strategy7" updated="2015-10-23T09:47:26Z"/>
-			
-				<I acct_num="12" name="WCVaccount0001"
-				   desc="account for WCVaccount0001" cash="1000000.00"
-				   client="7" mgr="5"
-				   start="row.inception_date" mdrift="5.0000"
-				   sol="Strategy8" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="13" name="WCVaccount0002"
-				   desc="account for WCVaccount0002" cash="1000000.00"
-				   client="7" mgr="5"
-				   start="row.inception_date" mdrift="4.0000"
-				   sol="Strategy9" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="14" name="XFIaccount0001"
-				   desc="account for XFIaccount0001" cash="500000.00"
-				   client="10" mgr="4"
-				   start="row.inception_date" mdrift="24.7490"
-				   sol="FI Dynamic" updated="2015-10-23T09:47:28Z"/>
-			
-				<I acct_num="15" name="XFIaccount0002"
-				   desc="account for XFIaccount0002" cash="18975.00"
-				   client="10" mgr="4"
-				   start="row.inception_date" mdrift="2.0250"
-				   sol="FixedIncome" updated="2015-10-23T09:47:28Z"/>
-			
-				<I acct_num="16" name="XFIaccount0003"
-				   desc="account for XFIaccount0003" cash="40125.00"
-				   client="10" mgr="4"
-				   start="row.inception_date" mdrift="14.3750"
-				   sol="FixedIncome" updated="2015-10-23T09:47:29Z"/>
-			
-				<I acct_num="17" name="XFIaccount0004"
-				   desc="account for XFIaccount0004" cash="149635.00"
-				   client="10" mgr="4"
-				   start="row.inception_date" mdrift="17.8200"
-				   sol="FixedIncome" updated="2015-10-23T09:47:29Z"/>
-			
-				<I acct_num="18" name="XFIaccount0011"
-				   desc="account for XFIaccount0011" cash="25000.00"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="5.4720"
-				   sol="EquityIndex" updated="2015-10-23T09:47:29Z"/>
-			
-				<I acct_num="19" name="XFIaccount0012"
-				   desc="account for XFIaccount0012" cash="50000.00"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="5.4720"
-				   sol="EquityIndex" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="20" name="XFIaccount0013"
-				   desc="account for XFIaccount0013" cash="100000.00"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="5.4720"
-				   sol="EquityIndex" updated="2015-10-23T09:47:30Z"/>
-			
-				<I acct_num="21" name="XFIaccount0014"
-				   desc="account for XFIaccount0014" cash="200000.00"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="5.4720"
-				   sol="EquityIndex" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="22" name="XFIaccount0015"
-				   desc="account for XFIaccount0015" cash="400000.00"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="5.4720"
-				   sol="EquityIndex" updated="2015-10-23T09:47:30Z"/>
-			
-				<I acct_num="23" name="XFIaccount0021"
-				   desc="account for XFIaccount0021" cash="10039.57"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="AssetAlloc" updated="2015-10-23T09:47:30Z"/>
-			
-				<I acct_num="24" name="XFIaccountMSP1"
-				   desc="account for XFIaccountMSP1" cash="1057120.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="1.8380"
-				   sol="Strategy10" updated="2015-10-23T09:47:31Z"/>
-			
-				<I acct_num="25" name="XFIaccountMSP2"
-				   desc="account for XFIaccountMSP2" cash="804845.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="1.6830"
-				   sol="Strategy11" updated="2015-10-23T09:47:31Z"/>
-			
-				<I acct_num="26" name="XFIaccountMtS9"
-				   desc="account for XFIaccountMtS9" cash="49886.60"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="2.7370"
-				   sol="E1" updated="2015-10-23T09:47:32Z"/>
-			
-				<I acct_num="27" name="XFIaccountStM9"
-				   desc="account for XFIaccountStM9" cash="100682.50"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="1.4470"
-				   sol="Strategy12" updated="2015-10-23T09:47:32Z"/>
-			
-				<I acct_num="28" name="XFIlongshort01"
-				   desc="account for XFIlongshort01" cash="4966.22"
-				   client="10" mgr="1"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="Flexible" updated="2015-10-23T09:47:32Z"/>
-			
-				<I acct_num="29" name="XFIsmaforcomp1"
-				   desc="account for XFIsmaforcomp1" cash="100000.00"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="30.0000"
-				   sol="E1" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="30" name="XFIsmaforcomp2"
-				   desc="account for XFIsmaforcomp2" cash="200000.00"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="30.0000"
-				   sol="E2" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="31" name="XFIsmaforcomp3"
-				   desc="account for XFIsmaforcomp3" cash="300000.00"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="30.0000"
-				   sol="E2" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="32" name="XFIsmaforcomp4"
-				   desc="account for XFIsmaforcomp4" cash="400000.00"
-				   client="10" mgr="4"
-				   start="row.inception_date" mdrift="30.0000"
-				   sol="FI" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="33" name="XFIsmaforcomp5"
-				   desc="account for XFIsmaforcomp5" cash="500000.00"
-				   client="10" mgr="4"
-				   start="row.inception_date" mdrift="30.0000"
-				   sol="FI" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="34" name="XFIsmaforcomp6"
-				   desc="account for XFIsmaforcomp6" cash="600000.00"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="30.0000"
-				   sol="E2" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="35" name="XFIsmaforcomp7"
-				   desc="account for XFIsmaforcomp7" cash="700000.00"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="30.0000"
-				   sol="E2" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="36" name="XFIsmaforcomp8"
-				   desc="account for XFIsmaforcomp8" cash="800000.00"
-				   client="10" mgr="3"
-				   start="row.inception_date" mdrift="30.0000"
-				   sol="E1" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="37" name="XFIxrebtests01"
-				   desc="account for XFIxrebtests01" cash="0.00"
-				   client="10" mgr="1"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="Flexible" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="38" name="BlendBenchmark1"
-				   desc="Blend Benchmark1" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="39" name="Composite1"
-				   desc="Composite1" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="40" name="BlendBenchmark2"
-				   desc="Blend Benchmark2" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="41" name="Composite2"
-				   desc="Composite2" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="42" name="MRGHH01"
-				   desc="MRGHH01" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="43" name="MRGHH02"
-				   desc="MRGHH02" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="44" name="MRLHH01"
-				   desc="MRLHH01" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="45" name="MRLHH02"
-				   desc="MRLHH02" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="46" name="UBSHH01"
-				   desc="UBSHH01" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="47" name="UBSHH02"
-				   desc="UBSHH02" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="48" name="XFIxrebtests02"
-				   desc="account for XFIxrebtests02" cash="0.00"
-				   client="10" mgr="1"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="Flexible" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="49" name="MRLaccount0003"
-				   desc="account for MRLaccount0003" cash="0.00"
-				   client="5" mgr="5"
-				   start="row.inception_date" mdrift="62.5000"
-				   sol="Strategy3" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="50" name="Composite3"
-				   desc="Composite3" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="51" name="MRG02Composite"
-				   desc="MRG02Composite" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="52" name="FLXaccount0001"
-				   desc="" cash="0.00"
-				   client="0" mgr="6"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="Flexible" updated="2004-05-10T12:34:00Z"/>
-			
-				<I acct_num="53" name="Composite4"
-				   desc="Composite4" cash="0.00"
-				   client="0" mgr="0"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="" updated="1900-01-01T00:00:00Z"/>
-			
-				<I acct_num="54" name="XFIaccountTAP1"
-				   desc="account for XFIaccountTAP1" cash="5000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product1" updated="2015-10-23T09:47:33Z"/>
-			
-				<I acct_num="55" name="XFIaccountTAP2"
-				   desc="account for XFIaccountTAP2" cash="5000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product2" updated="2015-10-23T09:47:33Z"/>
-			
-				<I acct_num="56" name="XFIaccountTAP3"
-				   desc="account for XFIaccountTAP3" cash="5000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-BG1-Fixed" updated="2015-10-23T09:47:33Z"/>
-			
-				<I acct_num="57" name="XFIaccountTAP4"
-				   desc="account for XFIaccountTAP4" cash="5000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-BG1-Fixed" updated="2015-10-23T09:47:33Z"/>
-			
-				<I acct_num="58" name="XFIaccountTAP5"
-				   desc="account for XFIaccountTAP5" cash="5000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product1" updated="2015-10-23T09:47:34Z"/>
-			
-				<I acct_num="59" name="XFIaccountTAP6"
-				   desc="account for XFIaccountTAP6" cash="5000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product2" updated="2015-10-23T09:47:34Z"/>
-			
-				<I acct_num="60" name="XFIaccountTAP7"
-				   desc="account for XFIaccountTAP7" cash="5000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product1" updated="2015-10-23T09:47:34Z"/>
-			
-				<I acct_num="61" name="XFIaccountTAP8"
-				   desc="account for XFIaccountTAP8" cash="5000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product1" updated="2015-10-23T09:47:35Z"/>
-			
-				<I acct_num="62" name="XFIaccountTAP9"
-				   desc="account for XFIaccountTAP9" cash="5000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-BlendProduct1" updated="2015-10-23T09:47:35Z"/>
-			
-				<I acct_num="63" name="UBSaccountTAP1"
-				   desc="account for UBSaccountTAP1" cash="0.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product11" updated="2015-10-23T09:47:36Z"/>
-			
-				<I acct_num="64" name="XFIaccountTAP12"
-				   desc="account for XFIaccountTAP12" cash="150000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="10.0000"
-				   sol="PRDT-Product12" updated="2015-10-23T09:47:36Z"/>
-			
-				<I acct_num="65" name="XFIaccountTAP13"
-				   desc="account for XFIaccountTAP13" cash="400000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="3.7500"
-				   sol="PRDT-Product13" updated="2015-10-23T09:47:36Z"/>
-			
-				<I acct_num="66" name="XFIaccountTAP14"
-				   desc="account for XFIaccountTAP14" cash="100000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="15.0000"
-				   sol="PRDT-Product14" updated="2015-10-23T09:47:36Z"/>
-			
-				<I acct_num="67" name="XFIaccountTAP15"
-				   desc="account for XFIaccountTAP15" cash="5000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product1" updated="2015-10-23T09:47:37Z"/>
-			
-				<I acct_num="68" name="XFIaccountTAP16"
-				   desc="account for XFIaccountTAP16" cash="100000.00"
-				   client="10" mgr="6"
-				   start="row.inception_date" mdrift="5.4720"
-				   sol="PRDT-Product20" updated="2015-10-23T09:47:37Z"/>
-			
-				<I acct_num="69" name="MRGaccount0003"
-				   desc="account for MRGaccount0003" cash="0.00"
-				   client="6" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="Strategy2" updated="2015-10-23T09:47:37Z"/>
-			
-				<I acct_num="70" name="UBSaccount0003"
-				   desc="account for UBSaccount0003" cash="0.00"
-				   client="9" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="Strategy3" updated="2015-10-23T09:47:38Z"/>
-			
-				<I acct_num="71" name="XFIaccountTAP17"
-				   desc="account for XFIaccountTAP17" cash="100000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product15" updated="2015-10-23T09:47:38Z"/>
-			
-				<I acct_num="72" name="XFIaccountTAP18"
-				   desc="account for XFIaccountTAP18" cash="100000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product16" updated="2015-10-23T09:47:38Z"/>
-			
-				<I acct_num="73" name="XFIaccountTAP19"
-				   desc="account for XFIaccountTAP19" cash="100000.00"
-				   client="10" mgr="6"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product17" updated="2015-10-23T09:47:39Z"/>
-			
-				<I acct_num="74" name="XFIaccountTAP20"
-				   desc="account for XFIaccountTAP20" cash="100000.00"
-				   client="10" mgr="6"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product18" updated="2015-10-23T09:47:39Z"/>
-			
-				<I acct_num="75" name="XFIaccountTAP21"
-				   desc="account for XFIaccountTAP21" cash="100000.00"
-				   client="10" mgr="6"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product19" updated="2015-10-23T09:47:39Z"/>
-			
-				<I acct_num="76" name="XFIaccountTAP22"
-				   desc="account for XFIaccountTAP22" cash="100000.00"
-				   client="10" mgr="6"
-				   start="row.inception_date" mdrift="5.4720"
-				   sol="PRDT-Product21" updated="2015-10-23T09:47:40Z"/>
-			
-				<I acct_num="77" name="XFIaccountTAP23"
-				   desc="account for XFIaccountTAP23" cash="5000.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product2" updated="2015-10-23T09:47:40Z"/>
-			
-				<I acct_num="78" name="XFIaccountTAP24"
-				   desc="account for XFIaccountTAP24" cash="100000.00"
-				   client="10" mgr="6"
-				   start="row.inception_date" mdrift="5.4720"
-				   sol="PRDT-Product22" updated="2015-10-23T09:47:40Z"/>
-			
-				<I acct_num="79" name="UBSaccountTAP2"
-				   desc="account for UBSaccountTAP2" cash="0.00"
-				   client="10" mgr="5"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-DynProduct23" updated="2015-10-23T09:47:41Z"/>
-			
-				<I acct_num="80" name="XFIaccountTAP25"
-				   desc="account for XFIaccountTAP25" cash="103000.00"
-				   client="10" mgr="6"
-				   start="row.inception_date" mdrift="0.2910"
-				   sol="PRDT-Product23" updated="2015-10-23T09:47:41Z"/>
-			
-				<I acct_num="81" name="XFIaccountTAP26"
-				   desc="account for XFIaccountTAP26" cash="100000.00"
-				   client="10" mgr="6"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product24" updated="2015-10-23T09:47:41Z"/>
-			
-				<I acct_num="82" name="MRGaccountTAP1"
-				   desc="account for MRGaccountTAP1" cash="0.00"
-				   client="10" mgr="6"
-				   start="row.inception_date" mdrift="0.0000"
-				   sol="PRDT-Product25" updated="2015-10-23T09:47:42Z"/>
-			
-				<I acct_num="83" name="acct2"
-				   desc="Account for Mr. Two" cash="500000.00"
-				   client="6" mgr="1"
-				   start="row.inception_date" mdrift="7.1000"
-				   sol="Flexible" updated="2015-10-23T10:20:14Z"/>
-			
-		</B>
-	</Body>
-</Grid>

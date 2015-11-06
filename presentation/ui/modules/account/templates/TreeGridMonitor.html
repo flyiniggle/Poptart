@@ -4,18 +4,16 @@
 	<script type="text/javascript" src="/scripts/TreeGrid/GridE.js"></script>
 </head>
 <body>
-<p>yo</p>
-	<div id="gridMain">
-		<treegrid Data_Url="/modules/account/data/grid.xml"></treegrid>
-	</div>
-
+	<input id="grouper" type="button" value="Group by Manager"/>
+	<input id="unGrouper" type="button" value="Clear Grouping"/>
+	<div id="gridMain"></div>
 	<script type="text/javascript" src="/scripts/jquery-1.11.3.js"></script>
 	<script type="text/javascript" src="/scripts/poptart.js"></script>
 	<script type="text/javascript" src="/modules/account/scripts/monitor.js"></script>
 	<script type="text/javascript">
 		(function() {
-			//Poptart.Account.Monitor.treegridData = {{data | safe}};
-			//Poptart.Account.Monitor.init();
+			Poptart.Account.Monitor.treeGridData = "{{ data }}".replace("\"", "\\\"");
+			Poptart.Account.Monitor.initTreeGrid();
 		}());
 	</script>
 </body>
