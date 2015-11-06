@@ -2,7 +2,7 @@ Poptart.Account.Monitor = function(){
 	var ReturnObj = {};
 
 	ReturnObj.init = function(){
-		$("#testTable").igTreeGrid({
+		$("#testTable").igGrid({
 			dataSource: Poptart.Account.Monitor.treegridData,
 			primaryKey: "pk",
 			columns: [
@@ -16,6 +16,30 @@ Poptart.Account.Monitor = function(){
 				{headerText: "Max Drift", key: "max_pos_drift", dataType: "number"},
 				{headerText: "Solution", key: "solution_name", dataType: "string"},
 				{headerText: "Last Updated", key: "last_update", dataType: "date"}
+			],
+			features:[
+				{
+					name: "GroupBy",
+					groupByDialogContainment: "window",
+					columnSettings:[
+						{
+							columnKey: "total_cash",
+							summaries: [
+								{
+									summaryFunction:"custom",
+									text: "Total cash:",
+									customSummary: function(data){
+										var cash = 0;
+										$.map(data, function(d){
+											cash += parseFloat(d);
+										});
+										return cash;
+									}
+								}
+							]
+						}
+					]
+				}
 			]
 		});
 	};
