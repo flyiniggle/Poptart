@@ -34,6 +34,8 @@ var AccountController = function(){
 				} else if(gridType === "treegrid"){
 					fs.writeFile("ui/modules/account/data/grid.xml", nunjucks.render("modules/account/templates/TreeGridTemplate.xml", {data: JSON.parse(data.data)}));
 					res.render("modules/account/templates/TreeGridMonitor.html", {data: fs.readFileSync("ui/modules/account/data/grid.xml", "utf8").replace(/\r?\n|\r/g, "")});
+				} else if(gridType === "jqWidgets"){
+					res.render("modules/account/templates/jqWidgetMonitor.vm", data);
 				}
 			};
 		};

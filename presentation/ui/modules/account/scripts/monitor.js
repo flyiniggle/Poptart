@@ -54,5 +54,68 @@ Poptart.Account.Monitor = function(){
 		});
 	};
 
+	ReturnObj.initJqGrid = function(data) {
+		var gridSource, adapter;
+
+		adapter = new $.jqx.dataAdapter({ localdata: data,  dataType: "array"}, {
+			loadComplete: function(data) {},
+			loadError: function(xhr, status, error){
+				console.log(error);
+			}
+		});
+		gridSource = {
+			source: adapter,
+			autoheight: true,
+			//autowidth: true,
+			width: 800,
+			pageable: true,
+			filterable: true,
+			sortable: true,
+			groupsexpandedbydefault: true,
+			columns: [
+				{text: "Account Number", pinned: true, datafield: "pk", dataType: "number", width: 50},
+				{text: "Name", datafield: "name", dataType: "string", width: 140},
+				{text: "Description", datafield: "description", dataType: "string", width: 140},
+				{text: "Cash", datafield: "total_cash", dataType: "number", width: 140},
+				{text: "Client", datafield: "client_1_id", dataType: "string", width: 50},
+				{text: "Manager", datafield: "manager", dataType: "string", width: 90},
+				{text: "Start Date", datafield: "inception_date", dataType: "date", width: 140},
+				{text: "Max Drift", datafield: "max_pos_drift", dataType: "number", width: 140},
+				{text: "Solution", datafield: "solution_name", dataType: "string", width: 50},
+				{text: "Last Updated", datafield: "last_update", dataType: "date", width: 140}
+			],
+			groupable: true,
+			groupsrenderer: getRenderer(adapter)
+		};
+		$("#gridMain").jqxGrid(gridSource);
+	};
+
+	var getRenderer = function(adapter){
+		return function(text, group, expanded, data) {
+			var number = adapter.formatNumber(group, data.groupcolumn.cellsformat),
+				text = data.groupcolumn.text + ': ' + number,
+				rows = [],
+				aggregate, getRows;
+
+			getRows = function(group, rows) {
+				var i;
+				if(group.subGroups.length > 0) {
+					for(i = 0; i < group.subGroups.length; i++) {
+						getRows(group.subGroups[i], rows);
+					}
+				} else {
+					for(i = 0; i < group.subItems.length; i++) {
+						rows.push(group.subItems[i]);
+					}
+				}
+			};
+			getRows(data, rows);
+			aggregate = this.getcolumnaggregateddata("total_cash", ['sum'], true, rows);
+			//}
+
+			return "<span class='tableGroupTotal'>" + text + "</span><span class='tableGroupTotal'>Total cash: " + aggregate.sum + "</span>";
+		}
+	};
+
 	return ReturnObj;
 }();
