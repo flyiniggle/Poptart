@@ -11,7 +11,18 @@ var AccountController = function(){
 
 		callback = function(res){
 			return function(data) {
-				res.render("modules/account/templates/monitor.html", data);
+				var templateData = {},
+					accountNames = [],
+					JSONData = JSON.parse(data),
+					i;
+
+				for(i = 0; i<JSONData.length; i++){
+					accountNames.push(JSONData[i].name.toString());
+				}
+
+				templateData.data = data;
+				templateData.accountNamesList = accountNames;
+				res.render("modules/account/templates/monitor.html", templateData);
 			};
 		};
 

@@ -19,10 +19,7 @@ var AccountsService = function(){
 				data += chunk;
 			});
 			response.on('end', function() {
-				var templateData = {
-					data: data
-				};
-				callback(templateData);
+				callback(data);
 			});
 			response.on('error', function(e) {
 				console.log(e.message);
