@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+	<link rel="stylesheet" href="/css/jqWidgets/jqx.base.css" type="text/css"/>
+</head>
+<body>
+
+	<div id="gridMain"></div>
+	<script type="text/javascript" src="/scripts/jquery-1.11.3.js"></script>
+
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxcore.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxcore.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxdata.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxbuttons.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxscrollbar.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxmenu.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxlistbox.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxdropdownlist.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxgrid.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxgrid.selection.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxgrid.columnsresize.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxgrid.filter.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxgrid.sort.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxgrid.pager.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxgrid.grouping.js"></script>
+	<script type="text/javascript" src="/scripts/jqWidgets/jqxgrid.aggregates.js"></script>
+
+	<script type="text/javascript" src="/scripts/poptart.js"></script>
+	<script type="text/javascript" src="/modules/account/scripts/monitor.js"></script>
+	<script type="text/javascript">
+		(function() {
+			Poptart.Account.Monitor.initJqGrid({{ data|safe }});
+		}());
+	</script>
+</body>
+</html>
