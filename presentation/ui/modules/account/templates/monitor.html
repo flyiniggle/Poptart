@@ -7,7 +7,8 @@
 		<link href="/css/jquery-ui/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
 	</head>
 	<body>
-	<p>yo</p>
+		<p>Choose an account:</p>
+		<input id="accountSelector" type="text"/>
 		<table id="testTable">
 
 		</table>
@@ -20,6 +21,7 @@
 		<script type="text/javascript">
 			(function(){
 				Poptart.Account.Monitor.treegridData = {{data | safe}};
+				Poptart.Account.Monitor.accountList = "{{accountNamesList}}".split(",");
 				Poptart.Account.Monitor.init();
 			})();
 		</script>

@@ -21,6 +21,7 @@ app.use("/modules", express.static(path.join(__dirname, "ui", "modules")));
 app.use("/css", express.static(path.join(__dirname, "ui", "css")));
 
 // Routes for modules
+app.get("/", express.static("./ui/index.html"));
 app.use("/index", express.static("./ui/index.html"));
 app.use("/account", accountRoutes);
 

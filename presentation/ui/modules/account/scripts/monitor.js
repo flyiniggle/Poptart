@@ -2,6 +2,9 @@ Poptart.Account.Monitor = function(){
 	var ReturnObj = {};
 
 	ReturnObj.init = function(){
+		$("#accountSelector").autocomplete({
+			source: Poptart.Account.Monitor.accountList
+		});
 		$("#testTable").igGrid({
 			dataSource: Poptart.Account.Monitor.treegridData,
 			primaryKey: "pk",
