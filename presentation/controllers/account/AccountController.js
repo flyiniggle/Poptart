@@ -17,7 +17,7 @@ var AccountController = function(){
 					i;
 
 				for(i = 0; i<JSONData.length; i++){
-					accountNames.push(JSONData[i].name.toString());
+					accountNames.push("'" + JSONData[i].name.toString() + "'");
 				}
 
 				templateData.data = data;
@@ -35,16 +35,9 @@ var AccountController = function(){
 	};
 
 	self.getGrids = function(req, res){
-		var callback,
-			gridType = req.params.grid_type;
-
-		callback = function(res){
+		return function(res){
 			return function(data) {
-				if(gridType === "ignite"){
-					res.render("modules/account/templates/monitor.html", JSON.parse(data));
-				} else if(gridType === "jqWidgets"){
-					res.render("modules/account/templates/jqWidgetMonitor.html", JSON.parse(data));
-				}
+				res.render("modules/account/templates/monitor.html", data);
 			};
 		};
 
