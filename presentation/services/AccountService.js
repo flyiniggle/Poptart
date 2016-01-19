@@ -1,4 +1,4 @@
-var Service = require('./BaseService.js');
+var Service = imports('services/BaseService.js');
 var http = require('http');
 var util = require('util');
 

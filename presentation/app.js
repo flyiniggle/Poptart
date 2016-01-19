@@ -1,8 +1,16 @@
+global.imports = function(name) {
+	return require(__dirname + '/' + name);
+};
+global.loadPath = function(name) {
+	return __dirname + '/' + name;
+};
+
 // Imports
-var express = require('express'),
-	nunjucks = require('nunjucks'),
-	path = require('path'),
-	accountRoutes = require('./routes/AccountRouter.js')(express);
+var express = require('express');
+var nunjucks = require('nunjucks');
+var path = require('path');
+var dashboardRoutes = imports('routes/dashboard/DashboardRouter.js')(express);
+var accountRoutes = imports('routes/AccountRouter.js')(express);
 
 // Setup
 var app, env;
@@ -21,8 +29,9 @@ app.use("/modules", express.static(path.join(__dirname, "ui", "modules")));
 app.use("/css", express.static(path.join(__dirname, "ui", "css")));
 
 // Routes for modules
-app.get("/", express.static("./ui/index.html"));
-app.use("/index", express.static("./ui/index.html"));
+//app.get("/", express.static("./ui/index.html"));
+app.use("/", dashboardRoutes);
+app.use("/index", dashboardRoutes);
 app.use("/account", accountRoutes);
 
 var server = app.listen(3000, function(){

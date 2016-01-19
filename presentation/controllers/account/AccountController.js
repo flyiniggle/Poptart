@@ -1,4 +1,4 @@
-var AccountService = require('../../services/AccountService.js'),
+var AccountService = imports('services/AccountService.js'),
 	nunjucks = require('nunjucks'),
 	fs = require('fs');
 
