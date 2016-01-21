@@ -4,13 +4,34 @@ global.imports = function(name) {
 global.loadPath = function(name) {
 	return __dirname + '/' + name;
 };
+global.logging = undefined;
 
 // Imports
+var path = require('path');
+
 var express = require('express');
 var nunjucks = require('nunjucks');
-var path = require('path');
+var winston = require('winston');
+
 var dashboardRoutes = imports('routes/dashboard/DashboardRouter.js')(express);
 var accountRoutes = imports('routes/AccountRouter.js')(express);
+
+// Logging
+global.logging = new (winston.Logger)({
+	transports: [
+		new (winston.transports.Console)(),
+		new (winston.transports.File)({
+			name: 'info-file',
+			level: 'info',
+			filename: loadPath('logs/info.log')
+		}),
+		new (winston.transports.File)({
+			name: 'error-file',
+			level: 'error',
+			filename: loadPath('logs/error.log')
+		})
+	]
+});
 
 // Setup
 var app, env, server;

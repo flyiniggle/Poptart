@@ -18,9 +18,11 @@ var DashboardService = function(){
 			});
 			response.on('end', function() {
 				callback(data);
+				logging.info(data);
+				logging.error(data);
 			});
 			response.on('error', function(e) {
-				console.log(e.message);
+				logging.error(e.message);
 			});
 		});
 		request.on('error', function(e) {
