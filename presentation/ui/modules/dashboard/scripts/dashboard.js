@@ -3,15 +3,26 @@ Poptart.Dashboard = function() {
 
 	ReturnObj.init = function() {
 		$.ajax({
-			url: "/summary",
+			url: "/summary/account",
 			accepts: "application/json",
-			success: _showSummary
+			success: showAccountSummary
+		});
+
+		$.ajax({
+			url: "/summary/security",
+			accepts: "application/json",
+			success: showSecuritySummary
 		})
 	};
 
-	function _showSummary(data){
-		$("#summary_accountCount").html(data.totalCount);
-		$("#summary_updatedAccounts").html(data.recentAccounts);
+	function showAccountSummary(data){
+		$("#accountCount").html(data.totalCount);
+		$("#accountUpdated").html(data.recentAccounts);
+	}
+
+	function showSecuritySummary(data){
+		$("#securityCount").html(data.totalCount);
+		console.log(data)
 	}
 
 	return ReturnObj;

@@ -32,7 +32,19 @@ var DashboardController = function(){
 				res.send(responseData);
 			};
 		};
-		dashboardService.getDashboardData(req, callback(res))
+		dashboardService.getDashboardData(req, callback(res), "account");
+	};
+
+	self.getSecuritiesDashboardData = function(req, res){
+		var callback;
+
+		callback = function(res){
+			return function(data){
+				res.setHeader('Content-Type', 'application/json');
+				res.send({totalCount: JSON.parse(data).total_count});
+			};
+		};
+		dashboardService.getDashboardData(req,  callback(res), "securities");
 	};
 };
 

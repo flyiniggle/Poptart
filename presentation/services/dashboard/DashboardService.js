@@ -4,11 +4,11 @@ var http = require('http');
 var DashboardService = function(){
 	var self = this;
 
-	self.getDashboardData = function(res, callback){
+	self.getDashboardData = function(res, callback, module){
 		var options = new self.getBaseRequestOptions(),
 			data = "",
 			request;
-		options.path = "/account/summary";
+		options.path = "/" + module + "/summary";
 		options.method = "GET";
 		options.headers = {Accept: "application:json"};
 		request = http.request(options, function(response) {
