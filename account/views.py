@@ -1,3 +1,6 @@
+import datetime
+import json
+
 from django.views.generic import View
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
@@ -21,6 +24,17 @@ class AccountOverview(View):
                 return HttpResponse(JSONSerializer().serialize(account), status="201 Created", content_type="application/json")
             except ValidationError as e:
                 return HttpResponse(e, status="409 Conflict", content_type="application/json")
+
+
+class AccountSummary(View):
+    def get(self, request):
+        now = datetime.datetime.now()
+        time_delta = datetime.timedelta(days=7)
+
+        count = len(Account.objects.all())
+        active = [account.name for account in Account.objects.filter(last_update__gt=now - time_delta)]
+        summary_data = dict(total_count=count, active=active)
+        return HttpResponse(json.dumps(summary_data), status="200 OK", content_type="application/json")
 
 
 class AccountDetail(View):

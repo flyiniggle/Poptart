@@ -4,7 +4,22 @@
 		<meta title="Poptarts!"/>
 	</head>
 	<body>
+		<div id="summary">
+			<div>
+				<span>Total accounts: </span><span id="summary_accountCount"></span>
+			</div>
+			<div>
+				<span>Recently used: </span><span id="summary_updatedAccounts"></span>
+			</div>
+		</div>
 		<a href="/account/">Account Monitor</a>
-
+		<script type="text/javascript" src="/scripts/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="/scripts/poptart.js"></script>
+		<script type="text/javascript" src="modules/dashboard/scripts/dashboard.js"></script>
+		<script type="text/javascript">
+			(function(){
+				Poptart.Dashboard.init();
+			})();
+		</script>
 	</body>
 </html>

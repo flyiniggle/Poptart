@@ -10,6 +10,7 @@ module.exports = function(express){
 
 	router.use('/', express.static(loadPath("ui/index.html")));
 	router.use('/index', express.static(loadPath("ui/index.html")));
+	router.use('/summary', dashboardController.getDashboardData);
 
 	return router;
 };

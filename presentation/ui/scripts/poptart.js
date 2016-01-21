@@ -1,3 +1,4 @@
 var Poptart = {
-	Account: {}
+	Account: {},
+	Dashboard: {}
 };
