@@ -23,6 +23,8 @@ class AccountMonitor(View):
             complete_account["total_cash"] = float(account.total_cash)
             complete_account["expected_cash"] = float(account.expected_cash)
             complete_account["max_pos_drift"] = float(account.max_pos_drift)
+            complete_account["max_cash_drift"] = float(account.max_cash_drift)
+            complete_account["max_total_drift"] = float(account.max_total_drift)
             complete_account["last_update"] = str(account.last_update)
             complete_account["client_1_id"] = account.client_1_id
             complete_account["manager"] = account.manager

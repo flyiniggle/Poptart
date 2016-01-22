@@ -9,6 +9,8 @@ class Account(models.Model):
     total_cash = models.DecimalField(default=0, decimal_places=2, max_digits=17)
     expected_cash = models.DecimalField(default=0, decimal_places=2, max_digits=17)
     max_pos_drift = models.DecimalField(default=100, decimal_places=3, max_digits=10)
+    max_cash_drift = models.DecimalField(default=100, decimal_places=3, max_digits=10)
+    max_total_drift = models.DecimalField(default=100, decimal_places=3, max_digits=10)
     last_update = models.DateTimeField(null=True)
     client_1_id = models.IntegerField(null=True)
     manager = models.IntegerField(null=True)
@@ -23,6 +25,20 @@ class Account(models.Model):
     @property
     def holdings(self):
         return Holding.objects.filter(account=self)
+
+    @property
+    def total_holdings_value(self):
+        holdings_values = Decimal(0)
+        for holding in Holding.objects.filter(account=self):
+            holdings_values += Decimal(holding.value)
+        return float(holdings_values)
+
+    @property
+    def total_expected_holdings_value(self):
+        holdings_expected_values = Decimal(0)
+        for holding in Holding.objects.filter(account=self):
+            holdings_expected_values += Decimal(holding.expected_value)
+        return float(holdings_expected_values)
 
     @property
     def total_value(self):
@@ -44,7 +60,7 @@ class Account(models.Model):
 
     @property
     def holdings_drift(self):
-        return float(abs(self.total_value - self.total_expected_value))
+        return float(abs(self.total_holdings_value - self.total_expected_holdings_value))
 
     @property
     def total_drift(self):
