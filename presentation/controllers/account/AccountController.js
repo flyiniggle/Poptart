@@ -1,4 +1,4 @@
-var AccountService = imports('services/AccountService.js');
+var AccountService = imports('services/account/AccountService.js');
 
 var AccountController = function(){
 	var self = this;

@@ -14,7 +14,7 @@ var nunjucks = require('nunjucks');
 var winston = require('winston');
 
 var dashboardRoutes = imports('routes/dashboard/DashboardRouter.js')(express);
-var accountRoutes = imports('routes/AccountRouter.js')(express);
+var accountRoutes = imports('routes/account/AccountRouter.js')(express);
 
 // Logging
 global.logging = new (winston.Logger)({
