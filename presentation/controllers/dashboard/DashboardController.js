@@ -27,8 +27,8 @@ var DashboardController = function(){
 		try {
 			JSONData = JSON.parse(data);
 		} catch(e) {
-			logging.error("Could not parse to JSON: " + data);
-			return e;
+			logging.error("Could not parse to JSON: %s", data);
+			return res.send(e);
 		}
 
 		if(JSONData.active.length > 10) {
