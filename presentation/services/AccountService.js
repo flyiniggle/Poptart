@@ -21,15 +21,16 @@ var AccountsService = function(){
 			});
 			response.on('end', function() {
 				self.emit('end', data, res);
+				logging.info(data);
 			});
 			response.on('error', function(e) {
 				self.emit('error', e);
-				console.log(e.message);
+				logging.error(e.message);
 			});
 		});
 		request.on('error', function(e) {
 			res.send("An error occurred");
-			console.log("An error occurred: %s", e.message);
+			logging.error("An error occurred: %s", e.message);
 		});
 		request.end();
 
