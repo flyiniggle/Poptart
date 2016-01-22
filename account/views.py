@@ -4,15 +4,22 @@ import json
 from django.views.generic import View
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
+from django.forms.models import model_to_dict
 
 from poptart.lib.serializers import JSONSerializer
 from account.models import Account
 from account.models import Holding
 
 
-class AccountOverview(View):
+class AccountMonitor(View):
     def get(self, request):
-        return HttpResponse(JSONSerializer().serialize(Account.objects.all()), status="200 OK", content_type="application/json")
+        accounts = Account.objects.all()
+        complete_accounts = []
+        for account in accounts:
+            complete_account = model_to_dict(account)
+            complete_account["total_value"] = account.total_value
+            complete_account["total_expected_value"] = account.total_expected_value
+        return HttpResponse(JSONSerializer().serialize(accounts), status="200 OK", content_type="application/json")
 
     def post(self, request):
         if 'newAccount' in request.post:
