@@ -19,10 +19,12 @@ Poptart.Account.Monitor = function(){
 				{headerText: "Cash Drift", key: "cash_drift", dataType: "number"},
 				{headerText: "Holdings Drift", key: "holdings_drift", dataType: "number"},
 				{headerText: "Total Drift", key: "total_drift", dataType: "number"},
+				{headerText: "Max Cash Drift", key: "max_cash_drift", dataType: "number"},
+				{headerText: "Max Position Drift", key: "max_pos_drift", dataType: "number"},
+				{headerText: "Max Total Drift", key: "max_total_drift", dataType: "number"},
 				{headerText: "Client", key: "client_1_id", dataType: "string"},
 				{headerText: "Manager", key: "manager", dataType: "string"},
 				{headerText: "Start Date", key: "inception_date", dataType: "date"},
-				{headerText: "Max Drift", key: "max_pos_drift", dataType: "number"},
 				{headerText: "Solution", key: "solution_name", dataType: "string"},
 				{headerText: "Last Updated", key: "last_update", dataType: "date"}
 			],
