@@ -1,14 +1,30 @@
 var DashboardService = imports('services/dashboard/DashboardService.js');
+var AccountService = imports('services/account/AccountService.js');
 
 var DashboardController = function(){
 	var self = this;
 
 	/// Public Methods
 	self.getAccountDashboardData = function(req, res) {
-		var service = new DashboardService();
+		var service = new DashboardService(),
+			accountService = new AccountService(),
+			accountsData = null,
+			alertsData = null;
 
-		service.on("end", processAccountDashboardData);
+		service.on("end", function(res, data) {
+			accountsData = data;
+			if(accountsData && alertsData) {
+				processAccountDashboardData(res, accountsData, alertsData);
+			}
+		});
+		accountService.on("end", function(res, data){
+			alertsData = data;
+			if(accountsData && alertsData){
+				processAccountDashboardData(res, accountsData, alertsData);
+			}
+		});
 		service.getDashboardData(res, "account");
+		accountService.getAccounts(res)
 	};
 
 	self.getSecuritiesDashboardData = function(req, res){
@@ -18,32 +34,56 @@ var DashboardController = function(){
 		service.getDashboardData(res, "securities");
 	};
 
+
 	// Private Functions
-	function processAccountDashboardData(res, data) {
-		var JSONData,
+	function processAccountDashboardData(res, accountsData, alertsData) {
+		var JSONAccountsData,
+			JSONAlertsData,
 			responseData = {},
 			recentAccounts,
-			detailsString;
+			detailsString,
+			highHoldingsDrift = [],
+			highCashDrift = [],
+			highTotalDrift = [],
+			account, i;
+
 		try {
-			JSONData = JSON.parse(data);
+			JSONAccountsData = JSON.parse(accountsData);
+			JSONAlertsData = JSON.parse(alertsData);
 		} catch(e) {
-			logging.error("Could not parse to JSON: %s", data);
-			return res.send(e);
+			logging.error("Could not parse to JSON: %s, %s", accountsData, alertsData);
+			res.send(e);
+			return
 		}
 
-		if(JSONData.active.length > 10) {
-			detailsString = "and " + (JSONData.active.length - 10) + " more.";
-			recentAccounts = JSONData.active.slice(0, 9).join(", ");
+		if(JSONAccountsData.active.length > 10) {
+			detailsString = "and " + (JSONAccountsData.active.length - 10) + " more.";
+			recentAccounts = JSONAccountsData.active.slice(0, 9).join(", ");
 			recentAccounts += detailsString
-		} else
-			if(JSONData.active.length === 0) {
-				recentAccounts = "none"
-			} else {
-				recentAccounts = JSONData.active.join(", ");
-			}
+		} else if(JSONAccountsData.active.length === 0) {
+			recentAccounts = "none"
+		} else {
+			recentAccounts = JSONAccountsData.active.join(", ");
+		}
 
-		responseData.totalCount = JSONData.total_count;
+		for(i=(JSONAlertsData.length-1); account= JSONAlertsData[i]; i--){
+			if(account.holdings_drift > account.max_pos_drift) {
+				highHoldingsDrift.push(account.name);
+			}
+			if(account.cash_drift > account.max_cash_drift) {
+				highCashDrift.push(account.name);
+			}
+			if(account.total_drift > account.max_total_drift) {
+				highTotalDrift.push(account.name);
+			}
+		}
+
+		responseData.totalCount = JSONAccountsData.total_count;
 		responseData.recentAccounts = recentAccounts;
+		responseData.highHoldingsDriftCount = highHoldingsDrift.length;
+		responseData.highCashDriftCount = highCashDrift.length;
+		responseData.highTotalDriftCount = highTotalDrift.length;
+
 		res.setHeader('Content-Type', 'application/json');
 		res.send(responseData);
 	}
@@ -52,7 +92,6 @@ var DashboardController = function(){
 		res.setHeader('Content-Type', 'application/json');
 		res.send({totalCount: JSON.parse(data).total_count});
 	}
-
 };
 
 module.exports = DashboardController;

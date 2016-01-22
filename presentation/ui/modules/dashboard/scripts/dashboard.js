@@ -18,6 +18,9 @@ Poptart.Dashboard = function() {
 	function showAccountSummary(data){
 		$("#accountCount").html(data.totalCount);
 		$("#accountUpdated").html(data.recentAccounts);
+		$("#cashDriftCount").html(data.highCashDriftCount);
+		$("#holdingsDriftCount").html(data.highHoldingsDriftCount);
+		$("#totalDriftCount").html(data.highTotalDriftCount);
 	}
 
 	function showSecuritySummary(data){

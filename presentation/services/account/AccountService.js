@@ -20,7 +20,7 @@ var AccountsService = function(){
 				data += chunk;
 			});
 			response.on('end', function() {
-				self.emit('end', data, res);
+				self.emit('end', res, data);
 				logging.info(data);
 			});
 			response.on('error', function(e) {
