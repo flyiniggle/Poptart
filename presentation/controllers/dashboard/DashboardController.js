@@ -1,6 +1,4 @@
-var DashboardService = imports('services/dashboard/DashboardService.js'),
-	nunjucks = require('nunjucks');
-
+var DashboardService = imports('services/dashboard/DashboardService.js');
 
 var DashboardController = function(){
 	var self = this;
@@ -10,14 +8,14 @@ var DashboardController = function(){
 		var service = new DashboardService();
 
 		service.on("end", processDashboardData);
-		service.getDashboardData(req, res, "account");
+		service.getDashboardData(res, "account");
 	};
 
 	self.getSecuritiesDashboardData = function(req, res){
 		var service = new DashboardService();
 
 		service.on("end", processSecuritiesDashboardData);
-		service.getDashboardData(req, res, "securities");
+		service.getDashboardData(res, "securities");
 	};
 
 	// Private Functions

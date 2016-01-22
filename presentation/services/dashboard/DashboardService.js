@@ -1,12 +1,11 @@
 var http = require('http');
-var events = require('events');
 
 var Service = imports('services/BaseService.js');
 
 var DashboardService = function(){
 	var self = this;
 
-	self.getDashboardData = function(req, res, module){
+	self.getDashboardData = function(res, module){
 		var options = new self.getBaseRequestOptions(),
 			data = "",
 			request;

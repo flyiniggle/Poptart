@@ -1,47 +1,41 @@
-var AccountService = imports('services/AccountService.js'),
-	nunjucks = require('nunjucks'),
-	fs = require('fs');
+var AccountService = imports('services/AccountService.js');
 
 var AccountController = function(){
-	var self = this,
-		accountService = new AccountService();
+	var self = this;
 
+	// Public Methods
 	self.getAccounts = function(req, res){
-		var callback;
+		var service = new AccountService();
 
-		callback = function(res){
-			return function(data) {
-				var templateData = {},
-					accountNames = [],
-					JSONData = JSON.parse(data),
-					i;
-
-				for(i = 0; i<JSONData.length; i++){
-					accountNames.push("'" + JSONData[i].name.toString() + "'");
-				}
-
-				templateData.data = data;
-				templateData.accountNamesList = accountNames;
-				res.render("modules/account/templates/monitor.html", templateData);
-			};
-		};
-
-		accountService.getAccounts(res, callback(res));
+		service.on("end", processAccounts);
+		service.getAccounts(res);
 	};
 
 	self.getAccount = function(req, res){
-		var data = accountService.getAccount(req, res);
-		return data;
+		var service = new AccountService();
+
+		service.on("end", processAccount);
+		service.getAccounts(res);
 	};
 
-	self.getGrids = function(req, res){
-		return function(res){
-			return function(data) {
-				res.render("modules/account/templates/monitor.html", data);
-			};
-		};
+	// Private Functions
+	function processAccounts(data, res) {
+		var templateData = {},
+			accountNames = [],
+			JSONData = JSON.parse(data),
+			i;
 
-		accountService.getAccounts(res, callback(res));
+		for(i = 0; i < JSONData.length; i++) {
+			accountNames.push("'" + JSONData[i].name.toString() + "'");
+		}
+
+		templateData.data = data;
+		templateData.accountNamesList = accountNames;
+		res.render("modules/account/templates/monitor.html", templateData);
+	}
+
+	function processAccount(data, res) {
+
 	}
 };
 

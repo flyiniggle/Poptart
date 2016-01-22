@@ -1,11 +1,12 @@
-var Service = imports('services/BaseService.js');
 var http = require('http');
 var util = require('util');
+
+var Service = imports('services/BaseService.js');
 
 var AccountsService = function(){
 	var self = this;
 
-	self.getAccounts = function(res, callback) {
+	self.getAccounts = function(res) {
 		var options = self.getBaseRequestOptions(),
 			data = "",
 			request;
@@ -19,9 +20,10 @@ var AccountsService = function(){
 				data += chunk;
 			});
 			response.on('end', function() {
-				callback(data);
+				self.emit('end', data, res);
 			});
 			response.on('error', function(e) {
+				self.emit('error', e);
 				console.log(e.message);
 			});
 		});
@@ -34,7 +36,7 @@ var AccountsService = function(){
 		return request;
 	};
 
-	self.getAccount = function(req, res) {
+	self.getAccount = function(res) {
 		var options = new self.getBaseRequestOptions(),
 			acct_id = req.params.acct_id,
 			request;
