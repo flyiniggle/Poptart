@@ -1,3 +1,6 @@
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
+
 var Service = function() {
 	var self = this;
 
@@ -8,5 +11,7 @@ var Service = function() {
 		};
 	};
 };
+
+util.inherits(Service, EventEmitter);
 
 module.exports = Service;

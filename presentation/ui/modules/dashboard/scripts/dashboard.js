@@ -22,7 +22,6 @@ Poptart.Dashboard = function() {
 
 	function showSecuritySummary(data){
 		$("#securityCount").html(data.totalCount);
-		console.log(data)
 	}
 
 	return ReturnObj;

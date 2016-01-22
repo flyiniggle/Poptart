@@ -3,49 +3,58 @@ var DashboardService = imports('services/dashboard/DashboardService.js'),
 
 
 var DashboardController = function(){
-	var self = this,
-		dashboardService = new DashboardService();
+	var self = this;
 
+	/// Public Methods
 	self.getDashboardData = function(req, res) {
-		var callback;
+		var service = new DashboardService();
 
-		callback = function(res) {
-			return function(data) {
-				var JSONData = JSON.parse(data),
-					responseData = {},
-					recentAccounts,
-					detailsString;
-
-				if(JSONData.active.length > 10){
-					detailsString = "and " + (JSONData.active.length - 10) + " more.";
-					recentAccounts = JSONData.active.slice(0, 9).join(", ");
-					recentAccounts += detailsString
-				} else if(JSONData.active.length === 0){
-					recentAccounts = "none"
-				} else {
-					recentAccounts = JSONData.active.join(", ");
-				}
-
-				responseData.totalCount = JSONData.total_count;
-				responseData.recentAccounts = recentAccounts;
-				res.setHeader('Content-Type', 'application/json');
-				res.send(responseData);
-			};
-		};
-		dashboardService.getDashboardData(req, callback(res), "account");
+		service.on("end", processDashboardData);
+		service.getDashboardData(req, res, "account");
 	};
 
 	self.getSecuritiesDashboardData = function(req, res){
-		var callback;
+		var service = new DashboardService();
 
-		callback = function(res){
-			return function(data){
-				res.setHeader('Content-Type', 'application/json');
-				res.send({totalCount: JSON.parse(data).total_count});
-			};
-		};
-		dashboardService.getDashboardData(req,  callback(res), "securities");
+		service.on("end", processSecuritiesDashboardData);
+		service.getDashboardData(req, res, "securities");
 	};
+
+	// Private Functions
+	function processDashboardData(res, data) {
+		var JSONData,
+			responseData = {},
+			recentAccounts,
+			detailsString;
+		try {
+			JSONData = JSON.parse(data);
+		} catch(e) {
+			logging.error("Could not parse to JSON: " + data);
+			return e;
+		}
+
+		if(JSONData.active.length > 10) {
+			detailsString = "and " + (JSONData.active.length - 10) + " more.";
+			recentAccounts = JSONData.active.slice(0, 9).join(", ");
+			recentAccounts += detailsString
+		} else
+			if(JSONData.active.length === 0) {
+				recentAccounts = "none"
+			} else {
+				recentAccounts = JSONData.active.join(", ");
+			}
+
+		responseData.totalCount = JSONData.total_count;
+		responseData.recentAccounts = recentAccounts;
+		res.setHeader('Content-Type', 'application/json');
+		res.send(responseData);
+	}
+
+	function processSecuritiesDashboardData(res, data) {
+		res.setHeader('Content-Type', 'application/json');
+		res.send({totalCount: JSON.parse(data).total_count});
+	}
+
 };
 
 module.exports = DashboardController;

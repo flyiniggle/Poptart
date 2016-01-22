@@ -1,10 +1,12 @@
-var Service = imports('services/BaseService.js');
 var http = require('http');
+var events = require('events');
+
+var Service = imports('services/BaseService.js');
 
 var DashboardService = function(){
 	var self = this;
 
-	self.getDashboardData = function(res, callback, module){
+	self.getDashboardData = function(req, res, module){
 		var options = new self.getBaseRequestOptions(),
 			data = "",
 			request;
@@ -17,17 +19,17 @@ var DashboardService = function(){
 				data += chunk;
 			});
 			response.on('end', function() {
-				callback(data);
+				self.emit('end', res, data);
 				logging.info(data);
-				logging.error(data);
 			});
 			response.on('error', function(e) {
+				self.emit('error', res, e);
 				logging.error(e.message);
 			});
 		});
 		request.on('error', function(e) {
 			res.send("An error occurred");
-			console.log("An error occurred: %s", e.message);
+			logging.error("An error occurred: %s", e.message);
 		});
 		request.end();
 
