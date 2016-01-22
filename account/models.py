@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models
 
 
@@ -7,7 +8,7 @@ class Account(models.Model):
     inception_date = models.DateTimeField(null=True)
     total_cash = models.DecimalField(default=0, decimal_places=2, max_digits=17)
     expected_cash = models.DecimalField(default=0, decimal_places=2, max_digits=17)
-    max_pos_drift = models.DecimalField(null=True, decimal_places=4, max_digits=10)
+    max_pos_drift = models.DecimalField(default=100, decimal_places=3, max_digits=10)
     last_update = models.DateTimeField(null=True)
     client_1_id = models.IntegerField(null=True)
     manager = models.IntegerField(null=True)
@@ -18,24 +19,36 @@ class Account(models.Model):
 
     def __unicode__(self):
         return unicode(self.name)
-    
+
     @property
     def holdings(self):
         return Holding.objects.filter(account=self)
-    
+
     @property
     def total_value(self):
-        holdings_values = 0
+        holdings_values = Decimal(0)
         for holding in Holding.objects.filter(account=self):
-            holdings_values = holdings_values + float(holding.value)
-        return holdings_values + float(self.total_cash)
-    
+            holdings_values += Decimal(holding.value)
+        return float(holdings_values + Decimal(self.total_cash))
+
     @property
     def total_expected_value(self):
-        holdings_expected_values = float(0)
+        holdings_expected_values = Decimal(0)
         for holding in Holding.objects.filter(account=self):
-            holdings_expected_values = holdings_expected_values + float(holding.expected_value)
-        return holdings_expected_values + float(self.total_cash)
+            holdings_expected_values += Decimal(holding.expected_value)
+        return float(holdings_expected_values + Decimal(self.total_cash))
+
+    @property
+    def cash_drift(self):
+        return float(abs(self.total_cash - self.expected_cash))
+
+    @property
+    def holdings_drift(self):
+        return float(abs(self.total_value - self.total_expected_value))
+
+    @property
+    def total_drift(self):
+        return float(self.cash_drift + self.holdings_drift)
 
 
 class Holding(models.Model):
@@ -50,16 +63,16 @@ class Holding(models.Model):
 
     def __unicode__(self):
         return unicode("%s, %s" % (self.security, self.quantity))
-    
+
     @property
     def value(self):
-        return self.quantity * self.security.last_price
-    
+        return float(self.quantity * self.security.last_price)
+
     @property
     def quantity_drift(self):
-        return abs(self.quantity - self.expected_quantity)
-    
+        return float(abs(self.quantity - self.expected_quantity))
+
     @property
     def value_drift(self):
-        return abs(self.value - self.expected_value)
+        return float(abs(self.value - Decimal(self.expected_value)))
 

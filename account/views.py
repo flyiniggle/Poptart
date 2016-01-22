@@ -4,7 +4,6 @@ import json
 from django.views.generic import View
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
-from django.forms.models import model_to_dict
 
 from poptart.lib.serializers import JSONSerializer
 from account.models import Account
@@ -16,10 +15,26 @@ class AccountMonitor(View):
         accounts = Account.objects.all()
         complete_accounts = []
         for account in accounts:
-            complete_account = model_to_dict(account)
+            complete_account = dict()
+            complete_account["pk"] = account.pk
+            complete_account["name"] = account.name
+            complete_account["description"] = account.description
+            complete_account["inception_date"] = str(account.inception_date)
+            complete_account["total_cash"] = float(account.total_cash)
+            complete_account["expected_cash"] = float(account.expected_cash)
+            complete_account["max_pos_drift"] = float(account.max_pos_drift)
+            complete_account["last_update"] = str(account.last_update)
+            complete_account["client_1_id"] = account.client_1_id
+            complete_account["manager"] = account.manager
+            complete_account["solution_name"] = account.solution_name
             complete_account["total_value"] = account.total_value
             complete_account["total_expected_value"] = account.total_expected_value
-        return HttpResponse(JSONSerializer().serialize(accounts), status="200 OK", content_type="application/json")
+            complete_account["cash_drift"] = account.cash_drift
+            complete_account["holdings_drift"] = account.holdings_drift
+            complete_account["total_drift"] = account.total_drift
+            complete_accounts.append(complete_account)
+
+        return HttpResponse(json.dumps(complete_accounts), status="200 OK", content_type="application/json")
 
     def post(self, request):
         if 'newAccount' in request.post:
