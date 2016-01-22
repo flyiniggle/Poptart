@@ -4,10 +4,10 @@ var DashboardController = function(){
 	var self = this;
 
 	/// Public Methods
-	self.getDashboardData = function(req, res) {
+	self.getAccountDashboardData = function(req, res) {
 		var service = new DashboardService();
 
-		service.on("end", processDashboardData);
+		service.on("end", processAccountDashboardData);
 		service.getDashboardData(res, "account");
 	};
 
@@ -19,7 +19,7 @@ var DashboardController = function(){
 	};
 
 	// Private Functions
-	function processDashboardData(res, data) {
+	function processAccountDashboardData(res, data) {
 		var JSONData,
 			responseData = {},
 			recentAccounts,
