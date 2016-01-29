@@ -2,36 +2,38 @@ var DashboardService = imports('services/dashboard/DashboardService.js');
 var AccountService = imports('services/account/AccountService.js');
 
 var DashboardController = function(){
-	var self = this;
+	var self = this,
+		dashboardService = new DashboardService(),
+		accountService = new AccountService();
 
 	/// Public Methods
 	self.getAccountDashboardData = function(req, res) {
-		var service = new DashboardService(),
-			accountService = new AccountService(),
+		var dashboardGetter = dashboardService.getDashboardData(res, "account"),
+			accountGetter = accountService.getAccounts(res),
 			accountsData = null,
 			alertsData = null;
 
-		service.on("end", function(res, data) {
+		dashboardGetter.on("end", function(res, data) {
 			accountsData = data;
 			if(accountsData && alertsData) {
 				processAccountDashboardData(res, accountsData, alertsData);
 			}
 		});
-		accountService.on("end", function(res, data){
+		accountGetter.on("end", function(res, data){
 			alertsData = data;
 			if(accountsData && alertsData){
 				processAccountDashboardData(res, accountsData, alertsData);
 			}
 		});
-		service.getDashboardData(res, "account");
-		accountService.getAccounts(res)
+		dashboardGetter.send();
+		accountGetter.send();
 	};
 
 	self.getSecuritiesDashboardData = function(req, res){
-		var service = new DashboardService();
+		var service = dashboardService.getDashboardData(res, "securities");
 
 		service.on("end", processSecuritiesDashboardData);
-		service.getDashboardData(res, "securities");
+		service.send();
 	};
 
 

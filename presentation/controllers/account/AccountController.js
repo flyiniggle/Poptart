@@ -1,25 +1,26 @@
 var AccountService = imports('services/account/AccountService.js');
 
 var AccountController = function(){
-	var self = this;
+	var self = this,
+		accountService = new AccountService();
 
 	// Public Methods
 	self.getAccounts = function(req, res){
-		var service = new AccountService();
+		var service = accountService.getAccounts(res);
 
 		service.on("end", processAccounts);
-		service.getAccounts(res);
+		service.send();
 	};
 
 	self.getAccount = function(req, res){
-		var service = new AccountService();
+		var service = accountService.getAccount(res);
 
 		service.on("end", processAccount);
-		service.getAccounts(res);
+		service.send();
 	};
 
 	// Private Functions
-	function processAccounts(data, res) {
+	function processAccounts(res, data) {
 		var templateData = {},
 			accountNames = [],
 			JSONData = JSON.parse(data),
