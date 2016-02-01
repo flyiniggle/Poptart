@@ -1,3 +1,5 @@
+var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller
+
 var DashboardService = imports('services/dashboard/DashboardService.js');
 var AccountService = imports('services/account/AccountService.js');
 
@@ -10,23 +12,14 @@ var DashboardController = function(){
 	self.getAccountDashboardData = function(req, res) {
 		var dashboardService = dashboardServiceFactory.getDashboardData(res, "account"),
 			accountService = accountServiceFactory.getAccounts(res),
-			accountsData = null,
-			alertsData = null;
+			marshaller;
 
-		dashboardService.on("end", function(res, data) {
-			accountsData = data;
-			if(accountsData && alertsData) {
-				processAccountDashboardData(res, accountsData, alertsData);
-			}
+		marshaller = new ServiceMarshaller([accountService, dashboardService]);
+		marshaller.on("end", function(data){
+			processAccountDashboardData(res, data[0], data[1]);
 		});
-		accountService.on("end", function(res, data){
-			alertsData = data;
-			if(accountsData && alertsData){
-				processAccountDashboardData(res, accountsData, alertsData);
-			}
-		});
-		dashboardService.send();
-		accountService.send();
+		marshaller.send();
+
 	};
 
 	self.getSecuritiesDashboardData = function(req, res){
@@ -58,17 +51,17 @@ var DashboardController = function(){
 			return
 		}
 
-		if(JSONAccountsData.active.length > 10) {
-			detailsString = "and " + (JSONAccountsData.active.length - 10) + " more.";
-			recentAccounts = JSONAccountsData.active.slice(0, 9).join(", ");
+		if(JSONAlertsData.active.length > 10) {
+			detailsString = "and " + (JSONAlertsData.active.length - 10) + " more.";
+			recentAccounts = JSONAlertsData.active.slice(0, 9).join(", ");
 			recentAccounts += detailsString
-		} else if(JSONAccountsData.active.length === 0) {
+		} else if(JSONAlertsData.active.length === 0) {
 			recentAccounts = "none"
 		} else {
-			recentAccounts = JSONAccountsData.active.join(", ");
+			recentAccounts = JSONAlertsData.active.join(", ");
 		}
 
-		for(i=(JSONAlertsData.length-1); account= JSONAlertsData[i]; i--){
+		for(i=(JSONAccountsData.length-1); account=JSONAccountsData[i]; i--){
 			if(account.holdings_drift > account.max_pos_drift) {
 				highHoldingsDrift.push(account.name);
 			}
@@ -80,7 +73,7 @@ var DashboardController = function(){
 			}
 		}
 
-		responseData.totalCount = JSONAccountsData.total_count;
+		responseData.totalCount = JSONAlertsData.total_count;
 		responseData.recentAccounts = recentAccounts;
 		responseData.highHoldingsDriftCount = highHoldingsDrift.length;
 		responseData.highCashDriftCount = highCashDrift.length;

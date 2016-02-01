@@ -12,7 +12,7 @@ var AccountsService = function(){
 		options.path = "/account/";
 		options.method = "GET";
 		options.headers = {Accept: "application:json"};
-		getter = new Service(options, res);
+		getter = new Service.Service(options, res);
 
 		return getter;
 	};

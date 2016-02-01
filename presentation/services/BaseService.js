@@ -35,4 +35,40 @@ var Service = function(options, res){
 
 util.inherits(Service, EventEmitter);
 
-module.exports = Service;
+
+var ServiceMarshaller = function(services) {
+	var self = this,
+		statusArray = [],
+		resultsArray = [],
+		service, i,
+		l = services.length;
+
+	for(i=0; i<l; i++){
+		statusArray.push(false);
+		service = services[i];
+		service.on('end', function() {
+			var index = i;
+			return function(res, data) {
+				resultsArray[index] = data;
+				statusArray[index] = true;
+				if(statusArray.indexOf(false) < 0){
+					self.emit("end", resultsArray);
+				}
+			};
+		}());
+		service.send();
+	}
+
+	self.send = function(){
+		for(i = 0; i < l; i++) {
+			services[i].send();
+		}
+	}
+};
+
+util.inherits(ServiceMarshaller, EventEmitter);
+
+module.exports = {
+	Service: Service,
+	ServiceMarshaller: ServiceMarshaller
+};

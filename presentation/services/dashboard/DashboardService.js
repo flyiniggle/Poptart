@@ -13,7 +13,7 @@ var DashboardService = function(){
 		options.method = "GET";
 		options.headers = {Accept: "application:json"};
 
-		getter = new Service(options, res);
+		getter = new Service.Service(options, res);
 
 		return getter;
 	}
