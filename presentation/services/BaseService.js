@@ -2,16 +2,7 @@ var http = require('http');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
-var ServiceFactory = function() {
-	var self = this;
-
-	self.getBaseRequestOptions = function() {
-		return {
-			host: "127.0.0.1",
-			port: 8000
-		};
-	};
-};
+var config = imports("config/config.js");
 
 var Service = function(options, res){
 	var self = this,
@@ -20,6 +11,9 @@ var Service = function(options, res){
 	self.send = function(){
 		request.end();
 	};
+
+	options.host = config.businiess.host;
+	options.port = config.businiess.port;
 
 	request = http.request(options, function(response) {
 		response.setEncoding('utf8');
@@ -41,7 +35,4 @@ var Service = function(options, res){
 
 util.inherits(Service, EventEmitter);
 
-module.exports = {
-	ServiceFactory: ServiceFactory,
-	Service: Service
-};
+module.exports = Service;

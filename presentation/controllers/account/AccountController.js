@@ -2,18 +2,18 @@ var AccountService = imports('services/account/AccountService.js');
 
 var AccountController = function(){
 	var self = this,
-		accountService = new AccountService();
+		accountServiceFactory = new AccountService();
 
 	// Public Methods
 	self.getAccounts = function(req, res){
-		var service = accountService.getAccounts(res);
+		var service = accountServiceFactory.getAccounts(res);
 
 		service.on("end", processAccounts);
 		service.send();
 	};
 
 	self.getAccount = function(req, res){
-		var service = accountService.getAccount(res);
+		var service = accountServiceFactory.getAccount(res);
 
 		service.on("end", processAccount);
 		service.send();

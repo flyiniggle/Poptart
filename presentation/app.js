@@ -13,6 +13,7 @@ var express = require('express');
 var nunjucks = require('nunjucks');
 var winston = require('winston');
 
+var config = imports("config/config.js");
 var dashboardRoutes = imports('routes/dashboard/DashboardRouter.js')(express);
 var accountRoutes = imports('routes/account/AccountRouter.js')(express);
 
@@ -54,9 +55,9 @@ app.use("/", dashboardRoutes);
 app.use("/index", dashboardRoutes);
 app.use("/account", accountRoutes);
 
-server = app.listen(3000, function(){
-	var host = server.address().address,
-		port = server.address().port;
+server = app.listen(config.presentation.port, function(){
+	var host = "localhost",
+		port = config.presentation.port;
 
-	console.log("I hear you at http://%s:%s", host, port);
+	console.log("I hear you at http://%s:%d", host, port);
 });

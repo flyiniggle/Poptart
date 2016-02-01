@@ -1,24 +1,22 @@
 var http = require('http');
 
-var service = imports('services/BaseService.js');
+var Service = imports('services/BaseService.js');
 
 var DashboardService = function(){
 	var self = this;
 
 	self.getDashboardData = function(res, module) {
-		var options = new self.getBaseRequestOptions(),
+		var options = {},
 			getter;
 
 		options.path = "/" + module + "/summary";
 		options.method = "GET";
 		options.headers = {Accept: "application:json"};
 
-		getter = new service.Service(options, res);
+		getter = new Service(options, res);
 
 		return getter;
 	}
 };
-
-DashboardService.prototype = new service.ServiceFactory();
 
 module.exports = DashboardService;
