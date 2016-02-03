@@ -10,9 +10,9 @@ var DashboardController = function(){
 	self.getAccountDashboardData = function(req, res) {
 		var dashboardRequest = dashboardService.getDashboardData(res, "account"),
 			accountRequest = accountService.getAccounts(res),
-			marshaller = new ServiceMarshaller([dashboardRequest, accountRequest]);
+			marshaller = new ServiceMarshaller(res, [dashboardRequest, accountRequest]);
 
-		marshaller.on("end", function(data){
+		marshaller.on("end", function(res, data){
 			processAccountDashboardData(res, data[0], data[1]);
 		});
 		marshaller.send();
@@ -28,9 +28,9 @@ var DashboardController = function(){
 
 
 	// Private Functions
-	function processAccountDashboardData(res, accountsData, alertsData) {
+	function processAccountDashboardData(res, summaryData, accountsData) {
 		var JSONAccountsData,
-			JSONAlertsData,
+			JSONSummaryData,
 			responseData = {},
 			recentAccounts,
 			detailsString,
@@ -41,21 +41,21 @@ var DashboardController = function(){
 
 		try {
 			JSONAccountsData = JSON.parse(accountsData);
-			JSONAlertsData = JSON.parse(alertsData);
+			JSONSummaryData = JSON.parse(summaryData);
 		} catch(e) {
-			logging.error("Could not parse to JSON: %s, %s", accountsData, alertsData);
+			logging.error("Could not parse to JSON: %s, %s", accountsData, summaryData);
 			res.send(e);
 			return
 		}
 
-		if(JSONAlertsData.active.length > 10) {
-			detailsString = "and " + (JSONAlertsData.active.length - 10) + " more.";
-			recentAccounts = JSONAlertsData.active.slice(0, 9).join(", ");
+		if(JSONSummaryData.active.length > 10) {
+			detailsString = "and " + (JSONSummaryData.active.length - 10) + " more.";
+			recentAccounts = JSONSummaryData.active.slice(0, 9).join(", ");
 			recentAccounts += detailsString
-		} else if(JSONAlertsData.active.length === 0) {
+		} else if(JSONSummaryData.active.length === 0) {
 			recentAccounts = "none"
 		} else {
-			recentAccounts = JSONAlertsData.active.join(", ");
+			recentAccounts = JSONSummaryData.active.join(", ");
 		}
 
 		for(i=(JSONAccountsData.length-1); account=JSONAccountsData[i]; i--){
@@ -70,7 +70,7 @@ var DashboardController = function(){
 			}
 		}
 
-		responseData.totalCount = JSONAlertsData.total_count;
+		responseData.totalCount = JSONSummaryData.total_count;
 		responseData.recentAccounts = recentAccounts;
 		responseData.highHoldingsDriftCount = highHoldingsDrift.length;
 		responseData.highCashDriftCount = highCashDrift.length;

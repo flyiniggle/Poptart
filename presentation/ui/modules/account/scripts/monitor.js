@@ -2,10 +2,11 @@ Poptart.Account.Monitor = function(){
 	var ReturnObj = {};
 
 	ReturnObj.init = function(){
-		$("#accountSelector").autocomplete({
-			source: Poptart.Account.Monitor.accountList
-		});
-		$("#testTable").igGrid({
+		$("#am_accountSelector").autocomplete({
+			source: Poptart.Account.Monitor.accountList,
+			change: changeAccountURL
+		}).on("blur", changeAccountURL);
+		$("#am_testTable").igGrid({
 			dataSource: Poptart.Account.Monitor.treegridData,
 			primaryKey: "pk",
 			columns: [
@@ -54,6 +55,15 @@ Poptart.Account.Monitor = function(){
 			]
 		});
 	};
+
+	function changeAccountURL(e){
+		var monitor = Poptart.Account.Monitor,
+			i, pk;
+
+		i = monitor.accountList.indexOf(e.target.value);
+		pk = monitor.accountIDsList[i];
+		$("#am_accountLauncher").attr("action", "/account/" + pk).submit();
+	}
 
 	return ReturnObj;
 }();

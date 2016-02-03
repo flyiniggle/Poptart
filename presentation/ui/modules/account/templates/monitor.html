@@ -7,11 +7,17 @@
 		<link href="/css/jquery-ui/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
 	</head>
 	<body>
-		<p>Choose an account:</p>
-		<input id="accountSelector" type="text"/>
-		<table id="testTable">
+		<div id="am_controls">
+			<form id="am_accountLauncher" onSubmit="Poptart.Account.Monitor.goToAccount">
+				<span>Go to account: </span>
+				<input id="am_accountSelector" type="text"/>
+				<input type="button" value="launch"/>
+			</form>
+		</div>
 
-		</table>
+		<table id="am_testTable"></table>
+
+		<!-- JS -->
 		<script type="text/javascript" src="/scripts/jquery-1.10.2.js"></script>
 		<script type="text/javascript" src="/scripts/jquery-ui-1.10.4.custom.js"></script>
 		<script type="text/javascript" src="/scripts/modernizr-custom.js"></script>
@@ -21,7 +27,8 @@
 		<script type="text/javascript">
 			(function(){
 				Poptart.Account.Monitor.treegridData = {{data | safe}};
-				Poptart.Account.Monitor.accountList = {{accountNamesList}};
+				Poptart.Account.Monitor.accountList = {{accountNamesList | safe}};
+				Poptart.Account.Monitor.accountIDsList = {{accountIDsList | safe}};
 				Poptart.Account.Monitor.init();
 			})();
 		</script>

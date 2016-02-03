@@ -6,11 +6,14 @@ var config = imports("config/config.js");
 
 var Service = function(options, res){
 	var self = this,
-		request, data = "";
+		request, data = "",
+		loggingName = "request-timing: " + options.path;
 
 	// Constructor
 	options.host = config.businiess.host;
 	options.port = config.businiess.port;
+
+	logging.profile(loggingName);
 
 	request = http.request(options, function(response) {
 		response.setEncoding('utf8');
@@ -18,7 +21,7 @@ var Service = function(options, res){
 			data += chunk;
 		}).on('end', function() {
 			self.emit('end', res, data);
-			logging.info(data);
+			logging.profile(loggingName);
 		}).on('error', function(e) {
 			self.emit('error', e);
 			logging.error(e.message);
@@ -38,7 +41,7 @@ var Service = function(options, res){
 util.inherits(Service, EventEmitter);
 
 
-var ServiceMarshaller = function(services) {
+var ServiceMarshaller = function(res, services) {
 	var self = this,
 		statusArray = [],
 		resultsArray = [],
@@ -55,7 +58,7 @@ var ServiceMarshaller = function(services) {
 				resultsArray[index] = data;
 				statusArray[index] = true;
 				if(statusArray.indexOf(false) < 0){
-					self.emit("end", resultsArray);
+					self.emit("end", res, resultsArray);
 				}
 			};
 		}());
