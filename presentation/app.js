@@ -20,7 +20,10 @@ var accountRoutes = imports('routes/account/AccountRouter.js')(express);
 // Logging
 global.logging = new (winston.Logger)({
 	transports: [
-		new (winston.transports.Console)(),
+		new (winston.transports.Console)({
+			handleExceptions: true,
+			humanReadableUnhandledException: true
+		}),
 		new (winston.transports.File)({
 			name: 'info-file',
 			level: 'info',
