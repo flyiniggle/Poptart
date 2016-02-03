@@ -27,5 +27,5 @@ var AccountsService = function(){
 	};
 };
 
-module.exports = AccountsService;
+module.exports = new AccountsService();
 

@@ -8,10 +8,7 @@ var Service = function(options, res){
 	var self = this,
 		request, data = "";
 
-	self.send = function(){
-		request.end();
-	};
-
+	// Constructor
 	options.host = config.businiess.host;
 	options.port = config.businiess.port;
 
@@ -31,6 +28,11 @@ var Service = function(options, res){
 		self.emit('error', e);
 		logging.error("An error occurred: %s", e.message);
 	});
+
+	// Methods
+	self.send = function() {
+		request.end();
+	};
 };
 
 util.inherits(Service, EventEmitter);
@@ -43,6 +45,7 @@ var ServiceMarshaller = function(services) {
 		service, i,
 		l = services.length;
 
+	// Constructor
 	for(i=0; i<l; i++){
 		statusArray.push(false);
 		service = services[i];
@@ -56,9 +59,17 @@ var ServiceMarshaller = function(services) {
 				}
 			};
 		}());
+		service.on('error', function(e){
+			logging.error("Marshalled request failed: " + e.message);
+			self.emit('error');
+			services.forEach(function(req){
+				req.abort();
+			});
+		});
 		service.send();
 	}
 
+	// Methods
 	self.send = function(){
 		for(i = 0; i < l; i++) {
 			services[i].send();

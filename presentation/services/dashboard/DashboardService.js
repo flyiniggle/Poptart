@@ -19,4 +19,4 @@ var DashboardService = function(){
 	}
 };
 
-module.exports = DashboardService;
+module.exports = new DashboardService();

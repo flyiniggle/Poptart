@@ -1,20 +1,17 @@
 var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller
 
-var DashboardService = imports('services/dashboard/DashboardService.js');
-var AccountService = imports('services/account/AccountService.js');
+var dashboardService = imports('services/dashboard/DashboardService.js');
+var accountService = imports('services/account/AccountService.js');
 
 var DashboardController = function(){
-	var self = this,
-		dashboardServiceFactory = new DashboardService(),
-		accountServiceFactory = new AccountService();
+	var self = this;
 
 	/// Public Methods
 	self.getAccountDashboardData = function(req, res) {
-		var dashboardService = dashboardServiceFactory.getDashboardData(res, "account"),
-			accountService = accountServiceFactory.getAccounts(res),
-			marshaller;
+		var dashboardRequest = dashboardService.getDashboardData(res, "account"),
+			accountRequest = accountService.getAccounts(res),
+			marshaller = new ServiceMarshaller([dashboardRequest, accountRequest]);
 
-		marshaller = new ServiceMarshaller([accountService, dashboardService]);
 		marshaller.on("end", function(data){
 			processAccountDashboardData(res, data[0], data[1]);
 		});
@@ -23,10 +20,10 @@ var DashboardController = function(){
 	};
 
 	self.getSecuritiesDashboardData = function(req, res){
-		var service = dashboardServiceFactory.getDashboardData(res, "securities");
+		var request = dashboardService.getDashboardData(res, "securities");
 
-		service.on("end", processSecuritiesDashboardData);
-		service.send();
+		request.on("end", processSecuritiesDashboardData);
+		request.send();
 	};
 
 

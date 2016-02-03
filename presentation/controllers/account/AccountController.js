@@ -1,15 +1,16 @@
-var AccountService = imports('services/account/AccountService.js');
+var accountService = imports('services/account/AccountService.js');
+var dashboardService = imports('services/dashboard/DashboardService.js');
 
 var AccountController = function(){
-	var self = this,
-		accountServiceFactory = new AccountService();
+	var self = this;
 
 	// Public Methods
 	self.getAccounts = function(req, res){
-		var service = accountServiceFactory.getAccounts(res);
+		var accountsRequest = accountService.getAccounts(res),
+			summaryRequest = dashboardService.getDashboardData("account", res);
 
-		service.on("end", processAccounts);
-		service.send();
+		accountsRequest.on("end", processAccounts);
+		accountsRequest.send();
 	};
 
 	self.getAccount = function(req, res){
