@@ -31,7 +31,15 @@ global.logging = new (winston.Logger)({
 			level: 'error',
 			filename: loadPath('logs/error.log')
 		})
-	]
+	],
+	exceptionHandlers: [
+		new winston.transports.File({
+			name: 'unhandled-exceptions-file',
+			filename: loadPath('logs/exceptions.log'),
+			humanReadableUnhandledException: true
+		})
+	],
+	exitOnError: false
 });
 
 // Setup
