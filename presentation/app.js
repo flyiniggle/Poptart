@@ -53,7 +53,8 @@ app.set('view engine', 'nunjucks');
 
 env = nunjucks.configure(path.join(__dirname, "ui"), {
 	express: app,
-	autoescape: true
+	autoescape: true,
+	watch: true
 });
 
 // Routes for static files

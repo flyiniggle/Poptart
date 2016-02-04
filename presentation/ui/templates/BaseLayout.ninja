@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="/css/infragistics/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" type="text/css"/>
+	<link href="/css/infragistics/css/structure/infragistics.css" rel="stylesheet" type="text/css"/>
+	<link href="/css/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
+	<link href="/css/jquery-ui/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
+
+	{% block css %}
+		<link href="/css/styles.css" rel="stylesheet" type="text/css"/>
+		<link href="/css/text.css" rel="stylesheet" type="text/css"/>
+	{% endblock %}
+</head>
+<body>
+	<div id="controlsContainer">
+		<div id="controls">
+			{% block controls %}
+			{% endblock %}
+		</div>
+	</div>
+
+	<div id="leftSideBarFixed">
+		<div id="leftSideBar">
+			<div id="summary">
+				{% block summary %}
+				{% endblock %}
+			</div>
+			<div id="alerts">
+				{% block alerts %}
+					{% include "components/alerts.ninja" %}
+				{% endblock %}
+			</div>
+		</div>
+	</div>
+
+	<div id="main">
+		{% block main %}
+		{% endblock %}
+	</div>
+
+	<!-- JS -->
+	{% block js_libraries %}
+		<script type="text/javascript" src="/scripts/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="/scripts/jquery-ui-1.10.4.custom.js"></script>
+		<script type="text/javascript" src="/scripts/modernizr-custom.js"></script>
+		<script type="text/javascript" src="/scripts/infragistics.js"></script>
+	{% endblock %}
+
+	{%  block js %}
+		<script type="text/javascript" src="/scripts/poptart.js"></script>
+	{% endblock %}
+</body>
+</html>

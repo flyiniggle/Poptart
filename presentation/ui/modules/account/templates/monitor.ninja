@@ -1,51 +1,44 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<link href="/css/infragistics/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" type="text/css"/>
-		<link href="/css/infragistics/css/structure/infragistics.css" rel="stylesheet" type="text/css"/>
-		<link href="/css/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
-		<link href="/css/jquery-ui/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
-	</head>
-	<body>
-		<div id="am_controls">
-			<form id="am_accountLauncher" onSubmit="Poptart.Account.Monitor.goToAccount()">
-				<span>Go to account: </span>
-				<input id="am_accountSelector" type="text"/>
-				<input type="button" value="launch"/>
-			</form>
-		</div>
-		<div id="am_summary">
-			<div>
-				<span>Total accounts: </span>
-				<span>{{summaryData.total_count}}</span>
-			</div>
-			<div>
-				<span>Recently active accounts: </span>
-				{% for account in summaryData.active %}
-					<span>{{account}}</span>
-				{% endfor %}
-			</div>
-			<div id="am_alerts">
-				{% include "components/alerts.ninja" %}
-			</div>
-		</div>
+{% extends "templates/BaseLayout.ninja" %}
 
-		<table id="am_testTable"></table>
+{% block css %}
+	{{ super() }}
+	<link href="/modules/account/css/styles.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
 
-		<!-- JS -->
-		<script type="text/javascript" src="/scripts/jquery-1.10.2.js"></script>
-		<script type="text/javascript" src="/scripts/jquery-ui-1.10.4.custom.js"></script>
-		<script type="text/javascript" src="/scripts/modernizr-custom.js"></script>
-		<script type="text/javascript" src="/scripts/infragistics.js"></script>
-		<script type="text/javascript" src="/scripts/poptart.js"></script>
-		<script type="text/javascript" src="/modules/account/scripts/monitor.js"></script>
-		<script type="text/javascript">
-			(function(){
-				Poptart.Account.Monitor.treegridData = {{data | safe}};
-				Poptart.Account.Monitor.accountList = {{accountNamesList | safe}};
-				Poptart.Account.Monitor.accountIDsList = {{accountIDsList | safe}};
-				Poptart.Account.Monitor.init();
-			})();
-		</script>
-	</body>
-</html>
+{% block controls %}
+	<form id="am_accountLauncher" onSubmit="Poptart.Account.Monitor.goToAccount()">
+		<span>Go to account: </span>
+		<input id="am_accountSelector" type="text"/>
+		<input type="button" value="launch"/>
+	</form>
+{% endblock %}
+
+{% block summary %}
+	<div>
+		<span>Total accounts: </span>
+		<span>{{summaryData.total_count}}</span>
+	</div>
+	<div>
+		<span>Recently active accounts: </span>
+		{% for account in summaryData.active %}
+			<span>{{account}}</span>
+		{% endfor %}
+	</div>
+{% endblock %}
+
+{% block main %}
+	<table id="am_testTable"></table>
+{% endblock %}
+
+{% block js %}
+	{{ super() }}
+	<script type="text/javascript" src="/modules/account/scripts/monitor.js"></script>
+	<script type="text/javascript">
+		(function(){
+			Poptart.Account.Monitor.treegridData = {{data | safe}};
+			Poptart.Account.Monitor.accountList = {{accountNamesList | safe}};
+			Poptart.Account.Monitor.accountIDsList = {{accountIDsList | safe}};
+			Poptart.Account.Monitor.init();
+		})();
+	</script>
+{% endblock %}
