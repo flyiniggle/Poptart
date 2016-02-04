@@ -1,0 +1,7 @@
+{% for alert in alerts %}
+    <div class="alert {{alert.level}}">
+        <div class="alert_close"></div>
+        <span class="alert_summary">{{alert.summary}}</span>
+        <span class="alert_message">{{alert.message}}</span>
+    </div>
+{% endfor %}

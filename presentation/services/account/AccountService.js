@@ -17,11 +17,10 @@ var AccountsService = function(){
 		return getter;
 	};
 
-	self.getAccount = function(res) {
-		var options = {},
-			acct_id = req.params.acct_id;
+	self.getAccount = function(res, acct) {
+		var options = {};
 
-		options.path = util.format("/account/%s/", acct_id);
+		options.path = util.format("/account/%s/", acct);
 		options.method = "GET";
 		options.headers = {Accept: "application:json"};
 	};

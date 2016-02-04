@@ -1,3 +1,4 @@
+var Alert = imports("common/alerts/alert.js");
 var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
 var accountService = imports('services/account/AccountService.js');
 var dashboardService = imports('services/dashboard/DashboardService.js');
@@ -28,7 +29,7 @@ var AccountController = function(){
 	};
 
 	self.getAccount = function(req, res){
-		var service = accountService.getAccount(res);
+		var service = accountService.getAccount(res, req.params.acc_id);
 
 		service.on("end", processAccount);
 		service.send();
@@ -40,24 +41,38 @@ var AccountController = function(){
 		var templateData = {},
 			accountNames = [],
 			accountIDs = [],
+			alerts = [],
 			JSONAccountData = (!!accountData) ? JSON.parse(accountData) : completeAccountData,
 			JSONSummaryData = JSON.parse(summaryData),
-			i;
+			i, account, alertMessage;
 
 		if(!completeAccountData){
 			completeAccountData = JSONAccountData;
 		}
 
-		for(i = 0; i < JSONAccountData.length; i++) {
+		for(i = (JSONAccountData.length - 1); account = JSONAccountData[i]; i--) {
 			accountNames.push(JSONAccountData[i].name.toString());
 			accountIDs.push(JSONAccountData[i].pk.toString());
+			if(account.holdings_drift > account.max_pos_drift) {
+				alertMessage = account.name + " has drifting holdings.";
+				alerts.push(new Alert("warning", "Holdings Drift", alertMessage));
+			}
+			if(account.cash_drift > account.max_cash_drift) {
+				alertMessage = account.name + " has drifting cash.";
+				alerts.push(new Alert("warning", "Cash Drift", alertMessage));
+			}
+			if(account.total_drift > account.max_total_drift) {
+				alertMessage = account.name + " is drifting.";
+				alerts.push(new Alert("warning", "Drift", alertMessage));
+			}
 		}
 
 		templateData.data = JSON.stringify(completeAccountData);
 		templateData.accountNamesList = JSON.stringify(accountNames);
 		templateData.accountIDsList = JSON.stringify(accountIDs);
-		templateData.summaryData = JSON.stringify(JSONSummaryData);
-		res.render("modules/account/templates/monitor.html", templateData);
+		templateData.summaryData = JSONSummaryData;
+		templateData.alerts = alerts;
+		res.render("modules/account/templates/monitor.ninja", templateData);
 	}
 
 	function processAccount(data, res) {

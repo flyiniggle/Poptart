@@ -8,11 +8,26 @@
 	</head>
 	<body>
 		<div id="am_controls">
-			<form id="am_accountLauncher" onSubmit="Poptart.Account.Monitor.goToAccount">
+			<form id="am_accountLauncher" onSubmit="Poptart.Account.Monitor.goToAccount()">
 				<span>Go to account: </span>
 				<input id="am_accountSelector" type="text"/>
 				<input type="button" value="launch"/>
 			</form>
+		</div>
+		<div id="am_summary">
+			<div>
+				<span>Total accounts: </span>
+				<span>{{summaryData.total_count}}</span>
+			</div>
+			<div>
+				<span>Recently active accounts: </span>
+				{% for account in summaryData.active %}
+					<span>{{account}}</span>
+				{% endfor %}
+			</div>
+			<div id="am_alerts">
+				{% include "components/alerts.ninja" %}
+			</div>
 		</div>
 
 		<table id="am_testTable"></table>
