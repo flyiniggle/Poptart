@@ -8,7 +8,6 @@ Poptart.Account.Monitor = function(){
 		}).on("blur", changeAccountURL);
 		$("#am_testTable").igGrid({
 			dataSource: Poptart.Account.Monitor.treegridData,
-			width: "79%",
 			primaryKey: "pk",
 			columns: [
 				{headerText: "Account Number", key: "pk", dataType: "number"},

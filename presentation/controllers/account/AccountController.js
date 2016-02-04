@@ -55,11 +55,11 @@ var AccountController = function(){
 			accountIDs.push(JSONAccountData[i].pk.toString());
 			if(account.holdings_drift > account.max_pos_drift) {
 				alertMessage = account.name + " has drifting holdings.";
-				alerts.push(new Alert("warning", "Holdings Drift", alertMessage));
+				alerts.push(new Alert("error", "Holdings Drift", alertMessage));
 			}
 			if(account.cash_drift > account.max_cash_drift) {
 				alertMessage = account.name + " has drifting cash.";
-				alerts.push(new Alert("warning", "Cash Drift", alertMessage));
+				alerts.push(new Alert("info", "Cash Drift", alertMessage));
 			}
 			if(account.total_drift > account.max_total_drift) {
 				alertMessage = account.name + " is drifting.";
