@@ -1,3 +1,5 @@
+var nunjucks = require('nunjucks');
+
 var DashboardController = imports("controllers/dashboard/DashboardController.js");
 
 module.exports = function(express){
@@ -8,8 +10,12 @@ module.exports = function(express){
 	router.use("/scripts", express.static(loadPath("ui/modules/dashboard/scripts")));
 	router.use("/css", express.static(loadPath("ui/modules/dashboard/css")));
 
-	router.use('/', express.static(loadPath("ui/index.html")));
-	router.use('/index', express.static(loadPath("ui/index.html")));
+	router.get('/', function(req, res) {
+		res.render(loadPath("ui/index.ninja"))
+	});
+	router.get('/index', function(req, res){
+		res.render(loadPath("ui/index.ninja"))
+	});
 	router.use('/summary/account', dashboardController.getAccountDashboardData);
 	router.use('/summary/security', dashboardController.getSecuritiesDashboardData);
 

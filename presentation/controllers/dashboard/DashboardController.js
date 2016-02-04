@@ -1,4 +1,5 @@
-var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller
+var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
+var Alert = imports("common/alerts/Alert.js");
 
 var dashboardService = imports('services/dashboard/DashboardService.js');
 var accountService = imports('services/account/AccountService.js');
@@ -16,7 +17,6 @@ var DashboardController = function(){
 			processAccountDashboardData(res, data[0], data[1]);
 		});
 		marshaller.send();
-
 	};
 
 	self.getSecuritiesDashboardData = function(req, res){
@@ -34,9 +34,8 @@ var DashboardController = function(){
 			responseData = {},
 			recentAccounts,
 			detailsString,
-			highHoldingsDrift = [],
-			highCashDrift = [],
-			highTotalDrift = [],
+			alertMessage,
+			alerts = [],
 			account, i;
 
 		try {
@@ -60,21 +59,22 @@ var DashboardController = function(){
 
 		for(i=(JSONAccountsData.length-1); account=JSONAccountsData[i]; i--){
 			if(account.holdings_drift > account.max_pos_drift) {
-				highHoldingsDrift.push(account.name);
+				alertMessage = account.name + " has drifting holdings.";
+				alerts.push(new Alert("error", "Holdings Drift", alertMessage));
 			}
 			if(account.cash_drift > account.max_cash_drift) {
-				highCashDrift.push(account.name);
+				alertMessage = account.name + " has drifting cash.";
+				alerts.push(new Alert("info", "Cash Drift", alertMessage));
 			}
 			if(account.total_drift > account.max_total_drift) {
-				highTotalDrift.push(account.name);
+				alertMessage = account.name + " is drifting.";
+				alerts.push(new Alert("warning", "Drift", alertMessage));
 			}
 		}
 
 		responseData.totalCount = JSONSummaryData.total_count;
 		responseData.recentAccounts = recentAccounts;
-		responseData.highHoldingsDriftCount = highHoldingsDrift.length;
-		responseData.highCashDriftCount = highCashDrift.length;
-		responseData.highTotalDriftCount = highTotalDrift.length;
+		responseData.alerts = alerts;
 
 		res.setHeader('Content-Type', 'application/json');
 		res.send(responseData);

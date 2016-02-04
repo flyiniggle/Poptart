@@ -1,0 +1,25 @@
+{% extends "templates/BaseLayout.ninja" %}
+
+{%  block controls %}
+	<a href="/account/">Account Monitor</a>
+{% endblock %}
+
+{% block summary %}
+	<div>
+		<span>Total accounts: </span><span id="accountCount"></span>
+	</div>
+	<div>
+		<span>Recently used: </span><span id="accountUpdated"></span>
+	</div>
+	<div>
+		<span>Total securities: </span><span id="securityCount"></span>
+	</div>
+{% endblock %}
+
+{% block js %}
+	{{ super() }}
+	<script type="text/javascript" src="modules/dashboard/scripts/dashboard.js"></script>
+	<script type="text/javascript">
+		Poptart.Dashboard.init();
+	</script>
+{% endblock %}

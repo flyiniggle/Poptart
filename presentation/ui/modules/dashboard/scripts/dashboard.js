@@ -12,15 +12,13 @@ Poptart.Dashboard = function() {
 			url: "/summary/security",
 			accepts: "application/json",
 			success: showSecuritySummary
-		})
+		});
 	};
 
 	function showAccountSummary(data){
 		$("#accountCount").html(data.totalCount);
 		$("#accountUpdated").html(data.recentAccounts);
-		$("#cashDriftCount").html(data.highCashDriftCount);
-		$("#holdingsDriftCount").html(data.highHoldingsDriftCount);
-		$("#totalDriftCount").html(data.highTotalDriftCount);
+		$("#alerts").html(nunjucks.render("components/alerts/templates/alerts.ninja", data));
 	}
 
 	function showSecuritySummary(data){
