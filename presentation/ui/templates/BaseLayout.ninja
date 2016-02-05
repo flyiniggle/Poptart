@@ -15,26 +15,40 @@
 <body>
 	<div id="controlsContainer">
 		<div id="controls">
-			{% block controls %}
-			{% endblock %}
+			<div id="mainNavMenuTarget"></div>
+			<div id="mainNavMenu">
+				{% block main_nav %}
+					<a href="/">Dashboard</a>
+				{% endblock %}
+			</div>
+			<div id="contextControls">
+				{% block controls %}
+				{% endblock %}
+			</div>
 		</div>
 	</div>
 
 	<div id="leftSideBarFixed">
 		<div id="leftSideBar">
-			<div id="summary">
-				{% block summary %}
-				{% endblock %}
+			<div id="summary" class="panel">
+				<div class="panelHeader">Summary:</div>
+				<div id="summaryContent">
+					{% block summary %}
+					{% endblock %}
+				</div>
 			</div>
-			<div id="alerts">
-				{% block alerts %}
-					{% include "components/alerts/templates/alerts.ninja" %}
-				{% endblock %}
+			<div id="alerts" class="panel">
+				<div class="panelHeader">Alerts:</div>
+				<div id="alertsContent">
+					{% block alerts %}
+						{% include "components/alerts/templates/alerts.ninja" %}
+					{% endblock %}
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<div id="main">
+	<div id="main" class="panel">
 		{% block main %}
 		{% endblock %}
 	</div>
@@ -50,6 +64,9 @@
 
 	{%  block js %}
 		<script type="text/javascript" src="/scripts/poptart.js"></script>
+		<script type="text/javascript">
+			Poptart.init();
+		</script>
 	{% endblock %}
 </body>
 </html>

@@ -1,6 +1,6 @@
 {% extends "templates/BaseLayout.ninja" %}
 
-{%  block controls %}
+{%  block main_nav %}
 	<a href="/account/">Account Monitor</a>
 {% endblock %}
 
