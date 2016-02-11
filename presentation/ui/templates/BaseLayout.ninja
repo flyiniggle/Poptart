@@ -15,10 +15,14 @@
 <body>
 	<div id="controlsContainer">
 		<div id="controls">
-			<div id="mainNavMenuTarget"></div>
+			<div id="mainNavMenuTarget">
+				<h2 id="mainNavMenuTargetText">
+					Go To:
+				</h2>
+			</div>
 			<div id="mainNavMenu">
 				{% block main_nav %}
-					<a href="/">Dashboard</a>
+					<a class="navigationLink" href="/">Dashboard</a>
 				{% endblock %}
 			</div>
 			<div id="contextControls">
@@ -31,14 +35,18 @@
 	<div id="leftSideBarFixed">
 		<div id="leftSideBar">
 			<div id="summary" class="panel">
-				<div class="panelHeader">Summary:</div>
+				<div class="panelHeader">
+					<h3>Summary:</h3>
+				</div>
 				<div id="summaryContent">
 					{% block summary %}
 					{% endblock %}
 				</div>
 			</div>
 			<div id="alerts" class="panel">
-				<div class="panelHeader">Alerts:</div>
+				<div class="panelHeader">
+					<h3>Alerts:</h3>
+				</div>
 				<div id="alertsContent">
 					{% block alerts %}
 						{% include "components/alerts/templates/alerts.ninja" %}

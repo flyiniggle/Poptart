@@ -1,10 +1,9 @@
 .demo {
-	color: rgb(43, 39, 38);
-	color: rgb(10, 81, 109);
-	color: rgb(1, 135, 144);
-	color: rgb(125, 173, 147);
-	color: rgb(186, 204, 164);
-	color: rgb(120, 120, 120);
+	color: rgb(94, 57, 41);
+	color: rgb(205, 140, 82);
+	color: rgb(183, 209, 163);
+	color: rgb(222, 232, 190);
+	color: rgb(252, 247, 211);
 }
 
 *{
@@ -16,26 +15,24 @@
 /* Base Layout */
 
 html {
-	height: 100%;
+	min-height: 100%;
+	overflow: auto;
 }
 
 body {
-	background-color: rgb(43, 39, 38);
+	background-color: rgb(252, 247, 211);
 }
 
 .panel {
 	margin: 5px;
-	background: rgb(43, 39, 38);
-	border: 2px solid rgb(120, 120, 120);;
 }
 
 .panelHeader {
 	width: 100%;
 	margin: 0;
 	padding: 2px;
-	color: rgb(43, 39, 38);
 	font-weight: bold;
-	background-color: rgb(120, 120, 120);;
+	background-color: rgb(183, 209, 163);
 }
 
 #controlsContainer {
@@ -49,8 +46,8 @@ body {
 	position: fixed;
 	width: inherit;
 	height: inherit;
-	background-color: rgb(1, 135, 144);
-	border-bottom: 3px solid rgb(125, 173, 147);
+	background-color: rgb(94, 57, 41);
+	border-bottom: 3px solid rgb(222, 232, 190);
 	-webkit-box-shadow: 0 2px 2px 0 rgba(100, 100, 100, 0.5);
 	-moz-box-shadow: 0 2px 2px 0 rgba(100, 100, 100, 0.5);
 	box-shadow: 0 2px 2px 0 rgba(100, 100, 100, 0.5);
@@ -62,23 +59,29 @@ body {
 	height: inherit;
 	padding-top: 5px;
 	vertical-align: top;
-	color: rgb(43, 39, 38);
 }
 
 #mainNavMenuTarget {
 	display: inline-block;
-	width: 50px;
+	padding-left: 20px;
+	padding-right: 20px;
 	height: inherit;
-	background-color: rgb(10, 81, 109);
+}
+
+#mainNavMenuTargetText {
+	display: block;
+	height: inherit;
+	font-size: 17px;
+	padding-top: 10px;
 }
 
 #mainNavMenu {
 	display: none;
 	position: absolute;
-	top: 46px;
-	background-color: rgb(10, 81, 109);
+	top: 50px;
+	background-color: rgb(222, 232, 190);
 	padding: 10px;
-	border-bottom: 3px solid rgb(125, 173, 147);
+	border-bottom: 3px solid rgb(94, 57, 41);
 	-webkit-box-shadow: 2px 2px 2px 0 rgba(100, 100, 100, 0.5);
 	-moz-box-shadow: 2px 2px 2px 0 rgba(100, 100, 100, 0.5);
 	box-shadow: 2px 2px 2px 0 rgba(100, 100, 100, 0.5);
@@ -115,7 +118,7 @@ body {
 /* Alerts */
 
 #alerts {
-	height: 450px;
+	max-height: 800px;
 }
 
 #alertsContent {
@@ -136,7 +139,6 @@ body {
 .alert_summary, .alert_message {
 	display: block;
 	text-overflow: ellipsis;
-	color: rgb(43, 39, 38)
 }
 
 .info {

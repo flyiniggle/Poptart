@@ -10,7 +10,7 @@ Poptart.Account.Monitor = function(){
 			dataSource: Poptart.Account.Monitor.treegridData,
 			primaryKey: "pk",
 			width: "100%",
-			height: "600px",
+			height: "800px",
 			defaultColumnWidth: "150px",
 			columns: [
 				{headerText: "Account Number", key: "pk", dataType: "number", width: "40px"},

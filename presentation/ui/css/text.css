@@ -1,23 +1,40 @@
 *{
 	font-family: Arial, Helvetica, sans-serif;
-	color: rgb(200, 200, 200);
 }
 
 h1 {
 	font-size: 20px;
 	font-weight: bold;
+	color: rgb(205, 140, 82);
 }
 
 h2 {
 	font-size: 17px;
 	font-weight: bold;
+	color: rgb(205, 140, 82);
 }
 
 h3 {
 	font-size: 13px;
 	font-weight: bold;
+	color: rgb(94, 57, 41);
 }
 
 p, span {
 	font-size: 12px;
+	color: rgb(94, 57, 41);
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a.navigationLink {
+	font-size: 12px;
+	font-weight: normal;
+	color: rgb(94, 57, 41);
 }
