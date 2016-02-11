@@ -2,11 +2,11 @@
 
 {% block css %}
 	{{ super() }}
-	<link href="/modules/account/css/styles.css" rel="stylesheet" type="text/css"/>
+	<link href="/monitors/account/css/styles.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block controls %}
-	<form id="am_accountLauncher" onSubmit="Poptart.Account.Monitor.goToAccount()">
+	<form id="am_accountLauncher" onSubmit="Poptart.Monitor.Account.goToAccount()">
 		<span>Go to account: </span>
 		<input id="am_accountSelector" type="text"/>
 		<input type="button" class="componentAction" value="launch"/>
@@ -32,13 +32,13 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/modules/account/scripts/monitor.js"></script>
+	<script type="text/javascript" src="/monitors/account/scripts/Poptart.Monitor.Account.js"></script>
 	<script type="text/javascript">
 		(function(){
-			Poptart.Account.Monitor.treegridData = {{data | safe}};
-			Poptart.Account.Monitor.accountList = {{accountNamesList | safe}};
-			Poptart.Account.Monitor.accountIDsList = {{accountIDsList | safe}};
-			Poptart.Account.Monitor.init();
+			Poptart.Monitor.Account.treegridData = {{data | safe}};
+			Poptart.Monitor.Account.accountList = {{accountNamesList | safe}};
+			Poptart.Monitor.Account.accountIDsList = {{accountIDsList | safe}};
+			Poptart.Monitor.Account.init();
 		})();
 	</script>
 {% endblock %}

@@ -1,13 +1,13 @@
-Poptart.Account.Monitor = function(){
+Poptart.Monitor.Account = function(){
 	var ReturnObj = {};
 
 	ReturnObj.init = function(){
 		$("#am_accountSelector").autocomplete({
-			source: Poptart.Account.Monitor.accountList,
+			source: Poptart.Monitor.Account.accountList,
 			change: changeAccountURL
 		}).on("blur", changeAccountURL);
 		$("#am_testTable").igGrid({
-			dataSource: Poptart.Account.Monitor.treegridData,
+			dataSource: Poptart.Monitor.Account.treegridData,
 			primaryKey: "pk",
 			width: "100%",
 			defaultColumnWidth: "150px",

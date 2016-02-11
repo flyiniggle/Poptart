@@ -1,6 +1,6 @@
 var Alert = imports("components/alerts/alert.js");
 var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
-var accountService = imports('services/account/AccountService.js');
+var accountService = imports('services/monitors/account/AccountMonitorService.js');
 var dashboardService = imports('services/dashboard/DashboardService.js');
 
 var AccountController = function(){

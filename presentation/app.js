@@ -15,7 +15,7 @@ var winston = require('winston');
 
 var config = imports("config/config.js");
 var dashboardRoutes = imports('routes/dashboard/DashboardRouter.js')(express);
-var accountRoutes = imports('routes/account/AccountRouter.js')(express);
+var accountMonitorRoutes = imports('routes/monitors/account/AccountMonitorRouter.js')(express);
 
 // Logging
 global.logging = new (winston.Logger)({
@@ -58,7 +58,6 @@ env = nunjucks.configure(path.join(__dirname, "templates"), {
 });
 
 // Routes for static files
-app.use("/modules", express.static(path.join(__dirname, "ui", "modules")));
 app.use("/components", express.static(path.join(__dirname, "ui", "components")));
 app.use("/scripts", express.static(path.join(__dirname, "ui", "scripts")));
 app.use("/css", express.static(path.join(__dirname, "ui", "css")));
@@ -67,7 +66,7 @@ app.use("/templates", express.static(path.join(__dirname, "templates")));
 // Routes for modules
 app.use("/", dashboardRoutes);
 app.use("/index", dashboardRoutes);
-app.use("/account", accountRoutes);
+app.use("/monitors/account", accountMonitorRoutes);
 
 server = app.listen(config.presentation.port, function(){
 	var host = "localhost",
