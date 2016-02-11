@@ -4,6 +4,7 @@
 	<title>Poptart Node</title>
 	<link href="/css/infragistics/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" type="text/css"/>
 	<link href="/css/infragistics/css/structure/infragistics.css" rel="stylesheet" type="text/css"/>
+	<link href="/css/ionicons/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
 	<link href="/css/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
 	<link href="/css/jquery-ui/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
 
@@ -16,7 +17,7 @@
 	<div id="controlsContainer">
 		<div id="controls">
 			<div id="mainNavMenuTarget">
-				<h2 id="mainNavMenuTargetText">
+				<h2 id="mainNavMenuTargetText" class="ion-android-exit">
 					Go To:
 				</h2>
 			</div>

@@ -1,6 +1,13 @@
 {% for alert in alerts %}
-    <div class="alert {{alert.level}}">
+    <div class="alert">
         <div class="alert_close"></div>
+        {% if  alert.level == "error"%}
+            <span class="{{ alert.level }} ion-minus-circled"></span>
+        {% elif  alert.level == "warning" %}
+            <span class="{{ alert.level }} ion-alert-circled"></span>
+        {% elif  alert.level == "info" %}
+            <span class="{{ alert.level }} ion-information-circled"></span>
+        {% endif %}
         <h3 class="alert_summary">{{alert.summary}}</h3>
         <span class="alert_message">{{alert.message}}</span>
     </div>
