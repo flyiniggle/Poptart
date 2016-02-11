@@ -6,13 +6,13 @@
 
 {% block summary %}
 	<div>
-		<span>Total accounts: </span><span id="accountCount"></span>
+		<h4>Total accounts: </h4><span id="accountCount"></span>
 	</div>
 	<div>
-		<span>Recently used: </span><span id="accountUpdated"></span>
+		<h4>Recently used: </h4><span id="accountUpdated"></span>
 	</div>
 	<div>
-		<span>Total securities: </span><span id="securityCount"></span>
+		<h4>Total securities: </h4><span id="securityCount"></span>
 	</div>
 {% endblock %}
 

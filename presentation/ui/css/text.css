@@ -2,6 +2,10 @@
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+h1, h2, h3, h4 {
+	display: inline-block;
+}
+
 h1 {
 	font-size: 20px;
 	font-weight: bold;
@@ -20,6 +24,12 @@ h3 {
 	color: rgb(94, 57, 41);
 }
 
+h4 {
+	font-size: 12px;
+	font-weight: bold;
+	color: rgb(94, 57, 41);
+}
+
 p, span {
 	font-size: 12px;
 	color: rgb(94, 57, 41);
@@ -29,7 +39,7 @@ a {
 	text-decoration: none;
 }
 
-a:hover {
+a:hover, input[type='button']:hover {
 	text-decoration: underline;
 }
 
@@ -37,4 +47,14 @@ a.navigationLink {
 	font-size: 12px;
 	font-weight: normal;
 	color: rgb(94, 57, 41);
+}
+
+input[type='button'] {
+	color: rgb(94, 57, 41);
+	border: none;
+	background-color: transparent;
+}
+
+.componentAction {
+	color: rgb(222, 232, 190) !important;
 }

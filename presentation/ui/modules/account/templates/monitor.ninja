@@ -9,7 +9,7 @@
 	<form id="am_accountLauncher" onSubmit="Poptart.Account.Monitor.goToAccount()">
 		<span>Go to account: </span>
 		<input id="am_accountSelector" type="text"/>
-		<input type="button" value="launch"/>
+		<input type="button" class="componentAction" value="launch"/>
 	</form>
 {% endblock %}
 

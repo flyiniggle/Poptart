@@ -141,10 +141,6 @@ body {
 	text-overflow: ellipsis;
 }
 
-.alert_summary {
-	display: inline;
-}
-
 .alert_message {
 	display: block;
 }
