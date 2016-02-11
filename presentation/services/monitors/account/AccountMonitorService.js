@@ -2,7 +2,7 @@ var util = require('util');
 
 var Service = imports('services/BaseService.js');
 
-var AccountsService = function(){
+var AccountsMonitorService = function(){
 	var self = this;
 
 	self.getAccounts = function(res) {
@@ -26,5 +26,5 @@ var AccountsService = function(){
 	};
 };
 
-module.exports = new AccountsService();
+module.exports = new AccountsMonitorService();
 

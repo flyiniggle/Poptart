@@ -1,6 +1,6 @@
 var Alert = imports("components/alerts/alert.js");
 var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
-var accountService = imports('services/monitors/account/AccountMonitorService.js');
+var accountMonitorService = imports('services/monitors/account/AccountMonitorService.js');
 var dashboardService = imports('services/dashboard/DashboardService.js');
 
 var AccountController = function(){
@@ -14,7 +14,7 @@ var AccountController = function(){
 			accountsRequest;
 
 		if(!completeAccountData){
-			accountsRequest = accountService.getAccounts(res);
+			accountsRequest = accountMonitorService.getAccounts(res);
 			marshaller = new ServiceMarshaller(res, [accountsRequest, summaryRequest]);
 			marshaller.on("end", function(res, data) {
 				processAccounts(res, data[0], data[1]);
@@ -29,7 +29,7 @@ var AccountController = function(){
 	};
 
 	self.getAccount = function(req, res){
-		var service = accountService.getAccount(res, req.params.acc_id);
+		var service = accountMonitorService.getAccount(res, req.params.acc_id);
 
 		service.on("end", processAccount);
 		service.send();
