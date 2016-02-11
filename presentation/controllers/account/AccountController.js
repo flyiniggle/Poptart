@@ -1,4 +1,4 @@
-var Alert = imports("common/alerts/alert.js");
+var Alert = imports("components/alerts/alert.js");
 var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
 var accountService = imports('services/account/AccountService.js');
 var dashboardService = imports('services/dashboard/DashboardService.js');
@@ -72,7 +72,7 @@ var AccountController = function(){
 		templateData.accountIDsList = JSON.stringify(accountIDs);
 		templateData.summaryData = JSONSummaryData;
 		templateData.alerts = alerts;
-		res.render("modules/account/templates/monitor.ninja", templateData);
+		res.render("modules/monitors/account/accountmonitor.ninja", templateData);
 	}
 
 	function processAccount(data, res) {

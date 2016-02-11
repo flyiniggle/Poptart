@@ -1,4 +1,4 @@
-{% extends "templates/BaseLayout.ninja" %}
+{% extends "BaseLayout.ninja" %}
 
 {% block css %}
 	{{ super() }}

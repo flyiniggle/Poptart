@@ -18,7 +18,7 @@ Poptart.Dashboard = function() {
 	function showAccountSummary(data){
 		$("#accountCount").html(data.totalCount);
 		$("#accountUpdated").html(data.recentAccounts);
-		$("#alertsContent").append(nunjucks.render("components/alerts/templates/alerts.ninja", data));
+		$("#alertsContent").append(nunjucks.render("templates/components/alerts/alerts.ninja", data));
 	}
 
 	function showSecuritySummary(data){

@@ -50,7 +50,7 @@
 				</div>
 				<div id="alertsContent">
 					{% block alerts %}
-						{% include "components/alerts/templates/alerts.ninja" %}
+						{% include "components/alerts/alerts.ninja" %}
 					{% endblock %}
 				</div>
 			</div>

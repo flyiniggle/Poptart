@@ -1,5 +1,5 @@
 var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
-var Alert = imports("common/alerts/Alert.js");
+var Alert = imports("components/alerts/Alert.js");
 
 var dashboardService = imports('services/dashboard/DashboardService.js');
 var accountService = imports('services/account/AccountService.js');

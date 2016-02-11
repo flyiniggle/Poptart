@@ -51,7 +51,7 @@ var app, env, server;
 app = express();
 app.set('view engine', 'nunjucks');
 
-env = nunjucks.configure(path.join(__dirname, "ui"), {
+env = nunjucks.configure(path.join(__dirname, "templates"), {
 	express: app,
 	autoescape: true,
 	watch: true
@@ -62,6 +62,7 @@ app.use("/modules", express.static(path.join(__dirname, "ui", "modules")));
 app.use("/components", express.static(path.join(__dirname, "ui", "components")));
 app.use("/scripts", express.static(path.join(__dirname, "ui", "scripts")));
 app.use("/css", express.static(path.join(__dirname, "ui", "css")));
+app.use("/templates", express.static(path.join(__dirname, "templates")));
 
 // Routes for modules
 app.use("/", dashboardRoutes);

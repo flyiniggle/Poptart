@@ -1,7 +1,7 @@
-{% extends "templates/BaseLayout.ninja" %}
+{% extends "BaseLayout.ninja" %}
 
 {%  block main_nav %}
-	<a class="navigationLink" href="/account/">Account Monitor</a>
+	<a class="navigationLink" href="/account">Account Monitor</a>
 {% endblock %}
 
 {% block summary %}
@@ -18,7 +18,7 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="modules/dashboard/scripts/dashboard.js"></script>
+	<script type="text/javascript" src="/index/scripts/dashboard.js"></script>
 	<script type="text/javascript">
 		Poptart.Dashboard.init();
 	</script>
