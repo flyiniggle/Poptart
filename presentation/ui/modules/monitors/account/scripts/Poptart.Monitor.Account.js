@@ -59,7 +59,7 @@ Poptart.Monitor.Account = function(){
 	};
 
 	function changeAccountURL(e){
-		var monitor = Poptart.Account.Monitor,
+		var monitor = Poptart.Monitor.Account,
 			i, pk;
 
 		i = monitor.accountList.indexOf(e.target.value);

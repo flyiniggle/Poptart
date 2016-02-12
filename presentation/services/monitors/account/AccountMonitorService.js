@@ -1,5 +1,3 @@
-var util = require('util');
-
 var Service = imports('services/BaseService.js');
 
 var AccountsMonitorService = function(){
@@ -15,14 +13,6 @@ var AccountsMonitorService = function(){
 		getter = new Service.Service(options, res);
 
 		return getter;
-	};
-
-	self.getAccount = function(res, acct) {
-		var options = {};
-
-		options.path = util.format("/account/%s/", acct);
-		options.method = "GET";
-		options.headers = {Accept: "application:json"};
 	};
 };
 

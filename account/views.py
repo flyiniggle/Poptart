@@ -15,26 +15,7 @@ class AccountMonitor(View):
         accounts = Account.objects.all()
         complete_accounts = []
         for account in accounts:
-            complete_account = dict()
-            complete_account["pk"] = account.pk
-            complete_account["name"] = account.name
-            complete_account["description"] = account.description
-            complete_account["inception_date"] = str(account.inception_date)
-            complete_account["total_cash"] = float(account.total_cash)
-            complete_account["expected_cash"] = float(account.expected_cash)
-            complete_account["max_pos_drift"] = float(account.max_pos_drift)
-            complete_account["max_cash_drift"] = float(account.max_cash_drift)
-            complete_account["max_total_drift"] = float(account.max_total_drift)
-            complete_account["last_update"] = str(account.last_update)
-            complete_account["client_1_id"] = account.client_1_id
-            complete_account["manager"] = account.manager
-            complete_account["solution_name"] = account.solution_name
-            complete_account["total_value"] = account.total_value
-            complete_account["total_expected_value"] = account.total_expected_value
-            complete_account["cash_drift"] = account.cash_drift
-            complete_account["holdings_drift"] = account.holdings_drift
-            complete_account["total_drift"] = account.total_drift
-            complete_accounts.append(complete_account)
+            complete_accounts.append(buildFullAccount(account))
 
         return HttpResponse(json.dumps(complete_accounts), status="200 OK", content_type="application/json")
 
@@ -63,7 +44,13 @@ class AccountSummary(View):
 
 class AccountDetail(View):
     def get(self, request, **kwargs):
-        return HttpResponse(JSONSerializer().serialize(Holding.objects.filter(account=kwargs.get('acct_id'))))
+        acct_id = kwargs.get('acct_id')
+        account = Account.objects.get(pk=acct_id)
+        complete_account = buildFullAccount(account)
+        holdings = Holding.objects.filter(account=acct_id)
+        details = dict(account=complete_account, holdings=list(holdings))
+                
+        return HttpResponse(json.dumps(details), status="200 OK", content_type="application/json")
 
     def post(self, request):
         n = request.post
@@ -80,3 +67,27 @@ class AccountDetail(View):
                 return HttpResponse(JSONSerializer().serialize(holding), status="201 Created", content_type="application/json")
             except ValidationError as e:
                 return HttpResponse(e, status="409 Conflict", content_type="application/json")
+            
+
+def buildFullAccount(account):
+    complete_account = dict()
+    complete_account["pk"] = account.pk
+    complete_account["name"] = account.name
+    complete_account["description"] = account.description
+    complete_account["inception_date"] = str(account.inception_date)
+    complete_account["total_cash"] = float(account.total_cash)
+    complete_account["expected_cash"] = float(account.expected_cash)
+    complete_account["max_pos_drift"] = float(account.max_pos_drift)
+    complete_account["max_cash_drift"] = float(account.max_cash_drift)
+    complete_account["max_total_drift"] = float(account.max_total_drift)
+    complete_account["last_update"] = str(account.last_update)
+    complete_account["client_1_id"] = account.client_1_id
+    complete_account["manager"] = account.manager
+    complete_account["solution_name"] = account.solution_name
+    complete_account["total_value"] = account.total_value
+    complete_account["total_expected_value"] = account.total_expected_value
+    complete_account["cash_drift"] = account.cash_drift
+    complete_account["holdings_drift"] = account.holdings_drift
+    complete_account["total_drift"] = account.total_drift
+    
+    return complete_account

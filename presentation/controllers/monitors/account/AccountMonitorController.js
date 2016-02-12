@@ -3,7 +3,7 @@ var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
 var accountMonitorService = imports('services/monitors/account/AccountMonitorService.js');
 var dashboardService = imports('services/dashboard/DashboardService.js');
 
-var AccountController = function(){
+var AccountMonitorController = function(){
 	var self = this,
 		completeAccountData;
 
@@ -26,13 +26,6 @@ var AccountController = function(){
 			});
 			summaryRequest.send();
 		}
-	};
-
-	self.getAccount = function(req, res){
-		var service = accountMonitorService.getAccount(res, req.params.acc_id);
-
-		service.on("end", processAccount);
-		service.send();
 	};
 
 
@@ -75,10 +68,6 @@ var AccountController = function(){
 		res.render("modules/monitors/account/accountmonitor.ninja", templateData);
 	}
 
-	function processAccount(data, res) {
-
-	}
-
 	function processAccountLookup(res, data){
 
 		res.send(data);
@@ -88,4 +77,4 @@ var AccountController = function(){
 
 };
 
-module.exports = AccountController;
+module.exports = AccountMonitorController;

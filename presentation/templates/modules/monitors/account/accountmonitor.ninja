@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block controls %}
-	<form id="am_accountLauncher" onSubmit="Poptart.Monitor.Account.goToAccount()">
+	<form id="am_accountLauncher">
 		<span>Go to account: </span>
 		<input id="am_accountSelector" type="text"/>
 		<input type="button" class="componentAction" value="launch"/>
