@@ -1,4 +1,5 @@
 const accountService = imports('services/account/AccountService');
+const Alert = imports('components/alerts/Alert.js');
 
 const AccountController = function(){
 	const self = this;
@@ -14,7 +15,9 @@ const AccountController = function(){
 	// Request Callbacks
 	function processAccount(res, accountData){
 		var templateData = {},
-			JSONData;
+			alerts = [],
+			JSONData, account,
+			alertMessage;
 
 		try {
 			JSONData = JSON.parse(accountData);
@@ -22,8 +25,24 @@ const AccountController = function(){
 			logging.error("Could not parse data: %s", accountData);
 		}
 
-		templateData.account = JSON.stringify(JSONData.account);
-		templateData.holdings = JSON.stringify(JSONData.holdings);
+		account = JSONData.account;
+
+		if(account.holdings_drift > account.max_pos_drift) {
+			alertMessage = account.name + " has drifting holdings.";
+			alerts.push(new Alert("error", "Holdings Drift", alertMessage));
+		}
+		if(account.cash_drift > account.max_cash_drift) {
+			alertMessage = account.name + " has drifting cash.";
+			alerts.push(new Alert("info", "Cash Drift", alertMessage));
+		}
+		if(account.total_drift > account.max_total_drift) {
+			alertMessage = account.name + " is drifting.";
+			alerts.push(new Alert("warning", "Drift", alertMessage));
+		}
+
+		templateData.account = JSONData.account;
+		templateData.holdings = JSONData.holdings;
+		templateData.alerts = alerts;
 
 		res.render("modules/account/account.ninja", templateData);
 	}

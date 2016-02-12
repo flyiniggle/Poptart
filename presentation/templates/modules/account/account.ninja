@@ -1,3 +1,21 @@
-<p>{{ account }}</p>
+{% extends 'BaseLayout.ninja' %}
 
-{{ holdings }}
+{% block main_nav %}
+	{{ super() }}
+	<a class="navigationLink" href="/monitors/account">Account Monitor</a>
+{% endblock %}
+
+{% block summary %}
+	<div>
+		<h4>Account: </h4><span id="accountCount">{{ account.name }}</span>
+	</div>
+	<div>
+		<h4>Description: </h4><span id="accountCount">{{ account.description }}</span>
+	</div>
+	<div>
+		<h4>Manager: </h4><span id="accountUpdated">{{ account.manager }}</span>
+	</div>
+	<div>
+		<h4>Client: </h4><span id="securityCount">{{ account.client_1_id }}</span>
+	</div>
+{% endblock %}

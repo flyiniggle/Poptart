@@ -47,8 +47,9 @@ class AccountDetail(View):
         acct_id = kwargs.get('acct_id')
         account = Account.objects.get(pk=acct_id)
         complete_account = buildFullAccount(account)
-        holdings = Holding.objects.filter(account=acct_id)
-        details = dict(account=complete_account, holdings=list(holdings))
+        holdings = list(Holding.objects.filter(account=acct_id))
+        JSONHoldings = JSONSerializer().serialize(holdings)
+        details = dict(account=complete_account, holdings=JSONHoldings)
                 
         return HttpResponse(json.dumps(details), status="200 OK", content_type="application/json")
 

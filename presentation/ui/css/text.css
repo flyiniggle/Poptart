@@ -39,7 +39,7 @@ a {
 	text-decoration: none;
 }
 
-a:hover, input[type='button']:hover {
+a:hover, input[type='button']:hover, input[type='submit']:hover {
 	text-decoration: underline;
 }
 
@@ -49,7 +49,7 @@ a.navigationLink {
 	color: rgb(94, 57, 41);
 }
 
-input[type='button'] {
+input[type='button'], input[type='submit'] {
 	color: rgb(94, 57, 41);
 	border: none;
 	background-color: transparent;

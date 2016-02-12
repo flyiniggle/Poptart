@@ -3,9 +3,9 @@ Poptart.Monitor.Account = function(){
 
 	ReturnObj.init = function(){
 		$("#am_accountSelector").autocomplete({
-			source: Poptart.Monitor.Account.accountList,
-			change: changeAccountURL
-		}).on("blur", changeAccountURL);
+			source: Poptart.Monitor.Account.accountList
+		});
+
 		$("#am_testTable").igGrid({
 			dataSource: Poptart.Monitor.Account.treegridData,
 			primaryKey: "pk",
@@ -58,14 +58,14 @@ Poptart.Monitor.Account = function(){
 		});
 	};
 
-	function changeAccountURL(e){
+	ReturnObj.launchAccount = function(){
 		var monitor = Poptart.Monitor.Account,
 			i, pk;
-
-		i = monitor.accountList.indexOf(e.target.value);
+console.log("laa")
+		i = monitor.accountList.indexOf($("#am_accountSelector").val());
 		pk = monitor.accountIDsList[i];
 		$("#am_accountLauncher").attr("action", "/account/" + pk).submit();
-	}
+	};
 
 	return ReturnObj;
 }();

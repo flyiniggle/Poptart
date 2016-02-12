@@ -6,10 +6,10 @@
 {% endblock %}
 
 {% block controls %}
-	<form id="am_accountLauncher">
+	<form id="am_accountLauncher" onsubmit="Poptart.Monitor.Account.launchAccount()">
 		<span>Go to account: </span>
 		<input id="am_accountSelector" type="text"/>
-		<input type="button" class="componentAction" value="launch"/>
+		<input type="submit" class="componentAction" value="launch"/>
 	</form>
 {% endblock %}
 
