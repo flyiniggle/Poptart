@@ -1,5 +1,6 @@
 import datetime
 import json
+from random import randrange
 
 from django.views.generic import View
 from django.http import HttpResponse
@@ -8,6 +9,7 @@ from django.core.exceptions import ValidationError
 from poptart.lib.serializers import JSONSerializer
 from account.models import Account
 from account.models import Holding
+from securitymanager.models import Security
 
 
 class AccountMonitor(View):
@@ -68,7 +70,41 @@ class AccountDetail(View):
                 return HttpResponse(JSONSerializer().serialize(holding), status="201 Created", content_type="application/json")
             except ValidationError as e:
                 return HttpResponse(e, status="409 Conflict", content_type="application/json")
-            
+
+class DemoData(View):
+    def get(self, request):
+        securities = Security.objects.all()
+        account_types = ["savings", 'retirement', 'growth', 'account', 'basic']
+        sponsors = ['MRG', 'MRL', 'UBS', 'XFI', 'WCV', 'SMB']
+        solutions = ["AssetAlloc", "E1", "E2", "EquityIndex", "FI", "FIDynamic", "FixedIncome", "PRDT-Product2", "Strategy1", "Strategy2", "Strategy3", "Strategy4", "Strategy5", "Strategy6", "Strategy7", "Strategy8", "Strategy9", "Strategy10"]
+        for i in range(0, 100):
+            sponsor = sponsors[randrange(0, len(sponsors) - 1)]
+            account_type = account_types[randrange(0, len(account_types) -1)]
+            name = "{0}{1}{2}".format(sponsor, account_type, i)
+            cash = randrange(0, 100000000)
+            expected_cash = randrange(0, 10000000)
+            client = randrange(1, 50)
+            description = "{0} for client {1}".format(account_type, client)
+            max_pos_drift = randrange(0, 100000)
+            max_cash_drift = randrange(0, 100000)
+            max_total_drift = randrange(0, 200000)
+            manager = randrange(0, 10)
+            solution = solutions[randrange(0, len(solutions) - 1)]
+            account = Account(name=name, description=description, inception_date=datetime.datetime.now(), total_cash=cash,
+                              expected_cash=expected_cash, max_pos_drift=max_pos_drift, max_cash_drift=max_cash_drift,
+                              max_total_drift=max_total_drift, client_1_id=client, manager=manager, solution_name=solution)
+            account.save()
+            number_of_holdings = randrange(0, 15)
+            for j in range(0, number_of_holdings):
+                sec = securities[randrange(1, (len(securities) - 1))]
+                quan = randrange(1, 5000)
+                exquan = randrange(1, 5000)
+                exval = randrange(1, 1000000)
+                holding = Holding(account=account, security=sec,
+                                  quantity=quan, expected_quantity=exquan, expected_value=exval)
+                holding.save()
+                
+        return HttpResponse("done", status="200 OK", content_type="text/html")
 
 def buildFullAccount(account):
     complete_account = dict()

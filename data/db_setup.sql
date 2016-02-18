@@ -34,7 +34,10 @@ CREATE TABLE IF NOT EXISTS account_account (
   `description` varchar(255) DEFAULT NULL,
   `inception_date` datetime,
   `total_cash` decimal(17,2),
+  `expected_cash` decimal(17,2),
   `max_pos_drift` decimal(10,4),
+  `max_cash_drift` decimal(10,4),
+  `max_total_drift` decimal(10,4),
   `last_update` datetime,
   `client_1_id` int(11),
   `manager` int(11),
@@ -50,6 +53,7 @@ CREATE TABLE IF NOT EXISTS account_holding (
   expected_quantity double NOT NULL,
   security_id int(11) NOT NULL,
   account_id int(11),
+  expected_value decimal(17,2),
   PRIMARY KEY (id),
   KEY account_holding_8a089c2a (account_id),
   KEY account_hold_security_id_36d54736_fk_securitymanager_security_id (security_id)
