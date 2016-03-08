@@ -1,12 +1,16 @@
 Poptart.Monitor.Account = function(){
-	var ReturnObj = {};
+	var ReturnObj = {},
+		tableControls;
 
 	ReturnObj.init = function(){
+		var  testTableEle = $("#am_testTable"),
+			testTable;
+
 		$("#am_accountSelector").autocomplete({
 			source: Poptart.Monitor.Account.accountList
 		});
 
-		$("#am_testTable").igGrid({
+		testTable = testTableEle.igGrid({
 			dataSource: Poptart.Monitor.Account.treegridData,
 			primaryKey: "pk",
 			width: "100%",
@@ -56,12 +60,14 @@ Poptart.Monitor.Account = function(){
 				}
 			]
 		});
+
+		tableControls = new Poptart.TableController(testTable, testTableEle[0]);
 	};
 
 	ReturnObj.launchAccount = function(){
 		var monitor = Poptart.Monitor.Account,
 			i, pk;
-console.log("laa")
+
 		i = monitor.accountList.indexOf($("#am_accountSelector").val());
 		pk = monitor.accountIDsList[i];
 		$("#am_accountLauncher").attr("action", "/account/" + pk).submit();

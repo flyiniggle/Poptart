@@ -16,6 +16,9 @@
 	</div>
 {% endblock %}
 
+{% block main %}
+{% endblock %}
+
 {% block js %}
 	{{ super() }}
 	<script type="text/javascript" src="/index/scripts/dashboard.js"></script>
