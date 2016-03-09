@@ -1,4 +1,4 @@
-Poptart.TableController = function(table, tableEle){
+Poptart.TableController = function(table){
 	var self = this,
 		model;
 

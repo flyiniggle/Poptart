@@ -3,20 +3,19 @@ Poptart.Monitor.Account = function(){
 		tableControls;
 
 	ReturnObj.init = function(){
-		var  testTableEle = $("#am_testTable"),
-			testTable;
+		var testTable = $("#am_testTable");
 
 		$("#am_accountSelector").autocomplete({
 			source: Poptart.Monitor.Account.accountList
 		});
 
-		testTable = testTableEle.igGrid({
+		testTable.igGrid({
 			dataSource: Poptart.Monitor.Account.treegridData,
 			primaryKey: "pk",
 			width: "100%",
 			defaultColumnWidth: "150px",
 			columns: [
-				{headerText: "Account Number", key: "pk", dataType: "number", width: "40px"},
+				{headerText: "#", key: "pk", dataType: "number", width: "40px"},
 				{headerText: "Name", key: "name", dataType: "string", width: "175px"},
 				{headerText: "Description", key: "description", dataType: "string", width: "150px"},
 				{headerText: "Cash", key: "total_cash", dataType: "number", width: "100px"},
@@ -36,6 +35,9 @@ Poptart.Monitor.Account = function(){
 				{headerText: "Last Updated", key: "last_update", dataType: "date"}
 			],
 			features:[
+				{
+					name: "Paging",
+				},
 				{
 					name: "GroupBy",
 					groupByDialogContainment: "window",
@@ -61,7 +63,7 @@ Poptart.Monitor.Account = function(){
 			]
 		});
 
-		tableControls = new Poptart.TableController(testTable, testTableEle[0]);
+		tableControls = new Poptart.TableController(testTable);
 	};
 
 	ReturnObj.launchAccount = function(){
