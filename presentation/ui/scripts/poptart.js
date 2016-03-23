@@ -55,6 +55,8 @@ var Poptart = function(){
 	});
 	ko.setTemplateEngine(new ko.nunjucksTemplateEngine());
 
+	//Register knockout components
+
 
 
 	// Public methods
@@ -63,6 +65,10 @@ var Poptart = function(){
 	ReturnObj.init = function(){
 		$("#mainNavMenuTarget").on("mouseover", showNavMenu);
 		$("#mainNavMenuTarget, #mainNavMenu").on("mouseleave", hideNavMenu);
+		ko.components.register("alerts", {
+			createViewModel: Poptart.Alerts,
+			template: "components/alerts/alerts.ninja"
+		});
 	};
 
 

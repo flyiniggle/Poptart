@@ -77,3 +77,11 @@ Poptart.Monitor.Account = function(){
 
 	return ReturnObj;
 }();
+
+Poptart.Monitor.Account.CreateAccount = function(){
+	var ReturnObj = {};
+
+	ReturnObj.init = function(){
+
+	}
+};

@@ -48,7 +48,7 @@
 				<div class="panelHeader">
 					<h3>Alerts:</h3>
 				</div>
-				<div id="alertsContent">
+				<div id="alertsContent" data-bind="component:{ name: 'alerts', params: {alerts: [{summary:'blah', message:'blahmessage', severity:'error'}]}}">
 					{% block alerts %}
 						{% include "components/alerts/alerts.ninja" %}
 					{% endblock %}
@@ -74,6 +74,7 @@
 
 	{%  block js %}
 		<script type="text/javascript" src="/scripts/poptart.js"></script>
+		<script type="text/javascript" src="/components/Poptart.Alerts.js"></script>
 		<script type="text/javascript">
 			Poptart.init();
 		</script>

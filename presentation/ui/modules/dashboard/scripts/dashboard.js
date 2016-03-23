@@ -16,9 +16,15 @@ Poptart.Dashboard = function() {
 	};
 
 	function showAccountSummary(data){
+		var alertModel = function(){
+			this.alerts = data.alerts
+		};
+
 		$("#accountCount").html(data.totalCount);
 		$("#accountUpdated").html(data.recentAccounts);
-		$("#alertsContent").append(nunjucks.render("templates/components/alerts/alerts.ninja", data));
+		//$("#alertsContent").dataBind({component:{ name: 'alerts', params: {alerts: 'alerts'}}});
+		ko.applyBindings(new alertModel());
+		//append(nunjucks.render("templates/components/alerts/alerts.ninja", data));
 	}
 
 	function showSecuritySummary(data){

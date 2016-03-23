@@ -1,3 +1,4 @@
+<div>just want to see something</div>
 {% for alert in alerts %}
     <div class="alert">
         <div class="alert_close"></div>
