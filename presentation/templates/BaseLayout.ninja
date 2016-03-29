@@ -48,7 +48,7 @@
 				<div class="panelHeader">
 					<h3>Alerts:</h3>
 				</div>
-				<div id="alertsContent" data-bind="component:{ name: 'alerts', params: {alerts: [{summary:'blah', message:'blahmessage', severity:'error'}]}}">
+				<div id="alertsContent">
 					{% block alerts %}
 						{% include "components/alerts/alerts.ninja" %}
 					{% endblock %}

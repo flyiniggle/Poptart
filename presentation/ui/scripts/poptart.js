@@ -43,17 +43,23 @@ var Poptart = function(){
 		});
 	};
 
-	//Use nunjucks as the templating engine
-	ko.nunjucksTemplateEngine = function(){};
-	ko.nunjucksTemplateEngine.prototype = ko.utils.extend(new ko.templateEngine(), {
-		renderTemplate: function(templateSource, bindingContext) {
-			var html = nunjucks.render(templateSource, bindingContext['$data']);
-
-			return ko.utils.parseHtmlFragment(html);
-		},
-		allowTemplateRewriting: false
+	ko.components.loaders.unshift({
+		loadTemplate: function(name, templateConfig, callback) {
+			if(templateConfig.module) {
+				// Uses jQuery's ajax facility to load the markup from a file
+				var fullUrl = '/templates/' + templateConfig.module + "/" + templateConfig.name;
+				$.get(fullUrl, function(markupString) {
+					// We need an array of DOM nodes, not a string.
+					// We can use the default loader to convert to the
+					// required format.
+					ko.components.defaultLoader.loadTemplate(name, markupString, callback);
+				});
+			} else {
+				// Unrecognized config format. Let another loader handle it.
+				callback(null);
+			}
+		}
 	});
-	ko.setTemplateEngine(new ko.nunjucksTemplateEngine());
 
 	//Register knockout components
 
@@ -67,7 +73,9 @@ var Poptart = function(){
 		$("#mainNavMenuTarget, #mainNavMenu").on("mouseleave", hideNavMenu);
 		ko.components.register("alerts", {
 			createViewModel: Poptart.Alerts,
-			template: "components/alerts/alerts.ninja"
+			template: {
+				element: "alerts-template"
+			}
 		});
 	};
 
