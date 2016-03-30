@@ -105,7 +105,7 @@ Poptart.RibbonMenu = function(){
 
 		self.label = ele.data("name");
 		self.ribbonMenu = ele;
-		self.tab = jQuery("[data-name='" + self.label + "'");
+		self.tab = jQuery(".ribbonMenuTab[data-name='" + self.label + "'");
 
 		self.select = function() {
 			self.ribbonMenu.show();
