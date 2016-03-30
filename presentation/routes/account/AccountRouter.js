@@ -8,6 +8,9 @@ module.exports = function(express) {
 	router.use("/scripts", express.static(loadPath("ui/modules/account/scripts")));
 	router.use("/css", express.static(loadPath("ui/modules/account/css")));
 
+	router.get('/create', function(req, res) {
+		res.render("modules/monitors/account/createaccount.ninja");
+	});
 	router.get('/:acct_id', accountController.getAccount);
 
 	return router;

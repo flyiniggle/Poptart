@@ -71,12 +71,7 @@ var Poptart = function(){
 	ReturnObj.init = function(){
 		$("#mainNavMenuTarget").on("mouseover", showNavMenu);
 		$("#mainNavMenuTarget, #mainNavMenu").on("mouseleave", hideNavMenu);
-		ko.components.register("alerts", {
-			createViewModel: Poptart.Alerts,
-			template: {
-				element: "alerts-template"
-			}
-		});
+		Poptart.RibbonMenu.init();
 	};
 
 
@@ -98,4 +93,59 @@ var Poptart = function(){
 	};
 
 	return ReturnObj;
+}();
+
+Poptart.RibbonMenu = function(){
+	var ReturnObj = {},
+		ribbonMenus = {},
+		activeMenu;
+
+	var RibbonMenu = function(ele) {
+		var self = this;
+
+		self.label = ele.data("name");
+		self.ribbonMenu = ele;
+		self.tab = jQuery("[data-name='" + self.label + "'");
+
+		self.select = function() {
+			self.ribbonMenu.show();
+			self.tab.removeClass("ribbonMenuTabUnselected").addClass("ribbonMenuTabSelected")
+		};
+
+		self.deselect = function() {
+			self.ribbonMenu.hide();
+			self.tab.removeClass("ribbonMenuTabSelected").addClass("ribbonMenuTabUnselected")
+		};
+	};
+
+	ReturnObj.init = function() {
+		var menus = jQuery(".ribbonMenu"),
+			m;
+
+		jQuery.each(menus, function(i, val){
+				m = jQuery(val);
+					ribbonMenus[m.data("name")] = new RibbonMenu(m);
+			});
+
+		$(".ribbonMenuTab").one("click", showRibbonMenu);
+	};
+
+	function showRibbonMenu(e) {
+		if(!!activeMenu){
+			activeMenu.deselect();
+		}
+		activeMenu = ribbonMenus[jQuery(e.target).data("name")];
+		activeMenu.select();
+
+		activeMenu.tab.one("click", hideRibbonMenu);
+	}
+
+	function hideRibbonMenu() {
+		activeMenu.tab.one("click", showRibbonMenu);
+		activeMenu.deselect();
+		activeMenu = null;
+	}
+
+	return ReturnObj;
+
 }();

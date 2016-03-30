@@ -44,6 +44,7 @@ body {
 
 #controls {
 	position: fixed;
+	top: 0;
 	width: inherit;
 	height: inherit;
 	background-color: rgb(94, 57, 41);
@@ -54,11 +55,48 @@ body {
 	z-index: 100;
 }
 
-#contextControls {
+#ribbonMenuTabs {
+	position: absolute;
+	top: 0;
 	display: inline-block;
 	height: inherit;
-	padding-top: 5px;
-	vertical-align: top;
+}
+
+.ribbonMenuTab {
+	min-width: 70px;
+	height: 100%;
+	line-height: 50px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.ribbonMenuTabUnselected {
+	color: rgb(205, 140, 82);
+}
+
+.ribbonMenuTabUnselected:hover {
+	background: rgb(205, 140, 82);
+	color: rgb(94, 57, 41);
+}
+
+.ribbonMenuTabSelected {
+	background: rgb(205, 140, 82);
+	color: rgb(94, 57, 41);
+}
+
+#ribbonMenuStack {
+	height: 70px;
+}
+
+.ribbonMenu {
+	display: none;
+	background-color: rgb(205, 140, 82);
+	height: inherit;
+}
+
+.ribbonMenuItem {
+	display: inline-block;
+	padding-right: 15px;
 }
 
 #mainNavMenuTarget {
@@ -71,8 +109,8 @@ body {
 #mainNavMenuTargetText {
 	display: block;
 	height: inherit;
+	line-height: 50px;
 	font-size: 17px;
-	padding-top: 10px;
 }
 
 #mainNavMenu {

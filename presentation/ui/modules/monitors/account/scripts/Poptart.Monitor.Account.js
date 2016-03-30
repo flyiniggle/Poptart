@@ -79,9 +79,24 @@ Poptart.Monitor.Account = function(){
 }();
 
 Poptart.Monitor.Account.CreateAccount = function(){
-	var ReturnObj = {};
+	var ReturnObj = {},
+		AccountCreationViewModel;
+
+	AccountCreationViewModel = function(data) {
+		var self = this;
+
+		self.accountName = ko.observable("");
+		self.accountDescription = ko.observable("");
+		self.expectedCash = ko.observable("");
+		self.maxPositionDrift = ko.observable("");
+		self.maxCashDrift = ko.observable("");
+		self.maxTotalDrift = ko.observable("");
+		self.startingCash = ko.observable("");
+	};
 
 	ReturnObj.init = function(){
+		ko.applyBindings( new AccountCreationViewModel(data));
+	};
 
-	}
-};
+	return ReturnObj;
+}();

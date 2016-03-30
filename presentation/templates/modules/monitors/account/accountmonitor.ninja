@@ -6,11 +6,25 @@
 {% endblock %}
 
 {% block controls %}
-	<form id="am_accountLauncher" onsubmit="Poptart.Monitor.Account.launchAccount()">
-		<span>Go to account: </span>
-		<input id="am_accountSelector" type="text"/>
-		<input type="submit" class="componentAction" value="launch"/>
-	</form>
+	<div class="ribbonMenuTab ribbonMenuTabUnselected" data-name="Management">Management</div>
+{% endblock %}
+
+
+{% block ribbonMenus %}
+	<div id="ribbonMenu_Management" class="ribbonMenu" data-name="Management">
+		<div class="ribbonMenuItem">
+			<form id="am_accountLauncher" onsubmit="Poptart.Monitor.Account.launchAccount()">
+				<span>Go to account: </span>
+				<br/>
+				<input id="am_accountSelector" type="text"/>
+				<input type="submit" class="componentAction" value="launch"/>
+			</form>
+		</div>
+
+		<div class="ribbonMenuItem">
+			<a href="/account/create">create account</a>
+		</div>
+	</div>
 {% endblock %}
 
 {% block summary %}

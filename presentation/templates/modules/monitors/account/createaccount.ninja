@@ -1,0 +1,68 @@
+{% extends "BaseLayout.ninja" %}
+
+{% block css %}
+	{{ super() }}
+	<link href="/monitors/account/css/styles.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block main_nav %}
+	{{ super() }}
+	<a class="navigationLink" href="/monitors/account">Account Monitor</a>
+{% endblock %}
+
+{% block controls %}
+	<!--<a href="/account/">cancel</a>-->
+{% endblock %}
+
+{% block summary %}
+	<div>
+		<span>Total holdings value: </span>
+		<span></span>
+	</div>
+	<div>
+		<span>Holdings Drift: </span>
+		<span></span>
+	</div>
+	<div>
+		<span>Cash drift: </span>
+		<span></span>
+	</div>
+	<div>
+		<span>Total value: </span>
+		<span data-bind="text: startingCash"></span>
+	</div>
+{% endblock %}
+
+{% block main %}
+	<label for="accountNameInput">Account name:</label>
+	<input id="accountNameInput" type="text" data-bind="value: accountName"/>
+	<br/>
+	<label for="accountDescriptionInput">Account description:</label>
+	<textarea id="accountDescriptionInput" data-bind="text: accountDescription"></textarea>
+	<br/>
+	<label for="accountExpectedCashInput">Expected cash:</label>
+	<input id="accountExpectedCashInput" type="text" data-bind="value: expectedCash"/>
+	<br/>
+	<label for="accountMaxPositionDriftInput">Maximum position drift:</label>
+	<input id="accountMaxPositionDriftInput" type="text" data-bind="value: maxPositionDrift"/>
+	<br/>
+	<label for="accountMaxCashDriftInput">Maximum cash drift:</label>
+	<input id="accountMaxCashDriftInput" type="text" data-bind="value: maxCashDrift"/>
+	<br/>
+	<label for="accountMaxTotalDriftInput">Maximum total drift:</label>
+	<input id="accountMaxTotalDriftInput" type="text" data-bind="value: maxTotalDrift"/>
+	<br/>
+	<label for="accountCashInput">Starting cash:</label>
+	<input id="accountCashInput" type="text" data-bind="textInput: startingCash"/>
+{% endblock %}
+
+{% block js %}
+	{{ super() }}
+	<script type="text/javascript" src="/components/Poptart.TableController.js"></script>
+	<script type="text/javascript" src="/monitors/account/scripts/Poptart.Monitor.Account.js"></script>
+	<script type="text/javascript">
+		(function() {
+			Poptart.Monitor.Account.CreateAccount.init();
+		})();
+	</script>
+{% endblock %}
