@@ -23,6 +23,11 @@ body {
 	background-color: rgb(252, 247, 211);
 }
 
+input[type=text] {
+	padding: 3px;
+	border: none;
+}
+
 .panel {
 	margin: 5px;
 }
@@ -36,7 +41,7 @@ body {
 }
 
 #controlsContainer {
-	height: 100px;
+	height: 120px;
 	width: 100%;
 	margin-bottom: 10px;
 	display: block;
@@ -85,18 +90,48 @@ body {
 }
 
 #ribbonMenuStack {
-	height: 50px;
+	height: 70px;
 }
 
 .ribbonMenu {
 	display: none;
 	background-color: rgb(205, 140, 82);
 	height: inherit;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
-.ribbonMenuItem {
-	display: inline-block;
-	padding-right: 15px;
+.ribbonMenuGroup {
+	height: 60px;
+	padding-right: 10px;
+	padding-left: 10px;
+	border-right: 1px solid rgb(222, 232, 190);
+	float: left;
+}
+
+.ribbonMenuGroup:first-child {
+	margin-left: 15px;
+	border-left: 1px solid rgb(222, 232, 190);
+}
+
+.ribbonMenuGroupLabel {
+	display: block;
+	color: rgb(222, 232, 190);
+	margin-bottom: 5px;
+}
+
+.ribbonMenuForm {
+	display: inline;
+}
+
+.ribbonMenu input[type=text] {
+	font-size: 12px;
+}
+
+.ribbonMenu a {
+	display: block;
+	font-size: 12px;
+	color: rgb(94, 57, 41);
 }
 
 #mainNavMenuTarget {
