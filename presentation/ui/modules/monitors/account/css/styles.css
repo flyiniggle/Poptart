@@ -1,0 +1,6 @@
+#createAccountMain, #createAccountCash, #createAccountHoldings {
+	display: inline-block;
+	float: left;
+	padding-left: 10px;
+	width: 45%;
+}

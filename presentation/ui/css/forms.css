@@ -1,0 +1,22 @@
+input, textarea {
+	font-size: 13px;
+	padding: 3px;
+	border: none;
+}
+
+input[type='button'], input[type='submit'] {
+	color: rgb(94, 57, 41);
+	background-color: transparent;
+}
+
+.mainForm > input[type='text'], .mainForm > textarea {
+	width: 90%;
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+.mainForm > label {
+	display: block;
+	width: 90%;
+	height: 16px;
+}

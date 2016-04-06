@@ -8,7 +8,7 @@
         {% elif  alert.level == "info" %}
             <span class="{{ alert.level }} ion-information-circled"></span>
         {% endif %}
-        <h3 class="alert_summary">{{alert.summary}}</h3>
+        <h4 class="alert_summary">{{alert.summary}}</h4>
         <span class="alert_message">{{alert.message}}</span>
     </div>
 {% endfor %}

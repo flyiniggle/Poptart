@@ -16,7 +16,7 @@
 			<span class="ribbonMenuGroupLabel">Go to account: </span>
 			<form id="am_accountLauncher" class="ribbonMenuForm" onsubmit="Poptart.Monitor.Account.launchAccount()">
 				<input id="am_accountSelector" type="text"/>
-				<input type="submit" class="ribbonMenuFormSubmit" value="go"/>
+				<input type="submit" value="go"/>
 			</form>
 		</div>
 

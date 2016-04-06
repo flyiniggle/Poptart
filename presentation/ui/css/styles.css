@@ -23,11 +23,6 @@ body {
 	background-color: rgb(252, 247, 211);
 }
 
-input[type=text] {
-	padding: 3px;
-	border: none;
-}
-
 .panel {
 	margin: 5px;
 }
@@ -124,13 +119,9 @@ input[type=text] {
 	display: inline;
 }
 
-.ribbonMenu input[type=text] {
-	font-size: 12px;
-}
-
 .ribbonMenu a {
 	display: block;
-	font-size: 12px;
+	font-size: 13px;
 	color: rgb(94, 57, 41);
 }
 
@@ -202,7 +193,7 @@ input[type=text] {
 .alert {
 	padding: 5px;
 	width: 100%;
-	height: 40px;
+	height: 50px;
 	border-bottom: 1px solid rgb(222, 232, 190);
 }
 

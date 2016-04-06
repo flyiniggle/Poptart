@@ -19,19 +19,19 @@ h2 {
 }
 
 h3 {
-	font-size: 13px;
+	font-size: 15px;
 	font-weight: bold;
 	color: rgb(94, 57, 41);
 }
 
 h4 {
-	font-size: 12px;
+	font-size: 14px;
 	font-weight: bold;
 	color: rgb(94, 57, 41);
 }
 
-p, span {
-	font-size: 12px;
+p, span, label {
+	font-size: 13px;
 	color: rgb(94, 57, 41);
 }
 
@@ -44,17 +44,7 @@ a:hover, input[type='button']:hover, input[type='submit']:hover {
 }
 
 a.navigationLink {
-	font-size: 12px;
+	font-size: 13px;
 	font-weight: normal;
 	color: rgb(94, 57, 41);
-}
-
-input[type='button'], input[type='submit'] {
-	color: rgb(94, 57, 41);
-	border: none;
-	background-color: transparent;
-}
-
-.componentAction {
-	color: rgb(222, 232, 190) !important;
 }
