@@ -15,15 +15,22 @@
 		<div class="ribbonMenuGroup">
 			<span class="ribbonMenuGroupLabel">Go to account: </span>
 			<form id="am_accountLauncher" class="ribbonMenuForm" onsubmit="Poptart.Monitor.Account.launchAccount()">
-				<input id="am_accountSelector" type="text"/>
+				<input id="am_accountLauncherSelector" class="am_accountSelector" type="text"/>
 				<input type="submit" value="go"/>
+			</form>
+		</div>
+		
+		<div class="ribbonMenuGroup">
+			<span class="ribbonMenuGroupLabel">Delete account: </span>
+			<form id="am_accountDeleter" class="ribbonMenuForm">
+				<input class="am_accountSelector" type="text"/>
+				<input type="submit" value="delete"/>
 			</form>
 		</div>
 
 		<div class="ribbonMenuGroup">
 			<span class="ribbonMenuGroupLabel">Controls: </span>
 			<a class="ribbonMenuLink" href="/account/create">create account</a>
-			<a class="ribbonMenuLink" href="/account/create">delete account</a>
 		</div>
 	</div>
 {% endblock %}

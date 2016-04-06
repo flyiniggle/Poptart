@@ -5,7 +5,7 @@ Poptart.Monitor.Account = function(){
 	ReturnObj.init = function(){
 		var testTable = $("#am_testTable");
 
-		$("#am_accountSelector").autocomplete({
+		$(".am_accountSelector").autocomplete({
 			source: Poptart.Monitor.Account.accountList
 		});
 
@@ -70,7 +70,7 @@ Poptart.Monitor.Account = function(){
 		var monitor = Poptart.Monitor.Account,
 			i, pk;
 
-		i = monitor.accountList.indexOf($("#am_accountSelector").val());
+		i = monitor.accountList.indexOf($("#am_accountLauncherSelector").val());
 		pk = monitor.accountIDsList[i];
 		$("#am_accountLauncher").attr("action", "/account/" + pk).submit();
 	};
@@ -80,22 +80,27 @@ Poptart.Monitor.Account = function(){
 
 Poptart.Monitor.Account.CreateAccount = function(){
 	var ReturnObj = {},
-		AccountCreationViewModel;
+		AccountCreationViewModel, viewModel;
 
-	AccountCreationViewModel = function(data) {
+	AccountCreationViewModel = function() {
 		var self = this;
 
 		self.accountName = ko.observable("");
 		self.accountDescription = ko.observable("");
 		self.expectedCash = ko.observable("");
+		self.startingCash = ko.observable("");
 		self.maxPositionDrift = ko.observable("");
 		self.maxCashDrift = ko.observable("");
 		self.maxTotalDrift = ko.observable("");
-		self.startingCash = ko.observable("");
 	};
 
 	ReturnObj.init = function(){
-		ko.applyBindings( new AccountCreationViewModel(data));
+		viewModel = new AccountCreationViewModel();
+		ko.applyBindings(viewModel);
+	};
+	
+	ReturnObj.submit = function() {
+		console.log(ko.toJSON(viewModel));
 	};
 
 	return ReturnObj;
