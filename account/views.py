@@ -5,6 +5,7 @@ from random import randrange
 from django.views.generic import View
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
+from django.views.decorators.csrf import csrf_exempt
 
 from poptart.lib.serializers import JSONSerializer
 from account.models import Account
@@ -22,15 +23,22 @@ class AccountMonitor(View):
         return HttpResponse(json.dumps(complete_accounts), status="200 OK", content_type="application/json")
 
     def post(self, request):
-        if 'newAccount' in request.post:
-            n = request.post
-            account = Account(name=n.name, description=n.description)
-            try:
-                account.full_clean()
-                account.save()
-                return HttpResponse(JSONSerializer().serialize(account), status="201 Created", content_type="application/json")
-            except ValidationError as e:
-                return HttpResponse(e, status="409 Conflict", content_type="application/json")
+        n = json.loads(request.read())
+        try:
+            account = Account(name=n.get('accountName'), description=n.get('accountDescription'), inception_date=datetime.datetime.now(),
+                          total_cash=n.get('startingCash'), expected_cash=n.get('expectedCash'), max_pos_drift=n.get('maxPositionDrift'),
+                          max_cash_drift=n.get('maxCashDrift'), max_total_drift=n.get('maxTotalDrift'), solution_name="AssetAlloc",
+                          manager=randrange(0, 10), client_1_id=randrange(1, 50), last_update=datetime.datetime.now())
+        except Exception as e:
+            return HttpResponse(e, status="409 Conflict", content_type="application/json")
+
+        try:
+            account.full_clean()
+            account.save()
+            complete_account = buildFullAccount(account)
+            return HttpResponse(json.dumps(complete_account), status="201 Created", content_type="application/json")
+        except ValidationError as e:
+            return HttpResponse(e, status="409 Conflict", content_type="application/json")
 
 
 class AccountSummary(View):
@@ -52,7 +60,7 @@ class AccountDetail(View):
         holdings = list(Holding.objects.filter(account=acct_id))
         JSONHoldings = JSONSerializer().serialize(holdings)
         details = dict(account=complete_account, holdings=JSONHoldings)
-                
+
         return HttpResponse(json.dumps(details), status="200 OK", content_type="application/json")
 
     def post(self, request):
@@ -103,7 +111,7 @@ class DemoData(View):
                 holding = Holding(account=account, security=sec,
                                   quantity=quan, expected_quantity=exquan, expected_value=exval)
                 holding.save()
-                
+
         return HttpResponse("done", status="200 OK", content_type="text/html")
 
 def buildFullAccount(account):
@@ -126,5 +134,5 @@ def buildFullAccount(account):
     complete_account["cash_drift"] = account.cash_drift
     complete_account["holdings_drift"] = account.holdings_drift
     complete_account["total_drift"] = account.total_drift
-    
+
     return complete_account
