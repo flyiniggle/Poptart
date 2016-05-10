@@ -5,7 +5,6 @@ from random import randrange
 from django.views.generic import View
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
-from django.views.decorators.csrf import csrf_exempt
 
 from poptart.lib.serializers import JSONSerializer
 from account.models import Account
@@ -24,21 +23,15 @@ class AccountMonitor(View):
 
     def post(self, request):
         n = json.loads(request.read())
-        try:
-            account = Account(name=n.get('accountName'), description=n.get('accountDescription'), inception_date=datetime.datetime.now(),
-                          total_cash=n.get('startingCash'), expected_cash=n.get('expectedCash'), max_pos_drift=n.get('maxPositionDrift'),
-                          max_cash_drift=n.get('maxCashDrift'), max_total_drift=n.get('maxTotalDrift'), solution_name="AssetAlloc",
-                          manager=randrange(0, 10), client_1_id=randrange(1, 50), last_update=datetime.datetime.now())
-        except Exception as e:
-            return HttpResponse(e, status="409 Conflict", content_type="application/json")
+        account = Account(name=n.get('accountName'), description=n.get('accountDescription'), inception_date=datetime.datetime.now(),
+                      total_cash=n.get('startingCash'), expected_cash=n.get('expectedCash'), max_pos_drift=n.get('maxPositionDrift'),
+                      max_cash_drift=n.get('maxCashDrift'), max_total_drift=n.get('maxTotalDrift'), solution_name="AssetAlloc",
+                      manager=randrange(0, 10), client_1_id=randrange(1, 50), last_update=datetime.datetime.now())
 
-        try:
-            account.full_clean()
-            account.save()
-            complete_account = buildFullAccount(account)
-            return HttpResponse(json.dumps(complete_account), status="201 Created", content_type="application/json")
-        except ValidationError as e:
-            return HttpResponse(e, status="409 Conflict", content_type="application/json")
+        account.full_clean()
+        account.save()
+        complete_account = buildFullAccount(account)
+        return HttpResponse(json.dumps(complete_account), status="201 Created", content_type="application/json")
 
 
 class AccountSummary(View):
@@ -79,6 +72,7 @@ class AccountDetail(View):
             except ValidationError as e:
                 return HttpResponse(e, status="409 Conflict", content_type="application/json")
 
+
 class DemoData(View):
     def get(self, request):
         securities = Security.objects.all()
@@ -113,6 +107,7 @@ class DemoData(View):
                 holding.save()
 
         return HttpResponse("done", status="200 OK", content_type="text/html")
+
 
 def buildFullAccount(account):
     complete_account = dict()
