@@ -18,7 +18,7 @@
 	<div id="ribbonMenu_Management" class="ribbonMenu" data-name="Actions">
 		<div class="ribbonMenuGroup">
 			<span class="ribbonMenuGroupLabel">Controls: </span>
-			<a class="ribbonMenuLink" href="/monitors/account/">Save</a>
+			<span id="submitCreateAccount" class="ribbonMenuLink">Save</span>
 			<a class="ribbonMenuLink" href="/monitors/account/">Cancel</a>
 		</div>
 	</div>
@@ -39,7 +39,7 @@
 	</div>
 	<div>
 		<span>Total value: </span>
-		<span data-bind="text: startingCash"></span>
+		<span data-bind="text: totalValue"></span>
 	</div>
 {% endblock %}
 
@@ -53,7 +53,7 @@
 			<input id="accountNameInput" type="text" data-bind="value: accountName"/>
 			<br/>
 			<label for="accountDescriptionInput" class="textInputLabel">Account description:</label>
-			<textarea id="accountDescriptionInput" data-bind="text: accountDescription"></textarea>
+			<textarea id="accountDescriptionInput" data-bind="value: accountDescription"></textarea>
 		</form>
 	</div>
 	<div id="createAccountCash">

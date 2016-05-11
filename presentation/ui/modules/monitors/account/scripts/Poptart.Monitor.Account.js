@@ -2,6 +2,10 @@ Poptart.Monitor.Account = function(){
 	var ReturnObj = {},
 		tableControls;
 
+
+	//Public Methods
+	//////////////////
+
 	ReturnObj.init = function(){
 		var testTable = $("#am_testTable");
 
@@ -82,6 +86,9 @@ Poptart.Monitor.Account.CreateAccount = function(){
 	var ReturnObj = {},
 		AccountCreationViewModel, viewModel;
 
+	//View Models
+	//////////////////
+
 	AccountCreationViewModel = function() {
 		var self = this;
 
@@ -92,16 +99,42 @@ Poptart.Monitor.Account.CreateAccount = function(){
 		self.maxPositionDrift = ko.observable("");
 		self.maxCashDrift = ko.observable("");
 		self.maxTotalDrift = ko.observable("");
+
+		self.totalValue = ko.computed(function() {
+			return this.startingCash();
+		}, self);
 	};
+
+
+	//Public Methods
+	//////////////////
 
 	ReturnObj.init = function(){
 		viewModel = new AccountCreationViewModel();
 		ko.applyBindings(viewModel);
+
+		$("#submitCreateAccount").on("click", Poptart.Monitor.Account.CreateAccount.submit);
 	};
-	
+
 	ReturnObj.submit = function() {
-		console.log(ko.toJSON(viewModel));
+
+		$.ajax({
+			type: "POST",
+			url: "/account/create",
+			accept: "application/json",
+			contentType: "application/json",
+			success: checkCreateResponse,
+			data: ko.toJSON(viewModel)
+		});
 	};
+
+
+	//Private Functions
+	//////////////////
+
+	function checkCreateResponse(data){
+
+	}
 
 	return ReturnObj;
 }();

@@ -16,6 +16,22 @@ const AccountService = function(){
 		getter = new Service.Service(options, res);
 
 		return getter;
+	};
+
+	self.createAccount = function(res) {
+		var options = {},
+			getter;
+
+		options.path = "/account/";
+		options.method = "POST";
+		options.headers = {
+			"accept": "application/json",
+			"content-type": "application/json"
+		};
+
+		getter = new Service.Service(options, res);
+
+		return getter;
 	}
 };
 

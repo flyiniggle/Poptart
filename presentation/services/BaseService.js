@@ -36,6 +36,15 @@ var Service = function(options, res){
 	self.send = function() {
 		request.end();
 	};
+
+	self.post = function(data) {
+		if(typeof data === "object"){
+			data = JSON.stringify(data);
+		} else if (typeof data !== "string") {
+			data = data.toString();
+		}
+		request.end(data);
+	}
 };
 
 util.inherits(Service, EventEmitter);

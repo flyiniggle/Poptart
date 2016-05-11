@@ -119,9 +119,19 @@ body {
 	display: inline;
 }
 
-.ribbonMenu a {
+.ribbonMenuLink {
 	display: block;
+	cursor: pointer;
 	font-size: 13px;
+	color: rgb(94, 57, 41);
+	text-decoration: none;
+}
+
+.ribbonMenuLink:hover {
+	text-decoration: underline;
+}
+
+.ribbonMenuLink:visited {
 	color: rgb(94, 57, 41);
 }
 

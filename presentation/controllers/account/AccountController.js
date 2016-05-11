@@ -1,5 +1,6 @@
 const accountService = imports('services/account/AccountService');
 const Alert = imports('components/alerts/Alert.js');
+const ServerError = imports('support/Error.js');
 
 const AccountController = function(){
 	const self = this;
@@ -9,6 +10,13 @@ const AccountController = function(){
 
 		service.on("end", processAccount);
 		service.send();
+	};
+
+	self.createAccount = function(req, res) {
+		const service = accountService.createAccount(res);
+
+		service.on("end", processAccountCreation);
+		service.post(req.body);
 	};
 
 
@@ -45,6 +53,23 @@ const AccountController = function(){
 		templateData.alerts = alerts;
 
 		res.render("modules/account/account.ninja", templateData);
+	}
+
+	function processAccountCreation(res, newAccount) {
+		var JSONData, serverError;
+
+		try {
+			JSONData = JSON.parse(newAccount);
+		} catch(e) {
+			logging.error("Could not parse data: %s", newAccount);
+		}
+
+		if(!!JSONData.error){
+			serverError = new ServerError(res, JSONData.error);
+			serverError.send(500);
+		} else {
+			res.end();
+		}
 	}
 };
 
