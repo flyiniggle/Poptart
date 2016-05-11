@@ -40,7 +40,7 @@ Poptart.Monitor.Account = function(){
 			],
 			features:[
 				{
-					name: "Paging",
+					name: "Paging"
 				},
 				{
 					name: "GroupBy",
@@ -102,6 +102,10 @@ Poptart.Monitor.Account.CreateAccount = function(){
 
 		self.totalValue = ko.computed(function() {
 			return this.startingCash();
+		}, self);
+
+		self.cashDrift = ko.computed(function() {
+			return Math.abs(self.expectedCash() - self.startingCash())
 		}, self);
 	};
 
