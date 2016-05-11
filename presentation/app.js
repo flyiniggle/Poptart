@@ -52,7 +52,7 @@ var app, env, server;
 
 app = express();
 app.set('view engine', 'nunjucks');
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json({}));
 
 env = nunjucks.configure(path.join(__dirname, "templates"), {
