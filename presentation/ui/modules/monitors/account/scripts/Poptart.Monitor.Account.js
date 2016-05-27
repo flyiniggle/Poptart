@@ -21,6 +21,7 @@ Poptart.Monitor.Account = function(){
 			},
 			width: "100%",
 			flexHeight: true,
+			groupModel: {on: true},
 			colModel: [
 				{title: "#", dataIndx: "pk", dataType: "integer", width: "40px"},
 				{title: "Name", dataIndx: "name", dataType: "string", width: "175px"},
