@@ -2,10 +2,11 @@
 <html>
 <head>
 	<title>Poptart Node</title>
-	<link href="/css/paramquery/pqgrid.min.css" rel="stylesheet" type="text/css"/>
 	<link href="/css/ionicons/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
 	<link href="/css/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
 	<link href="/css/jquery-ui/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
+	<link href="/css/paramquery/pqgrid.min.css" rel="stylesheet" type="text/css"/>
+	<link href="/css/paramquery/pqgrid.ui.min.css" rel="stylesheet" type="text/css"/>
 
 	{% block css %}
 		<link href="/css/styles.css" rel="stylesheet" type="text/css"/>
@@ -79,7 +80,7 @@
 		<script type="text/javascript" src="/scripts/poptart.js"></script>
 		<script type="text/javascript" src="/components/Poptart.Alerts.js"></script>
 		<script type="text/javascript">
-			Poptart.init();
+			Poptart.init()
 		</script>
 	{% endblock %}
 </body>

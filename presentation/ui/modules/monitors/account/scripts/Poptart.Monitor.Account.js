@@ -35,7 +35,7 @@ Poptart.Monitor.Account = function(){
 				{title: "Max Cash Drift", dataIndx: "max_cash_drift", dataType: "float", width: "150px"},
 				{title: "Max Position Drift", dataIndx: "max_pos_drift", dataType: "float", width: "150px"},
 				{title: "Max Total Drift", dataIndx: "max_total_drift", dataType: "float", width: "150px"},
-				{title: "Client", dataIndx: "client_1_id", dataType: "string"},
+				{title: "Client", dataIndx: "client_1_id", dataType: "string", minWidth: "150px"},
 				{title: "Manager", dataIndx: "manager", dataType: "string"},
 				{title: "Start Date", dataIndx: "inception_date", dataType: "date"},
 				{title: "Solution", dataIndx: "solution_name", dataType: "string"},

@@ -19,7 +19,7 @@
 				<input type="submit" value="go"/>
 			</form>
 		</div>
-		
+
 		<div class="ribbonMenuGroup">
 			<span class="ribbonMenuGroupLabel">Delete account: </span>
 			<form id="am_accountDeleter" class="ribbonMenuForm">
@@ -76,8 +76,8 @@
 		(function(){
 			Poptart.Monitor.Account.treegridData = {{data | safe}};
 			Poptart.Monitor.Account.accountList = {{accountNamesList | safe}};
-			Poptart.Monitor.Account.accountIDsList = {{accountIDsList | safe}};
-			Poptart.Monitor.Account.init();
+			Poptart.Monitor.Account.accountIDsList = {{accountIDsList | safe}}
+			$(Poptart.Monitor.Account.init);
 		})();
 	</script>
 {% endblock %}
