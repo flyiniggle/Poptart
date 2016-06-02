@@ -16,6 +16,16 @@ class Account(models.Model):
     manager = models.IntegerField(null=True)
     solution_name = models.CharField(max_length=255, null=True)
 
+    calculated_props = [
+        'total_holdings_value',
+        'total_expected_holdings_value',
+        'total_value',
+        'total_expected_value',
+        'cash_drift',
+        'holdings_drift',
+        'total_drift'
+    ]
+
     def __str__(self):
         return str(self.name)
 
@@ -28,31 +38,21 @@ class Account(models.Model):
 
     @property
     def total_holdings_value(self):
-        holdings_values = Decimal(0)
-        for holding in Holding.objects.filter(account=self):
-            holdings_values += Decimal(holding.value)
+        holdings_values = reduce(lambda x, y: x + y, [holding.value for holding in self.holdings], 0)
         return float(holdings_values)
 
     @property
     def total_expected_holdings_value(self):
-        holdings_expected_values = Decimal(0)
-        for holding in Holding.objects.filter(account=self):
-            holdings_expected_values += Decimal(holding.expected_value)
+        holdings_expected_values = reduce(lambda x, y: x + y, [holding.expected_quantity for holding in self.holdings], 0)
         return float(holdings_expected_values)
 
     @property
     def total_value(self):
-        holdings_values = Decimal(0)
-        for holding in Holding.objects.filter(account=self):
-            holdings_values += Decimal(holding.value)
-        return float(holdings_values + Decimal(self.total_cash))
+        return float(self.total_holdings_value + float(self.total_cash))
 
     @property
     def total_expected_value(self):
-        holdings_expected_values = Decimal(0)
-        for holding in Holding.objects.filter(account=self):
-            holdings_expected_values += Decimal(holding.expected_value)
-        return float(holdings_expected_values + Decimal(self.total_cash))
+        return float(self.total_expected_holdings_value + float(self.total_cash))
 
     @property
     def cash_drift(self):

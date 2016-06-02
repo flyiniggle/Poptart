@@ -6,7 +6,7 @@ from django.views.generic import View
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 
-from poptart.lib.serializers import JSONSerializer
+from poptart.lib.serializers import ExtJsonSerializer
 from account.models import Account
 from account.models import Holding
 from securitymanager.models import Security
@@ -14,12 +14,9 @@ from securitymanager.models import Security
 
 class AccountMonitor(View):
     def get(self, request):
-        accounts = Account.objects.all()
-        complete_accounts = []
-        for account in accounts:
-            complete_accounts.append(buildFullAccount(account))
+        accounts = ExtJsonSerializer().serialize(Account.objects.all())
 
-        return HttpResponse(json.dumps(complete_accounts), status="200 OK", content_type="application/json")
+        return HttpResponse(accounts, status="200 OK", content_type="application/json")
 
     def post(self, request):
         n = json.loads(request.read())
@@ -30,8 +27,7 @@ class AccountMonitor(View):
 
         account.full_clean()
         account.save()
-        complete_account = buildFullAccount(account)
-        return HttpResponse(json.dumps(complete_account), status="201 Created", content_type="application/json")
+        return HttpResponse(json.dumps(account), status="201 Created", content_type="application/json")
 
 
 class AccountSummary(View):
@@ -49,10 +45,9 @@ class AccountDetail(View):
     def get(self, request, **kwargs):
         acct_id = kwargs.get('acct_id')
         account = Account.objects.get(pk=acct_id)
-        complete_account = buildFullAccount(account)
         holdings = list(Holding.objects.filter(account=acct_id))
-        JSONHoldings = JSONSerializer().serialize(holdings)
-        details = dict(account=complete_account, holdings=JSONHoldings)
+        JSONHoldings = ExtJsonSerializer().serialize(holdings)
+        details = dict(account=account, holdings=JSONHoldings)
 
         return HttpResponse(json.dumps(details), status="200 OK", content_type="application/json")
 
@@ -68,7 +63,7 @@ class AccountDetail(View):
             try:
                 holding.full_clean()
                 holding.save()
-                return HttpResponse(JSONSerializer().serialize(holding), status="201 Created", content_type="application/json")
+                return HttpResponse(ExtJsonSerializer().serialize(holding), status="201 Created", content_type="application/json")
             except ValidationError as e:
                 return HttpResponse(e, status="409 Conflict", content_type="application/json")
 
@@ -107,27 +102,3 @@ class DemoData(View):
                 holding.save()
 
         return HttpResponse("done", status="200 OK", content_type="text/html")
-
-
-def buildFullAccount(account):
-    complete_account = dict()
-    complete_account["pk"] = account.pk
-    complete_account["name"] = account.name
-    complete_account["description"] = account.description
-    complete_account["inception_date"] = str(account.inception_date)
-    complete_account["total_cash"] = float(account.total_cash)
-    complete_account["expected_cash"] = float(account.expected_cash)
-    complete_account["max_pos_drift"] = float(account.max_pos_drift)
-    complete_account["max_cash_drift"] = float(account.max_cash_drift)
-    complete_account["max_total_drift"] = float(account.max_total_drift)
-    complete_account["last_update"] = str(account.last_update)
-    complete_account["client_1_id"] = account.client_1_id
-    complete_account["manager"] = account.manager
-    complete_account["solution_name"] = account.solution_name
-    complete_account["total_value"] = account.total_value
-    complete_account["total_expected_value"] = account.total_expected_value
-    complete_account["cash_drift"] = account.cash_drift
-    complete_account["holdings_drift"] = account.holdings_drift
-    complete_account["total_drift"] = account.total_drift
-
-    return complete_account
