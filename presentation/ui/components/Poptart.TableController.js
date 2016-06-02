@@ -24,8 +24,8 @@ Poptart.TableController = function(table){
 
 	model = new TableControllerModel();
 
-	$("#tableControlsPageSizeSelect").dataBind({optionsText: "pageSizeOptions()", value: "pageSize", options: "pageSizeOptions"});
-	$("#tableControlsCurrentPage").dataBind({value: "currentPage"});
+	jQuery("#tableControlsPageSizeSelect").dataBind({optionsText: "pageSizeOptions()", value: "pageSize", options: "pageSizeOptions"});
+	jQuery("#tableControlsCurrentPage").dataBind({value: "currentPage"});
 
 	ko.applyBindings(model, document.getElementById("tableControlsHeader"));
 

@@ -7,9 +7,9 @@ Poptart.Monitor.Account = function(){
 	//////////////////
 
 	ReturnObj.init = function(){
-		var testTable = $("#am_testTable");
+		var testTable = jQuery("#am_testTable");
 
-		$(".am_accountSelector").autocomplete({
+		jQuery(".am_accountSelector").autocomplete({
 			source: Poptart.Monitor.Account.accountList
 		});
 
@@ -51,9 +51,9 @@ Poptart.Monitor.Account = function(){
 		var monitor = Poptart.Monitor.Account,
 			i, pk;
 
-		i = monitor.accountList.indexOf($("#am_accountLauncherSelector").val());
+		i = monitor.accountList.indexOf(jQuery("#am_accountLauncherSelector").val());
 		pk = monitor.accountIDsList[i];
-		$("#am_accountLauncher").attr("action", "/account/" + pk).submit();
+		jQuery("#am_accountLauncher").attr("action", "/account/" + pk).submit();
 	};
 
 	return ReturnObj;
@@ -94,12 +94,12 @@ Poptart.Monitor.Account.CreateAccount = function(){
 		viewModel = new AccountCreationViewModel();
 		ko.applyBindings(viewModel);
 
-		$("#submitCreateAccount").on("click", Poptart.Monitor.Account.CreateAccount.submit);
+		jQuery("#submitCreateAccount").on("click", Poptart.Monitor.Account.CreateAccount.submit);
 	};
 
 	ReturnObj.submit = function() {
 
-		$.ajax({
+		jQuery.ajax({
 			type: "POST",
 			url: "/account/create",
 			accept: "application/json",

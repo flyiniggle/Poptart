@@ -77,7 +77,7 @@
 			Poptart.Monitor.Account.treegridData = {{data | safe}};
 			Poptart.Monitor.Account.accountList = {{accountNamesList | safe}};
 			Poptart.Monitor.Account.accountIDsList = {{accountIDsList | safe}}
-			$(Poptart.Monitor.Account.init);
+			jQuery(Poptart.Monitor.Account.init);
 		})();
 	</script>
 {% endblock %}
