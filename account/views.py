@@ -14,9 +14,23 @@ from securitymanager.models import Security
 
 class AccountMonitor(View):
     def get(self, request):
-        accounts = ExtJsonSerializer().serialize(Account.objects.all())
+        g = request.GET
+        page_size = int(g.get("page_size"))
+        current_page = int(g.get("current_page"))
+        start_offset = page_size * (current_page - 1)
+        fields = g.getlist("fields", None)
 
-        return HttpResponse(accounts, status="200 OK", content_type="application/json")
+        accounts = Account.objects.all()
+
+        if page_size and current_page:
+            accounts = accounts[start_offset:page_size]
+
+        if fields:
+            json_accounts = ExtJsonSerializer().serialize(accounts, fields=fields)
+        else:
+            json_accounts = ExtJsonSerializer().serialize(accounts)
+
+        return HttpResponse(json_accounts, status="200 OK", content_type="application/json")
 
     def post(self, request):
         n = json.loads(request.read())
