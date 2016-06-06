@@ -66,12 +66,10 @@ class AccountSummary(View):
 class AccountDetail(View):
     def get(self, request, **kwargs):
         acct_id = kwargs.get('acct_id')
-        account = Account.objects.get(pk=acct_id)
-        holdings = list(Holding.objects.filter(account=acct_id))
-        JSONHoldings = ExtJsonSerializer().serialize(holdings)
-        details = dict(account=account, holdings=JSONHoldings)
+        account = Account.objects.filter(pk=acct_id)
+        JSONAccount = ExtJsonSerializer().serialize(account)
 
-        return HttpResponse(json.dumps(details), status="200 OK", content_type="application/json")
+        return HttpResponse(JSONAccount, status="200 OK", content_type="application/json")
 
     def post(self, request):
         n = request.post

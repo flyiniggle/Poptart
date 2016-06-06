@@ -38,7 +38,7 @@ const AccountController = function(){
 			return serverError.send(500);
 		}
 
-		account = JSONData.account;
+		account = JSONData[0];
 
 		if(account.holdings_drift > account.max_pos_drift) {
 			alertMessage = account.name + " has drifting holdings.";
