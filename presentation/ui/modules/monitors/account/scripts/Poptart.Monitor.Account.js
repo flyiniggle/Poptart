@@ -15,10 +15,16 @@ Poptart.Monitor.Account = function(){
 
 		testTable.pqGrid({
 			dataModel: {
-				data: Poptart.Monitor.Account.treegridData,
-				type: "local",
-				sorting: "local"
+				location: "remote",
+				dataType: "JSON",
+				method: "GET",
+				url: "/monitors/account/tabledata",
+				getData: function(dataJSON) {
+					var data = dataJSON.data;
+					return {curPage: dataJSON.currentPage, totalRecords: dataJSON.totalRecords, data: data};
+				}
 			},
+			pageModel: {type: "remote", rPP: 20, strRpp: "{0}"},
 			width: "100%",
 			flexHeight: true,
 			groupModel: {on: true},

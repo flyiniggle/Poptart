@@ -74,7 +74,6 @@
 	<script type="text/javascript" src="/monitors/account/scripts/Poptart.Monitor.Account.js"></script>
 	<script type="text/javascript">
 		(function(){
-			Poptart.Monitor.Account.treegridData = {{data | safe}};
 			Poptart.Monitor.Account.accountList = {{accountNamesList | safe}};
 			Poptart.Monitor.Account.accountIDsList = {{accountIDsList | safe}}
 			jQuery(Poptart.Monitor.Account.init);

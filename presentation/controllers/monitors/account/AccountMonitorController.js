@@ -2,30 +2,35 @@ var Alert = imports("components/alerts/alert.js");
 var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
 var accountMonitorService = imports('services/monitors/account/AccountMonitorService.js');
 var dashboardService = imports('services/dashboard/DashboardService.js');
+var paramQueryDataAdapter = imports('support/ParamQuery/DataAdapter.js');
 
 var AccountMonitorController = function(){
-	var self = this,
-		completeAccountData;
+	var self = this;
 
 	// Public Methods
 	self.getAccounts = function(req, res){
 		var summaryRequest = dashboardService.getDashboardData(res, "account"),
-			marshaller,
-			accountsRequest;
+			accountsFilter = accountMonitorService.getAccountsParamFormatter(),
+			accountsRequest,
+			marshaller;
 
-		if(!completeAccountData){
-			accountsRequest = accountMonitorService.getAccounts(res);
-			marshaller = new ServiceMarshaller(res, [accountsRequest, summaryRequest]);
-			marshaller.on("end", function(res, data) {
-				processAccounts(res, data[0], data[1]);
-			});
-			marshaller.send();
-		} else {
-			summaryRequest.on("end", function(res, data){
-				processAccounts(res, null, data)
-			});
-			summaryRequest.send();
-		}
+		accountsFilter.fields = ["name", "pk", "holdings_drift", "max_pos_drift", "cash_drift", "max_cash_drift", "total_drift", "max_total_drift"];
+		accountsRequest = accountMonitorService.getAccounts(res, accountsFilter);
+
+		marshaller = new ServiceMarshaller(res, [accountsRequest, summaryRequest]);
+		marshaller.on("end", function(res, data) {
+			processAccounts(res, data[0], data[1]);
+		});
+		marshaller.send();
+	};
+
+	self.getAccountsData = function(req, res){
+		var accountsRequest = accountMonitorService.getAccounts(res, paramQueryDataAdapter.translateServerRequest(req.query));
+
+		accountsRequest.on("end", function(res, data) {
+			processAccountData(res, data);
+		});
+		accountsRequest.send();
 	};
 
 
@@ -35,13 +40,9 @@ var AccountMonitorController = function(){
 			accountNames = [],
 			accountIDs = [],
 			alerts = [],
-			JSONAccountData = (!!accountData) ? JSON.parse(accountData) : completeAccountData,
+			JSONAccountData = JSON.parse(accountData),
 			JSONSummaryData = JSON.parse(summaryData),
 			i, account, alertMessage;
-
-		if(!completeAccountData){
-			completeAccountData = JSONAccountData;
-		}
 
 		for(i = (JSONAccountData.length - 1); account = JSONAccountData[i]; i--) {
 			accountNames.push(JSONAccountData[i].name.toString());
@@ -60,12 +61,17 @@ var AccountMonitorController = function(){
 			}
 		}
 
-		templateData.data = JSON.stringify(completeAccountData);
 		templateData.accountNamesList = JSON.stringify(accountNames);
 		templateData.accountIDsList = JSON.stringify(accountIDs);
 		templateData.summaryData = JSONSummaryData;
 		templateData.alerts = alerts;
 		res.render("modules/monitors/account/accountmonitor.ninja", templateData);
+	}
+
+	function processAccountData(res, data){
+		var JSONAccountData = JSON.parse(data);
+
+		res.send(paramQueryDataAdapter.translateServerResponse(res.req.query, JSONAccountData));
 	}
 
 	function processAccountLookup(res, data){

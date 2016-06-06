@@ -9,6 +9,7 @@ module.exports = function(express) {
 	router.use("/css", express.static(loadPath("ui/modules/monitors/account/css")));
 
 	router.get('/', accountMonitorController.getAccounts);
+	router.get('/tabledata', accountMonitorController.getAccountsData);
 
 	return router;
 };
