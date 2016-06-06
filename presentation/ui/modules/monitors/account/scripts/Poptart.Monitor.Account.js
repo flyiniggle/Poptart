@@ -7,11 +7,20 @@ Poptart.Monitor.Account = function(){
 	//////////////////
 
 	ReturnObj.init = function(){
-		var testTable = jQuery("#am_testTable");
+		var testTable = jQuery("#am_testTable"),
+			linkRenderer;
 
 		jQuery(".am_accountSelector").autocomplete({
 			source: Poptart.Monitor.Account.accountList
 		});
+
+		linkRenderer = function(ui) {
+			var link = jQuery("a");
+
+			link.attr("href", "/account/" + ui.rowData["pk"]);
+			link.text(ui.cellData);
+			return link.prop("outerHTML");
+		};
 
 		testTable.pqGrid({
 			dataModel: {
@@ -30,7 +39,7 @@ Poptart.Monitor.Account = function(){
 			groupModel: {on: true},
 			colModel: [
 				{title: "#", dataIndx: "pk", dataType: "integer", width: "40px"},
-				{title: "Name", dataIndx: "name", dataType: "string", width: "175px"},
+				{title: "Name", dataIndx: "name", dataType: "string", width: "175px", render: linkRenderer},
 				{title: "Description", dataIndx: "description", dataType: "string", width: "150px"},
 				{title: "Cash", dataIndx: "total_cash", dataType: "float", width: "100px"},
 				{title: "Value", dataIndx: "total_value", dataType: "float", width: "100px"},
