@@ -25,12 +25,17 @@ const AccountController = function(){
 		var templateData = {},
 			alerts = [],
 			JSONData, account,
-			alertMessage;
+			alertMessage, serverError;
 
 		try {
 			JSONData = JSON.parse(accountData);
 		} catch(e) {
 			logging.error("Could not parse data: %s", accountData);
+		}
+
+		if(!!JSONData.error) {
+			serverError = new ServerError(res, JSONData.error);
+			return serverError.send(500);
 		}
 
 		account = JSONData.account;

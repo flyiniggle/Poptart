@@ -1,4 +1,5 @@
 var Alert = imports("components/alerts/alert.js");
+var ServerError = imports('support/Error.js');
 var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
 var accountMonitorService = imports('services/monitors/account/AccountMonitorService.js');
 var dashboardService = imports('services/dashboard/DashboardService.js');
@@ -42,7 +43,17 @@ var AccountMonitorController = function(){
 			alerts = [],
 			JSONAccountData = JSON.parse(accountData),
 			JSONSummaryData = JSON.parse(summaryData),
-			i, account, alertMessage;
+			i, account, alertMessage, serverError;
+
+		if(!!JSONAccountData.error) {
+			serverError = new ServerError(res, JSONAccountData.error);
+			return serverError.send(500);
+		}
+
+		if(!!JSONSummaryData.error){
+			serverError = new ServerError(res, JSONSummaryData.error);
+			return serverError.send(500);
+		}
 
 		for(i = (JSONAccountData.length - 1); account = JSONAccountData[i]; i--) {
 			accountNames.push(JSONAccountData[i].name.toString());
