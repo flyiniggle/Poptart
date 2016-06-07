@@ -15,11 +15,11 @@ Poptart.Monitor.Account = function(){
 		});
 
 		linkRenderer = function(ui) {
-			var link = jQuery("a");
+			var link = document.createElement("a");
 
-			link.attr("href", "/account/" + ui.rowData["pk"]);
-			link.text(ui.cellData);
-			return link.prop("outerHTML");
+			link.href = "/account/" + ui.rowData["pk"];
+			link.innerHTML = ui.cellData;
+			return link.outerHTML;
 		};
 
 		testTable.pqGrid({
