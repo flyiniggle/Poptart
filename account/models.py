@@ -26,33 +26,37 @@ class Account(models.Model):
         'total_drift'
     ]
 
+
+    @property
+    def holdings(self):
+        if not hasattr(self, 'calculated_holdings'):
+            self.calculated_holdings = Holding.objects.filter(account=self)
+        return self.calculated_holdings
+
     def __str__(self):
         return str(self.name)
 
     def __unicode__(self):
         return unicode(self.name)
 
-    @property
-    def holdings(self):
-        return Holding.objects.filter(account=self)
 
     @property
     def total_holdings_value(self):
-        holdings_values = reduce(lambda x, y: x + y, [holding.value for holding in self.holdings], 0)
+        holdings_values = sum([holding.value for holding in self.holdings], 0)
         return float(holdings_values)
 
     @property
     def total_expected_holdings_value(self):
-        holdings_expected_values = reduce(lambda x, y: x + y, [holding.expected_quantity for holding in self.holdings], 0)
+        holdings_expected_values = sum([holding.expected_quantity for holding in self.holdings], 0)
         return float(holdings_expected_values)
 
     @property
     def total_value(self):
-        return float(self.total_holdings_value + float(self.total_cash))
+        return self.total_holdings_value + float(self.total_cash)
 
     @property
     def total_expected_value(self):
-        return float(self.total_expected_holdings_value + float(self.total_cash))
+        return self.total_expected_holdings_value + float(self.total_cash)
 
     @property
     def cash_drift(self):

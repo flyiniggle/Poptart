@@ -57,5 +57,5 @@ class ExtPythonSerializer(ExtBaseSerializer, PythonSerializer):
     pass
 
 
-class ExtJsonSerializer(ExtPythonSerializer, JsonSerializer):
+class ExtJsonSerializer(ExtBaseSerializer, JsonSerializer):
     pass
