@@ -33,10 +33,12 @@ Poptart.Monitor.Account = function(){
 					return {curPage: dataJSON.currentPage, totalRecords: dataJSON.totalRecords, data: data};
 				}
 			},
-			pageModel: {type: "remote", rPP: 20, strRpp: "{0}"},
+			pageModel: {type: "remote", rPP: 25, strRpp: "{0}", rPPOptions: [10, 25, 50, 100, 500, 1000]},
 			width: "100%",
 			flexHeight: true,
-			groupModel: {on: true},
+			groupModel: {
+				on: true
+			},
 			colModel: [
 				{title: "#", dataIndx: "pk", dataType: "integer", width: "40px"},
 				{title: "Name", dataIndx: "name", dataType: "string", width: "175px", render: linkRenderer},
