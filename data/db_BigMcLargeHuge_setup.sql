@@ -35,13 +35,13 @@ CREATE TABLE IF NOT EXISTS account_account (
   `inception_date` datetime,
   `total_cash` decimal(17,2),
   `expected_cash` decimal(17,2),
-  `max_pos_drift` decimal(10,4),
-  `max_cash_drift` decimal(10,4),
-  `max_total_drift` decimal(10,4),
   `last_update` datetime,
   `client_1_id` int(11),
   `manager` int(11),
   `solution_name` varchar(255),
+  `max_pos_drift` decimal(10,4),
+  `max_cash_drift` decimal(10,4),
+  `max_total_drift` decimal(10,4),
   PRIMARY KEY (id),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
