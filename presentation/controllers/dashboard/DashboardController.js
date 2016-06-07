@@ -1,5 +1,6 @@
 var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
 var Alert = imports("components/alerts/Alert.js");
+var ServerError = imports('support/Error.js');
 
 var dashboardService = imports('services/dashboard/DashboardService.js');
 var accountService = imports('services/monitors/account/AccountMonitorService.js');
@@ -30,10 +31,12 @@ var DashboardController = function(){
 	// Private Functions
 	function processAccountDashboardData(res, summaryData, accountsData) {
 		var JSONAccountsData,
+			JSONAccountsList,
 			JSONSummaryData,
 			responseData = {},
 			recentAccounts,
 			detailsString,
+			serverError,
 			alertMessage,
 			alerts = [],
 			account, i;
@@ -47,6 +50,15 @@ var DashboardController = function(){
 			return
 		}
 
+		if(!!JSONAccountsData.error) {
+			serverError = new ServerError(res, JSONAccountsData.error);
+			return serverError.send(500);
+		}
+		if(!!JSONSummaryData.error) {
+			serverError = new ServerError(res, JSONSummaryData.error);
+			return serverError.send(500);
+		}
+
 		if(JSONSummaryData.active.length > 10) {
 			detailsString = "and " + (JSONSummaryData.active.length - 10) + " more.";
 			recentAccounts = JSONSummaryData.active.slice(0, 9).join(", ");
@@ -57,7 +69,9 @@ var DashboardController = function(){
 			recentAccounts = JSONSummaryData.active.join(", ");
 		}
 
-		for(i=(JSONAccountsData.length-1); account=JSONAccountsData[i]; i--){
+		JSONAccountsList = JSON.parse(JSONAccountsData.accounts_data);
+
+		for(i=(JSONAccountsList.length-1); account=JSONAccountsList[i]; i--){
 			if(account.holdings_drift > account.max_pos_drift) {
 				alertMessage = account.name + " has drifting holdings.";
 				alerts.push(new Alert("error", "Holdings Drift", alertMessage));

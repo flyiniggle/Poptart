@@ -43,6 +43,7 @@ var AccountMonitorController = function(){
 			alerts = [],
 			JSONAccountData = JSON.parse(accountData),
 			JSONSummaryData = JSON.parse(summaryData),
+			JSONAccountsList = JSON.parse(JSONAccountData.accounts_data),
 			i, account, alertMessage, serverError;
 
 		if(!!JSONAccountData.error) {
@@ -50,14 +51,14 @@ var AccountMonitorController = function(){
 			return serverError.send(500);
 		}
 
-		if(!!JSONSummaryData.error){
+		if(!!JSONSummaryData.error) {
 			serverError = new ServerError(res, JSONSummaryData.error);
 			return serverError.send(500);
 		}
 
-		for(i = (JSONAccountData.length - 1); account = JSONAccountData[i]; i--) {
-			accountNames.push(JSONAccountData[i].name.toString());
-			accountIDs.push(JSONAccountData[i].pk.toString());
+		for(i=(JSONAccountsList.length - 1); account=JSONAccountsList[i]; i--) {
+			accountNames.push(account.name.toString());
+			accountIDs.push(account.pk.toString());
 			if(account.holdings_drift > account.max_pos_drift) {
 				alertMessage = account.name + " has drifting holdings.";
 				alerts.push(new Alert("error", "Holdings Drift", alertMessage));
