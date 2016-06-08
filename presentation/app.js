@@ -17,6 +17,7 @@ var winston = require('winston');
 var config = imports("config/config.js");
 var dashboardRoutes = imports('routes/dashboard/DashboardRouter.js')(express);
 var accountMonitorRoutes = imports('routes/monitors/account/AccountMonitorRouter.js')(express);
+var securityMonitorRoutes = imports('routes/monitors/security/SecurityMonitorRouter.js')(express);
 var accountRoutes = imports('routes/account/AccountRouter.js')(express);
 
 // Logging
@@ -71,6 +72,7 @@ app.use("/templates", express.static(path.join(__dirname, "templates")));
 app.use("/", dashboardRoutes);
 app.use("/index", dashboardRoutes);
 app.use("/monitors/account", accountMonitorRoutes);
+app.use("/monitors/security", securityMonitorRoutes);
 app.use("/account", accountRoutes);
 
 server = app.listen(config.presentation.port, function(){
