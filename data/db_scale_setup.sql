@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS securitymanager_security (
   ticker varchar(20) NOT NULL,
   CUSIP varchar(9) NOT NULL,
   description varchar(100) DEFAULT NULL,
-  last_price double NOT NULL,
+  last_price decimal(4,2) NOT NULL,
   segment int(11) NOT NULL DEFAULT '12',
   PRIMARY KEY (id),
   UNIQUE KEY ticker (ticker),
@@ -49,8 +49,8 @@ CREATE TABLE IF NOT EXISTS account_account (
 DROP TABLE IF EXISTS account_holding;
 CREATE TABLE IF NOT EXISTS account_holding (
   id int(11) NOT NULL AUTO_INCREMENT,
-  quantity double NOT NULL,
-  expected_quantity double NOT NULL,
+  quantity int(11) NOT NULL,
+  expected_quantity int(11) NOT NULL,
   security_id int(11) NOT NULL,
   account_id int(11),
   expected_value decimal(17,2),

@@ -60,21 +60,21 @@ class Account(models.Model):
 
     @property
     def cash_drift(self):
-        return Decimal(abs(self.total_cash - self.expected_cash))
+        return abs(self.total_cash - self.expected_cash)
 
     @property
     def holdings_drift(self):
-        return Decimal(abs(self.total_holdings_value - self.total_expected_holdings_value))
+        return abs(self.total_holdings_value - self.total_expected_holdings_value)
 
     @property
     def total_drift(self):
-        return Decimal(self.cash_drift + self.holdings_drift)
+        return self.cash_drift + self.holdings_drift
 
 
 class Holding(models.Model):
     security = models.ForeignKey('securitymanager.Security', unique=False)
-    quantity = models.FloatField(default=1)
-    expected_quantity = models.FloatField(default=1)
+    quantity = models.IntegerField(default=1)
+    expected_quantity = models.IntegerField(default=0)
     expected_value = models.DecimalField(default=0, decimal_places=2, max_digits=17)
     account = models.ForeignKey('Account', null=True, unique=False)
 
@@ -86,13 +86,13 @@ class Holding(models.Model):
 
     @property
     def value(self):
-        return Decimal(self.quantity * self.security.last_price)
+        return self.quantity * self.security.last_price
 
     @property
     def quantity_drift(self):
-        return Decimal(abs(self.quantity - self.expected_quantity))
+        return abs(self.quantity - self.expected_quantity)
 
     @property
     def value_drift(self):
-        return Decimal(abs(self.value - Decimal(self.expected_value)))
+        return abs(self.value - Decimal(self.expected_value))
 

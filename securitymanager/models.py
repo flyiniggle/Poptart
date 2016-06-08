@@ -6,7 +6,7 @@ class Security(models.Model):
     description = models.CharField(max_length=100, null=True)
     CUSIP = models.CharField(unique=True, max_length=9)
     segment = models.ForeignKey('securitymanager.AssetClass', unique=False, default=12, db_column="segment")
-    last_price = models.FloatField(default=1)
+    last_price = models.DecimalField(default=1, decimal_places=2, max_digits=4)
 
     def __str__(self):
         return str(self.ticker)
