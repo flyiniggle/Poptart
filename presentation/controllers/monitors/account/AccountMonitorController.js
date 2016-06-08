@@ -43,7 +43,7 @@ var AccountMonitorController = function(){
 			alerts = [],
 			JSONAccountData = JSON.parse(accountData),
 			JSONSummaryData = JSON.parse(summaryData),
-			JSONAccountsList = JSON.parse(JSONAccountData.accounts_data),
+			JSONAccountsList = JSONAccountData.accounts_data,
 			i, account, alertMessage, serverError;
 
 		if(!!JSONAccountData.error) {

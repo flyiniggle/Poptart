@@ -1,12 +1,13 @@
 import datetime
-import json
+import simplejson as json
 from random import randrange
 
 from django.views.generic import View
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 
-from poptart.lib.serializers import ExtJsonSerializer
+from poptart.lib.serializers import ExtJsonSerializer, ExtPythonSerializer
+from poptart.lib.encoders import DateTimeWebAPIEncoder
 from account.models import Account
 from account.models import Holding
 from securitymanager.models import Security
@@ -29,16 +30,16 @@ class AccountMonitor(View):
             accounts = accounts[start_offset:limit]
 
         if fields:
-            json_accounts = ExtJsonSerializer().serialize(accounts, fields=fields)
+            json_accounts = ExtPythonSerializer().serialize(accounts, fields=fields)
         else:
-            json_accounts = ExtJsonSerializer().serialize(accounts)
+            json_accounts = ExtPythonSerializer().serialize(accounts)
 
         response = {
             'total_accounts': accounts_count,
             'accounts_data': json_accounts
         }
 
-        return HttpResponse(json.dumps(response), status="200 OK", content_type="application/json")
+        return HttpResponse(json.dumps(response, cls=DateTimeWebAPIEncoder), status="200 OK", content_type="application/json")
 
     def post(self, request):
         n = json.loads(request.read())
@@ -49,7 +50,7 @@ class AccountMonitor(View):
 
         account.full_clean()
         account.save()
-        return HttpResponse(json.dumps(account), status="201 Created", content_type="application/json")
+        return HttpResponse(json.dumps(account, cls=DateTimeWebAPIEncoder), status="201 Created", content_type="application/json")
 
 
 class AccountSummary(View):
@@ -60,7 +61,7 @@ class AccountSummary(View):
         count = len(Account.objects.all())
         active = [account.name for account in Account.objects.filter(last_update__gt=now - time_delta)]
         summary_data = dict(total_count=count, active=active)
-        return HttpResponse(json.dumps(summary_data), status="200 OK", content_type="application/json")
+        return HttpResponse(json.dumps(summary_data, cls=DateTimeWebAPIEncoder), status="200 OK", content_type="application/json")
 
 
 class AccountDetail(View):

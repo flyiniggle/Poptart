@@ -43,32 +43,32 @@ class Account(models.Model):
     @property
     def total_holdings_value(self):
         holdings_values = sum([holding.value for holding in self.holdings], 0)
-        return float(holdings_values)
+        return Decimal(holdings_values)
 
     @property
     def total_expected_holdings_value(self):
         holdings_expected_values = sum([holding.expected_quantity for holding in self.holdings], 0)
-        return float(holdings_expected_values)
+        return Decimal(holdings_expected_values)
 
     @property
     def total_value(self):
-        return self.total_holdings_value + float(self.total_cash)
+        return self.total_holdings_value + Decimal(self.total_cash)
 
     @property
     def total_expected_value(self):
-        return self.total_expected_holdings_value + float(self.total_cash)
+        return self.total_expected_holdings_value + Decimal(self.total_cash)
 
     @property
     def cash_drift(self):
-        return float(abs(self.total_cash - self.expected_cash))
+        return Decimal(abs(self.total_cash - self.expected_cash))
 
     @property
     def holdings_drift(self):
-        return float(abs(self.total_holdings_value - self.total_expected_holdings_value))
+        return Decimal(abs(self.total_holdings_value - self.total_expected_holdings_value))
 
     @property
     def total_drift(self):
-        return float(self.cash_drift + self.holdings_drift)
+        return Decimal(self.cash_drift + self.holdings_drift)
 
 
 class Holding(models.Model):
@@ -86,13 +86,13 @@ class Holding(models.Model):
 
     @property
     def value(self):
-        return float(self.quantity * self.security.last_price)
+        return Decimal(self.quantity * self.security.last_price)
 
     @property
     def quantity_drift(self):
-        return float(abs(self.quantity - self.expected_quantity))
+        return Decimal(abs(self.quantity - self.expected_quantity))
 
     @property
     def value_drift(self):
-        return float(abs(self.value - Decimal(self.expected_value)))
+        return Decimal(abs(self.value - Decimal(self.expected_value)))
 

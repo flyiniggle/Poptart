@@ -69,7 +69,7 @@ var DashboardController = function(){
 			recentAccounts = JSONSummaryData.active.join(", ");
 		}
 
-		JSONAccountsList = JSON.parse(JSONAccountsData.accounts_data);
+		JSONAccountsList = JSONAccountsData.accounts_data;
 
 		for(i=(JSONAccountsList.length-1); account=JSONAccountsList[i]; i--){
 			if(account.holdings_drift > account.max_pos_drift) {

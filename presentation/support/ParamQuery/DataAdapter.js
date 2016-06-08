@@ -6,7 +6,7 @@ module.exports = function() {
 		return {
 			currentPage: params.pq_curpage,
 			totalRecords: data.total_accounts,
-			data: JSON.parse(data.accounts_data)
+			data: data.accounts_data
 		}
 	};
 
