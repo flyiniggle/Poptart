@@ -25,7 +25,7 @@ const SecurityMonitorController = function() {
 			return serverError.send(500);
 		}
 
-		res.send(data);
+		res.render("modules/monitors/security/securitymonitor.ninja", {securities: JSON.stringify(securitiesData)});
 	}
 };
 

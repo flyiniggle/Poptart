@@ -1,0 +1,40 @@
+{%  extends "BaseLayout.ninja" %}
+
+{% block summary %}
+	<div>
+		<span>Total securities: </span>
+		<span>tk</span>
+	</div>
+{% endblock %}
+
+{% block main %}
+	<div id="tableControlsHeader">
+		<div id="tableControlsLoader" class="tableControlsBox">
+			<img src="/css/images/loader.svg"/>
+		</div>
+		<div id="tableControlsPagination" class="tableControlsBox">
+			<span>first</span>
+			<span>prev</span>
+			<input id="tableControlsCurrentPage" type="text" value="1"/>
+			<span>next</span>
+			<span>last</span>
+		</div>
+		<div id="tableControlsPageSize" class="tableControlsBox">
+			<span>page size: </span>
+			<select id="tableControlsPageSizeSelect"></select>
+		</div>
+	</div>
+	<table id="sm_table"></table>
+{% endblock %}
+
+{% block js %}
+	{{ super() }}
+	<script type="text/javascript" src="/components/Poptart.TableController.js"></script>
+	<script type="text/javascript" src="/monitors/security/scripts/Poptart.Monitor.Security.js"></script>
+	<script type="text/javascript">
+		(function() {
+			Poptart.Monitor.Security.securities = {{ securities | safe }};
+			jQuery(Poptart.Monitor.Security.init);
+		})();
+	</script>
+{% endblock %}
