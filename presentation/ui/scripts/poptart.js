@@ -10,6 +10,7 @@ var Poptart = function(){
 
 	//Global Setup
 	///////////////
+	jQuery.noConflict();
 
 	//Allow script bindings for knockout
 	var render = function(options) {
@@ -33,12 +34,12 @@ var Poptart = function(){
 		return rendered.join(',');
 	};
 
-	$['fn']['dataBind'] = $['fn']['dataBind'] || function(options) {
+	jQuery['fn']['dataBind'] = jQuery['fn']['dataBind'] || function(options) {
 		return this['each'](function() {
-			var opts = $.extend({}, $['fn']['dataBind']['defaults'], options),
+			var opts = jQuery.extend({}, jQuery['fn']['dataBind']['defaults'], options),
 					attr = render(opts);
 			if(attr != null && attr != '') {
-				$(this)['attr']('data-bind', attr);
+				jQuery(this)['attr']('data-bind', attr);
 			}
 		});
 	};
@@ -48,7 +49,7 @@ var Poptart = function(){
 			if(templateConfig.module) {
 				// Uses jQuery's ajax facility to load the markup from a file
 				var fullUrl = '/templates/' + templateConfig.module + "/" + templateConfig.name;
-				$.get(fullUrl, function(markupString) {
+				jQuery.get(fullUrl, function(markupString) {
 					// We need an array of DOM nodes, not a string.
 					// We can use the default loader to convert to the
 					// required format.
@@ -69,8 +70,8 @@ var Poptart = function(){
 	///////////////////
 
 	ReturnObj.init = function(){
-		$("#mainNavMenuTarget").on("mouseover", showNavMenu);
-		$("#mainNavMenuTarget, #mainNavMenu").on("mouseleave", hideNavMenu);
+		jQuery("#mainNavMenuTarget").on("mouseover", showNavMenu);
+		jQuery("#mainNavMenuTarget, #mainNavMenu").on("mouseleave", hideNavMenu);
 		Poptart.RibbonMenu.init();
 	};
 
@@ -127,7 +128,7 @@ Poptart.RibbonMenu = function(){
 					ribbonMenus[m.data("name")] = new RibbonMenu(m);
 			});
 
-		$(".ribbonMenuTab").one("click", showRibbonMenu);
+		jQuery(".ribbonMenuTab").one("click", showRibbonMenu);
 	};
 
 	function showRibbonMenu(e) {

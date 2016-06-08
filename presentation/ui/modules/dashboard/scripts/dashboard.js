@@ -2,13 +2,13 @@ Poptart.Dashboard = function() {
 	var ReturnObj = {};
 
 	ReturnObj.init = function() {
-		$.ajax({
+		jQuery.ajax({
 			url: "/summary/account",
 			accepts: "application/json",
 			success: showAccountSummary
 		});
 
-		$.ajax({
+		jQuery.ajax({
 			url: "/summary/security",
 			accepts: "application/json",
 			success: showSecuritySummary
@@ -17,13 +17,13 @@ Poptart.Dashboard = function() {
 
 	function showAccountSummary(data){
 
-		$("#accountCount").html(data.totalCount);
-		$("#accountUpdated").html(data.recentAccounts);
-		$("#alertsContent").append(nunjucks.render("templates/components/alerts/alerts.ninja", data));
+		jQuery("#accountCount").html(data.totalCount);
+		jQuery("#accountUpdated").html(data.recentAccounts);
+		jQuery("#alertsContent").append(nunjucks.render("templates/components/alerts/alerts.ninja", data));
 	}
 
 	function showSecuritySummary(data){
-		$("#securityCount").html(data.totalCount);
+		jQuery("#securityCount").html(data.totalCount);
 	}
 
 	return ReturnObj;

@@ -2,11 +2,11 @@
 <html>
 <head>
 	<title>Poptart Node</title>
-	<link href="/css/infragistics/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" type="text/css"/>
-	<link href="/css/infragistics/css/structure/infragistics.css" rel="stylesheet" type="text/css"/>
 	<link href="/css/ionicons/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
 	<link href="/css/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
 	<link href="/css/jquery-ui/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
+	<link href="/css/paramquery/pqgrid.min.css" rel="stylesheet" type="text/css"/>
+	<link href="/css/paramquery/pqgrid.ui.min.css" rel="stylesheet" type="text/css"/>
 
 	{% block css %}
 		<link href="/css/styles.css" rel="stylesheet" type="text/css"/>
@@ -72,8 +72,7 @@
 		<script type="text/javascript" src="/scripts/jquery-1.10.2.js"></script>
 		<script type="text/javascript" src="/scripts/jquery-ui-1.10.4.custom.js"></script>
 		<script type="text/javascript" src="/scripts/knockout-3.4.0.debug.js"></script>
-		<script type="text/javascript" src="/scripts/modernizr-custom.js"></script>
-		<script type="text/javascript" src="/scripts/infragistics.js"></script>
+		<script type="text/javascript" src="/scripts/pqgrid.min.js"></script>
 		<script type="text/javascript" src="/scripts/nunjucks.js"></script>
 	{% endblock %}
 
@@ -81,7 +80,7 @@
 		<script type="text/javascript" src="/scripts/poptart.js"></script>
 		<script type="text/javascript" src="/components/Poptart.Alerts.js"></script>
 		<script type="text/javascript">
-			Poptart.init();
+			Poptart.init()
 		</script>
 	{% endblock %}
 </body>

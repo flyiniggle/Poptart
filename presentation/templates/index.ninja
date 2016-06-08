@@ -16,6 +16,9 @@
 	</div>
 {% endblock %}
 
+{% block alerts %}
+{% endblock %}
+
 {% block main %}
 {% endblock %}
 

@@ -25,7 +25,7 @@ const AccountController = function(){
 		var templateData = {},
 			alerts = [],
 			JSONData, account,
-			alertMessage;
+			alertMessage, serverError;
 
 		try {
 			JSONData = JSON.parse(accountData);
@@ -33,7 +33,12 @@ const AccountController = function(){
 			logging.error("Could not parse data: %s", accountData);
 		}
 
-		account = JSONData.account;
+		if(!!JSONData.error) {
+			serverError = new ServerError(res, JSONData.error);
+			return serverError.send(500);
+		}
+
+		account = JSONData[0];
 
 		if(account.holdings_drift > account.max_pos_drift) {
 			alertMessage = account.name + " has drifting holdings.";
