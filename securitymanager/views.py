@@ -1,19 +1,19 @@
 import json
 
 from django.http import HttpResponse
+from django.views.generic import View
 
 from poptart.lib.serializers import ExtJsonSerializer
 from securitymanager.models import Security, AssetClass
 
 
-def securities(request):
-    return HttpResponse(ExtJsonSerializer().serialize(Security.objects.all()))
+class Securities(View):
+    def get(self, request):
+        return HttpResponse(ExtJsonSerializer().serialize(Security.objects.all()), status="200 OK", content_type="application/json")
 
 
 def summary(request):
-    data = {
-        "total_count": ""
-    }
+    data = dict()
     data["total_count"] = len(Security.objects.all())
 
     return HttpResponse(json.dumps(data), status="200 OK", content_type="application/json")
