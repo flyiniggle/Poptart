@@ -6,6 +6,16 @@ from django.utils import six
 
 
 class ExtBaseSerializer(BaseSerializer):
+    def __init__(self):
+        super(ExtBaseSerializer, self).__init__()
+        self.stream = ""
+        self.get_calculated_props = True
+        self.selected_fields = None
+        self.use_natural_keys = False
+        self.use_natural_foreign_keys = False
+        self.use_natural_primary_keys = False
+        self.options = None
+
     def get_dump_object(self, obj):
         data = self._current
         if not self.use_natural_primary_keys or not hasattr(obj, 'natural_key'):
@@ -24,25 +34,30 @@ class ExtBaseSerializer(BaseSerializer):
 
         self.start_serialization()
         self.first = True
+        selected_fields = self.selected_fields
+        handle_field = self.handle_field
+        handle_fk_field = self.handle_fk_field
+        handle_m2m_field = self.handle_m2m_field
+        handle_prop = self.handle_prop
         for obj in queryset:
             self.start_object(obj)
-            concrete_model = obj._meta.concrete_model
+            concrete_model = obj._meta.concrete_model._meta
             props = getattr(obj, 'calculated_props', [])
-            for field in concrete_model._meta.local_fields:
+            for field in concrete_model.local_fields:
                 if field.serialize:
                     if field.rel is None:
-                        if self.selected_fields is None or field.attname in self.selected_fields:
-                            self.handle_field(obj, field)
+                        if selected_fields is None or field.attname in selected_fields:
+                            handle_field(obj, field)
                     else:
-                        if self.selected_fields is None or field.attname[:-3] in self.selected_fields:
-                            self.handle_fk_field(obj, field)
-            for field in concrete_model._meta.many_to_many:
+                        if selected_fields is None or field.attname[:-3] in selected_fields:
+                            handle_fk_field(obj, field)
+            for field in concrete_model.many_to_many:
                 if field.serialize:
-                    if self.selected_fields is None or field.attname in self.selected_fields:
-                        self.handle_m2m_field(obj, field)
+                    if selected_fields is None or field.attname in selected_fields:
+                        handle_m2m_field(obj, field)
             for prop in props:
-                if self.selected_fields is None or prop in self.selected_fields:
-                    self.handle_prop(obj, prop)
+                if selected_fields is None or prop in selected_fields:
+                    handle_prop(obj, prop)
             self.end_object(obj)
             if self.first:
                 self.first = False
