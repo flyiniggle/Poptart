@@ -4,6 +4,8 @@ from django.core.serializers.python import Serializer as PythonSerializer
 from django.core.serializers.json import Serializer as JsonSerializer
 from django.utils import six
 
+import cProfile, pstats, StringIO
+
 
 class ExtBaseSerializer(BaseSerializer):
     def __init__(self):
@@ -39,6 +41,8 @@ class ExtBaseSerializer(BaseSerializer):
         handle_fk_field = self.handle_fk_field
         handle_m2m_field = self.handle_m2m_field
         handle_prop = self.handle_prop
+        #pr = cProfile.Profile()
+        #pr.enable()
         for obj in queryset:
             self.start_object(obj)
             concrete_model = obj._meta.concrete_model._meta
@@ -62,6 +66,12 @@ class ExtBaseSerializer(BaseSerializer):
             if self.first:
                 self.first = False
         self.end_serialization()
+        #pr.disable()
+        #s = StringIO.StringIO()
+        #sortby = 'cumulative'
+        #ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        #ps.print_stats()
+        #print s.getvalue()
         return self.getvalue()
 
     def handle_prop(self, obj, field):
