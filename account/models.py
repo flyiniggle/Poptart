@@ -1,5 +1,5 @@
 from decimal import Decimal
-from django.db import models
+from django.db import models, connection
 
 
 class Account(models.Model):
@@ -26,6 +26,11 @@ class Account(models.Model):
         'total_drift'
     ]
 
+    def __str__(self):
+        return str(self.name)
+
+    def __unicode__(self):
+        return unicode(self.name)
 
     @property
     def holdings(self):
@@ -33,22 +38,31 @@ class Account(models.Model):
             self.calculated_holdings = Holding.objects.filter(account=self)
         return self.calculated_holdings
 
-    def __str__(self):
-        return str(self.name)
-
-    def __unicode__(self):
-        return unicode(self.name)
-
-
     @property
     def total_holdings_value(self):
-        holdings_values = sum([holding.value for holding in self.holdings], 0)
-        return Decimal(holdings_values)
+        if not hasattr(self, 'calculated_total_holdings_value'):
+            cursor = connection.cursor()
+            cursor.execute('''SELECT account_account.id, SUM( account_holding.quantity * securitymanager_security.last_price ) AS holding_value
+                            FROM `account_account`
+                            INNER JOIN `account_holding` ON account_holding.account_id = %s
+                            INNER JOIN `securitymanager_security` ON securitymanager_security.id = account_holding.security_id''', [self.id])
+
+            row = cursor.fetchone()
+            self.calculated_total_holdings_value = row[1] or Decimal(0)
+        return self.calculated_total_holdings_value
 
     @property
     def total_expected_holdings_value(self):
-        holdings_expected_values = sum([holding.expected_quantity for holding in self.holdings], 0)
-        return Decimal(holdings_expected_values)
+        if not hasattr(self, 'calculated_total_expected_holdings_value'):
+            cursor = connection.cursor()
+            cursor.execute('''SELECT account_account.id, SUM( account_holding.expected_value ) AS holding_value
+                            FROM `account_account`
+                            INNER JOIN `account_holding` ON account_holding.account_id = %s
+                            INNER JOIN `securitymanager_security` ON securitymanager_security.id = account_holding.security_id''', [self.id])
+
+            row = cursor.fetchone()
+            self.calculated_total_holdings_value = row[1] or Decimal(0)
+        return self.calculated_total_holdings_value
 
     @property
     def total_value(self):
@@ -86,7 +100,15 @@ class Holding(models.Model):
 
     @property
     def value(self):
-        return self.quantity * self.security.last_price
+        cursor = connection.cursor()
+        cursor.execute(
+            '''SELECT account_holding.id, (account_holding.quantity * securitymanager_security.last_price) AS holding_value
+            FROM `account_holding`
+            INNER JOIN `securitymanager_security`
+            ON securitymanager_security.id = %s''',
+            [self.security_id])
+        row = cursor.fetchone()
+        return row[1] or Decimal(0)
 
     @property
     def quantity_drift(self):
