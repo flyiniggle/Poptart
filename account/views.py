@@ -19,9 +19,13 @@ class AccountMonitor(View):
         page_size = g.get("page_size")
         current_page = g.get("current_page")
         fields = g.getlist("fields", None)
+        order_by = g.getlist("order_by", None)
 
         accounts = Account.objects.all()
         accounts_count = len(accounts)
+
+        if order_by:
+            accounts = accounts.order_by(*order_by)
 
         if page_size and current_page:
             page_size = int(page_size)

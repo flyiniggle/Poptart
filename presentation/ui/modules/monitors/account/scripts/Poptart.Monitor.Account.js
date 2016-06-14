@@ -33,6 +33,7 @@ Poptart.Monitor.Account = function(){
 				},
 				schema: {
 					total: "total",
+					groups: "group",
 					data: "data",
 					fields: {
 						pk: { type: "number"},
@@ -56,7 +57,8 @@ Poptart.Monitor.Account = function(){
 					}
 				},
 				pageSize: 500,
-				serverPaging: true
+				serverPaging: true,
+				serverGrouping: true
 			},
 			pageable: true,
 			groupable: true,
