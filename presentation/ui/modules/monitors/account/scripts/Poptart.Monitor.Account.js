@@ -56,12 +56,16 @@ Poptart.Monitor.Account = function(){
 						last_update: {type: "date"}
 					}
 				},
-				pageSize: 500,
+				pageSize: 50,
 				serverPaging: true,
 				serverGrouping: true
 			},
-			pageable: true,
+			pageable: {
+				pageSizes: [10, 25, 50, 100, 500, 1000],
+				numeric: true
+			},
 			groupable: true,
+			height: 600,
 			columns: [
 				{title: "#", field: "pk", width: "40px"},
 				{title: "Name", field: "name", width: "175px"},
