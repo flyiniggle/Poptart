@@ -31,6 +31,10 @@ Poptart.Monitor.Account = function(){
 						dataType: "JSON"
 					}
 				},
+				aggregate: [
+					{field: "total_value", aggregate: "sum"},
+					{field: "total_cash", aggregate: "sum"}
+				],
 				schema: {
 					total: "total",
 					groups: "group",
@@ -64,14 +68,16 @@ Poptart.Monitor.Account = function(){
 				pageSizes: [10, 25, 50, 100, 500, 1000],
 				numeric: true
 			},
-			groupable: true,
+			groupable: {
+				showFooter: true
+			},
 			height: 600,
 			columns: [
 				{title: "#", field: "pk", width: "40px"},
 				{title: "Name", field: "name", width: "175px"},
 				{title: "Description", field: "description", width: "150px"},
-				{title: "Cash", field: "total_cash", width: "100px"},
-				{title: "Value", field: "total_value", width: "100px"},
+				{title: "Cash", field: "total_cash", width: "100px", aggregates: ["sum"], groupFooterTemplate: "Total: #=sum#"},
+				{title: "Value", field: "total_value", width: "100px", aggregates: ["sum"], groupFooterTemplate: "Total: #=sum#"},
 				{title: "Expected Cash", field: "expected_cash", width: "150px"},
 				{title: "Expected Value", field: "total_expected_value", width: "150px"},
 				{title: "Cash Drift", field: "cash_drift", width: "100px"},
