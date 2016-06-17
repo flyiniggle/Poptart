@@ -3,7 +3,7 @@ var ServerError = imports('support/Error.js');
 var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
 var accountMonitorService = imports('services/monitors/account/AccountMonitorService.js');
 var dashboardService = imports('services/dashboard/DashboardService.js');
-var paramQueryDataAdapter = imports('support/ParamQuery/DataAdapter.js');
+var kendoDataAdapter = imports('support/Kendo/DataAdapter.js');
 
 var AccountMonitorController = function(){
 	var self = this;
@@ -26,7 +26,7 @@ var AccountMonitorController = function(){
 	};
 
 	self.getAccountsData = function(req, res){
-		var accountsRequest = accountMonitorService.getAccounts(res, paramQueryDataAdapter.translateServerRequest(req.query));
+		var accountsRequest = accountMonitorService.getAccounts(res, kendoDataAdapter.translateServerRequest(req.query));
 
 		accountsRequest.on("end", function(res, data) {
 			processAccountData(res, data);
@@ -83,7 +83,7 @@ var AccountMonitorController = function(){
 	function processAccountData(res, data){
 		var JSONAccountData = JSON.parse(data);
 
-		res.send(paramQueryDataAdapter.translateServerResponse(res.req.query, JSONAccountData));
+		res.send(kendoDataAdapter.translateServerResponse(res.req.query, JSONAccountData));
 	}
 
 	function processAccountLookup(res, data){
