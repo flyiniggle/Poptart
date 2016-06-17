@@ -73,6 +73,7 @@
 		<script type="text/javascript" src="/scripts/jquery-ui-1.10.4.custom.js"></script>
 		<script type="text/javascript" src="/scripts/knockout-3.4.0.debug.js"></script>
 		<script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2016.1/latest/js/infragistics.core.js"></script>
+		<script src="http://cdn-na.infragistics.com/igniteui/2016.1/latest/js/infragistics.lob.js"></script>
 		<script type="text/javascript" src="/scripts/nunjucks.js"></script>
 	{% endblock %}
 

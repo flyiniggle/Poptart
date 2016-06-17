@@ -31,12 +31,12 @@ Poptart.TableController = function(table){
 	ko.applyBindings(model, document.getElementById("tableControlsHeader"));
 
 	model.pageSize.subscribe(function(value) {
-		table.pqGrid("option", "pageModel.rPP", parseInt(value));
-		table.pqGrid("refreshDataAndView");
+		//table.pqGrid("option", "pageModel.rPP", parseInt(value));
+		//table.pqGrid("refreshDataAndView");
 	});
 
 	model.currentPageIndex.subscribe(function(value) {
-		table.pqGrid("goToPage", {page: value});
+		//table.pqGrid("goToPage", {page: value});
 	});
 
 };

@@ -13,23 +13,17 @@ Poptart.Monitor.Security = function() {
 			return link.outerHTML;
 		};*/
 
-		table.pqGrid({
-			dataModel: {
-				data: Poptart.Monitor.Security.securities
-			},
-			pageModel: {type: "local", rPP: 25, strRpp: "{0}", rPPOptions: [10, 25, 50, 100]},
+		table.igGrid({
+			dataSource: Poptart.Monitor.Security.securities,
+			//pageModel: {type: "local", rPP: 25, strRpp: "{0}", rPPOptions: [10, 25, 50, 100]},
 			width: "100%",
-			flexHeight: true,
-			groupModel: {
-				on: true
-			},
-			colModel: [
-				{title: "#", dataIndx: "pk", dataType: "integer", width: "40px"},
-				{title: "Ticker", dataIndx: "ticker", dataType: "string", width: "150px"},
-				{title: "CUSIP", dataIndx: "CUSIP", dataType: "string", width: "150px"},
-				{title: "Description", dataIndx: "description", dataType: "string", width: "200px"},
-				{title: "Last Price", dataIndx: "last_price", dataType: "float", width: "100px"},
-				{title: "Asset Class", dataIndx: "segment", dataType: "float", width: "75px"}
+			columns: [
+				{headerText: "#", key: "pk", dataType: "integer", width: "40px"},
+				{headerText: "Ticker", key: "ticker", dataType: "string", width: "150px"},
+				{headerText: "CUSIP", key: "CUSIP", dataType: "string", width: "150px"},
+				{headerText: "Description", key: "description", dataType: "string", width: "200px"},
+				{headerText: "Last Price", key: "last_price", dataType: "float", width: "100px"},
+				{headerText: "Asset Class", key: "segment", dataType: "float", width: "75px"}
 			]
 		});
 
