@@ -1,6 +1,5 @@
 Poptart.Monitor.Account = function(){
-	var ReturnObj = {},
-		tableControls;
+	var ReturnObj = {};
 
 
 	//Public Methods
@@ -8,20 +7,11 @@ Poptart.Monitor.Account = function(){
 
 	ReturnObj.init = function(){
 		var testTable = jQuery("#am_testTable"),
-			dataSource,
-			linkRenderer;
+			dataSource;
 
 		jQuery(".am_accountSelector").autocomplete({
 			source: Poptart.Monitor.Account.accountList
 		});
-
-		linkRenderer = function(ui) {
-			var link = document.createElement("a");
-
-			link.href = "/account/" + ui.rowData["pk"];
-			link.innerHTML = ui.cellData;
-			return link.outerHTML;
-		};
 
 		dataSource = new jQuery.ig.DataSource({
 			dataSource: "/monitors/account/tabledata",
@@ -92,13 +82,31 @@ Poptart.Monitor.Account = function(){
 				},
 				{
 					name: "GroupBy",
-					type: "remote"
+					type: "remote",
+					columnSettings: [
+						{
+							columnKey: "total_cash",
+							summaries: [
+								{
+									text: "Total Cash: ",
+									summaryFunction: "sum"
+								}
+							]
+						},
+						{
+							columnKey: "total_value",
+							summaries: [
+								{
+									text: "Total Value: ",
+									summaryFunction: "sum"
+								}
+							]
+						}
+					]
 				}
 			],
 			width: "100%"
 		});
-
-		//tableControls = new Poptart.TableController(testTable);
 	};
 
 	ReturnObj.launchAccount = function(){
