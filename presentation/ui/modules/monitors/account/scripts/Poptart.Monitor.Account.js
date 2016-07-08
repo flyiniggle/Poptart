@@ -87,8 +87,13 @@ Poptart.Monitor.Account = function(){
 					name: "Sorting",
 					type: "remote",
 					sortUrlKey: "order_by"
+				},
+				{
+					name: "GroupBy",
+					type: "remote"
 				}
-			]
+			],
+			width: "100%"
 		});
 
 		//tableControls = new Poptart.TableController(testTable);
