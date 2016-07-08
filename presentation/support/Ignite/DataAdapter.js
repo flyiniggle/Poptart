@@ -5,7 +5,7 @@ module.exports = function() {
 
 	dataAdapter.translateServerRequest = function(params) {
 		var queryObject = {};
-		queryObject.current_page = params.current_page + 1;
+		queryObject.current_page = parseInt(params.current_page) + 1;
 		queryObject.page_size = params.page_size;
 
 		if(params["$orderby"]){
