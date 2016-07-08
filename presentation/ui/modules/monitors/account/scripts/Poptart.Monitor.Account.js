@@ -88,7 +88,7 @@ Poptart.Monitor.Account = function(){
 							columnKey: "total_cash",
 							summaries: [
 								{
-									text: "Total Cash: ",
+									text: "Total: ",
 									summaryFunction: "sum"
 								}
 							]
@@ -97,7 +97,7 @@ Poptart.Monitor.Account = function(){
 							columnKey: "total_value",
 							summaries: [
 								{
-									text: "Total Value: ",
+									text: "Total: ",
 									summaryFunction: "sum"
 								}
 							]
