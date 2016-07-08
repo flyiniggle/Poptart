@@ -44,15 +44,15 @@ var AccountMonitorController = function(){
 			JSONAccountData = JSON.parse(accountData),
 			JSONSummaryData = JSON.parse(summaryData),
 			JSONAccountsList = JSONAccountData.accounts_data,
-			i, account, alertMessage, serverError;
+			i, account, alertMessage;
 
 		if(!!JSONAccountData.error) {
-			serverError = new ServerError(res, JSONAccountData.error);
+			let serverError = new ServerError(res, JSONAccountData.error);
 			return serverError.send(500);
 		}
 
 		if(!!JSONSummaryData.error) {
-			serverError = new ServerError(res, JSONSummaryData.error);
+			let serverError = new ServerError(res, JSONSummaryData.error);
 			return serverError.send(500);
 		}
 
@@ -83,6 +83,11 @@ var AccountMonitorController = function(){
 	function processAccountData(res, data){
 		var JSONAccountData = JSON.parse(data);
 
+		if(!!JSONAccountData.error) {
+			let serverError = new ServerError(res, JSONAccountData.error);
+			return serverError.send(500);
+		}
+		
 		res.send(JSONAccountData);
 	}
 

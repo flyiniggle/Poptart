@@ -17,11 +17,10 @@ const SecurityMonitorController = function() {
 
 	// Request Callbacks
 	function processSecurities(res, data){
-		var securitiesData = JSON.parse(data),
-			serverError;
+		var securitiesData = JSON.parse(data);
 
 		if(!!securitiesData.error) {
-			serverError = new ServerError(res, data.error);
+			let serverError = new ServerError(res, data.error);
 			return serverError.send(500);
 		}
 
