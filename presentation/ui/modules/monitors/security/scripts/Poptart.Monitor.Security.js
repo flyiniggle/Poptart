@@ -2,20 +2,11 @@ Poptart.Monitor.Security = function() {
 	var ReturnObj = {};
 
 	ReturnObj.init = function() {
-		var table = jQuery("#sm_table"),
-			tableControls;
+		var table = jQuery("#sm_table");
 
-		/*linkRenderer = function(ui) {
-			var link = document.createElement("a");
-
-			link.href = "/account/" + ui.rowData["pk"];
-			link.innerHTML = ui.cellData;
-			return link.outerHTML;
-		};*/
 
 		table.igGrid({
 			dataSource: Poptart.Monitor.Security.securities,
-			//pageModel: {type: "local", rPP: 25, strRpp: "{0}", rPPOptions: [10, 25, 50, 100]},
 			width: "100%",
 			columns: [
 				{headerText: "#", key: "pk", dataType: "integer", width: "40px"},
@@ -26,8 +17,6 @@ Poptart.Monitor.Security = function() {
 				{headerText: "Asset Class", key: "segment", dataType: "float", width: "75px"}
 			]
 		});
-
-		tableControls = new Poptart.TableController(table);
 	};
 
 	return ReturnObj;

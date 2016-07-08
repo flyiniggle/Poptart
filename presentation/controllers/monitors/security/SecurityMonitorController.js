@@ -1,6 +1,5 @@
 const ServerError = imports('support/Error.js');
 const securityMonitorService = imports('services/monitors/security/securityMonitorService.js');
-const paramQueryDataAdapter = imports('support/ParamQuery/DataAdapter.js');
 
 const SecurityMonitorController = function() {
 	var self = this;
