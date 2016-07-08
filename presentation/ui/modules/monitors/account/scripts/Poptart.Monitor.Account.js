@@ -60,6 +60,9 @@ Poptart.Monitor.Account = function(){
 				{headerText: "Name", key: "name", type: "string", width: "175px"},
 				{headerText: "Description", key: "description", type: "number", width: "150px"},
 				{headerText: "Cash", key: "total_cash", type: "number", width: "100px"},
+				{headerText: "Client", key: "client_1_id", width: "150px"},
+				{headerText: "Manager", key: "manager", width: "150px"},
+				{headerText: "Solution", key: "solution_name", width: "150px"},
 				{headerText: "Value", key: "total_value", width: "100px"},
 				{headerText: "Expected Cash", key: "expected_cash", width: "150px"},
 				{headerText: "Expected Value", key: "total_expected_value", width: "150px"},
@@ -69,8 +72,6 @@ Poptart.Monitor.Account = function(){
 				{headerText: "Max Cash Drift", key: "max_cash_drift", width: "150px"},
 				{headerText: "Max Position Drift", key: "max_pos_drift", width: "150px"},
 				{headerText: "Max Total Drift", key: "max_total_drift", width: "150px"},
-				{headerText: "Client", key: "client_1_id", width: "150px"},
-				{headerText: "Manager", key: "manager", width: "150px"},
 				{headerText: "Start Date", key: "inception_date", width: "150px"},
 				{headerText: "Solution", key: "solution_name", width: "150px"},
 				{headerText: "Last Updated", key: "last_update", width: "150px"}
@@ -81,7 +82,8 @@ Poptart.Monitor.Account = function(){
 					type: "remote",
 					pageIndexUrlKey: "current_page",
 					pageSizeUrlKey: "page_size",
-					pageSizeDropDownLocation: "above"
+					pageSizeDropDownLocation: "above",
+					pageSizeList: [10, 25, 50, 100, 500, 1000]
 				},
 				{
 					name: "Sorting",
