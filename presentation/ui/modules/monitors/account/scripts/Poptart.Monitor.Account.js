@@ -7,10 +7,24 @@ Poptart.Monitor.Account = function(){
 
 	ReturnObj.init = function(){
 		var testTable = jQuery("#am_testTable"),
+			accountLauncher = jQuery("#am_accountLauncherSelector"),
+			accountDeleter = jQuery("#am_accountDeleterSelector"),
 			dataSource;
 
-		jQuery(".am_accountSelector").autocomplete({
-			source: Poptart.Monitor.Account.accountList
+		accountLauncher.igCombo({
+			dataSource: Poptart.Monitor.Account.accountList,
+			valueKey: "id",
+			textKey: "name",
+			placeHolder: "Go to account...",
+			autoComplete: true
+		});
+
+		accountDeleter.igCombo({
+			dataSource: Poptart.Monitor.Account.accountList,
+			valueKey: "id",
+			textKey: "name",
+			placeHolder: "Delete account...",
+			autoComplete: true
 		});
 
 		dataSource = new jQuery.ig.DataSource({
@@ -107,14 +121,15 @@ Poptart.Monitor.Account = function(){
 			],
 			width: "100%"
 		});
+
+		//Events
+		jQuery("#am_accountLauncher").on("click", launchAccount.bind(accountLauncher))
+
 	};
 
-	ReturnObj.launchAccount = function(){
-		var monitor = Poptart.Monitor.Account,
-			i, pk;
+	var launchAccount = function(){
+		var pk = this.igCombo("selectedItems")[0].data.id;
 
-		i = monitor.accountList.indexOf(jQuery("#am_accountLauncherSelector").val());
-		pk = monitor.accountIDsList[i];
 		jQuery("#am_accountLauncher").attr("action", "/account/" + pk).submit();
 	};
 

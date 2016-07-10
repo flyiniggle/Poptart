@@ -6,6 +6,7 @@ var dashboardService = imports('services/dashboard/DashboardService.js');
 var igniteDataAdapter = imports('support/Ignite/DataAdapter.js');
 
 var AccountMonitorController = function(){
+	"use strict";
 	var self = this;
 
 	// Public Methods
@@ -38,8 +39,7 @@ var AccountMonitorController = function(){
 	// Request Callbacks
 	function processAccounts(res, accountData, summaryData) {
 		var templateData = {},
-			accountNames = [],
-			accountIDs = [],
+			accountList = [],
 			alerts = [],
 			JSONAccountData = JSON.parse(accountData),
 			JSONSummaryData = JSON.parse(summaryData),
@@ -57,8 +57,10 @@ var AccountMonitorController = function(){
 		}
 
 		for(i=(JSONAccountsList.length - 1); account=JSONAccountsList[i]; i--) {
-			accountNames.push(account.name.toString());
-			accountIDs.push(account.pk.toString());
+			accountList.push({
+				name: account.name.toString(),
+				id: account.pk.toString()
+			});
 			if(account.holdings_drift > account.max_pos_drift) {
 				alertMessage = account.name + " has drifting holdings.";
 				alerts.push(new Alert("error", "Holdings Drift", alertMessage));
@@ -73,8 +75,7 @@ var AccountMonitorController = function(){
 			}
 		}
 
-		templateData.accountNamesList = JSON.stringify(accountNames);
-		templateData.accountIDsList = JSON.stringify(accountIDs);
+		templateData.accountList = JSON.stringify(accountList);
 		templateData.summaryData = JSONSummaryData;
 		templateData.alerts = alerts;
 		res.render("modules/monitors/account/accountmonitor.ninja", templateData);
@@ -87,7 +88,7 @@ var AccountMonitorController = function(){
 			let serverError = new ServerError(res, JSONAccountData.error);
 			return serverError.send(500);
 		}
-		
+
 		res.send(JSONAccountData);
 	}
 
