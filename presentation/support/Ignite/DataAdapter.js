@@ -4,15 +4,20 @@ module.exports = function() {
 	var dataAdapter = {};
 
 	dataAdapter.translateServerRequest = function(params) {
-		var queryObject = {};
+		var queryObject = {},
+			orderBy = params["$orderby"].split(",");
+
 		queryObject.current_page = parseInt(params.current_page) + 1;
 		queryObject.page_size = params.page_size;
 
-		if(params["$orderby"]){
-			let orderByArr = params["$orderby"].split(" "),
-				dir = (orderByArr[1] === "asc") ? "" : "-",
-				field = orderByArr[0];
-			queryObject.order_by = [dir + field];
+		if(!!orderBy.length){
+			queryObject.order_by = orderBy.map(function(val) {
+				let orderByArr = val.split(" "),
+					dir = (orderByArr[1] === "asc") ? "" : "-",
+					field = orderByArr[0];
+				
+				return dir + field;
+			})
 		}
 
 		return queryObject;
