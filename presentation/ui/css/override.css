@@ -1,0 +1,13 @@
+/*
+This is embarrassing, but here we have a quick,
+hacky way to override framework CSS that looks dumb with my stuff.
+This should eventually b e replaced with true custom theming,
+if I ever get to work on that.
+*/
+
+.ui-igcombo-wrapper {
+	height: 19px;
+}
+.ribbonMenuForm > .ui-igcombo-wrapper {
+	vertical-align: middle;
+}

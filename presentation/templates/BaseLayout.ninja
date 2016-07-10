@@ -3,15 +3,18 @@
 <head>
 	<title>Poptart Node</title>
 	<link href="/css/ionicons/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
-	<link href="/css/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
-	<link href="/css/jquery-ui/smoothness/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
+{#
 	<link href="http://cdn-na.infragistics.com/igniteui/2016.1/latest/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" type="text/css"/>
+#}
 	<link href="http://cdn-na.infragistics.com/igniteui/2016.1/latest/css/structure/infragistics.css" rel="stylesheet" type="text/css"/>
+	<link href="/css/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
+	<link href="/css/jquery-ui/custom/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
 
 	{% block css %}
 		<link href="/css/styles.css" rel="stylesheet" type="text/css"/>
 		<link href="/css/text.css" rel="stylesheet" type="text/css"/>
 		<link href="/css/forms.css" rel="stylesheet" type="text/css"/>
+		<link href="/css/override.css" rel="stylesheet" type="text/css"/>
 	{% endblock %}
 </head>
 <body>
