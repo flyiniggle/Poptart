@@ -117,6 +117,10 @@ Poptart.RibbonMenu = function(){
 			self.ribbonMenu.hide();
 			self.tab.removeClass("ribbonMenuTabSelected").addClass("ribbonMenuTabUnselected")
 		};
+
+		// Setup
+		self.tab.one("click", showRibbonMenu.bind(self.tab));
+
 	};
 
 	ReturnObj.init = function() {
@@ -128,14 +132,16 @@ Poptart.RibbonMenu = function(){
 					ribbonMenus[m.data("name")] = new RibbonMenu(m);
 			});
 
-		jQuery(".ribbonMenuTab").one("click", showRibbonMenu);
+		if(menus[0]) {
+			showRibbonMenu.call(jQuery(menus[0]));
+		}
 	};
 
-	function showRibbonMenu(e) {
+	function showRibbonMenu() {
 		if(!!activeMenu){
 			activeMenu.deselect();
 		}
-		activeMenu = ribbonMenus[jQuery(e.target).data("name")];
+		activeMenu = ribbonMenus[this.data("name")];
 		activeMenu.select();
 
 		activeMenu.tab.one("click", hideRibbonMenu);
