@@ -2,6 +2,7 @@ const ServerError = imports('support/Error.js');
 const securityMonitorService = imports('services/monitors/security/securityMonitorService.js');
 
 const SecurityMonitorController = function() {
+	"use strict";
 	var self = this;
 
 	// Public Methods

@@ -3,6 +3,7 @@ const Alert = imports('components/alerts/Alert.js');
 const ServerError = imports('support/Error.js');
 
 const AccountController = function(){
+	"use strict";
 	const self = this;
 
 	self.getAccount = function(req, res){
