@@ -123,7 +123,7 @@ Poptart.Monitor.Account = function(){
 		});
 
 		//Events
-		jQuery("#am_accountLauncher").on("click", launchAccount.bind(accountLauncher))
+		jQuery("#am_accountLauncher").on("click", launchAccount.bind(accountLauncher));
 
 	};
 
