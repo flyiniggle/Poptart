@@ -16,7 +16,8 @@ Poptart.Monitor.Account = function(){
 			valueKey: "id",
 			textKey: "name",
 			placeHolder: "Go to account...",
-			autoComplete: true
+			autoComplete: true,
+			height: "20px"
 		});
 
 		accountDeleter.igCombo({
@@ -24,7 +25,8 @@ Poptart.Monitor.Account = function(){
 			valueKey: "id",
 			textKey: "name",
 			placeHolder: "Delete account...",
-			autoComplete: true
+			autoComplete: true,
+			height: "20px"
 		});
 
 		dataSource = new jQuery.ig.DataSource({
