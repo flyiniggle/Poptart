@@ -64,9 +64,9 @@
 			<label for="accountExpectedCashInput" class="textInputLabel">Expected cash:</label>
 			<input id="accountExpectedCashInput" type="text" data-bind="value: expectedCash"/>
 			<br/>
-			<br/>
 			<label for="accountCashInput" class="textInputLabel">Starting cash:</label>
 			<input id="accountCashInput" type="text" data-bind="textInput: startingCash"/>
+			<br/>
 			<label for="accountMaxCashDriftInput" class="textInputLabel">Maximum cash drift:</label>
 			<input id="accountMaxCashDriftInput" type="text" data-bind="value: maxCashDrift"/>
 		</form>

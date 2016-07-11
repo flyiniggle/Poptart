@@ -26,7 +26,7 @@ Poptart.Monitor.Account = function(){
 			textKey: "name",
 			placeHolder: "Delete account...",
 			autoComplete: true,
-			height: "20px"
+			height: Poptart.Ignite.constants.INPUT_HEIGHT
 		});
 
 		dataSource = new jQuery.ig.DataSource({
@@ -172,6 +172,15 @@ Poptart.Monitor.Account.CreateAccount = function(){
 	ReturnObj.init = function(){
 		viewModel = new AccountCreationViewModel();
 		ko.applyBindings(viewModel);
+
+		// Ig Components
+		jQuery("#accountExpectedCashInput, #accountCashInput, #accountMaxCashDriftInput, #accountMaxPositionDriftInput, #accountMaxTotalDriftInput").igCurrencyEditor({
+			currencySymbol: "$",
+			minValue: 0,
+			maxDecimals: 3,
+			height: Poptart.Ignite.constants.INPUT_HEIGHT,
+			width: "90%"
+		});
 
 		jQuery("#submitCreateAccount").on("click", Poptart.Monitor.Account.CreateAccount.submit);
 	};
