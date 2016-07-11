@@ -62,10 +62,10 @@
 				<h3>Cash Settings:</h3>
 			</div>
 			<label for="accountExpectedCashInput" class="textInputLabel">Expected cash:</label>
-			<input id="accountExpectedCashInput" type="text" data-bind="value: expectedCash"/>
+			<input id="accountExpectedCashInput" type="text" data-bind="IgCurrencyEditor: expectedCash"/>
 			<br/>
 			<label for="accountCashInput" class="textInputLabel">Starting cash:</label>
-			<input id="accountCashInput" type="text" data-bind="textInput: startingCash"/>
+			<input id="accountCashInput" type="text" data-bind="IgCurrencyEditor: startingCash"/>
 			<br/>
 			<label for="accountMaxCashDriftInput" class="textInputLabel">Maximum cash drift:</label>
 			<input id="accountMaxCashDriftInput" type="text" data-bind="value: maxCashDrift"/>

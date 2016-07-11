@@ -63,6 +63,17 @@ var Poptart = function(){
 	});
 
 	//Register knockout components
+	/////////////////////////////////
+
+	//Register knockout bindings
+	/////////////////////////////////
+	ko.bindingHandlers.IgCurrencyEditor = {
+		init: function(element, valueAccessor) {
+			jQuery(element).on("igcurrencyeditortextchanged", function(event, ele) {
+				valueAccessor()(ele.text);
+			})
+		}
+	};
 
 
 
