@@ -177,7 +177,7 @@ Poptart.Monitor.Account.CreateAccount = function(){
 		jQuery("#accountExpectedCashInput, #accountCashInput, #accountMaxCashDriftInput, #accountMaxPositionDriftInput, #accountMaxTotalDriftInput").igCurrencyEditor({
 			currencySymbol: "$",
 			minValue: 0,
-			maxDecimals: 3,
+			maxDecimals: 2,
 			height: Poptart.Ignite.constants.INPUT_HEIGHT,
 			width: "90%"
 		});
