@@ -4,14 +4,13 @@ module.exports = function() {
 	var dataAdapter = {};
 
 	dataAdapter.translateServerRequest = function(params) {
-		var queryObject = {},
-			orderBy = params["$orderby"];
+		var queryObject = {};
 
 		queryObject.current_page = parseInt(params.current_page) + 1;
 		queryObject.page_size = params.page_size;
 
-		if(!!orderBy){
-			orderBy = orderBy.split(",");
+		if(params.hasOwnProperty("$orderby")){
+			let orderBy = params["$orderby"].split(",");
 			queryObject.order_by = orderBy.map(function(val) {
 				let orderByArr = val.split(" "),
 					dir = (orderByArr[1] === "asc") ? "" : "-",
