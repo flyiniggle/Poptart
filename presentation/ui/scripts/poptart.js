@@ -82,8 +82,9 @@ var Poptart = function(){
 
 		target.subscribe(function(value) {
 			var floatValue = parseFloat(value),
-				parts, intPart, formattedValue,
-				i = 0;
+				sign = "",
+				i = 0,
+				parts, intPart, formattedValue;
 
 			if(isNaN(floatValue)){
 				target.formattedValue(". . .");
@@ -91,6 +92,10 @@ var Poptart = function(){
 			parts = floatValue.toFixed(2).toString().split(".");
 			intPart = parts.shift().split("");
 			formattedValue = [];
+
+			if(floatValue < 0) {
+				sign = intPart.shift();
+			}
 
 			while(intPart.length > 0){
 				if((i > 0 ) && !(i % 3)){
@@ -101,6 +106,7 @@ var Poptart = function(){
 			}
 
 			formattedValue.push(".");
+			formattedValue.unshift(sign);
 			formattedValue.unshift("$");
 
 			target.formattedValue(formattedValue.concat(parts).join(""));
