@@ -35,11 +35,11 @@
 	</div>
 	<div>
 		<span>Cash drift: </span>
-		<span data-bind="text: cashDrift"></span>
+		<span data-bind="text: cashDrift.formattedValue"></span>
 	</div>
 	<div>
 		<span>Total value: </span>
-		<span data-bind="text: totalValue"></span>
+		<span data-bind="text: totalValue.formattedValue"></span>
 	</div>
 {% endblock %}
 

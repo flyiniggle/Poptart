@@ -65,16 +65,49 @@ var Poptart = function(){
 	//Register knockout components
 	/////////////////////////////////
 
-	//Register knockout bindings
+	//Register knockout bindings3+
 	/////////////////////////////////
 	ko.bindingHandlers.IgCurrencyEditor = {
 		init: function(element, valueAccessor) {
 			jQuery(element).on("igcurrencyeditortextchanged", function(event, ele) {
-				valueAccessor()(ele.text);
+				valueAccessor()(jQuery(this).igCurrencyEditor("value"));
 			})
 		}
 	};
 
+	//Register knockout extenders
+	/////////////////////////////////
+	ko.extenders.CurrencyDisplay = function(target) {
+		target.formattedValue = ko.observable();
+
+		target.subscribe(function(value) {
+			var floatValue = parseFloat(value),
+				parts, intPart, formattedValue,
+				i = 0;
+
+			if(isNaN(floatValue)){
+				target.formattedValue(". . .");
+			}
+			parts = floatValue.toFixed(2).toString().split(".");
+			intPart = parts.shift().split("");
+			formattedValue = [];
+
+			while(intPart.length > 0){
+				if((i > 0 ) && !(i % 3)){
+					formattedValue.unshift(",");
+				}
+				formattedValue.unshift(intPart.pop());
+				i++;
+			}
+
+			formattedValue.push(".");
+			formattedValue.unshift("$");
+
+			target.formattedValue(formattedValue.concat(parts).join(""));
+		});
+
+		return target
+	};
 
 
 	// Public methods

@@ -158,11 +158,11 @@ Poptart.Monitor.Account.CreateAccount = function(){
 
 		self.totalValue = ko.computed(function() {
 			return this.startingCash();
-		}, self);
+		}, self).extend({CurrencyDisplay: null});
 
 		self.cashDrift = ko.computed(function() {
 			return Math.abs(self.expectedCash() - self.startingCash())
-		}, self);
+		}, self).extend({CurrencyDisplay: null});
 	};
 
 
