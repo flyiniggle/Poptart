@@ -49,21 +49,8 @@
 {% endblock %}
 
 {% block main %}
-	<div id="tableControlsHeader">
-		<div id="tableControlsLoader" class="tableControlsBox">
-			<img src="/css/images/loader.svg"/>
-		</div>
-		<div id="tableControlsPagination" class="tableControlsBox">
-			<span>first</span>
-			<span>prev</span>
-			<input id="tableControlsCurrentPage" type="text" value="1"/>
-			<span>next</span>
-			<span>last</span>
-		</div>
-		<div id="tableControlsPageSize" class="tableControlsBox">
-			<span>page size: </span>
-			<select id="tableControlsPageSizeSelect"></select>
-		</div>
+	<div class="panelHeader">
+		<h3>Accounts:</h3>
 	</div>
 	<table id="am_testTable"></table>
 {% endblock %}
