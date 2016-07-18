@@ -77,6 +77,8 @@
 		<script type="text/javascript" src="/scripts/knockout-3.4.0.debug.js"></script>
 		<script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2016.1/latest/js/infragistics.core.js"></script>
 		<script src="http://cdn-na.infragistics.com/igniteui/2016.1/latest/js/infragistics.lob.js"></script>
+		<script src="http://igniteui.com/js/external/knockout.mapping-latest.js"></script>
+		<script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2016.1/latest/js/extensions/infragistics.ui.editors.knockout-extensions.js"></script>
 		<script type="text/javascript" src="/scripts/nunjucks.js"></script>
 	{% endblock %}
 

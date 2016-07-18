@@ -69,11 +69,25 @@ var Poptart = function(){
 	/////////////////////////////////
 	ko.bindingHandlers.IgCurrencyEditor = {
 		init: function(element, valueAccessor) {
-			jQuery(element).on("igcurrencyeditortextchanged", function(event, ele) {
+			jQuery(element).on("igcurrencyeditortextchanged", function() {
 				valueAccessor()(jQuery(this).igCurrencyEditor("value"));
 			})
 		}
 	};
+
+	/*ko.bindingHandlers.IgPercentEditor = {
+		init: function(element, valueAccessor) {
+			jQuery(element).on("igpercenteditortextchanged", function() {
+				valueAccessor()(jQuery(this).igPercentEditor("value"));
+			})
+		},
+		update: function(element, valueAccessor) {
+			try {
+				jQuery(element).igPercentEditor("value", valueAccessor()());
+			} catch(e){}
+
+		}
+	};*/
 
 	//Register knockout extenders
 	/////////////////////////////////
@@ -110,6 +124,25 @@ var Poptart = function(){
 			formattedValue.unshift("$");
 
 			target.formattedValue(formattedValue.concat(parts).join(""));
+		});
+
+		return target
+	};
+
+	ko.extenders.PercentDisplay = function(target) {
+		target.formattedValue = ko.observable();
+
+		target.subscribe(function(value) {
+			var floatValue = parseFloat(value),
+				formattedValue;
+
+			if(isNaN(floatValue)) {
+				target.formattedValue(". . .");
+			}
+			formattedValue = parseFloat(value).toFixed(3).toString();
+			formattedValue += "%";
+
+			target.formattedValue(formattedValue);
 		});
 
 		return target

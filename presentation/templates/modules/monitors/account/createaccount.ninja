@@ -62,13 +62,16 @@
 				<h3>Cash Settings:</h3>
 			</div>
 			<label for="accountExpectedCashInput" class="textInputLabel">Expected cash:</label>
-			<input id="accountExpectedCashInput" type="text" data-bind="IgCurrencyEditor: expectedCash"/>
+			<input id="accountExpectedCashInput" type="text" data-bind="igCurrencyEditor: { value: expectedCash}"/>
 			<br/>
 			<label for="accountCashInput" class="textInputLabel">Starting cash:</label>
-			<input id="accountCashInput" type="text" data-bind="IgCurrencyEditor: startingCash"/>
+			<input id="accountCashInput" type="text" data-bind="igCurrencyEditor: { value: startingCash}"/>
 			<br/>
 			<label for="accountMaxCashDriftInput" class="textInputLabel">Maximum cash drift:</label>
-			<input id="accountMaxCashDriftInput" type="text" data-bind="value: maxCashDrift"/>
+			<input id="accountMaxCashDriftInput" type="text" data-bind="igCurrencyEditor: { value: maxCashDrift}"/>
+			<br/>
+			<label for="accountMaxCashDriftPercentInput" class="textInputLabel">Maximum cash drift percent:</label>
+			<input id="accountMaxCashDriftPercentInput" type="text" data-bind="igPercentEditor: { value: maxCashDriftPercent}"/>
 		</form>
 	</div>
 	<div id="createAccountHoldings">
@@ -77,10 +80,10 @@
 				<h3>Holdings:</h3>
 			</div>
 			<label for="accountMaxPositionDriftInput" class="textInputLabel">Maximum position drift:</label>
-			<input id="accountMaxPositionDriftInput" type="text" data-bind="value: maxPositionDrift"/>
+			<input id="accountMaxPositionDriftInput" type="text" data-bind="igCurrencyEditor: { value: maxPositionDrift }"/>
 			<br/>
 			<label for="accountMaxTotalDriftInput" class="textInputLabel">Maximum total drift:</label>
-			<input id="accountMaxTotalDriftInput" type="text" data-bind="value: maxTotalDrift"/>
+			<input id="accountMaxTotalDriftInput" type="text" data-bind="igCurrencyEditor: { value: maxTotalDrift }"/>
 		</form>
 	</div>
 {% endblock %}

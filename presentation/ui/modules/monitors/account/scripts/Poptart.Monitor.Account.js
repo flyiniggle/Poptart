@@ -153,8 +153,28 @@ Poptart.Monitor.Account.CreateAccount = function(){
 		self.expectedCash = ko.observable("");
 		self.startingCash = ko.observable("");
 		self.maxPositionDrift = ko.observable("");
-		self.maxCashDrift = ko.observable("");
 		self.maxTotalDrift = ko.observable("");
+		self.maxCashDrift = ko.observable("");
+
+		self.maxCashDriftPercent = ko.computed({
+			read: function() {
+				var self = this,
+					max = parseFloat(self.maxCashDrift()),
+					expected = parseFloat(self.expectedCash());
+
+				if(!isNaN(max) && !isNaN(expected)) {
+					return (max / expected);
+				} else {
+					return "";
+				}
+			},
+			write: function(value) {
+				var self = this;
+
+				self.maxCashDrift(parseFloat(self.expectedCash()) * parseFloat(value));
+			},
+			owner: self
+		});
 
 		self.totalValue = ko.computed(function() {
 			return this.startingCash();
@@ -174,10 +194,17 @@ Poptart.Monitor.Account.CreateAccount = function(){
 		ko.applyBindings(viewModel);
 
 		// Ig Components
-		jQuery("#accountExpectedCashInput, #accountCashInput, #accountMaxCashDriftInput, #accountMaxPositionDriftInput, #accountMaxTotalDriftInput").igCurrencyEditor({
+		jQuery("#accountExpectedCashInput, #accountCashInput, #accountMaxCashDriftInput, #accountMaxPositionDriftInput, #accountMaxTotalDriftInput").igCurrencyEditor("option", {
 			currencySymbol: "$",
 			minValue: 0,
 			maxDecimals: 2,
+			height: Poptart.Ignite.constants.INPUT_HEIGHT,
+			width: "90%"
+		});
+
+		jQuery("#accountMaxCashDriftPercentInput").igPercentEditor("option", {
+			minValue: 0,
+			maxDecimals: 12,
 			height: Poptart.Ignite.constants.INPUT_HEIGHT,
 			width: "90%"
 		});
