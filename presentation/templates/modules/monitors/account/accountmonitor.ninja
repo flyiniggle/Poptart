@@ -57,7 +57,6 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/components/Poptart.TableController.js"></script>
 	<script type="text/javascript" src="/monitors/account/scripts/Poptart.Monitor.Account.js"></script>
 	<script type="text/javascript">
 		(function(){
