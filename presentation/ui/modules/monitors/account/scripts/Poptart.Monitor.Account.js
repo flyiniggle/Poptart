@@ -56,10 +56,11 @@ Poptart.Monitor.Account = function(){
 			}),
 			responseDataKey: "accounts_data",
 			responseTotalRecCountKey: "total_accounts"
-
 		});
 
 		testTable.igGrid({
+			height: "640px",
+			width: "100%",
 			dataSource: dataSource,
 			columns: [
 				{headerText: "#", key: "pk", type: "number", width: "40px"},
@@ -120,8 +121,7 @@ Poptart.Monitor.Account = function(){
 						}
 					]
 				}
-			],
-			width: "100%"
+			]
 		});
 
 		//Events
