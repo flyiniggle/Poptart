@@ -4,7 +4,6 @@ Poptart.Monitor.Security = function() {
 	ReturnObj.init = function() {
 		var table = jQuery("#sm_table");
 
-
 		table.igGrid({
 			dataSource: Poptart.Monitor.Security.securities,
 			width: "100%",
