@@ -6,6 +6,16 @@
 	color: rgb(252, 247, 211);
 }
 
+.demo {
+	color: rgb(53, 148, 209);
+	color: rgb(117, 169, 203);
+	color: rgb(61, 61, 61);
+	color: rgb(240, 240, 240);
+	color: rgb(222, 222, 222);
+}
+
+
+
 *{
 	box-sizing: border-box;
 	margin: 0;
@@ -20,7 +30,7 @@ html {
 }
 
 body {
-	background-color: rgb(252, 247, 211);
+	background-color: rgb(222, 222, 222);
 }
 
 .panel {
@@ -32,7 +42,7 @@ body {
 	margin: 0;
 	padding: 2px;
 	font-weight: bold;
-	background-color: rgb(183, 209, 163);
+	background-color: rgb(61, 61, 61);
 }
 
 #controlsContainer {
@@ -47,8 +57,8 @@ body {
 	top: 0;
 	width: inherit;
 	height: 50px;
-	background-color: rgb(94, 57, 41);
-	border-bottom: 3px solid rgb(222, 232, 190);
+	background-color: rgb(61, 61, 61);
+	border-bottom: 3px solid rgb(53, 148, 209);
 	-webkit-box-shadow: 0 2px 2px 0 rgba(100, 100, 100, 0.5);
 	-moz-box-shadow: 0 2px 2px 0 rgba(100, 100, 100, 0.5);
 	box-shadow: 0 2px 2px 0 rgba(100, 100, 100, 0.5);
@@ -71,17 +81,17 @@ body {
 }
 
 .ribbonMenuTabUnselected {
-	color: rgb(205, 140, 82);
+	color: rgb(61, 61, 61);
 }
 
 .ribbonMenuTabUnselected:hover {
-	background: rgb(205, 140, 82);
-	color: rgb(94, 57, 41);
+	background: rgb(117, 169, 203);
+	color: rgb(222, 222, 222);
 }
 
 .ribbonMenuTabSelected {
-	background: rgb(205, 140, 82);
-	color: rgb(94, 57, 41);
+	background: rgb(117, 169, 203);
+	color: rgb(222, 222, 222);
 }
 
 #ribbonMenuStack {
@@ -90,7 +100,7 @@ body {
 
 .ribbonMenu {
 	display: none;
-	background-color: rgb(205, 140, 82);
+	background-color: rgb(117, 169, 203);
 	height: inherit;
 	padding-top: 5px;
 	padding-bottom: 5px;
@@ -100,18 +110,18 @@ body {
 	height: 60px;
 	padding-right: 10px;
 	padding-left: 10px;
-	border-right: 1px solid rgb(222, 232, 190);
+	border-right: 1px solid rgb(61, 61, 61);
 	float: left;
 }
 
 .ribbonMenuGroup:first-child {
 	margin-left: 15px;
-	border-left: 1px solid rgb(222, 232, 190);
+	border-left: 1px solid rgb(61, 61, 61);
 }
 
 .ribbonMenuGroupLabel {
 	display: block;
-	color: rgb(222, 232, 190);
+	color: rgb(61, 61, 61);
 	margin-bottom: 5px;
 }
 
@@ -123,7 +133,7 @@ body {
 	display: block;
 	cursor: pointer;
 	font-size: 13px;
-	color: rgb(94, 57, 41);
+	color: rgb(222, 222, 222);
 	text-decoration: none;
 }
 
@@ -132,7 +142,7 @@ body {
 }
 
 .ribbonMenuLink:visited {
-	color: rgb(94, 57, 41);
+	color: rgb(222, 222, 222);
 }
 
 #mainNavMenuTarget {
@@ -153,9 +163,10 @@ body {
 	display: none;
 	position: absolute;
 	top: 50px;
-	background-color: rgb(222, 232, 190);
+	z-index: 10;
+	background-color: rgb(53, 148, 209);
 	padding: 10px;
-	border-bottom: 3px solid rgb(94, 57, 41);
+	border-bottom: 2px solid rgb(117, 169, 203);
 	-webkit-box-shadow: 2px 2px 2px 0 rgba(100, 100, 100, 0.5);
 	-moz-box-shadow: 2px 2px 2px 0 rgba(100, 100, 100, 0.5);
 	box-shadow: 2px 2px 2px 0 rgba(100, 100, 100, 0.5);
@@ -204,7 +215,7 @@ body {
 	padding: 5px;
 	width: 100%;
 	height: 50px;
-	border-bottom: 1px solid rgb(222, 232, 190);
+	border-bottom: 1px solid rgb(117, 169, 203);
 }
 
 .alert_summary {
@@ -231,24 +242,4 @@ body {
 	color: rgb(128, 0, 0);
 }
 
-/* Table Controls */
-#tableControlsHeader {
-	width: 100%;
-	height: 30px;
-	background-color: rgb(183, 209, 163);
-	color: rgb(94, 57, 41);
-}
-
-#tableControlsLoader img {
-	height: 20px;
-	display: none;
-}
-
-.tableControlsBox {
-	padding-left: 10px;
-	display: inline;
-	line-height: 100%;
-	vertical-align: middle;
-	height: 20px;
-}
 
