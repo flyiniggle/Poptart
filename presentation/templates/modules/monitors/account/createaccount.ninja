@@ -44,53 +44,68 @@
 {% endblock %}
 
 {% block main %}
-	<div id="createAccountMain">
-		<form class="mainForm">
-			<div class="panelHeader">
-				<h3>Account Details:</h3>
-			</div>
-			<label for="accountNameInput">Account name:</label>
-			<input id="accountNameInput" type="text" data-bind="value: accountName"/>
-			<br/>
-			<label for="accountDescriptionInput" class="textInputLabel">Account description:</label>
-			<textarea id="accountDescriptionInput" data-bind="value: accountDescription"></textarea>
-		</form>
+	<div class="row">
+		<div id="createAccountMain">
+			<form class="mainForm">
+				<div class="panelHeader">
+					<h3>Account Details:</h3>
+				</div>
+				<label for="accountNameInput">Account name:</label>
+				<input id="accountNameInput" type="text" data-bind="value: accountName"/>
+				<br/>
+				<label for="accountDescriptionInput" class="textInputLabel">Account description:</label>
+				<textarea id="accountDescriptionInput" data-bind="value: accountDescription"></textarea>
+			</form>
+		</div>
+		<div id="createAccountCash">
+			<form class="mainForm">
+				<div class="panelHeader">
+					<h3>Cash Settings:</h3>
+				</div>
+				<label for="accountExpectedCashInput" class="textInputLabel">Expected cash:</label>
+				<input id="accountExpectedCashInput" type="text" data-bind="igCurrencyEditor: expectedCashEditorOptions"/>
+				<br/>
+				<label for="accountCashInput" class="textInputLabel">Starting cash:</label>
+				<input id="accountCashInput" type="text" data-bind="igCurrencyEditor: startingCashEditorOptions"/>
+				<br/>
+			</form>
+		</div>
 	</div>
-	<div id="createAccountCash">
-		<form class="mainForm">
-			<div class="panelHeader">
-				<h3>Cash Settings:</h3>
-			</div>
-			<label for="accountExpectedCashInput" class="textInputLabel">Expected cash:</label>
-			<input id="accountExpectedCashInput" type="text" data-bind="igCurrencyEditor: { value: expectedCash}"/>
-			<br/>
-			<label for="accountCashInput" class="textInputLabel">Starting cash:</label>
-			<input id="accountCashInput" type="text" data-bind="igCurrencyEditor: { value: startingCash}"/>
-			<br/>
-			<label for="accountMaxCashDriftInput" class="textInputLabel">Maximum cash drift:</label>
-			<input id="accountMaxCashDriftInput" type="text" data-bind="igCurrencyEditor: { value: maxCashDrift}"/>
-			<br/>
-			<label for="accountMaxCashDriftPercentInput" class="textInputLabel">Maximum cash drift percent:</label>
-			<input id="accountMaxCashDriftPercentInput" type="text" data-bind="igPercentEditor: { value: maxCashDriftPercent}"/>
-		</form>
-	</div>
-	<div id="createAccountHoldings">
-		<form class="mainForm">
-			<div class="panelHeader">
-				<h3>Holdings:</h3>
-			</div>
-			<label for="accountMaxPositionDriftInput" class="textInputLabel">Maximum position drift:</label>
-			<input id="accountMaxPositionDriftInput" type="text" data-bind="igCurrencyEditor: { value: maxPositionDrift }"/>
-			<br/>
-			<label for="accountMaxTotalDriftInput" class="textInputLabel">Maximum total drift:</label>
-			<input id="accountMaxTotalDriftInput" type="text" data-bind="igCurrencyEditor: { value: maxTotalDrift }"/>
-		</form>
+	<div class="row">
+		<div id="createAccountHoldings">
+			<form class="mainForm">
+				<div class="panelHeader">
+					<h3>Drift Settings:</h3>
+				</div>
+				<label for="accountMaxPositionDriftInput" class="textInputLabel">Maximum position drift:</label>
+				<input id="accountMaxPositionDriftInput" type="text" data-bind="igCurrencyEditor: maxPositionDriftEditorOptions"/>
+				<br/>
+				<label for="accountMaxTotalDriftInput" class="textInputLabel">Maximum total drift:</label>
+				<input id="accountMaxTotalDriftInput" type="text" data-bind="igCurrencyEditor: maxTotalDriftEditorOptions"/>
+				<label for="accountMaxCashDriftInput" class="textInputLabel">Maximum cash drift:</label>
+				<input id="accountMaxCashDriftInput" type="text" data-bind="igCurrencyEditor: maxCashDriftEditorOptions"/>
+				<br/>
+				<label for="accountMaxCashDriftPercentInput" class="textInputLabel">Maximum cash drift percent:</label>
+				<input id="accountMaxCashDriftPercentInput" type="text" data-bind="igPercentEditor: maxCashDriftPercentEditorOptions"/>
+				<br/>
+			</form>
+		</div>
+		<div id="createAccountHoldings">
+			<form class="mainForm">
+				<div class="panelHeader">
+					<h3>Proposed Holdings:</h3>
+				</div>
+				<label for="accountSecuritySelect" class="textInputLabel">Security:</label>
+				<input id="accountSecuritySelect" type="text"/>
+				<br/>
+				<table id="accountAddHoldings" data-bind="igGrid: holdingsGridOptions"></table>
+			</form>
+		</div>
 	</div>
 {% endblock %}
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/components/Poptart.TableController.js"></script>
 	<script type="text/javascript" src="/monitors/account/scripts/Poptart.Monitor.Account.js"></script>
 	<script type="text/javascript">
 		(function() {

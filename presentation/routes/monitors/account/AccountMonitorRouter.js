@@ -10,6 +10,7 @@ module.exports = function(express) {
 
 	router.get('/', accountMonitorController.getAccounts);
 	router.get('/tabledata', accountMonitorController.getAccountsData);
+	router.get('/securities', accountMonitorController.getSecuritiesData);
 
 	return router;
 };

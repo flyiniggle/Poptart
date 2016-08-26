@@ -1,9 +1,10 @@
-var Alert = imports("components/alerts/alert.js");
-var ServerError = imports('support/Error.js');
-var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
-var accountMonitorService = imports('services/monitors/account/AccountMonitorService.js');
-var dashboardService = imports('services/dashboard/DashboardService.js');
-var igniteDataAdapter = imports('support/Ignite/DataAdapter.js');
+const Alert = imports("components/alerts/alert.js");
+const ServerError = imports('support/Error.js');
+const ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
+const accountMonitorService = imports('services/monitors/account/AccountMonitorService.js');
+const securityMonitorService = imports('services/monitors/security/securityMonitorService.js');
+const dashboardService = imports('services/dashboard/DashboardService.js');
+const igniteDataAdapter = imports('support/Ignite/DataAdapter.js');
 
 var AccountMonitorController = function(){
 	"use strict";
@@ -33,6 +34,15 @@ var AccountMonitorController = function(){
 			processAccountData(res, data);
 		});
 		accountsRequest.send();
+	};
+
+	self.getSecuritiesData = function(req, res){
+		var securitiesRequest = securityMonitorService.getSecurities(req, res);
+
+		securitiesRequest.on("end", function(res, data) {
+			processSecurities(res, data);
+		});
+		securitiesRequest.send();
 	};
 
 
@@ -90,6 +100,17 @@ var AccountMonitorController = function(){
 		}
 
 		res.send(JSONAccountData);
+	}
+
+	function processSecurities(res, data) {
+		var securitiesData = JSON.parse(data);
+
+		if(!!securitiesData.error) {
+			let serverError = new ServerError(res, data.error);
+			return serverError.send(500);
+		}
+
+		res.send(securitiesData);
 	}
 
 	/*function processAccountLookup(res, data){
