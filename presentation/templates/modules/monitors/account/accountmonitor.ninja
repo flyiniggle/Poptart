@@ -14,7 +14,7 @@
 	<div id="ribbonMenu_Management" class="ribbonMenu" data-name="Management">
 		<div class="ribbonMenuGroup">
 			<span class="ribbonMenuGroupLabel">Go to account: </span>
-			<form id="am_accountLauncher" class="ribbonMenuForm" onsubmit="Poptart.Monitor.Account.launchAccount()">
+			<form id="am_accountLauncher" class="ribbonMenuForm">
 				<input id="am_accountLauncherSelector" class="am_accountSelector" type="text"/>
 				<input type="submit" value="go"/>
 			</form>
@@ -23,7 +23,7 @@
 		<div class="ribbonMenuGroup">
 			<span class="ribbonMenuGroupLabel">Delete account: </span>
 			<form id="am_accountDeleter" class="ribbonMenuForm">
-				<input class="am_accountSelector" type="text"/>
+				<input id="am_accountDeleterSelector" class="am_accountSelector" type="text"/>
 				<input type="submit" value="delete"/>
 			</form>
 		</div>
@@ -49,33 +49,18 @@
 {% endblock %}
 
 {% block main %}
-	<div id="tableControlsHeader">
-		<div id="tableControlsLoader" class="tableControlsBox">
-			<img src="/css/images/loader.svg"/>
-		</div>
-		<div id="tableControlsPagination" class="tableControlsBox">
-			<span>first</span>
-			<span>prev</span>
-			<input id="tableControlsCurrentPage" type="text" value="1"/>
-			<span>next</span>
-			<span>last</span>
-		</div>
-		<div id="tableControlsPageSize" class="tableControlsBox">
-			<span>page size: </span>
-			<select id="tableControlsPageSizeSelect"></select>
-		</div>
+	<div class="panelHeader">
+		<h3>Accounts:</h3>
 	</div>
 	<table id="am_testTable"></table>
 {% endblock %}
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/components/Poptart.TableController.js"></script>
 	<script type="text/javascript" src="/monitors/account/scripts/Poptart.Monitor.Account.js"></script>
 	<script type="text/javascript">
 		(function(){
-			Poptart.Monitor.Account.accountList = {{accountNamesList | safe}};
-			Poptart.Monitor.Account.accountIDsList = {{accountIDsList | safe}}
+			Poptart.Monitor.Account.accountList = {{accountList | safe}};
 			jQuery(Poptart.Monitor.Account.init);
 		})();
 	</script>

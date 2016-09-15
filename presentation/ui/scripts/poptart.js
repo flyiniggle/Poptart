@@ -10,7 +10,7 @@ var Poptart = function(){
 
 	//Global Setup
 	///////////////
-	jQuery.noConflict();
+	//jQuery.noConflict();
 
 	//Allow script bindings for knockout
 	var render = function(options) {
@@ -63,7 +63,90 @@ var Poptart = function(){
 	});
 
 	//Register knockout components
+	/////////////////////////////////
 
+	//Register knockout bindings3+
+	/////////////////////////////////
+	ko.bindingHandlers.IgCurrencyEditor = {
+		init: function(element, valueAccessor) {
+			jQuery(element).on("igcurrencyeditortextchanged", function() {
+				valueAccessor()(jQuery(this).igCurrencyEditor("value"));
+			})
+		}
+	};
+
+	/*ko.bindingHandlers.IgPercentEditor = {
+		init: function(element, valueAccessor) {
+			jQuery(element).on("igpercenteditortextchanged", function() {
+				valueAccessor()(jQuery(this).igPercentEditor("value"));
+			})
+		},
+		update: function(element, valueAccessor) {
+			try {
+				jQuery(element).igPercentEditor("value", valueAccessor()());
+			} catch(e){}
+
+		}
+	};*/
+
+	//Register knockout extenders
+	/////////////////////////////////
+	ko.extenders.CurrencyDisplay = function(target) {
+		target.formattedValue = ko.observable();
+
+		target.subscribe(function(value) {
+			var floatValue = parseFloat(value),
+				sign = "",
+				i = 0,
+				parts, intPart, formattedValue;
+
+			if(isNaN(floatValue)){
+				target.formattedValue(". . .");
+			}
+			parts = floatValue.toFixed(2).toString().split(".");
+			intPart = parts.shift().split("");
+			formattedValue = [];
+
+			if(floatValue < 0) {
+				sign = intPart.shift();
+			}
+
+			while(intPart.length > 0){
+				if((i > 0 ) && !(i % 3)){
+					formattedValue.unshift(",");
+				}
+				formattedValue.unshift(intPart.pop());
+				i++;
+			}
+
+			formattedValue.push(".");
+			formattedValue.unshift(sign);
+			formattedValue.unshift("$");
+
+			target.formattedValue(formattedValue.concat(parts).join(""));
+		});
+
+		return target
+	};
+
+	ko.extenders.PercentDisplay = function(target) {
+		target.formattedValue = ko.observable();
+
+		target.subscribe(function(value) {
+			var floatValue = parseFloat(value),
+				formattedValue;
+
+			if(isNaN(floatValue)) {
+				target.formattedValue(". . .");
+			}
+			formattedValue = parseFloat(value).toFixed(3).toString();
+			formattedValue += "%";
+
+			target.formattedValue(formattedValue);
+		});
+
+		return target
+	};
 
 
 	// Public methods
@@ -117,6 +200,10 @@ Poptart.RibbonMenu = function(){
 			self.ribbonMenu.hide();
 			self.tab.removeClass("ribbonMenuTabSelected").addClass("ribbonMenuTabUnselected")
 		};
+
+		// Setup
+		self.tab.one("click", showRibbonMenu.bind(self.tab));
+
 	};
 
 	ReturnObj.init = function() {
@@ -128,14 +215,16 @@ Poptart.RibbonMenu = function(){
 					ribbonMenus[m.data("name")] = new RibbonMenu(m);
 			});
 
-		jQuery(".ribbonMenuTab").one("click", showRibbonMenu);
+		if(menus[0]) {
+			showRibbonMenu.call(jQuery(menus[0]));
+		}
 	};
 
-	function showRibbonMenu(e) {
+	function showRibbonMenu() {
 		if(!!activeMenu){
 			activeMenu.deselect();
 		}
-		activeMenu = ribbonMenus[jQuery(e.target).data("name")];
+		activeMenu = ribbonMenus[this.data("name")];
 		activeMenu.select();
 
 		activeMenu.tab.one("click", hideRibbonMenu);
@@ -150,3 +239,14 @@ Poptart.RibbonMenu = function(){
 	return ReturnObj;
 
 }();
+
+Poptart.Ignite = {
+	/*
+	 A place to keep constants and other useful global things for Ignite UI controls.
+	 I can't wait till I get to spend more time on webpack or module loading; gonna refactor
+	 the bejeezes our of this.
+	 */
+	constants: {
+		INPUT_HEIGHT: "20px"
+	}
+};

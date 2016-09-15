@@ -1,11 +1,13 @@
-var Alert = imports("components/alerts/alert.js");
-var ServerError = imports('support/Error.js');
-var ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
-var accountMonitorService = imports('services/monitors/account/AccountMonitorService.js');
-var dashboardService = imports('services/dashboard/DashboardService.js');
-var kendoDataAdapter = imports('support/Kendo/DataAdapter.js');
+const Alert = imports("components/alerts/alert.js");
+const ServerError = imports('support/Error.js');
+const ServiceMarshaller = imports('services/BaseService.js').ServiceMarshaller;
+const accountMonitorService = imports('services/monitors/account/AccountMonitorService.js');
+const securityMonitorService = imports('services/monitors/security/securityMonitorService.js');
+const dashboardService = imports('services/dashboard/DashboardService.js');
+const igniteDataAdapter = imports('support/Ignite/DataAdapter.js');
 
 var AccountMonitorController = function(){
+	"use strict";
 	var self = this;
 
 	// Public Methods
@@ -26,7 +28,7 @@ var AccountMonitorController = function(){
 	};
 
 	self.getAccountsData = function(req, res){
-		var accountsRequest = accountMonitorService.getAccounts(res, kendoDataAdapter.translateServerRequest(req.query));
+		var accountsRequest = accountMonitorService.getAccounts(res, igniteDataAdapter.translateServerRequest(req.query));
 
 		accountsRequest.on("end", function(res, data) {
 			processAccountData(res, data);
@@ -34,31 +36,41 @@ var AccountMonitorController = function(){
 		accountsRequest.send();
 	};
 
+	self.getSecuritiesData = function(req, res){
+		var securitiesRequest = securityMonitorService.getSecurities(req, res);
+
+		securitiesRequest.on("end", function(res, data) {
+			processSecurities(res, data);
+		});
+		securitiesRequest.send();
+	};
+
 
 	// Request Callbacks
 	function processAccounts(res, accountData, summaryData) {
 		var templateData = {},
-			accountNames = [],
-			accountIDs = [],
+			accountList = [],
 			alerts = [],
 			JSONAccountData = JSON.parse(accountData),
 			JSONSummaryData = JSON.parse(summaryData),
 			JSONAccountsList = JSONAccountData.accounts_data,
-			i, account, alertMessage, serverError;
+			i, account, alertMessage;
 
 		if(!!JSONAccountData.error) {
-			serverError = new ServerError(res, JSONAccountData.error);
+			let serverError = new ServerError(res, JSONAccountData.error);
 			return serverError.send(500);
 		}
 
 		if(!!JSONSummaryData.error) {
-			serverError = new ServerError(res, JSONSummaryData.error);
+			let serverError = new ServerError(res, JSONSummaryData.error);
 			return serverError.send(500);
 		}
 
 		for(i=(JSONAccountsList.length - 1); account=JSONAccountsList[i]; i--) {
-			accountNames.push(account.name.toString());
-			accountIDs.push(account.pk.toString());
+			accountList.push({
+				name: account.name.toString(),
+				id: account.pk.toString()
+			});
 			if(account.holdings_drift > account.max_pos_drift) {
 				alertMessage = account.name + " has drifting holdings.";
 				alerts.push(new Alert("error", "Holdings Drift", alertMessage));
@@ -73,8 +85,7 @@ var AccountMonitorController = function(){
 			}
 		}
 
-		templateData.accountNamesList = JSON.stringify(accountNames);
-		templateData.accountIDsList = JSON.stringify(accountIDs);
+		templateData.accountList = JSON.stringify(accountList);
 		templateData.summaryData = JSONSummaryData;
 		templateData.alerts = alerts;
 		res.render("modules/monitors/account/accountmonitor.ninja", templateData);
@@ -83,13 +94,29 @@ var AccountMonitorController = function(){
 	function processAccountData(res, data){
 		var JSONAccountData = JSON.parse(data);
 
-		res.send(kendoDataAdapter.translateServerResponse(res.req.query, JSONAccountData));
+		if(!!JSONAccountData.error) {
+			let serverError = new ServerError(res, JSONAccountData.error);
+			return serverError.send(500);
+		}
+
+		res.send(JSONAccountData);
 	}
 
-	function processAccountLookup(res, data){
+	function processSecurities(res, data) {
+		var securitiesData = JSON.parse(data);
+
+		if(!!securitiesData.error) {
+			let serverError = new ServerError(res, data.error);
+			return serverError.send(500);
+		}
+
+		res.send(securitiesData);
+	}
+
+	/*function processAccountLookup(res, data){
 
 		res.send(data);
-	}
+	}*/
 
 	// Private Functions
 

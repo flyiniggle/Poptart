@@ -3,6 +3,7 @@ const Alert = imports('components/alerts/Alert.js');
 const ServerError = imports('support/Error.js');
 
 const AccountController = function(){
+	"use strict";
 	const self = this;
 
 	self.getAccount = function(req, res){
@@ -25,7 +26,7 @@ const AccountController = function(){
 		var templateData = {},
 			alerts = [],
 			JSONData, account,
-			alertMessage, serverError;
+			alertMessage;
 
 		try {
 			JSONData = JSON.parse(accountData);
@@ -34,7 +35,7 @@ const AccountController = function(){
 		}
 
 		if(!!JSONData.error) {
-			serverError = new ServerError(res, JSONData.error);
+			let serverError = new ServerError(res, JSONData.error);
 			return serverError.send(500);
 		}
 
@@ -61,7 +62,7 @@ const AccountController = function(){
 	}
 
 	function processAccountCreation(res, newAccount) {
-		var JSONData, serverError;
+		var JSONData;
 
 		try {
 			JSONData = JSON.parse(newAccount);
@@ -70,7 +71,7 @@ const AccountController = function(){
 		}
 
 		if(!!JSONData.error){
-			serverError = new ServerError(res, JSONData.error);
+			let serverError = new ServerError(res, JSONData.error);
 			serverError.send(500);
 		} else {
 			res.end();
