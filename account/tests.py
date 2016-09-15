@@ -1,3 +1,8 @@
 from django.test import TestCase
+from account.models import Account
 
-# Create your tests here.
+
+class AccountTest(TestCase):
+    def test_get_account(self):
+        account = Account.objects.get(name="WCVsavings0")
+        self.assertTrue(account, "oh boy")
