@@ -235,15 +235,15 @@ Poptart.Monitor.Account.CreateAccount = function(){
 
 		this.columns = [
 			{headerText: "Name", key: "securityName", dataType:"string", width: "120px"},
-			{headerText: "Id", key: "securityId", dataType: "number"},
-			{headerText: "Segment", key: "segment", dataType: "string"},
-			{headerText: "Quantity", key: "quantity", dataType: "number"},
-			{headerText: "Value", key: "value", dataType: "number"},
-			{headerText: "Expected Quantity", key: "expectedQuantity", dataType: "number"},
-			{headerText: "Expected Value", key: "expectedValue", dataType: "number"},
-			{headerText: "Quantity Drift", key: "quantityDrift", dataType: "number"},
-			{headerText: "Value Drift", key: "valueDrift", dataType: "number"},
-			{headerText: "Price", key: "securityLastPrice", dataType: "number"}
+			{headerText: "Id", key: "securityId", dataType: "number", width: "*"},
+			{headerText: "Segment", key: "segment", dataType: "string", width: "*"},
+			{headerText: "Quantity", key: "quantity", dataType: "number", width: "*"},
+			{headerText: "Value", key: "value", dataType: "number", width: "*"},
+			{headerText: "Expected Quantity", key: "expectedQuantity", dataType: "number", width: "*"},
+			{headerText: "Expected Value", key: "expectedValue", dataType: "number", width: "*"},
+			{headerText: "Quantity Drift", key: "quantityDrift", dataType: "number", width: "*"},
+			{headerText: "Value Drift", key: "valueDrift", dataType: "number", width: "*"},
+			{headerText: "Price", key: "securityLastPrice", dataType: "number", width: "*"}
 		];
 		this.features = [
 			{
