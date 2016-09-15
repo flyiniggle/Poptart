@@ -10,10 +10,12 @@
     "type": "git",
     "url": "git+ssh://git@bitbucket.org/dtVestmark/poptartnode.git"
   },
-  "author": "",
-  "license": "ISC",
-  "homepage": "https://bitbucket.org/dtVestmark/poptartnode#readme",
+  "author": "Dan Thompson",
   "dependencies": {
-    "express": "^4.13.3"
+	"express": "^4.13.3",
+	"body-parser": "^1.15.2",
+	"winston": "^2.2.0"
+  },
+  "devDependencies": {
   }
 }
