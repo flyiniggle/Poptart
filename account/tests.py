@@ -45,5 +45,8 @@ class AccountTest(TestCase):
     def test_get_account_value(self):
         account = Account.objects.get(name=self.account_settings.name)
 
-        expected_value = self.account_settings.expected_cash
-        self.assertEqual(expected_value, account.total_value, "oh boy")
+        sup = [(quant * val) for quant, val in zip(self.holdings_settings.quantities, self.securities_settings.prices)]
+        expected_holdings_value = sum(sup)
+        expected_value = self.account_settings.total_cash + expected_holdings_value
+        self.assertEqual(expected_value, account.total_value,
+                         "Account value calculation did not return the expected results. Expected {0} and got {1}".format(expected_value, account.total_value))
