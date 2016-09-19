@@ -47,3 +47,30 @@ class AccountTestSecuritySettings(object):
                        cusip=self.CUSIP[count],
                        price=self.prices[count])
             count -= 1
+
+
+class HoldingsTestHoldingSettings(object):
+    get = Security.objects.get
+    security = "ALL"
+    quantity = 100
+    expected_quantity = 120
+    expected_value = Decimal("10000")
+
+    def get_settings(self):
+        return dict(security_name=self.security,
+                    quantity=self.quantity,
+                    expected_quantity=self.expected_quantity,
+                    expected_value=self.expected_value)
+
+
+class HoldingsTestSecuritySettings(object):
+    ticker = "ALL"
+    description = "Allstate"
+    CUSIP = "1"
+    price = Decimal("50")
+
+    def get_settings(self):
+        return dict(ticker=self.ticker,
+                    description=self.description,
+                    cusip=self.CUSIP,
+                    price=self.price)

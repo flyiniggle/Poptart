@@ -71,3 +71,68 @@ class AccountTest(TestCase):
 
         self.assertEqual(account.cash_drift, expected_drift,
                          "Account cash drift calculation did not return the expected results. Expected {0} and got {1}.".format(expected_drift, account.cash_drift))
+
+    def test_get_holdings_drift(self):
+        account = Account.objects.get(name=self.account_settings.name)
+
+        total_holdings_value = sum([(quant * val) for quant, val in zip(self.holdings_settings.quantities, self.securities_settings.prices)])
+        total_expected_holdings_value = Decimal(sum([val for val in self.holdings_settings.expected_values])).quantize(Decimal('1.00'))
+
+        expected_holdings_drift = abs(total_expected_holdings_value - total_holdings_value)
+
+        self.assertEqual(account.holdings_drift, expected_holdings_drift,
+                         "Account cash drift calculation did not return the expected results. Expected {0} and got {1}.".format(expected_holdings_drift, account.cash_drift))
+
+
+class HoldingTest(TestCase):
+    def setUp(self):
+        super(HoldingTest, self).setUp()
+        self.account_settings = AccountTestAccountSettings()
+        self.holdings_settings = HoldingsTestHoldingSettings()
+        self.securities_settings = HoldingsTestSecuritySettings()
+
+        fi = AssetClass(name="Fixed Income")
+        fi.save()
+
+        self.account = Account(name=self.account_settings.name, description=self.account_settings.description, inception_date=datetime.datetime.now(),
+                               total_cash=self.account_settings.total_cash, expected_cash=self.account_settings.expected_cash, max_pos_drift=self.account_settings.max_position_drift,
+                               max_cash_drift=self.account_settings.max_cash_drift, max_total_drift=self.account_settings.max_total_drift, solution_name=self.account_settings.solution_name,
+                               manager=self.account_settings.manager, client_1_id=self.account_settings.client, last_update=datetime.datetime.now())
+
+        self.account.save()
+
+        sec = self.securities_settings.get_settings()
+
+        self.security = Security(ticker=sec.get("ticker"),
+                                 description=sec.get("description"),
+                                 CUSIP=sec.get("cusip"),
+                                 segment=fi,
+                                 last_price=sec.get("price"))
+
+        self.security.save()
+
+        h = self.holdings_settings.get_settings()
+        holding = Holding(account=self.account,
+                          security=self.security,
+                          quantity=h.get("quantity"),
+                          expected_quantity=h.get("expected_quantity"),
+                          expected_value=h.get("expected_value"))
+
+        holding.save()
+
+    def test_get_value(self):
+        holding = Holding.objects.get(security=self.security, account=self.account)
+
+        expected_value = self.holdings_settings.quantity * self.securities_settings.price
+
+        self.assertEqual(holding.value, expected_value,
+                         "Holding value calculation did not return the expected results. Expected {0} and got {1}.".format(expected_value, holding.value))
+
+    def test_get_quantity_drift(self):
+        holding = Holding.objects.get(security=self.security, account=self.account)
+
+        expected_quantity_drift = abs(self.holdings_settings.expected_quantity - self.holdings_settings.quantity)
+
+        self.assertEqual(holding.quantity_drift, expected_quantity_drift,
+                         "Holding value calculation did not return the expected results. Expected {0} and got {1}.".format(expected_quantity_drift, holding.quantity_drift))
+
