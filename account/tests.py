@@ -48,11 +48,26 @@ class AccountTest(TestCase):
         expected_holdings_value = sum([(quant * val) for quant, val in zip(self.holdings_settings.quantities, self.securities_settings.prices)])
         expected_value = self.account_settings.total_cash + expected_holdings_value
         self.assertEqual(expected_value, account.total_value,
-                         "Account value calculation did not return the expected results. Expected {0} and got {1}".format(expected_value, account.total_value))
+                         "Account value calculation did not return the expected results. Expected {0} and got {1},".format(expected_value, account.total_value))
 
     def test_get_holdings_value(self):
         account = Account.objects.get(name=self.account_settings.name)
         expected_holdings_value = sum([(quant * val) for quant, val in zip(self.holdings_settings.quantities, self.securities_settings.prices)])
 
         self.assertEqual(account.total_holdings_value, expected_holdings_value,
-                         "Account holdings value calculation did not return the expected results. Expected {0} and got {1}".format(expected_holdings_value, account.total_holdings_value))
+                         "Account holdings value calculation did not return the expected results. Expected {0} and got {1},".format(expected_holdings_value, account.total_holdings_value))
+
+    def test_get_total_expected_holdings_value(self):
+        account = Account.objects.get(name=self.account_settings.name)
+        expected_expected_holdings_value = Decimal(sum([val for val in self.holdings_settings.expected_values])).quantize(Decimal('1.00'))
+
+        self.assertEqual(account.total_expected_holdings_value, expected_expected_holdings_value,
+                         "Account expected holdings value calculation did not return the expected results. Expected {0} and got {1},".format(expected_expected_holdings_value, account.total_expected_holdings_value))
+
+    def test_get_cash_drift(self):
+        account = Account.objects.get(name=self.account_settings.name)
+
+        expected_drift = abs(self.account_settings.expected_cash - self.account_settings.total_cash)
+
+        self.assertEqual(account.cash_drift, expected_drift,
+                         "Account cash drift calculation did not return the expected results. Expected {0} and got {1}.".format(expected_drift, account.cash_drift))
