@@ -5,7 +5,7 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		shell: {
 			test: {
-				command: 'python manage.py test',
+				command: 'python manage.py test -p "*tests.py"',
 				options: {
 					stdout: true,
 					failOnError: true
