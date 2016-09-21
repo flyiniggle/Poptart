@@ -1,10 +1,5 @@
-from subprocess import check_call
-import os
-
 import simplejson
 from django.test import TestCase, Client
-
-from poptart.settings import BASE_DIR
 
 
 class AccountMonitorTest(TestCase):
