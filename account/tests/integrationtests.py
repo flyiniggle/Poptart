@@ -1,9 +1,15 @@
-import simplejson
+from subprocess import check_call
+import os
 
+import simplejson
 from django.test import TestCase, Client
+
+from poptart.settings import BASE_DIR
 
 
 class AccountMonitorTest(TestCase):
+    fixtures = ['demodatadump.json']
+
     def test_get(self):
         c = Client()
         response = c.get('/account/')

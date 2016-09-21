@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from account.models import Account, Holding
 from securitymanager.models import AssetClass
-from account.testfixtures import *
+from account.fixtures.testfixtures import *
 
 
 class AccountTest(TestCase):

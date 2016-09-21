@@ -1,4 +1,3 @@
-0;
 30;Aggressive 1
 12;Cash
 13;Equity
