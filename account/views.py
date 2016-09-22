@@ -17,7 +17,7 @@ class AccountMonitor(View):
     def get(self, request):
         g = request.GET
         page_size = g.get("page_size")
-        current_page = g.get("current_page")
+        current_page = g.get("current_page", 1)
         fields = g.getlist("fields", None)
         order_by = g.getlist("order_by", None)
 

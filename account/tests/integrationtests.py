@@ -1,6 +1,9 @@
 import simplejson
 from django.test import TestCase, Client
 
+from account.models import Account
+from poptart.lib.serializers import ExtPythonSerializer
+
 
 class AccountMonitorTest(TestCase):
     fixtures = ['demodatadump.json']
@@ -12,9 +15,37 @@ class AccountMonitorTest(TestCase):
 
         try:
             content = simplejson.loads(response.content)
-            self.assertTrue("total_accounts" in content, "No 'total_accounts' field was found.")
-            self.assertTrue("accounts_data" in content, "No 'accounts_data' field was found.")
-            self.assertIsInstance(content.get("total_accounts"), int, "The 'total_accounts' field was not an int.")
-            self.assertIsInstance(content.get("accounts_data"), list, "The 'accounts_data' field was not a list.")
         except simplejson.JSONDecodeError as e:
             self.fail("Response was not properly formatted JSON: %s. Exception: %s" % (response.content, e.message))
+
+        self.assertTrue("total_accounts" in content, "No 'total_accounts' field was found.")
+        self.assertTrue("accounts_data" in content, "No 'accounts_data' field was found.")
+        self.assertIsInstance(content.get("total_accounts"), int, "The 'total_accounts' field was not an int.")
+        self.assertIsInstance(content.get("accounts_data"), list, "The 'accounts_data' field was not a list.")
+        self.assertEqual(content.get("total_accounts"), 100,
+                         "total_accounts did not match expected value. Expected {0} and got {1}".format(100, content.get("total_accounts")))
+        self.assertEqual(len(content.get("accounts_data")), content.get("total_accounts"),
+                         "total_accounts did not match the number of results returned")
+
+    def test_get_paging(self):
+        c = Client()
+        p_size = 10
+        response = c.get('/account/', {"page_size": p_size})
+
+        content = simplejson.loads(response.content)
+        accounts = len(content.get("accounts_data"))
+        self.assertEqual(accounts, p_size, "Expected {0} accounts but got {1}".format(p_size, accounts))
+
+    def test_get_sorted(self):
+        c = Client()
+        orderer = "name"
+        response = c.get('/account/', {"order_by": orderer})
+
+        content = simplejson.loads(response.content)
+        accounts = Account.objects.all()
+        accounts = accounts.order_by(orderer)
+
+        json_accounts = ExtPythonSerializer().serialize(accounts)
+        account_name_pairs = map(lambda got, exp: [got.get("name"), exp.get("name")], content.get("accounts_data"), json_accounts)
+        for pair in account_name_pairs:
+            self.assertEqual(pair[0], pair[1], "Account order did not match expected")
