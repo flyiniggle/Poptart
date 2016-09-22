@@ -36,6 +36,24 @@ class AccountMonitorTest(TestCase):
         accounts = len(content.get("accounts_data"))
         self.assertEqual(accounts, p_size, "Expected {0} accounts but got {1}".format(p_size, accounts))
 
+        response = c.get('/account/', {"page_size": p_size, "current_page": 2})
+        content = simplejson.loads(response.content)
+        accounts = len(content.get("accounts_data"))
+        self.assertEqual(accounts, p_size, "Expected {0} accounts on second page but got {1}".format(p_size, accounts))
+
+    def test_get_paging_out_of_bounds(self):
+        c = Client()
+        response = c.get('/account/', {"page_size": 1000})
+
+        content = simplejson.loads(response.content)
+        accounts = len(content.get("accounts_data"))
+        self.assertEqual(accounts, 100, "Requesting too many accounts returned the wrong data")
+
+        response = c.get('/account/', {"page_size": 10, "current_page": 20})
+
+        content = simplejson.loads(response.content)
+        self.assertEqual(len(content.get("accounts_data")), 0, "Expected 0 accounts but got {0}".format(len(content.get("accounts_data"))))
+
     def test_get_sorted(self):
         c = Client()
         orderer = "name"
