@@ -17,6 +17,7 @@ class ExtBaseSerializer(BaseSerializer):
         self.use_natural_foreign_keys = False
         self.use_natural_primary_keys = False
         self.options = None
+        self.First = True
 
     def get_dump_object(self, obj):
         data = self._current
@@ -43,28 +44,11 @@ class ExtBaseSerializer(BaseSerializer):
         handle_prop = self.handle_prop
         #pr = cProfile.Profile()
         #pr.enable()
-        for obj in queryset:
-            self.start_object(obj)
-            concrete_model = obj._meta.concrete_model._meta
-            props = getattr(obj, 'calculated_props', [])
-            for field in concrete_model.local_fields:
-                if field.serialize:
-                    if field.rel is None:
-                        if selected_fields is None or field.attname in selected_fields:
-                            handle_field(obj, field)
-                    else:
-                        if selected_fields is None or field.attname[:-3] in selected_fields:
-                            handle_fk_field(obj, field)
-            for field in concrete_model.many_to_many:
-                if field.serialize:
-                    if selected_fields is None or field.attname in selected_fields:
-                        handle_m2m_field(obj, field)
-            for prop in props:
-                if selected_fields is None or prop in selected_fields:
-                    handle_prop(obj, prop)
-            self.end_object(obj)
-            if self.first:
-                self.first = False
+        if hasattr(queryset, '__iter__'):
+            for obj in queryset:
+                self.serialize_one(obj, selected_fields, handle_field, handle_fk_field, handle_m2m_field, handle_prop)
+        else:
+            self.serialize_one(queryset, selected_fields, handle_field, handle_fk_field, handle_m2m_field, handle_prop)
         self.end_serialization()
         #pr.disable()
         #s = StringIO.StringIO()
@@ -73,6 +57,29 @@ class ExtBaseSerializer(BaseSerializer):
         #ps.print_stats()
         #print s.getvalue()
         return self.getvalue()
+
+    def serialize_one(self, obj, selected_fields, handle_field, handle_fk_field, handle_m2m_field, handle_prop):
+        self.start_object(obj)
+        concrete_model = obj._meta.concrete_model._meta
+        props = getattr(obj, 'calculated_props', [])
+        for field in concrete_model.local_fields:
+            if field.serialize:
+                if field.rel is None:
+                    if selected_fields is None or field.attname in selected_fields:
+                        handle_field(obj, field)
+                else:
+                    if selected_fields is None or field.attname[:-3] in selected_fields:
+                        handle_fk_field(obj, field)
+        for field in concrete_model.many_to_many:
+            if field.serialize:
+                if selected_fields is None or field.attname in selected_fields:
+                    handle_m2m_field(obj, field)
+        for prop in props:
+            if selected_fields is None or prop in selected_fields:
+                handle_prop(obj, prop)
+        self.end_object(obj)
+        if self.first:
+            self.first = False
 
     def handle_prop(self, obj, field):
         self._current[field] = getattr(obj, field)
