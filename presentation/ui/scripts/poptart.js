@@ -10,7 +10,7 @@ var Poptart = function(){
 
 	//Global Setup
 	///////////////
-	//jQuery.noConflict();
+	jQuery.noConflict();
 
 	//Allow script bindings for knockout
 	var render = function(options) {
