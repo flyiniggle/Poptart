@@ -189,10 +189,10 @@ Poptart.Monitor.Account.CreateAccount = function(){
 	var HoldingModel = function(securityName, securityId, segment, securityLastPrice) {
 		var self = this;
 
-		self.securityName = ko.observable(securityName);
-		self.securityId = ko.observable(securityId);
-		self.segment = ko.observable(segment);
-		self.securityLastPrice = ko.observable(securityLastPrice);
+		self.securityName = securityName;
+		self.securityId = securityId;
+		self.segment = segment;
+		self.securityLastPrice = securityLastPrice;
 		self.quantity = ko.observable(0);
 		self.expectedQuantity = ko.observable(0);
 		self.expectedValue = ko.observable(0);
@@ -217,7 +217,7 @@ Poptart.Monitor.Account.CreateAccount = function(){
 		}, self);
 		self.value = ko.pureComputed({
 			read: function() {
-				return this.quantity() * this.securityLastPrice();
+				return this.quantity() * this.securityLastPrice;
 			},
 			write: function() {
 				return undefined;
