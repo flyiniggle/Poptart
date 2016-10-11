@@ -20,12 +20,12 @@ def summary(request):
 
 
 def security(request, ticker):
-    return HttpResponse(ExtJsonSerializer().serialize(Security.objects.filter(ticker=ticker)))
+    return HttpResponse(ExtJsonSerializer().serialize(Security.objects.filter(ticker=ticker)), status="200 OK", content_type="application/json")
 
 
 def asset_classes(request):
-    return HttpResponse(ExtJsonSerializer().serialize(AssetClass.objects.all()))
+    return HttpResponse(ExtJsonSerializer().serialize(AssetClass.objects.all()), status="200 OK", content_type="application/json")
 
 
 def asset_class(request, ac_id):
-    return HttpResponse(ExtJsonSerializer().serialize(AssetClass.objects.filter(id=ac_id)))
+    return HttpResponse(ExtJsonSerializer().serialize(AssetClass.objects.filter(id=ac_id)), status="200 OK", content_type="application/json")
