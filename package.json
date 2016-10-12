@@ -14,9 +14,11 @@
   "dependencies": {
     "express": "^4.13.3",
     "body-parser": "^1.15.2",
-    "winston": "^2.2.0"
+    "winston": "^2.2.0",
+	"nunjucks": "^2.5.2"
   },
   "devDependencies": {
+    "eslint": "^3.7.1",
     "grunt": "^1.0.1",
     "grunt-shell": "^1.3.1"
   }
