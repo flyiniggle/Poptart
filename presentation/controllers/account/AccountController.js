@@ -2,11 +2,11 @@ const accountService = imports('services/account/AccountService');
 const Alert = imports('components/alerts/Alert.js');
 const ServerError = imports('support/Error.js');
 
-const AccountController = function(){
+const AccountController = function() {
 	"use strict";
 	const self = this;
 
-	self.getAccount = function(req, res){
+	self.getAccount = function(req, res) {
 		const service = accountService.getAccount(res, req.params.acct_id);
 
 		service.on("end", processAccount);
@@ -22,7 +22,7 @@ const AccountController = function(){
 
 
 	// Request Callbacks
-	function processAccount(res, accountData){
+	function processAccount(res, accountData) {
 		var templateData = {},
 			alerts = [],
 			JSONData, account,
@@ -34,8 +34,9 @@ const AccountController = function(){
 			logging.error("Could not parse data: %s", accountData);
 		}
 
-		if(!!JSONData.error) {
+		if(JSONData.error) {
 			let serverError = new ServerError(res, JSONData.error);
+
 			return serverError.send(500);
 		}
 
@@ -70,8 +71,9 @@ const AccountController = function(){
 			logging.error("Could not parse data: %s", newAccount);
 		}
 
-		if(!!JSONData.error){
+		if(JSONData.error) {
 			let serverError = new ServerError(res, JSONData.error);
+
 			serverError.send(500);
 		} else {
 			res.end();

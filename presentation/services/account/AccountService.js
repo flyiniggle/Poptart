@@ -2,10 +2,10 @@ const util = require('util');
 
 const Service = imports('services/BaseService.js');
 
-const AccountService = function(){
+const AccountService = function() {
 	var self = this;
 
-	self.getAccount = function(res, acct){
+	self.getAccount = function(res, acct) {
 		var options = {},
 			getter;
 
@@ -32,7 +32,7 @@ const AccountService = function(){
 		getter = new Service.Service(options, res);
 
 		return getter;
-	}
+	};
 };
 
 module.exports = new AccountService();

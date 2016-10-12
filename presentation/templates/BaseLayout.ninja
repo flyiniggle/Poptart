@@ -87,7 +87,7 @@
 	{% endblock %}
 
 	{%  block js %}
-		<script type="text/javascript" src="/scripts/poptart.js"></script>
+		<script type="text/javascript" src="/poptart.js"></script>
 		<script type="text/javascript" src="/components/Poptart.Alerts.js"></script>
 		<script type="text/javascript">
 			Poptart.init()

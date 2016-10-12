@@ -31,7 +31,7 @@ module.exports = function() {
 			current_page: params.page,
 			page_size: params.pageSize,
 			order_by: orderBy
-		}
+		};
 	};
 
 	// Private Functions

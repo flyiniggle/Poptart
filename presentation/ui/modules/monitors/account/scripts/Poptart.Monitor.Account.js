@@ -1,11 +1,10 @@
-Poptart.Monitor.Account = function(){
+Poptart.Monitor.Account = function() {
 	var ReturnObj = {};
-
 
 	//Public Methods
 	//////////////////
 
-	ReturnObj.init = function(){
+	ReturnObj.init = function() {
 		var testTable = jQuery("#am_testTable"),
 			accountLauncher = jQuery("#am_accountLauncherSelector"),
 			accountDeleter = jQuery("#am_accountDeleterSelector"),
@@ -129,7 +128,7 @@ Poptart.Monitor.Account = function(){
 
 	};
 
-	var launchAccount = function(){
+	var launchAccount = function() {
 		var pk = this.igCombo("selectedItems")[0].data.id;
 
 		jQuery("#am_accountLauncher").attr("action", "/account/" + pk).submit();
@@ -138,7 +137,7 @@ Poptart.Monitor.Account = function(){
 	return ReturnObj;
 }();
 
-Poptart.Monitor.Account.CreateAccount = function(){
+Poptart.Monitor.Account.CreateAccount = function() {
 	var ReturnObj = {}, viewModel;
 
 	//View Models
@@ -164,9 +163,8 @@ Poptart.Monitor.Account.CreateAccount = function(){
 
 				if(!isNaN(max) && !isNaN(expected)) {
 					return (max / expected);
-				} else {
-					return "";
 				}
+				return "";
 			},
 			write: function(value) {
 				var self = this;
@@ -181,7 +179,7 @@ Poptart.Monitor.Account.CreateAccount = function(){
 		}, self).extend({CurrencyDisplay: null});
 
 		self.cashDrift = ko.computed(function() {
-			return Math.abs(self.expectedCash() - self.startingCash())
+			return Math.abs(self.expectedCash() - self.startingCash());
 		}, self).extend({CurrencyDisplay: null});
 
 	};
@@ -234,7 +232,7 @@ Poptart.Monitor.Account.CreateAccount = function(){
 		this.autoGenerateColumns = false;
 
 		this.columns = [
-			{headerText: "Name", key: "securityName", dataType:"string", width: "120px"},
+			{headerText: "Name", key: "securityName", dataType: "string", width: "120px"},
 			{headerText: "Id", key: "securityId", dataType: "number", width: "*"},
 			{headerText: "Segment", key: "segment", dataType: "string", width: "*"},
 			{headerText: "Quantity", key: "quantity", dataType: "number", width: "*"},
@@ -309,13 +307,6 @@ Poptart.Monitor.Account.CreateAccount = function(){
 		return this;
 	};
 
-	var setNumericEditorOptions = function() {
-		this.height = Poptart.Ignite.constants.INPUT_HEIGHT;
-		this.width = "90%";
-
-		return this;
-	};
-
 	var setCurrencyEditorOptions = function() {
 		this.currencySymbol = "$";
 		this.minValue = 0;
@@ -363,7 +354,7 @@ Poptart.Monitor.Account.CreateAccount = function(){
 	//Public Methods
 	//////////////////
 
-	ReturnObj.init = function(){
+	ReturnObj.init = function() {
 
 		viewModel = new AccountCreationViewModel();
 
@@ -407,8 +398,8 @@ Poptart.Monitor.Account.CreateAccount = function(){
 	//Private Functions
 	//////////////////
 
-	function checkCreateResponse(data){
-
+	function checkCreateResponse(data) {
+		data;
 	}
 
 	return ReturnObj;

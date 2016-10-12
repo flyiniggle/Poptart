@@ -1,4 +1,4 @@
-var Poptart = function(){
+var Poptart = function() {
 	"use strict";
 
 	var ReturnObj = {
@@ -15,6 +15,7 @@ var Poptart = function(){
 	//Allow script bindings for knockout
 	var render = function(options) {
 		var rendered = [], key, val;
+
 		for(key in options) {
 			if(options.hasOwnProperty(key)) {
 				val = options[key];
@@ -34,12 +35,13 @@ var Poptart = function(){
 		return rendered.join(',');
 	};
 
-	jQuery['fn']['dataBind'] = jQuery['fn']['dataBind'] || function(options) {
-		return this['each'](function() {
-			var opts = jQuery.extend({}, jQuery['fn']['dataBind']['defaults'], options),
-					attr = render(opts);
-			if(attr != null && attr != '') {
-				jQuery(this)['attr']('data-bind', attr);
+	jQuery.fn.dataBind = jQuery.fn.dataBind || function(options) {
+		return this.each(function() {
+			var opts = jQuery.extend({}, jQuery.fn.dataBind.defaults, options),
+				attr = render(opts);
+
+			if(attr !== null && attr !== '') {
+				jQuery(this).attr('data-bind', attr);
 			}
 		});
 	};
@@ -49,6 +51,7 @@ var Poptart = function(){
 			if(templateConfig.module) {
 				// Uses jQuery's ajax facility to load the markup from a file
 				var fullUrl = '/templates/' + templateConfig.module + "/" + templateConfig.name;
+
 				jQuery.get(fullUrl, function(markupString) {
 					// We need an array of DOM nodes, not a string.
 					// We can use the default loader to convert to the
@@ -71,7 +74,7 @@ var Poptart = function(){
 		init: function(element, valueAccessor) {
 			jQuery(element).on("igcurrencyeditortextchanged", function() {
 				valueAccessor()(jQuery(this).igCurrencyEditor("value"));
-			})
+			});
 		}
 	};
 
@@ -100,7 +103,7 @@ var Poptart = function(){
 				i = 0,
 				parts, intPart, formattedValue;
 
-			if(isNaN(floatValue)){
+			if(isNaN(floatValue)) {
 				target.formattedValue(". . .");
 			}
 			parts = floatValue.toFixed(2).toString().split(".");
@@ -111,8 +114,8 @@ var Poptart = function(){
 				sign = intPart.shift();
 			}
 
-			while(intPart.length > 0){
-				if((i > 0 ) && !(i % 3)){
+			while(intPart.length > 0) {
+				if((i > 0 ) && !(i % 3)) {
 					formattedValue.unshift(",");
 				}
 				formattedValue.unshift(intPart.pop());
@@ -126,7 +129,7 @@ var Poptart = function(){
 			target.formattedValue(formattedValue.concat(parts).join(""));
 		});
 
-		return target
+		return target;
 	};
 
 	ko.extenders.PercentDisplay = function(target) {
@@ -145,14 +148,14 @@ var Poptart = function(){
 			target.formattedValue(formattedValue);
 		});
 
-		return target
+		return target;
 	};
 
 
 	// Public methods
 	///////////////////
 
-	ReturnObj.init = function(){
+	ReturnObj.init = function() {
 		jQuery("#mainNavMenuTarget").on("mouseover", showNavMenu);
 		jQuery("#mainNavMenuTarget, #mainNavMenu").on("mouseleave", hideNavMenu);
 		Poptart.RibbonMenu.init();
@@ -179,7 +182,7 @@ var Poptart = function(){
 	return ReturnObj;
 }();
 
-Poptart.RibbonMenu = function(){
+Poptart.RibbonMenu = function() {
 	var ReturnObj = {},
 		ribbonMenus = {},
 		activeMenu;
@@ -193,12 +196,12 @@ Poptart.RibbonMenu = function(){
 
 		self.select = function() {
 			self.ribbonMenu.show();
-			self.tab.removeClass("ribbonMenuTabUnselected").addClass("ribbonMenuTabSelected")
+			self.tab.removeClass("ribbonMenuTabUnselected").addClass("ribbonMenuTabSelected");
 		};
 
 		self.deselect = function() {
 			self.ribbonMenu.hide();
-			self.tab.removeClass("ribbonMenuTabSelected").addClass("ribbonMenuTabUnselected")
+			self.tab.removeClass("ribbonMenuTabSelected").addClass("ribbonMenuTabUnselected");
 		};
 
 		// Setup
@@ -210,10 +213,11 @@ Poptart.RibbonMenu = function(){
 		var menus = jQuery(".ribbonMenu"),
 			m;
 
-		jQuery.each(menus, function(i, val){
-				m = jQuery(val);
-					ribbonMenus[m.data("name")] = new RibbonMenu(m);
-			});
+		jQuery.each(menus, function(i, val) {
+			m = jQuery(val);
+
+			ribbonMenus[m.data("name")] = new RibbonMenu(m);
+		});
 
 		if(menus[0]) {
 			showRibbonMenu.call(jQuery(menus[0]));
@@ -221,7 +225,7 @@ Poptart.RibbonMenu = function(){
 	};
 
 	function showRibbonMenu() {
-		if(!!activeMenu){
+		if(activeMenu) {
 			activeMenu.deselect();
 		}
 		activeMenu = ribbonMenus[this.data("name")];

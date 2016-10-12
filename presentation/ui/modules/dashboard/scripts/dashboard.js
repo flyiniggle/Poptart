@@ -15,14 +15,14 @@ Poptart.Dashboard = function() {
 		});
 	};
 
-	function showAccountSummary(data){
+	function showAccountSummary(data) {
 
 		jQuery("#accountCount").html(data.totalCount);
 		jQuery("#accountUpdated").html(data.recentAccounts);
 		jQuery("#alertsContent").append(nunjucks.render("templates/components/alerts/alerts.ninja", data));
 	}
 
-	function showSecuritySummary(data){
+	function showSecuritySummary(data) {
 		jQuery("#securityCount").html(data.totalCount);
 	}
 

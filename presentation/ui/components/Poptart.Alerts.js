@@ -1,9 +1,9 @@
-Poptart.Alerts = function(params, componentInfo) {
+Poptart.Alerts = function(params) {
 	var alertParams = params.alerts,
 		alertList = [],
 		alertParam, i;
 
-	var Alerts = function(alerts){
+	var Alerts = function(alerts) {
 		var self = this;
 
 		self.alerts = ko.observableArray(alerts);
@@ -19,7 +19,7 @@ Poptart.Alerts = function(params, componentInfo) {
 
 	i = alertParams.length;
 
-	while(i--){
+	while(i--) {
 		alertParam = alertParams[i];
 		alertList.push(new Alert(alertParam.level, alertParam.summary, alertParam.message));
 	}

@@ -3,7 +3,7 @@ var Alert = function(level, summary, message) {
 		levels = ["info", "warning", "error"];
 
 	// Constructor
-	if(levels.indexOf(level) < 0){
+	if(levels.indexOf(level) < 0) {
 		throw new Error("Invalid level.");
 	}
 
@@ -13,13 +13,13 @@ var Alert = function(level, summary, message) {
 
 
 	// Methods
-	self.stringify = function(){
+	self.stringify = function() {
 		return JSON.stringify({
 			level: self.level,
 			summary: self.summary,
 			message: self.message
-		})
-	}
+		});
+	};
 };
 
 module.exports = Alert;

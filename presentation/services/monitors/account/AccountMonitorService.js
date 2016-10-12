@@ -1,7 +1,7 @@
 var qs = require('querystring');
 var Service = imports('services/BaseService.js');
 
-var AccountsMonitorService = function(){
+var AccountsMonitorService = function() {
 	var self = this;
 
 	self.getAccounts = function(res, params) {
@@ -10,7 +10,7 @@ var AccountsMonitorService = function(){
 			getter,
 			options = {};
 
-		if(params){
+		if(params) {
 			path += `?${queryString}`;
 		}
 
@@ -27,7 +27,7 @@ var AccountsMonitorService = function(){
 			fields: [],
 			current_page: undefined,
 			page_size: undefined
-		}
+		};
 	};
 };
 

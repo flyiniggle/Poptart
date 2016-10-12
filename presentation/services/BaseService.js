@@ -4,7 +4,7 @@ var EventEmitter = require('events').EventEmitter;
 
 var config = imports("config/config.js");
 
-var Service = function(options, res){
+var Service = function(options, res) {
 	var self = this,
 		request, data = "",
 		loggingName = "request-timing: " + options.path;
@@ -38,13 +38,13 @@ var Service = function(options, res){
 	};
 
 	self.post = function(data) {
-		if(typeof data === "object"){
+		if(typeof data === "object") {
 			data = JSON.stringify(data);
 		} else if (typeof data !== "string") {
 			data = data.toString();
 		}
 		request.end(data);
-	}
+	};
 };
 
 util.inherits(Service, EventEmitter);
@@ -58,23 +58,14 @@ var ServiceMarshaller = function(res, services) {
 		l = services.length;
 
 	// Constructor
-	for(i=0; i<l; i++){
+	for(i = 0; i < l; i++) {
 		statusArray.push(false);
 		service = services[i];
-		service.on('end', function() {
-			var index = i;
-			return function(res, data) {
-				resultsArray[index] = data;
-				statusArray[index] = true;
-				if(statusArray.indexOf(false) < 0){
-					self.emit("end", res, resultsArray);
-				}
-			};
-		}());
-		service.on('error', function(e){
+		service.on('end', handleServiceResponse(i));
+		service.on('error', function(e) {
 			logging.error("Marshalled request failed: " + e.message);
 			self.emit('error');
-			services.forEach(function(req){
+			services.forEach(function(req) {
 				req.abort();
 			});
 		});
@@ -82,10 +73,23 @@ var ServiceMarshaller = function(res, services) {
 	}
 
 	// Methods
-	self.send = function(){
+	self.send = function() {
 		for(i = 0; i < l; i++) {
 			services[i].send();
 		}
+	};
+
+	// Private
+	function handleServiceResponse(i) {
+		var index = i;
+
+		return function(res, data) {
+			resultsArray[index] = data;
+			statusArray[index] = true;
+			if(statusArray.indexOf(false) < 0) {
+				self.emit("end", res, resultsArray);
+			}
+		};
 	}
 };
 

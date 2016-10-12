@@ -6,12 +6,12 @@ const securityMonitorService = imports('services/monitors/security/securityMonit
 const dashboardService = imports('services/dashboard/DashboardService.js');
 const igniteDataAdapter = imports('support/Ignite/DataAdapter.js');
 
-var AccountMonitorController = function(){
+var AccountMonitorController = function() {
 	"use strict";
 	var self = this;
 
 	// Public Methods
-	self.getAccounts = function(req, res){
+	self.getAccounts = function(req, res) {
 		var summaryRequest = dashboardService.getDashboardData(res, "account"),
 			accountsFilter = accountMonitorService.getAccountsParamFormatter(),
 			accountsRequest,
@@ -27,7 +27,7 @@ var AccountMonitorController = function(){
 		marshaller.send();
 	};
 
-	self.getAccountsData = function(req, res){
+	self.getAccountsData = function(req, res) {
 		var accountsRequest = accountMonitorService.getAccounts(res, igniteDataAdapter.translateServerRequest(req.query));
 
 		accountsRequest.on("end", function(res, data) {
@@ -36,7 +36,7 @@ var AccountMonitorController = function(){
 		accountsRequest.send();
 	};
 
-	self.getSecuritiesData = function(req, res){
+	self.getSecuritiesData = function(req, res) {
 		var securitiesRequest = securityMonitorService.getSecurities(req, res);
 
 		securitiesRequest.on("end", function(res, data) {
@@ -56,17 +56,19 @@ var AccountMonitorController = function(){
 			JSONAccountsList = JSONAccountData.accounts_data,
 			i, account, alertMessage;
 
-		if(!!JSONAccountData.error) {
+		if(JSONAccountData.error) {
 			let serverError = new ServerError(res, JSONAccountData.error);
+
 			return serverError.send(500);
 		}
 
-		if(!!JSONSummaryData.error) {
+		if(JSONSummaryData.error) {
 			let serverError = new ServerError(res, JSONSummaryData.error);
+
 			return serverError.send(500);
 		}
 
-		for(i=(JSONAccountsList.length - 1); account=JSONAccountsList[i]; i--) {
+		for(i = (JSONAccountsList.length - 1); account = JSONAccountsList[i]; i--) {
 			accountList.push({
 				name: account.name.toString(),
 				id: account.pk.toString()
@@ -91,11 +93,12 @@ var AccountMonitorController = function(){
 		res.render("modules/monitors/account/accountmonitor.ninja", templateData);
 	}
 
-	function processAccountData(res, data){
+	function processAccountData(res, data) {
 		var JSONAccountData = JSON.parse(data);
 
-		if(!!JSONAccountData.error) {
+		if(JSONAccountData.error) {
 			let serverError = new ServerError(res, JSONAccountData.error);
+
 			return serverError.send(500);
 		}
 
@@ -105,8 +108,9 @@ var AccountMonitorController = function(){
 	function processSecurities(res, data) {
 		var securitiesData = JSON.parse(data);
 
-		if(!!securitiesData.error) {
+		if(securitiesData.error) {
 			let serverError = new ServerError(res, data.error);
+
 			return serverError.send(500);
 		}
 

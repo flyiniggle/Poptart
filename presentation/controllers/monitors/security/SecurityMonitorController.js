@@ -9,18 +9,19 @@ const SecurityMonitorController = function() {
 	self.getSecurities = function(req, res) {
 		var securitiesRequest = securityMonitorService.getSecurities(req, res);
 
-		securitiesRequest.on("end", function(res, data){
+		securitiesRequest.on("end", function(res, data) {
 			processSecurities(res, data);
 		});
 		securitiesRequest.send();
 	};
 
 	// Request Callbacks
-	function processSecurities(res, data){
+	function processSecurities(res, data) {
 		var securitiesData = JSON.parse(data);
 
-		if(!!securitiesData.error) {
+		if(securitiesData.error) {
 			let serverError = new ServerError(res, data.error);
+
 			return serverError.send(500);
 		}
 

@@ -46,7 +46,7 @@ const ServerError = function(res, error) {
 			res.end();
 			break;
 		}
-	}
+	};
 };
 
 module.exports = ServerError;

@@ -13,7 +13,7 @@ const SecurityMonitorService = function() {
 		getter = new Service.Service(options, res);
 
 		return getter;
-	}
+	};
 };
 
 module.exports = new SecurityMonitorService();

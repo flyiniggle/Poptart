@@ -49,14 +49,13 @@ global.logging = new (winston.Logger)({
 });
 
 // Setup
-var app, env, server;
+var app = express();
 
-app = express();
 app.set('view engine', 'nunjucks');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json({}));
 
-env = nunjucks.configure(path.join(__dirname, "templates"), {
+nunjucks.configure(path.join(__dirname, "templates"), {
 	express: app,
 	autoescape: true,
 	watch: true
@@ -75,9 +74,9 @@ app.use("/monitors/account", accountMonitorRoutes);
 app.use("/monitors/security", securityMonitorRoutes);
 app.use("/account", accountRoutes);
 
-server = app.listen(config.presentation.port, function(){
+app.listen(config.presentation.port, function() {
 	var host = "localhost",
 		port = config.presentation.port;
 
-	console.log("I hear you at http://%s:%d", host, port);
+	console.log("I hear you at http://%s:%d", host, port); // eslint-disable-line no-console
 });

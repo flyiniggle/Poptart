@@ -1,8 +1,6 @@
-var http = require('http');
-
 var Service = imports('services/BaseService.js');
 
-var DashboardService = function(){
+var DashboardService = function() {
 	var self = this;
 
 	self.getDashboardData = function(res, module) {
@@ -16,7 +14,7 @@ var DashboardService = function(){
 		getter = new Service.Service(options, res);
 
 		return getter;
-	}
+	};
 };
 
 module.exports = new DashboardService();

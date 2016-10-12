@@ -1,8 +1,6 @@
-var nunjucks = require('nunjucks');
-
 var DashboardController = imports("controllers/dashboard/DashboardController.js");
 
-module.exports = function(express){
+module.exports = function(express) {
 	var router = express.Router(),
 		dashboardController = new DashboardController();
 
@@ -13,7 +11,7 @@ module.exports = function(express){
 	router.get('/', function(req, res) {
 		res.render("index.ninja");
 	});
-	router.get('/index', function(req, res){
+	router.get('/index', function(req, res) {
 		res.render("index.ninja");
 	});
 	router.use('/summary/account', dashboardController.getAccountDashboardData);
