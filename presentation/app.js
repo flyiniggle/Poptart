@@ -66,6 +66,7 @@ app.use("/components", express.static(path.join(__dirname, "ui", "components")))
 app.use("/scripts", express.static(path.join(__dirname, "ui", "scripts")));
 app.use("/css", express.static(path.join(__dirname, "ui", "css")));
 app.use("/templates", express.static(path.join(__dirname, "templates")));
+app.use("/poptart.js", express.static(path.join(__dirname, "ui", "poptart.js")));
 
 // Routes for modules
 app.use("/", dashboardRoutes);
