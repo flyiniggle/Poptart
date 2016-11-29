@@ -8,8 +8,8 @@ var Alert = function(level, summary, message) {
 	}
 
 	self.level = level;
-	self.summary = summary.toString();
-	self.message = message.toString();
+	self.summary = summary ? summary.toString() : "";
+	self.message = message ? message.toString() : "";
 
 
 	// Methods
