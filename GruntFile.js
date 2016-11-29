@@ -22,8 +22,7 @@ module.exports = function(grunt) {
 		karma: {
 			unit: {
 				configFile: 'karma.conf.js',
-				background: true,
-				singleRun: false
+				singleRun: true
 			}
 		},
 		mochaTest: {
