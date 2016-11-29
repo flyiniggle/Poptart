@@ -1,9 +1,32 @@
 global.imports = function(name) {
-	return require(__dirname + '/' + name);
+	return require(path.join(__dirname, '..', '..', name));
 };
 
+
+var path = require('path');
+
 var chai = require('chai');
+var sinon = require('sinon');
 var assert = chai.assert;
+
+const igniteDataAdapter = imports('/support/Ignite/DataAdapter.js');
+
+describe("Ignite DataAdapter", function() {
+	describe("#translateServerRequest", function() {
+		const testParams = {
+				current_page: 0,
+				page_size: 100
+			};
+
+		it("should increment the current page parameter by 1", function() {
+			var pageForServer = igniteDataAdapter.translateServerRequest(testParams);
+
+			chai.assert.strictEqual(pageForServer.current_page,
+									1,
+									"current_page parameter for server was not incremented correctly.");
+		});
+	});
+});
 
 
 describe("Alert", function() {
