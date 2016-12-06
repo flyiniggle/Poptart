@@ -1,5 +1,4 @@
-import datetime
-
+from django.utils import timezone
 from django.test import TestCase
 
 from account.models import Account, Holding
@@ -18,10 +17,10 @@ class AccountTest(TestCase):
         fi = AssetClass(name="Fixed Income")
         fi.save()
 
-        account = Account(name=self.account_settings.name, description=self.account_settings.description, inception_date=datetime.datetime.now(),
+        account = Account(name=self.account_settings.name, description=self.account_settings.description, inception_date=timezone.now(),
                           total_cash=self.account_settings.total_cash, expected_cash=self.account_settings.expected_cash, max_pos_drift=self.account_settings.max_position_drift,
                           max_cash_drift=self.account_settings.max_cash_drift, max_total_drift=self.account_settings.max_total_drift, solution_name=self.account_settings.solution_name,
-                          manager=self.account_settings.manager, client_1_id=self.account_settings.client, last_update=datetime.datetime.now())
+                          manager=self.account_settings.manager, client_1_id=self.account_settings.client, last_update=timezone.now())
         account.save()
 
         for sec in self.securities_settings.get_settings():
@@ -94,10 +93,10 @@ class HoldingTest(TestCase):
         fi = AssetClass(name="Fixed Income")
         fi.save()
 
-        self.account = Account(name=self.account_settings.name, description=self.account_settings.description, inception_date=datetime.datetime.now(),
+        self.account = Account(name=self.account_settings.name, description=self.account_settings.description, inception_date=timezone.now(),
                                total_cash=self.account_settings.total_cash, expected_cash=self.account_settings.expected_cash, max_pos_drift=self.account_settings.max_position_drift,
                                max_cash_drift=self.account_settings.max_cash_drift, max_total_drift=self.account_settings.max_total_drift, solution_name=self.account_settings.solution_name,
-                               manager=self.account_settings.manager, client_1_id=self.account_settings.client, last_update=datetime.datetime.now())
+                               manager=self.account_settings.manager, client_1_id=self.account_settings.client, last_update=timezone.now())
 
         self.account.save()
 

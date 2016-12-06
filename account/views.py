@@ -1,10 +1,10 @@
-import datetime
 import simplejson as json
 from random import randrange
 
 from django.views.generic import View
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 from poptart.lib.serializers import ExtJsonSerializer, ExtPythonSerializer
 from poptart.lib.encoders import DateTimeWebAPIEncoder
@@ -47,10 +47,10 @@ class AccountMonitor(View):
 
     def post(self, request):
         n = request.POST
-        account = Account(name=n.get('accountName'), description=n.get('accountDescription'), inception_date=datetime.datetime.now(),
+        account = Account(name=n.get('accountName'), description=n.get('accountDescription'), inception_date=timezone.now(),
                       total_cash=n.get('startingCash'), expected_cash=n.get('expectedCash'), max_pos_drift=n.get('maxPositionDrift'),
                       max_cash_drift=n.get('maxCashDrift'), max_total_drift=n.get('maxTotalDrift'), solution_name="AssetAlloc",
-                      manager=randrange(0, 10), client_1_id=randrange(1, 50), last_update=datetime.datetime.now())
+                      manager=randrange(0, 10), client_1_id=randrange(1, 50), last_update=timezone.now())
 
         account.full_clean()
         account.save()
@@ -59,8 +59,8 @@ class AccountMonitor(View):
 
 class AccountSummary(View):
     def get(self, request):
-        now = datetime.datetime.now()
-        time_delta = datetime.timedelta(days=7)
+        now = timezone.now()
+        time_delta = timezone.timedelta(days=7)
 
         count = len(Account.objects.all())
         active = [account.name for account in Account.objects.filter(last_update__gt=now - time_delta)]
@@ -112,7 +112,7 @@ class DemoData(View):
             max_total_drift = randrange(0, 200000)
             manager = randrange(0, 10)
             solution = solutions[randrange(0, len(solutions) - 1)]
-            account = Account(name=name, description=description, inception_date=datetime.datetime.now(), total_cash=cash,
+            account = Account(name=name, description=description, inception_date=timezone.now(), total_cash=cash,
                               expected_cash=expected_cash, max_pos_drift=max_pos_drift, max_cash_drift=max_cash_drift,
                               max_total_drift=max_total_drift, client_1_id=client, manager=manager, solution_name=solution)
             account.save()
