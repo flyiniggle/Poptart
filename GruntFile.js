@@ -19,7 +19,9 @@ module.exports = function(grunt) {
 				sourceMap: true
 			},
 			build: {
-				src: ['presentation/static/ui/**/*.js', '!presentation/static/ui/scripts/*'],
+				src: ['presentation/static/ui/**/*.js', '!presentation/static/ui/scripts/*', '!**/*.min.js'],
+				ext: '.min.js',
+				extDot: 'last',
 				expand: true
 			}
 		},
@@ -29,8 +31,9 @@ module.exports = function(grunt) {
 			},
 			build: {
 				cwd: 'presentation/static/ui/',
-				src: ['**/*.css', '!css/jquery-ui/**', '!css/ionicons/**'],
+				src: ['**/*.css', '!css/jquery-ui/**', '!css/ionicons/**', '!**/*.min.js'],
 				dest: 'presentation/static/ui/',
+				ext: '.min.css',
 				expand: true
 			}
 		},
@@ -39,7 +42,7 @@ module.exports = function(grunt) {
 				configFile: 'presentation/build/eslint.json',
 				ignorePath: 'presentation/build/.eslintignore'
 			},
-			target: ['presentation/**/*.js', '!presentation/ui/scripts/*']
+			target: ['presentation/**/*.js', '!presentation/ui/scripts/*', '!presentation/static/**']
 		},
 		shell: {
 			test: {
