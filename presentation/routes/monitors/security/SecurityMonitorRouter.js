@@ -5,8 +5,8 @@ module.exports = function(express) {
 		securityMonitorController = new SecurityMonitorController();
 
 	// Middleware
-	router.use("/scripts", express.static(loadPath("ui/modules/monitors/security/scripts")));
-	router.use("/css", express.static(loadPath("ui/modules/monitors/security/css")));
+	router.use("/scripts", express.static(loadPath("static/ui/modules/monitors/security/scripts")));
+	router.use("/css", express.static(loadPath("static/ui/modules/monitors/security/css")));
 
 	router.get('/', securityMonitorController.getSecurities);
 

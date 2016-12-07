@@ -62,11 +62,11 @@ nunjucks.configure(path.join(__dirname, "templates"), {
 });
 
 // Routes for static files
-app.use("/components", express.static(path.join(__dirname, "ui", "components")));
-app.use("/scripts", express.static(path.join(__dirname, "ui", "scripts")));
-app.use("/css", express.static(path.join(__dirname, "ui", "css")));
+app.use("/components", express.static(path.join(__dirname, "static", "static", "ui", "components")));
+app.use("/scripts", express.static(path.join(__dirname, "static", "ui", "scripts")));
+app.use("/css", express.static(path.join(__dirname, "static", "ui", "css")));
 app.use("/templates", express.static(path.join(__dirname, "templates")));
-app.use("/poptart.js", express.static(path.join(__dirname, "ui", "poptart.js")));
+app.use("/poptart.js", express.static(path.join(__dirname, "static", "ui", "poptart.js")));
 
 // Routes for modules
 app.use("/", dashboardRoutes);

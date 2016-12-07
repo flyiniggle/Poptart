@@ -5,8 +5,8 @@ module.exports = function(express) {
 		accountController = new AccountController();
 
 	// Middleware
-	router.use("/scripts", express.static(loadPath("ui/modules/account/scripts")));
-	router.use("/css", express.static(loadPath("ui/modules/account/css")));
+	router.use("/scripts", express.static(loadPath("static/ui/modules/account/scripts")));
+	router.use("/css", express.static(loadPath("static/ui/modules/account/css")));
 
 	router.get('/create', function(req, res) {
 		res.render("modules/monitors/account/createaccount.ninja");

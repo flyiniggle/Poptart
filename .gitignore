@@ -1,9 +1,9 @@
 .idea
 .idea/*
-.idea/**
 node_modules/
 presentation/ui/modules/account/data/grid.xml
 presentation/logs/*
 presentation/logs/**
 *.komodoproject
 debug.log
+presentation/static
