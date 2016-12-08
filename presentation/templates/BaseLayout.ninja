@@ -2,19 +2,19 @@
 <html>
 <head>
 	<title>Poptart Node</title>
-	<link href="/css/ionicons/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
+	<link href="/ui/css/ionicons/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
 {#
 	<link href="http://cdn-na.infragistics.com/igniteui/2016.1/latest/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" type="text/css"/>
 #}
 	<link href="http://cdn-na.infragistics.com/igniteui/2016.1/latest/css/structure/infragistics.css" rel="stylesheet" type="text/css"/>
-	<link href="/css/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
-	<link href="/css/jquery-ui/custom/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
+	<link href="/ui/css/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
+	<link href="/ui/css/jquery-ui/custom/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
 
 	{% block css %}
-		<link href="/css/styles.min.css" rel="stylesheet" type="text/css"/>
-		<link href="/css/text.min.css" rel="stylesheet" type="text/css"/>
-		<link href="/css/forms.min.css" rel="stylesheet" type="text/css"/>
-		<link href="/css/override.min.css" rel="stylesheet" type="text/css"/>
+		<link href="/ui/css/styles.min.css" rel="stylesheet" type="text/css"/>
+		<link href="/ui/css/text.min.css" rel="stylesheet" type="text/css"/>
+		<link href="/ui/css/forms.min.css" rel="stylesheet" type="text/css"/>
+		<link href="/ui/css/override.min.css" rel="stylesheet" type="text/css"/>
 	{% endblock %}
 </head>
 <body>
@@ -72,9 +72,9 @@
 
 	<!-- JS -->
 	{% block js_libraries %}
-		<script type="text/javascript" src="/scripts/jquery-1.10.2.js"></script>
-		<script type="text/javascript" src="/scripts/jquery-ui-1.10.4.custom.js"></script>
-		<script type="text/javascript" src="/scripts/knockout-3.4.0.debug.js"></script>
+		<script type="text/javascript" src="/ui/scripts/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="/ui/scripts/jquery-ui-1.10.4.custom.js"></script>
+		<script type="text/javascript" src="/ui/scripts/knockout-3.4.0.debug.js"></script>
 		<script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2016.1/latest/js/infragistics.core.js"></script>
 		<script src="http://cdn-na.infragistics.com/igniteui/2016.1/latest/js/infragistics.lob.js"></script>
 		<script src="http://igniteui.com/js/external/knockout.mapping-latest.js"></script>
@@ -83,12 +83,12 @@
 		<script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2016.1/latest/js/extensions/infragistics.ui.combo.knockout-extensions.js"></script>
 		<script src="http://cdn-na.infragistics.com/igniteui/2016.1/latest/js/extensions/infragistics.ui.tree.knockout-extensions.js"></script>
 		<script src="http://cdn-na.infragistics.com/igniteui/2016.1/latest/js/extensions/infragistics.ui.grid.knockout-extensions.js"></script>
-		<script type="text/javascript" src="/scripts/nunjucks.js"></script>
+		<script type="text/javascript" src="/ui/scripts/nunjucks.js"></script>
 	{% endblock %}
 
 	{%  block js %}
-		<script type="text/javascript" src="/poptart.min.js"></script>
-		<script type="text/javascript" src="/components/Poptart.Alerts.min.js"></script>
+		<script type="text/javascript" src="/ui/poptart.min.js"></script>
+		<script type="text/javascript" src="/ui/components/Poptart.Alerts.min.js"></script>
 		<script type="text/javascript">
 			Poptart.init()
 		</script>

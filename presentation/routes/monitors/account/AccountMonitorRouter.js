@@ -5,9 +5,6 @@ module.exports = function(express) {
 		accountMonitorController = new AccountMonitorController();
 
 	// Middleware
-	router.use("/scripts", express.static(loadPath("static/ui/modules/monitors/account/scripts")));
-	router.use("/css", express.static(loadPath("static/ui/modules/monitors/account/css")));
-
 	router.get('/', accountMonitorController.getAccounts);
 	router.get('/tabledata', accountMonitorController.getAccountsData);
 	router.get('/securities', accountMonitorController.getSecuritiesData);

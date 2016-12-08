@@ -5,9 +5,6 @@ module.exports = function(express) {
 		dashboardController = new DashboardController();
 
 	// Middleware
-	router.use("/scripts", express.static(loadPath("static/ui/modules/dashboard/scripts")));
-	router.use("/css", express.static(loadPath("static/ui/modules/dashboard/css")));
-
 	router.get('/', function(req, res) {
 		res.render("index.ninja");
 	});

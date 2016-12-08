@@ -13,7 +13,7 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/monitors/security/scripts/Poptart.Monitor.Security.js"></script>
+	<script type="text/javascript" src="/ui/modules/monitors/security/scripts/Poptart.Monitor.Security.js"></script>
 	<script type="text/javascript">
 		(function() {
 			Poptart.Monitor.Security.securities = {{ securities | safe }};
