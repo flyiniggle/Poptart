@@ -57,7 +57,7 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/ui/modules/monitors/account/scripts/Poptart.Monitor.Account.js"></script>
+	<script type="text/javascript" src="/ui/modules/monitors/account/scripts/Poptart.Monitors.Account.min.js"></script>
 	<script type="text/javascript">
 		(function(){
 			Poptart.Monitor.Account.accountList = {{accountList | safe}};
