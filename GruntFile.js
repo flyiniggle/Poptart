@@ -144,6 +144,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['lint', 'test']);
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit']);
 	grunt.registerTask('lint', ['eslint']);
-	grunt.registerTask('build-static', ['uglify', 'copy', 'cssmin']);
+	grunt.registerTask('build-static', ['newer:uglify', 'newer:copy', 'newer:cssmin']);
 
 };
