@@ -1,6 +1,9 @@
 const path = require("path");
 
 module.exports = function(grunt) {
+	require('jit-grunt')(grunt);
+	require('time-grunt')(grunt);
+
 	const ignoredSourceScriptPatterns = ['!**/*.debug.js', '!**/*.min.js', '!scripts/*', '!**/*.map'],
 		baseUIPath = 'presentation/ui',
 		scripts = grunt.file.expand({filter: 'isFile',
@@ -19,98 +22,10 @@ module.exports = function(grunt) {
 				expand: true
 			}
 		},
-/*		concat: {
-			options: {
-				sourceMap: true
-			},
-			build: {
-				cwd: baseUIPath,
-				expand: true,
-				files: function() {
-					var modules = grunt.file.expand({
-							filter: 'isDirectory',
-							expand: true,
-							cwd: 'presentation/ui/modules'
-						}, ['**', '!**!/css', '!**!/scripts']),
-						components = grunt.file.expand({
-							filter: 'isFile',
-							expand: true,
-							cwd: 'presentation/ui'
-						}, ['components/!*.js', ...ignoredSourceScriptPatterns]),
-						files, componentFiles;
-
-					files = modules.map(function(path) {
-						var modulePath = `modules/${path}/scripts`,
-							moduleName = modulePath.split('/').reduce(function(result, next) {
-								var nameFragment;
-
-								switch(next) {
-								case "modules":
-									nameFragment = "Poptart.";
-									break;
-								case "scripts":
-									nameFragment = "debug.js";
-									break;
-								default:
-									nameFragment = `${next.charAt(0).toUpperCase() + next.slice(1)}.`;
-									break;
-								}
-								return result + nameFragment;
-							}, "");
-
-						return {
-							src: grunt.file.expand({
-								filter: 'isFile'
-							}, [`${baseUIPath}/${modulePath}/!*.js`, ...ignoredSourceScriptPatterns]).sort(
-								function(a, b) {
-									return a.length - b.length;
-								}
-							),
-							dest: `${baseUIPath}/${modulePath}/${moduleName}`
-						};
-					});
-
-					componentFiles = components.map(function(componentPath) {
-						return {
-							src: `${baseUIPath}/${componentPath}`,
-							dest: `${baseUIPath}/${componentPath.replace('.js', '.debug.js')}`
-						};
-					});
-
-					files = [...files, ...componentFiles];
-
-					files.push({
-						src: grunt.file.expand({
-							filter: 'isFile'
-						}, [`${baseUIPath}/!*.js`, ...ignoredSourceScriptPatterns]),
-						dest: `${baseUIPath}/poptart.debug.js`
-					});
-
-					return files;
-				}()
-			}
-		},
 		uglify: {
 			options: {
-				compress: true,
 				sourceMap: true,
-				sourceMapIncludeSources: true
-			},
-			build: {
-				src: ['presentation/ui/!**!/!*.debug.js', '!presentation/ui/scripts/!*', '!**!/!*.min.js'],
-				rename: function(dest, src) {
-					return src.replace('.debug.js', '.min.js');
-				},
-				extDot: 'last',
-				expand: true
-			}
-		},*/
-		uglify: {
-			options: {
-				compress: true,
-				sourceMap: true,
-				beautify: true,
-				sourceMapIncludeSources: true
+				compress: false
 			},
 			build: {
 				cwd: baseUIPath,
@@ -124,7 +39,7 @@ module.exports = function(grunt) {
 							filter: 'isFile',
 							expand: true,
 							cwd: 'presentation/ui'
-						}, ['components/*.js', ...ignoredSourceScriptPatterns]),
+						}, ['components/!*.js', ...ignoredSourceScriptPatterns]),
 						files, componentFiles;
 
 					files = modules.map(function(path) {
@@ -224,14 +139,14 @@ module.exports = function(grunt) {
 		}
 	});
 
-	grunt.loadNpmTasks('grunt-shell');
+	/*grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('grunt-eslint');
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-mocha-test');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
-	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-newer');*/
 
 	grunt.registerTask('default', ['lint', 'test']);
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit']);
