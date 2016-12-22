@@ -5,7 +5,7 @@ module.exports = function(grunt) {
 	require('time-grunt')(grunt);
 
 	const ignoredSourceScriptPatterns = ['!**/*.debug.js', '!**/*.min.js', '!scripts/*', '!**/*.map'],
-		baseUIPath = 'presentation/ui',
+		baseUIPath = './presentation/ui',
 		scripts = grunt.file.expand({filter: 'isFile',
 			matchBase: true,
 			cwd: baseUIPath},
@@ -38,7 +38,7 @@ module.exports = function(grunt) {
 						components = grunt.file.expand({
 							filter: 'isFile',
 							expand: true,
-							cwd: 'presentation/ui'
+							cwd: './presentation/ui'
 						}, ['components/!*.js', ...ignoredSourceScriptPatterns]),
 						files, componentFiles;
 
@@ -63,8 +63,9 @@ module.exports = function(grunt) {
 
 						return {
 							src: grunt.file.expand({
+								cwd: `${baseUIPath}/${modulePath}`,
 								filter: 'isFile'
-							}, [`${baseUIPath}/${modulePath}/*.js`, ...ignoredSourceScriptPatterns]).sort(
+							}, ['*.js', ...ignoredSourceScriptPatterns]).sort(
 								function(a, b) {
 									return a.length - b.length;
 								}
