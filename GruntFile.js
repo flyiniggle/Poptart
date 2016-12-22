@@ -5,20 +5,16 @@ module.exports = function(grunt) {
 	require('time-grunt')(grunt);
 
 	const ignoredSourceScriptPatterns = ['!**/*.debug.js', '!**/*.min.js', '!scripts/*', '!**/*.map'],
-		baseUIPath = './presentation/ui',
-		scripts = grunt.file.expand({filter: 'isFile',
-			matchBase: true,
-			cwd: baseUIPath},
-		['*.js', ...ignoredSourceScriptPatterns]);
+		baseUIPath = 'presentation/ui';
 
 	// Project configuration.
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		copy: {
 			build: {
-				cwd: 'presentation/',
-				src: 'ui/**',
-				dest: path.join('presentation', 'static'),
+				cwd: 'presentation/ui',
+				src: '**',
+				dest: path.join('presentation', 'static', 'ui'),
 				expand: true
 			}
 		},
@@ -38,12 +34,12 @@ module.exports = function(grunt) {
 						components = grunt.file.expand({
 							filter: 'isFile',
 							expand: true,
-							cwd: './presentation/ui'
-						}, ['components/!*.js', ...ignoredSourceScriptPatterns]),
+							cwd: 'presentation/ui/components'
+						}, ['*.js', ...ignoredSourceScriptPatterns]),
 						files, componentFiles;
 
-					files = modules.map(function(path) {
-						var modulePath = `modules/${path}/scripts`,
+					files = modules.map(function(pathFragment) {
+						var modulePath = `modules/${pathFragment}/scripts`,
 							moduleName = modulePath.split('/').reduce(function(result, next) {
 								var nameFragment;
 
@@ -69,15 +65,17 @@ module.exports = function(grunt) {
 								function(a, b) {
 									return a.length - b.length;
 								}
-							),
-							dest: `${baseUIPath}/${modulePath}/${moduleName}`
+							).map(function(piece) {
+								return path.join(baseUIPath, modulePath, piece);
+							}),
+							dest: path.join(baseUIPath, modulePath, moduleName)
 						};
 					});
 
 					componentFiles = components.map(function(componentPath) {
 						return {
-							src: `${baseUIPath}/${componentPath}`,
-							dest: `${baseUIPath}/${componentPath.replace('.js', '.min.js')}`
+							src: `${baseUIPath}/components/${componentPath}`,
+							dest: `${baseUIPath}/components/${componentPath.replace('.js', '.min.js')}`
 						};
 					});
 
@@ -85,8 +83,11 @@ module.exports = function(grunt) {
 
 					files.push({
 						src: grunt.file.expand({
-							filter: 'isFile'
-						}, [`${baseUIPath}/*.js`, ...ignoredSourceScriptPatterns]),
+							filter: 'isFile',
+							cwd: baseUIPath
+						}, ['*.js', ...ignoredSourceScriptPatterns]).map(function(path) {
+							return `${baseUIPath}/${path}`;
+						}),
 						dest: `${baseUIPath}/poptart.min.js`
 					});
 
@@ -139,15 +140,6 @@ module.exports = function(grunt) {
 			}
 		}
 	});
-
-	/*grunt.loadNpmTasks('grunt-shell');
-	grunt.loadNpmTasks('grunt-eslint');
-	grunt.loadNpmTasks('grunt-karma');
-	grunt.loadNpmTasks('grunt-mocha-test');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-contrib-cssmin');
-	grunt.loadNpmTasks('grunt-contrib-concat');
-	grunt.loadNpmTasks('grunt-newer');*/
 
 	grunt.registerTask('default', ['lint', 'test']);
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit']);
