@@ -72,7 +72,7 @@ module.exports = function(grunt) {
 			dest: `${baseDestUIPath}/poptart.min.js`
 		});
 
-		uglify.all.files = files;
+		uglify.build.files = files;
 		grunt.config.set("uglify", uglify);
 	});
 };

@@ -17,34 +17,32 @@ module.exports = function(grunt) {
 				expand: true
 			},
 			changed: {
-				cwd: baseUIPath,
-				expand: true
+				cwd: '',
+				expand: false
 			}
 		},
 		watch: {
+			options: {
+				spawn: false
+			},
 			js: {
 				files: ['presentation/ui/**/*.js'],
-				tasks: ['build-static']
+				tasks: ['copy:changed', 'uglify-build-all-javascript-file-mapping', 'newer:uglify']
+			},
+			css: {
+				files: ['presentation/ui/**/*.css'],
+				tasks: ['newer:css']
 			}
 		},
 		uglify: {
-			all: {
-				cwd: baseUIPath,
+			build: {
+				cwd: path.join('presentation', 'static', 'ui'),
 				extDot: 'last',
-				expand: true,
-				options: {
-					sourceMap: true,
-					compress: false
-				}
+				expand: true
 			},
-			changed: {
-				cwd: baseUIPath,
-				extDot: 'last',
-				expand: true,
-				options: {
-					sourceMap: true,
-					compress: false
-				}
+			options: {
+				sourceMap: true,
+				compress: false
 			}
 		},
 		cssmin: {
@@ -96,9 +94,17 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['lint', 'test']);
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit']);
 	grunt.registerTask('lint', ['eslint']);
-	grunt.registerTask('build-static', ['uglify-build-all-javascript-file-mapping', 'newer:copy:all', 'newer:uglify:all', 'newer:cssmin']);
+	grunt.registerTask('build-static', ['uglify-build-all-javascript-file-mapping', 'newer:copy:all', 'uglify', 'cssmin']);
 
-	/*grunt.event.on('watch', function(action, filepath, target) {
+	grunt.event.on('watch', function(action, filepath, target) {
 
-	});*/
+		if(target === 'js') {
+			let pathArr = filepath.split(path.sep);
+
+			grunt.config.set('copy.changed.src', filepath);
+			pathArr.splice(pathArr.indexOf('ui'), 0, 'static');
+			grunt.config.set('copy.changed.dest', pathArr.join(path.sep));
+		}
+
+	});
 };
