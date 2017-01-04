@@ -2,17 +2,22 @@ Poptart.Dashboard = function() {
 	var ReturnObj = {};
 
 	ReturnObj.init = function() {
-		jQuery.ajax({
-			url: "/summary/account",
-			accepts: "application/json",
-			success: showAccountSummary
-		});
 
-		jQuery.ajax({
+		Promise.resolve(jQuery.ajax({
+			url: "/summary/account",
+			accepts: "application/json"
+		})).then(showAccountSummary)
+			.catch(function(e) {
+				alert(e);
+			});
+
+		Promise.resolve(jQuery.ajax({
 			url: "/summary/security",
-			accepts: "application/json",
-			success: showSecuritySummary
-		});
+			accepts: "application/json"
+		})).then(showSecuritySummary)
+			.catch(function(e) {
+				alert(e);
+			});
 	};
 
 	function showAccountSummary(data) {
