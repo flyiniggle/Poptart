@@ -115,7 +115,7 @@ var Poptart = function() {
 			}
 
 			while(intPart.length > 0) {
-				if((i > 0 ) && !(i % 3)) {
+				if((i > 0) && !(i % 3)) {
 					formattedValue.unshift(",");
 				}
 				formattedValue.unshift(intPart.pop());
@@ -151,7 +151,6 @@ var Poptart = function() {
 		return target;
 	};
 
-
 	// Public methods
 	///////////////////
 
@@ -160,7 +159,6 @@ var Poptart = function() {
 		jQuery("#mainNavMenuTarget, #mainNavMenu").on("mouseleave", hideNavMenu);
 		Poptart.RibbonMenu.init();
 	};
-
 
 	// Private functions
 	//////////////////////

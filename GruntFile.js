@@ -58,11 +58,20 @@ module.exports = function(grunt) {
 			}
 		},
 		eslint: {
-			options: {
-				configFile: 'presentation/build/eslint.json',
-				ignorePath: 'presentation/build/.eslintignore'
+			all: {
+				options: {
+					configFile: 'presentation/build/eslint.json',
+					ignorePath: 'presentation/build/.eslintignore'
+				},
+				target: ['presentation/**/*.js', '!presentation/ui/scripts/**', '!presentation/static/**']
 			},
-			target: ['presentation/**/*.js', '!presentation/ui/scripts/*', '!presentation/static/**']
+			changed: {
+				options: {
+					configFile: 'presentation/build/eslint.json',
+					ignorePath: 'presentation/build/.eslintignore',
+					fix: true
+				}
+			}
 		},
 		shell: {
 			test: {
@@ -93,15 +102,16 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('default', ['lint', 'test']);
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit']);
-	grunt.registerTask('lint', ['eslint']);
+	grunt.registerTask('lint', ['eslint:all']);
 	grunt.registerTask('build-static', ['uglify-build-all-javascript-file-mapping', 'newer:copy:all', 'uglify', 'cssmin']);
 
 	grunt.event.on('watch', function(action, filepath, target) {
 
 		if(target === 'js') {
-			let pathArr = filepath.split(path.sep);
+			let pathArr = filepath.split(path.sep)
 
 			grunt.config.set('copy.changed.src', filepath);
+			grunt.config.set('eslint.changed.src', [filepath]);
 			pathArr.splice(pathArr.indexOf('ui'), 0, 'static');
 			grunt.config.set('copy.changed.dest', pathArr.join(path.sep));
 		}

@@ -49,7 +49,6 @@ var Service = function(options, res) {
 
 util.inherits(Service, EventEmitter);
 
-
 var ServiceMarshaller = function(res, services) {
 	var self = this,
 		statusArray = [],

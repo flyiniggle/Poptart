@@ -2,7 +2,6 @@ global.imports = function(name) {
 	return require(path.join(__dirname, '..', '..', name));
 };
 
-
 var path = require('path');
 
 var chai = require('chai');
@@ -27,7 +26,6 @@ describe("Ignite DataAdapter", function() {
 		});
 	});
 });
-
 
 describe("Alert", function() {
 	var testInfo = {
