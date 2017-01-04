@@ -9,16 +9,12 @@ module.exports = function(grunt) {
 	// Project configuration.
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		copy: {
-			all: {
+		sync: {
+			build: {
 				cwd: baseUIPath,
 				src: '**',
 				dest: path.join('presentation', 'static', 'ui'),
 				expand: true
-			},
-			changed: {
-				cwd: '',
-				expand: false
 			}
 		},
 		watch: {
@@ -27,7 +23,7 @@ module.exports = function(grunt) {
 			},
 			js: {
 				files: ['presentation/ui/**/*.js'],
-				tasks: ['copy:changed', 'uglify-build-all-javascript-file-mapping', 'newer:uglify']
+				tasks: ['sync', 'uglify-build-all-javascript-file-mapping', 'newer:uglify']
 			},
 			css: {
 				files: ['presentation/ui/**/*.css'],
@@ -103,18 +99,10 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['lint', 'test']);
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit']);
 	grunt.registerTask('lint', ['eslint:all']);
-	grunt.registerTask('build-static', ['uglify-build-all-javascript-file-mapping', 'newer:copy:all', 'uglify', 'cssmin']);
+	grunt.registerTask('build-static', ['uglify-build-all-javascript-file-mapping', 'sync', 'uglify', 'cssmin']);
 
-	grunt.event.on('watch', function(action, filepath, target) {
+	/*grunt.event.on('watch', function(action, filepath, target) {
 
-		if(target === 'js') {
-			let pathArr = filepath.split(path.sep)
-
-			grunt.config.set('copy.changed.src', filepath);
-			grunt.config.set('eslint.changed.src', [filepath]);
-			pathArr.splice(pathArr.indexOf('ui'), 0, 'static');
-			grunt.config.set('copy.changed.dest', pathArr.join(path.sep));
-		}
-
-	});
+		leaving this here till we integrate test coverage
+	});*/
 };
