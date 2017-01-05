@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 			},
 			css: {
 				files: ['presentation/ui/**/*.css'],
-				tasks: ['newer:css']
+				tasks: ['sync', 'newer:cssmin']
 			}
 		},
 		uglify: {
