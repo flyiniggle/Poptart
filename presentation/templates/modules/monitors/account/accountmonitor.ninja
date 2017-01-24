@@ -16,7 +16,7 @@
 			<span class="ribbonMenuGroupLabel">Go to account: </span>
 			<form id="am_accountLauncher" class="ribbonMenuForm">
 				<input id="am_accountLauncherSelector" class="am_accountSelector" type="text"/>
-				<input type="submit" value="go"/>
+				<input type="submit" value="go" class="ribbon"/>
 			</form>
 		</div>
 
@@ -24,7 +24,7 @@
 			<span class="ribbonMenuGroupLabel">Delete account: </span>
 			<form id="am_accountDeleter" class="ribbonMenuForm">
 				<input id="am_accountDeleterSelector" class="am_accountSelector" type="text"/>
-				<input type="submit" value="delete"/>
+				<input type="submit" value="delete" class="ribbon"/>
 			</form>
 		</div>
 

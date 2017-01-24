@@ -5,8 +5,15 @@ input, textarea {
 }
 
 input[type='button'], input[type='submit'] {
-	color: rgb(222, 222, 222);
 	background-color: transparent;
+}
+
+.mainForm > input[type='button'], .mainForm > input[type='submit'] {
+	color: rgb(53, 148, 209);
+}
+
+.ribbonMenu > input[type='button'], .ribbonMenu > input[type='submit'] {
+	color: rgb(222, 222, 222);
 }
 
 .mainForm > input[type='text'], .mainForm > textarea {

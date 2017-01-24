@@ -95,8 +95,7 @@
 				<div class="panelHeader">
 					<h3>Proposed Holdings:</h3>
 				</div>
-				<label for="accountSecuritySelect" class="textInputLabel">Security:</label>
-				<input id="accountSecuritySelect" type="text"/>
+				<input id="addHolding" type="button" value="add holding" data-bind="click: addHolding"/>
 				<br/>
 				<table id="accountAddHoldings" data-bind="igGrid: holdingsGridOptions"></table>
 			</form>

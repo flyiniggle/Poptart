@@ -16,6 +16,7 @@ Poptart.Monitor.Account.CreateAccount = function() {
 		self.maxCashDrift = ko.observable("");
 		self.holdings = ko.observableArray([]);
 
+		//Computed
 		self.maxCashDriftPercent = ko.computed({
 			read: function() {
 				var self = this,
@@ -43,15 +44,20 @@ Poptart.Monitor.Account.CreateAccount = function() {
 			return Math.abs(self.expectedCash() - self.startingCash());
 		}, self).extend({CurrencyDisplay: null});
 
+		//Methods
+		self.addHolding = function() {
+			this.holdings.push(new HoldingModel());
+			jQuery("#accountAddHoldings").igGrid("commit");
+		};
 	};
 
-	var HoldingModel = function(securityName, securityId, segment, securityLastPrice) {
+	var HoldingModel = function() {
 		var self = this;
 
-		self.securityName = securityName;
-		self.securityId = securityId;
-		self.segment = segment;
-		self.securityLastPrice = securityLastPrice;
+		self.securityName = ko.observable("");
+		self.securityId = ko.observable(0);
+		self.segment = ko.observable("");
+		self.securityLastPrice = ko.observable(0);
 		self.quantity = ko.observable(0);
 		self.expectedQuantity = ko.observable(0);
 		self.expectedValue = ko.observable(0);
@@ -76,13 +82,21 @@ Poptart.Monitor.Account.CreateAccount = function() {
 		}, self);
 		self.value = ko.pureComputed({
 			read: function() {
-				return this.quantity() * this.securityLastPrice;
+				return this.quantity() * this.securityLastPrice();
 			},
 			write: function() {
 				return undefined;
 			},
 			owner: self
 		});
+
+		//Because Ignite UI made me do it :/
+		self.update = function(security) {
+			self.securityName(security.ticker);
+			self.securityId(security.pk);
+			self.segment(security.segment);
+			self.securityLastPrice(security.last_price);
+		};
 	};
 
 	// Ig Component/Knockout Configuration
@@ -106,16 +120,23 @@ Poptart.Monitor.Account.CreateAccount = function() {
 		];
 		this.features = [
 			{
-				name: "Selection",
-				editMode: "row"
-			},
-			{
 				name: "Updating",
 				editMode: "row",
+				enableAddRow: false,
 				enableDeleteRow: true,
+				autoCommit: true,
 				generatePrimaryKeyValue: function(evt, ui) {
 					// setting a primary key for the new row
 					ui.value = 'PK' + ui.value;
+				},
+				editCellEnded: function(event, ui) {
+					var val;
+
+					if(ui.columnKey === "securityName") {
+						val = ui.editor.igCombo("dataForValue", ui.editor.igCombo('value'));
+						ui.owner.grid.findRecordByKey(ui.rowID).update(val);
+						ui.owner.grid.commit();
+					}
 				},
 				columnSettings: [
 					{
@@ -124,7 +145,9 @@ Poptart.Monitor.Account.CreateAccount = function() {
 					},
 					{
 						columnKey: "securityName",
-						readOnly: true
+						readOnly: false,
+						editorType: "combo",
+						editorOptions: setComboEditorOptions.call({})
 					},
 					{
 						columnKey: "segment",
@@ -187,9 +210,7 @@ Poptart.Monitor.Account.CreateAccount = function() {
 		return this;
 	};
 
-	var setComboEditorOptions = function() {
-		this.height = Poptart.Ignite.constants.INPUT_HEIGHT;
-		this.width = "90%";
+	function setComboEditorOptions() {
 		this.textKey = "ticker";
 		this.valueKey = "pk";
 		this.autoComplete = true;
@@ -223,13 +244,6 @@ Poptart.Monitor.Account.CreateAccount = function() {
 			primaryKey: "securityId",
 			dataSource: viewModel.holdings
 		});
-		viewModel.accountSecuritySelectEditorOptions = setComboEditorOptions.call({
-			selectionChanged: function(evt, ui) {
-				var security = ui.items[0].data;
-
-				viewModel.holdings.push(new HoldingModel(security.ticker, security.pk, security.segment, security.last_price));
-			}
-		});
 		viewModel.expectedCashEditorOptions = setCurrencyEditorOptions.call({value: viewModel.expectedCash});
 		viewModel.startingCashEditorOptions = setCurrencyEditorOptions.call({value: viewModel.startingCash});
 		viewModel.maxCashDriftEditorOptions = setCurrencyEditorOptions.call({value: viewModel.maxCashDrift});
@@ -240,18 +254,19 @@ Poptart.Monitor.Account.CreateAccount = function() {
 		ko.applyBindings(viewModel);
 
 		jQuery("#submitCreateAccount").on("click", Poptart.Monitor.Account.CreateAccount.submit);
-		jQuery("#accountSecuritySelect").igCombo(viewModel.accountSecuritySelectEditorOptions);
 	};
 
 	ReturnObj.submit = function() {
-		jQuery.ajax({
+		Promise.resolve(jQuery.ajax({
 			type: "POST",
 			url: "/account/create",
 			accept: "application/json",
 			contentType: "application/json",
-			success: checkCreateResponse,
 			data: ko.toJSON(viewModel)
-		});
+		})).then(checkCreateResponse)
+			.catch(function(e) {
+				alert(e);
+			});
 	};
 
 	//Private Functions
