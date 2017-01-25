@@ -52,52 +52,57 @@ Poptart.Monitor.Account.CreateAccount = function() {
 	};
 
 	var HoldingModel = function() {
-		var self = this;
+		var pk = 0;
 
-		self.securityName = ko.observable("");
-		self.securityId = ko.observable(0);
-		self.segment = ko.observable("");
-		self.securityLastPrice = ko.observable(0);
-		self.quantity = ko.observable(0);
-		self.expectedQuantity = ko.observable(0);
-		self.expectedValue = ko.observable(0);
+		return function() {
+			var self = this;
 
-		self.quantityDrift = ko.pureComputed({
-			read: function() {
-				return Math.abs(this.expectedQuantity() - this.quantity());
-			},
-			write: function() {
-				return undefined;
-			},
-			owner: self
-		}, self);
-		self.valueDrift = ko.pureComputed({
-			read: function() {
-				return Math.abs(this.expectedValue() - this.value());
-			},
-			write: function() {
-				return undefined;
-			},
-			owner: self
-		}, self);
-		self.value = ko.pureComputed({
-			read: function() {
-				return this.quantity() * this.securityLastPrice();
-			},
-			write: function() {
-				return undefined;
-			},
-			owner: self
-		});
+			self.pk = ko.observable(pk++);
+			self.securityName = ko.observable("");
+			self.securityId = ko.observable(0);
+			self.segment = ko.observable("");
+			self.securityLastPrice = ko.observable(0);
+			self.quantity = ko.observable(0);
+			self.expectedQuantity = ko.observable(0);
+			self.expectedValue = ko.observable(0);
 
-		//Because Ignite UI made me do it :/
-		self.update = function(security) {
-			self.securityName(security.ticker);
-			self.securityId(security.pk);
-			self.segment(security.segment);
-			self.securityLastPrice(security.last_price);
+			self.quantityDrift = ko.pureComputed({
+				read: function() {
+					return Math.abs(this.expectedQuantity() - this.quantity());
+				},
+				write: function() {
+					return undefined;
+				},
+				owner: self
+			}, self);
+			self.valueDrift = ko.pureComputed({
+				read: function() {
+					return Math.abs(this.expectedValue() - this.value());
+				},
+				write: function() {
+					return undefined;
+				},
+				owner: self
+			}, self);
+			self.value = ko.pureComputed({
+				read: function() {
+					return this.quantity() * this.securityLastPrice();
+				},
+				write: function() {
+					return undefined;
+				},
+				owner: self
+			});
+
+			//Because Ignite UI made me do it :/
+			self.update = function(security) {
+				self.securityName(security.ticker);
+				self.securityId(security.pk);
+				self.segment(security.segment);
+				self.securityLastPrice(security.last_price);
+			};
 		};
-	};
+	}();
 
 	// Ig Component/Knockout Configuration
 	/////////////////////////////////////////
@@ -105,8 +110,8 @@ Poptart.Monitor.Account.CreateAccount = function() {
 		this.width = '100%';
 		this.autoCommit = true;
 		this.autoGenerateColumns = false;
-
 		this.columns = [
+			{headerText: 'pk', key: "pk", dataType: "number", hidden: true},
 			{headerText: "Name", key: "securityName", dataType: "string", width: "120px"},
 			{headerText: "Id", key: "securityId", dataType: "number", width: "*"},
 			{headerText: "Segment", key: "segment", dataType: "string", width: "*"},
@@ -124,11 +129,7 @@ Poptart.Monitor.Account.CreateAccount = function() {
 				editMode: "row",
 				enableAddRow: false,
 				enableDeleteRow: true,
-				autoCommit: true,
-				generatePrimaryKeyValue: function(evt, ui) {
-					// setting a primary key for the new row
-					ui.value = 'PK' + ui.value;
-				},
+				autoCommit: false,
 				editCellEnded: function(event, ui) {
 					var val;
 
@@ -139,6 +140,10 @@ Poptart.Monitor.Account.CreateAccount = function() {
 					}
 				},
 				columnSettings: [
+					{
+						columnKey: "pk",
+						readOnly: true
+					},
 					{
 						columnKey: "securityId",
 						readOnly: true
@@ -241,7 +246,7 @@ Poptart.Monitor.Account.CreateAccount = function() {
 
 		//append ig component options
 		viewModel.holdingsGridOptions = setGridOptions.call({
-			primaryKey: "securityId",
+			primaryKey: "pk",
 			dataSource: viewModel.holdings
 		});
 		viewModel.expectedCashEditorOptions = setCurrencyEditorOptions.call({value: viewModel.expectedCash});
