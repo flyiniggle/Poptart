@@ -12,6 +12,8 @@ var Poptart = function() {
 	///////////////
 	jQuery.noConflict();
 
+	nunjucks.configure('/templates');
+
 	//Allow script bindings for knockout
 	var render = function(options) {
 		var rendered = [], key, val;

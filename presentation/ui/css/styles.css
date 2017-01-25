@@ -248,4 +248,39 @@ body {
 	color: rgb(128, 0, 0);
 }
 
+/* Server Errors */
+#serverError {
+	position: fixed;
+	z-index: 101;
+	top: 0;
+	width: 100%;
+	height: auto;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	padding-left: 50px;
+	padding-right: 50px;
+	background-color: rgb(61, 61, 61);
+}
+
+#serverErrorInterior {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.serverErrorInfo {
+	padding-top: 15px;
+}
+
+.serverErrorInfo > span {
+	display: block;
+	color: rgb(240, 240, 240);
+}
+
+#serverErrorClose {
+	z-index: 102;
+	position: fixed;
+	right: 30px;
+	color: rgb(53, 148, 209);
+	font-size: 20px;
+}
 

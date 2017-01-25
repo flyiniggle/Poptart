@@ -1,0 +1,15 @@
+<h2 id="serverErrorHeader">Oops! Something went horribly wrong:</h2>
+<br/>
+<h3 id="serverErrorSummary">{{ summary }} - </h3>
+<div class="serverErrorInfo">
+	<span>Message:  </span><span>{{ message }}</span>
+</div>
+<div class="serverErrorInfo">
+	<span>Stack Trace:  </span><span>{{ stacktrace }}</span>
+</div>
+<div class="serverErrorInfo">
+	<span>Method:  </span><span>{{ method }}</span>
+</div>
+<div class="serverErrorInfo">
+	<span>Request Path:  </span><span>{{ path }}</span>
+</div>

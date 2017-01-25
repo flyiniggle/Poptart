@@ -90,6 +90,7 @@
 	{%  block js %}
 		<script type="text/javascript" src="/ui/poptart.min.js"></script>
 		<script type="text/javascript" src="/ui/components/Poptart.Alerts.min.js"></script>
+		<script type="text/javascript" src="/ui/components/Poptart.Services.min.js"></script>
 		<script type="text/javascript">
 			Poptart.init()
 		</script>

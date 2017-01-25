@@ -1,0 +1,5 @@
+{% extends "BaseLayout.ninja" %}
+
+{% block main %}
+	{% include 'error.ninja' %}
+{% endblock %}

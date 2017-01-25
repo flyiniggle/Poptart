@@ -31,7 +31,7 @@ const ServerError = function(res, error) {
 			};
 
 			res.setHeader('contentType', 'text/html');
-			res.render("templates/support/error.ninja", templateContext);
+			res.render("templates/support/error/SynchronousErrorResponse.ninja", templateContext);
 			break;
 		default:
 			res.setHeader('contentType', 'application/json');
