@@ -7,7 +7,7 @@ const ServerError = function(res, error) {
 	self.send = function(status) {
 		var templateContext;
 
-		res.setHeader('statusCode', status);
+		res.status(status);
 		switch(acceptsType) {
 		case "application/json":
 			res.setHeader('contentType', 'application/json');
