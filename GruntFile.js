@@ -47,7 +47,7 @@ module.exports = function(grunt) {
 			},
 			build: {
 				cwd: 'presentation/static/ui/',
-				src: ['**/*.css', '!css/jquery-ui/**', '!css/ionicons/**', '!**/*.min.js'],
+				src: ['**/*.css', '!css/jquery-ui/**', '!css/ionicons/**', '!**/*.min.css'],
 				dest: 'presentation/static/ui/',
 				ext: '.min.css',
 				expand: true
