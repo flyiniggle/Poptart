@@ -15,10 +15,10 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'ui/scripts/*.js',
-      'ui/*.js',
-      'ui/components/**/*.js',
-      'ui/modules/**/*.js',
+      'static/ui/scripts/*.js',
+      'static/ui/*.min.js',
+      'static/ui/components/**/*.min.js',
+      'static/ui/modules/**/*.min.js',
       'test/client/*.js'
     ],
 
