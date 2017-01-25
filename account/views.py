@@ -47,7 +47,10 @@ class AccountMonitor(View):
         return HttpResponse(json.dumps(response, cls=DateTimeWebAPIEncoder), status="200 OK", content_type="application/json")
 
     def post(self, request):
-        n = ast.literal_eval(request.body)
+        if request.is_ajax():
+            n = ast.literal_eval(request.body)
+        else:
+            n = request.POST
         account = Account(name=n.get('accountName'), description=n.get('accountDescription'), inception_date=timezone.now(),
                       total_cash=n.get('startingCash'), expected_cash=n.get('expectedCash'), max_pos_drift=n.get('maxPositionDrift'),
                       max_cash_drift=n.get('maxCashDrift'), max_total_drift=n.get('maxTotalDrift'), solution_name="AssetAlloc",

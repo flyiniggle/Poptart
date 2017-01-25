@@ -80,7 +80,7 @@ class AccountMonitorTest(TestCase):
             "maxCashDrift": 50,
             "maxTotalDrift": 1000,
         }
-        response = c.post('/account/', post_data)
+        response = c.post('/account/', data=post_data)
 
         self.assertEqual(response.status_code, "201 Created", "Expected '201 Created' status code but got '%s'." % response.status_code)
         try:
@@ -89,3 +89,24 @@ class AccountMonitorTest(TestCase):
             self.fail("Did not find the newly created account.")
         serialized_account = ExtPythonSerializer().serialize(new_account)
         self.assertJSONEqual(response.content, simplejson.dumps(serialized_account, cls=DateTimeWebAPIEncoder), "New account was not serialized correctly.")
+
+        def test_create_account_via_ajax(self):
+            c = Client()
+            post_data = {
+                "accountName": "test_create_ajax",
+                "accountDescription": "woo, more tests!",
+                "startingCash": 100,
+                "expectedCash": 200,
+                "maxPositionDrift": 1000,
+                "maxCashDrift": 50,
+                "maxTotalDrift": 1000,
+            }
+            response = c.post('/account/', data=post_data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+            self.assertEqual(response.status_code, "201 Created", "Expected '201 Created' status code but got '%s'." % response.status_code)
+            try:
+                new_account = Account.objects.get(name=post_data.get("accountName"))
+            except Account.DoesNotExist:
+                self.fail("Did not find the newly created account.")
+            serialized_account = ExtPythonSerializer().serialize(new_account)
+            self.assertJSONEqual(response.content, simplejson.dumps(serialized_account, cls=DateTimeWebAPIEncoder), "New account was not serialized correctly.")
