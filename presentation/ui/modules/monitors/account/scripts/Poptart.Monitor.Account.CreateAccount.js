@@ -258,20 +258,11 @@ Poptart.Monitor.Account.CreateAccount = function() {
 
 		ko.applyBindings(viewModel);
 
-		jQuery("#submitCreateAccount").on("click", Poptart.Monitor.Account.CreateAccount.submit);
+		jQuery("#submitCreateAccount").on("click", Poptart.Monitor.Account.CreateAccount.submit.bind(this));
 	};
 
 	ReturnObj.submit = function() {
-		Promise.resolve(jQuery.ajax({
-			type: "POST",
-			url: "/account/create",
-			accept: "application/json",
-			contentType: "application/json",
-			data: ko.toJSON(viewModel)
-		})).then(checkCreateResponse)
-			.catch(function(e) {
-				alert(e);
-			});
+		this.Service.saveAccount(ko.toJS(viewModel)).then(checkCreateResponse);
 	};
 
 	//Private Functions
