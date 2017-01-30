@@ -7,9 +7,13 @@ const AccountController = function() {
 	const self = this;
 
 	self.getAccount = function(req, res) {
+		res.render("modules/account/account.ninja");
+	};
+
+	self.getAccountData = function(req, res) {
 		const service = accountService.getAccount(res, req.params.acct_id);
 
-		service.on("end", processAccount);
+		service.on("end", processAccountData);
 		service.send();
 	};
 
@@ -22,8 +26,9 @@ const AccountController = function() {
 
 
 	// Request Callbacks
-	function processAccount(res, accountData) {
-		var templateData = {},
+	function processAccountData(res, accountData) {
+
+		var responseData = {},
 			alerts = [],
 			JSONData, account,
 			alertMessage;
@@ -55,11 +60,10 @@ const AccountController = function() {
 			alerts.push(new Alert("warning", "Drift", alertMessage));
 		}
 
-		templateData.account = JSONData.account;
-		templateData.holdings = JSONData.holdings;
-		templateData.alerts = alerts;
+		responseData.account = account;
+		responseData.alerts = alerts;
 
-		res.render("modules/account/account.ninja", templateData);
+		res.send(responseData);
 	}
 
 	function processAccountCreation(res, newAccount) {

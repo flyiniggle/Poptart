@@ -1,21 +1,29 @@
 Poptart.Account.Service = function() {
+	"use strict";
 	var ReturnObj = Object.create(Poptart.Services.service, {});
 
-	ReturnObj.getAccountSummary = function(account) {
+	ReturnObj.getAccountSummary = function(accountId) {
 
 		return Promise.resolve(jQuery.ajax({
 			type: "GET",
-			url: "/account/" + account,
+			url: "/account/" + accountId + "/data",
 			accept: "application/json",
 			contentType: "application/json"
 		})).catch(function(e) {
 			this.handleServerError(e);
-		}.bind(this)).then(function(data) {
 			return {
-				account: data.accountName,
+				account: "",
+				description: "",
+				manager: "",
+				client: ""
+			};
+		}.bind(this)).then(function(data) {
+			data = data.account;
+			return {
+				account: data.name,
 				description: data.description,
 				manager: data.manager,
-				client: data.client
+				client: data.client_1_id
 			};
 		});
 	};

@@ -13,5 +13,6 @@ module.exports = function(express) {
 
 	router.get('/:acct_id', accountController.getAccount);
 
+	router.get('/:acct_id/data', accountController.getAccountData);
 	return router;
 };

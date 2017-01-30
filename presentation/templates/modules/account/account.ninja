@@ -7,25 +7,24 @@
 
 {% block summary %}
 	<div>
-		<h4>Account: </h4><span id="accountCount">{{ account.name }}</span>
+		<h4>Account: </h4><span id="accountName"></span>
 	</div>
 	<div>
-		<h4>Description: </h4><span id="accountCount">{{ account.description }}</span>
+		<h4>Description: </h4><span id="accountDescription"></span>
 	</div>
 	<div>
-		<h4>Manager: </h4><span id="accountUpdated">{{ account.manager }}</span>
+		<h4>Manager: </h4><span id="accountManager"></span>
 	</div>
 	<div>
-		<h4>Client: </h4><span id="securityCount">{{ account.client_1_id }}</span>
+		<h4>Client: </h4><span id="accountClient"></span>
 	</div>
 {% endblock %}
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/ui/modules/monitors/account/scripts/Poptart.Account.min.js"></script>
+	<script type="text/javascript" src="/ui/modules/account/scripts/Poptart.Account.min.js"></script>
 	<script type="text/javascript">
 		(function() {
-			Poptart.Account.accountList = {{ accountList | safe }};
 			jQuery(Poptart.Account.init);
 		})();
 	</script>

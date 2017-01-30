@@ -1,9 +1,13 @@
 Poptart.Account = function() {
-	var ReturnObj = {};
+	"use strict";
+	var ReturnObj = {},
+		accountId = window.location.href.split("/").pop();
 
 	function displayAccountSummary(data) {
-
-		return data;
+		jQuery("#accountName").html(data.account);
+		jQuery("#accountDescription").html(data.description);
+		jQuery("#accountManager").html(data.manager);
+		jQuery("#accountClient").html(data.client);
 	}
 
 	function displayAccountHoldings(data) {
@@ -17,13 +21,13 @@ Poptart.Account = function() {
 	}
 
 	ReturnObj.init = function() {
-		this.Service.getAccountSummary().then(displayAccountSummary);
-		this.Service.getAccountHoldings().then(displayAccountHoldings);
-		this.Service.getAccountAlerts().then(displayAccountAlerts);
+		Poptart.Account.Service.getAccountSummary(accountId).then(displayAccountSummary);
+		//Poptart.Account.Service.getAccountHoldings(accountId).then(displayAccountHoldings);
+		//Poptart.Account.Service.getAccountAlerts(accountId).then(displayAccountAlerts);
 	};
 
 	ReturnObj.updateHoldings = function() {
-		this.Service.setAccountHoldings().then(this.update);
+		Poptart.Account.Service.setAccountHoldings().then(Poptart.Account.update);
 	};
 
 	ReturnObj.update = function() {
