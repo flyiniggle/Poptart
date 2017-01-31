@@ -1,8 +1,9 @@
 import simplejson
+import json
 from django.test import TestCase, Client
 
 from account.models import Account
-from poptart.lib.serializers import ExtPythonSerializer
+from poptart.lib.serializers import ExtPythonSerializer, ExtJsonSerializer
 from poptart.lib.encoders import DateTimeWebAPIEncoder
 
 
@@ -110,3 +111,15 @@ class AccountMonitorTest(TestCase):
             self.fail("Did not find the newly created account.")
         serialized_account = ExtPythonSerializer().serialize(new_account)
         self.assertJSONEqual(response.content, simplejson.dumps(serialized_account, cls=DateTimeWebAPIEncoder), "New account was not serialized correctly.")
+
+
+class AccountTest(TestCase):
+    fixtures = ['demodatadump.json']
+
+    def test_get_account_holdings(self):
+        c = Client()
+        response = c.get('/account/1/holdings')
+        self.assertEqual(response.status_code, 200, "Response status was not OK: {0}.".format(response.status_code))
+        account = Account.objects.get(pk=1)
+        serialized_holdings = simplejson.loads(ExtJsonSerializer().serialize(account.holdings))
+        self.assertListEqual(simplejson.loads(response.content), serialized_holdings, "Returned holdings JSON data did not match expected.")

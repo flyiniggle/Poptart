@@ -1,3 +1,5 @@
+import itertools
+
 from django.utils import timezone
 from django.test import TestCase
 
@@ -36,6 +38,7 @@ class AccountTest(TestCase):
                     quantity=holding.get("quantity"),
                     expected_quantity=holding.get("expected_quantity"),
                     expected_value=holding.get("expected_value")).save()
+
 
     def tearDown(self):
         super(AccountTest, self).tearDown()
@@ -81,6 +84,20 @@ class AccountTest(TestCase):
 
         self.assertEqual(account.holdings_drift, expected_holdings_drift,
                          "Account cash drift calculation did not return the expected results. Expected {0} and got {1}.".format(expected_holdings_drift, account.cash_drift))
+
+    def test_get_holding(self):
+        account = Account.objects.get(name=self.account_settings.name)
+
+        for security in self.holdings_settings.securities:
+            holding = account.holdings.filter(security=Security.objects.filter(ticker=security))
+            self.assertEqual(len(holding), 1, "Multiple holdings were found.")
+            self.assertIsInstance(holding[0], Holding, "No holding was found for %s." % security)
+            self.assertEqual(security, holding[0].security.ticker, "Incorrect security retrieved. Expected {0} but got {1}".format(security, holding[0].security.ticker))
+
+    def test_get_holdings(self):
+        account = Account.objects.get(name=self.account_settings.name)
+
+        self.assertEqual(len(self.holdings_settings.securities), len(account.holdings), "Account.holdings did not return the correct number of holdings.")
 
 
 class HoldingTest(TestCase):

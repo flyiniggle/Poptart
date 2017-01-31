@@ -97,6 +97,14 @@ class AccountDetail(View):
                 return HttpResponse(e, status="409 Conflict", content_type="application/json")
 
 
+class AccountHoldings(View):
+    def get(self, request, **kwargs):
+        acct_id = kwargs.get('acct_id')
+        account = Account.objects.get(pk=acct_id)
+        JSONHoldings = ExtJsonSerializer().serialize(account.holdings)
+        return HttpResponse(JSONHoldings, status=200, content_type="application/json")
+
+
 class DemoData(View):
     def get(self, request):
         securities = Security.objects.all()
