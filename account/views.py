@@ -47,10 +47,10 @@ class AccountMonitor(View):
         return HttpResponse(json.dumps(response, cls=DateTimeWebAPIEncoder), status="200 OK", content_type="application/json")
 
     def post(self, request):
-        if request.is_ajax():
-            n = ast.literal_eval(request.body)
-        else:
-            n = request.POST
+        n = request.POST
+        if not n:
+            return HttpResponse(ValidationError("No account creation data received."), status=400, content_type="application/json")
+
         account = Account(name=n.get('accountName'), description=n.get('accountDescription'), inception_date=timezone.now(),
                       total_cash=n.get('startingCash'), expected_cash=n.get('expectedCash'), max_pos_drift=n.get('maxPositionDrift'),
                       max_cash_drift=n.get('maxCashDrift'), max_total_drift=n.get('maxTotalDrift'), solution_name="AssetAlloc",
@@ -58,7 +58,7 @@ class AccountMonitor(View):
 
         account.full_clean()
         account.save()
-        return HttpResponse(json.dumps(ExtPythonSerializer().serialize(Account.objects.get(name=account.name)), cls=DateTimeWebAPIEncoder), status="201 Created", content_type="application/json")
+        return HttpResponse(json.dumps(ExtPythonSerializer().serialize(Account.objects.get(name=account.name)), cls=DateTimeWebAPIEncoder), status=201, content_type="application/json")
 
 
 class AccountSummary(View):

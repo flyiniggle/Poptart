@@ -1,3 +1,5 @@
+const querystring = require('querystring');
+
 const accountService = imports('services/account/AccountService');
 const Alert = imports('components/alerts/Alert.js');
 const ServerError = imports('support/Error.js');
@@ -18,10 +20,11 @@ const AccountController = function() {
 	};
 
 	self.createAccount = function(req, res) {
-		const service = accountService.createAccount(res);
+		const data = querystring.stringify(req.body),
+			service = accountService.createAccount(res, data);
 
 		service.on("end", processAccountCreation);
-		service.post(req.body);
+		service.post(data);
 	};
 
 

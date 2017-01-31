@@ -18,7 +18,7 @@ const AccountService = function() {
 		return getter;
 	};
 
-	self.createAccount = function(res) {
+	self.createAccount = function(res, data) {
 		var options = {},
 			getter;
 
@@ -26,7 +26,8 @@ const AccountService = function() {
 		options.method = "POST";
 		options.headers = {
 			"accept": "application/json",
-			"content-type": "application/json"
+			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Length': Buffer.byteLength(data)
 		};
 
 		getter = new Service.Service(options, res);
