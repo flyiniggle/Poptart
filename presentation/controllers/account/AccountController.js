@@ -1,6 +1,8 @@
 const querystring = require('querystring');
 
 const accountService = imports('services/account/AccountService');
+const securityMonitorService = imports('services/monitors/security/SecurityMonitorService');
+const ServiceMarshaller = imports('services/BaseService').ServiceMarshaller;
 const Alert = imports('components/alerts/Alert.js');
 const ServerError = imports('support/Error.js');
 
@@ -19,6 +21,17 @@ const AccountController = function() {
 		service.send();
 	};
 
+	self.getAccountHoldings = function(req, res) {
+		const holdingsService = accountService.getAccountHoldings(res, req.params.acct_id),
+			securityService = securityMonitorService.getSecurities(res),
+			marshaller = new ServiceMarshaller(res, [holdingsService, securityService]);
+
+		marshaller.on("end", function(res, data) {
+			processAccountHoldings(res, data);
+		});
+		marshaller.send();
+	};
+
 	self.createAccount = function(req, res) {
 		const data = querystring.stringify(req.body),
 			service = accountService.createAccount(res, data);
@@ -30,7 +43,6 @@ const AccountController = function() {
 
 	// Request Callbacks
 	function processAccountData(res, accountData) {
-
 		var responseData = {},
 			alerts = [],
 			JSONData, account,
@@ -68,6 +80,34 @@ const AccountController = function() {
 
 		res.send(responseData);
 	}
+
+	function processAccountHoldings(res, data) {
+		var holdingsData,
+			securitiesData,
+			error;
+
+		try {
+			holdingsData = JSON.parse(data[0]);
+			securitiesData = JSON.parse(data[1]);
+		} catch(e) {
+			return logging.error("Could not parse holdings data: %s", data);
+		}
+
+		if((error = holdingsData.error) || (error = securitiesData.error)) {
+			let serverError = new ServerError(res, error);
+
+			return serverError.send(500);
+		}
+
+		holdingsData.map(function(holding) {
+
+			holding.security = securitiesData.find(security => security.pk === holding.security);
+
+			return holding;
+		});
+
+		res.send(holdingsData);
+	};
 
 	function processAccountCreation(res, newAccount) {
 		var JSONData;

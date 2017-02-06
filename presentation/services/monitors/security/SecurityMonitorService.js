@@ -3,7 +3,7 @@ const Service = imports('services/BaseService.js');
 const SecurityMonitorService = function() {
 	const self = this;
 
-	self.getSecurities = function(req, res) {
+	self.getSecurities = function(res) {
 		var getter,
 			options = {};
 

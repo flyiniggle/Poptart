@@ -3,6 +3,7 @@
 {% block main_nav %}
 	{{ super() }}
 	<a class="navigationLink" href="/monitors/account">Account Monitor</a>
+	<a class="navigationLink" href="/index">Dashboard</a>
 {% endblock %}
 
 {% block summary %}
@@ -17,6 +18,15 @@
 	</div>
 	<div>
 		<h4>Client: </h4><span id="accountClient"></span>
+	</div>
+{% endblock %}
+
+{% block main %}
+	<div class="row">
+		<div class="panelHeader">
+			<h3>Account Holdings:</h3>
+		</div>
+		<table id="accountHoldingsTable"></table>
 	</div>
 {% endblock %}
 

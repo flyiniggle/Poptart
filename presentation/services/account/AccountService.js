@@ -18,6 +18,19 @@ const AccountService = function() {
 		return getter;
 	};
 
+	self.getAccountHoldings = function(res, acct) {
+		var options = {},
+			getter;
+
+		options.path = util.format("/account/%s/holdings", acct);
+		options.method = "GET";
+		options.headers = {Accept: "application:json"};
+
+		getter = new Service.Service(options, res);
+
+		return getter;
+	};
+
 	self.createAccount = function(res, data) {
 		var options = {},
 			getter;

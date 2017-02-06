@@ -7,7 +7,7 @@ const SecurityMonitorController = function() {
 
 	// Public Methods
 	self.getSecurities = function(req, res) {
-		var securitiesRequest = securityMonitorService.getSecurities(req, res);
+		var securitiesRequest = securityMonitorService.getSecurities(res);
 
 		securitiesRequest.on("end", function(res, data) {
 			processSecurities(res, data);

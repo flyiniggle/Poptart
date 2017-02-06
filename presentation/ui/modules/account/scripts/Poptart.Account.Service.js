@@ -28,10 +28,35 @@ Poptart.Account.Service = function() {
 		});
 	};
 
-	ReturnObj.getAccountHoldings = function() {
-		var data = {};
+	ReturnObj.getAccountHoldings = function(accountId) {
+		return Promise.resolve(jQuery.ajax({
+			type: "GET",
+			url: "/account/" + accountId + "/holdings/",
+			accept: "application/json",
+			contentType: "application/json"
+		})).catch(function(e) {
+			this.handleServerError(e);
+			return [];
+		}.bind(this)).then(function(data) {
+			return data.map(function(record) {
+				var sec = record.security;
 
-		return data;
+				return {
+					CUSIP: sec.CUSIP,
+					security: sec.description,
+					segment: sec.segment,
+					quantity: record.quantity,
+					value: record.value,
+					expected_quantity: record.expected_quantity,
+					expected_value: record.expected_value,
+					quantity_drift: record.quantity_drift,
+					value_drift: record.value_drift,
+					last_price: sec.last_price
+				};
+			});
+		}).catch(function(error) {
+			return alert(error);
+		});
 	};
 
 	ReturnObj.setAccountHoldings = function() {
