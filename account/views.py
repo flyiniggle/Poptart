@@ -100,8 +100,13 @@ class AccountDetail(View):
 class AccountHoldings(View):
     def get(self, request, **kwargs):
         acct_id = kwargs.get('acct_id')
+        g = request.GET
+        fields = g.getlist("fields", None)
         account = Account.objects.get(pk=acct_id)
-        JSONHoldings = ExtJsonSerializer().serialize(account.holdings)
+        if fields:
+            JSONHoldings = ExtJsonSerializer().serialize(account.holdings, fields=fields)
+        else:
+            JSONHoldings = ExtJsonSerializer().serialize(account.holdings)
         return HttpResponse(JSONHoldings, status=200, content_type="application/json")
 
 

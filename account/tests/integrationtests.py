@@ -1,5 +1,4 @@
 import simplejson
-import json
 from django.test import TestCase, Client
 
 from account.models import Account
@@ -123,3 +122,19 @@ class AccountTest(TestCase):
         account = Account.objects.get(pk=1)
         serialized_holdings = simplejson.loads(ExtJsonSerializer().serialize(account.holdings))
         self.assertListEqual(simplejson.loads(response.content), serialized_holdings, "Returned holdings JSON data did not match expected.")
+
+    def test_get_holdings_fields(self):
+        c = Client()
+        response = c.get('/account/1/holdings', {"fields": ["security", "expected_value", "value_drift"]})
+        self.assertEqual(response.status_code, 200, "Response status was not OK: {0}.".format(response.status_code))
+        holdings = simplejson.loads(response.content)
+        for holding in holdings:
+            self.assertTrue("pk" in holding, "Did not find expected key 'pk.")
+            self.assertTrue("security" in holding, "Did not find expected key 'security.")
+            self.assertTrue("expected_value" in holding, "Did not find expected key 'expected_value.")
+            self.assertTrue("value_drift" in holding, "Did not find expected key 'value_drift.")
+            self.assertEqual(len(holding), 4, "Holding containted unexpected keys.")
+
+
+
+

@@ -92,6 +92,12 @@ class Holding(models.Model):
     expected_value = models.DecimalField(default=0, decimal_places=2, max_digits=17)
     account = models.ForeignKey('Account', null=True, unique=False)
 
+    calculated_props = [
+        'value',
+        'quantity_drift',
+        'value_drift'
+    ]
+
     def __str__(self):
         return str("%s, %s" % (self.security, self.quantity))
 
@@ -117,4 +123,3 @@ class Holding(models.Model):
     @property
     def value_drift(self):
         return abs(self.value - Decimal(self.expected_value))
-
