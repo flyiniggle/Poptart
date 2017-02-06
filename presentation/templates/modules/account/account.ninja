@@ -29,6 +29,9 @@
 	</div>
 {% endblock %}
 
+{% block alerts %}
+{% endblock %}
+
 {% block js %}
 	{{ super() }}
 	<script type="text/javascript" src="/ui/modules/account/scripts/Poptart.Account.min.js"></script>

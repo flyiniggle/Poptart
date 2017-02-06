@@ -57,15 +57,23 @@ Poptart.Account.Service = function() {
 	};
 
 	ReturnObj.setAccountHoldings = function() {
-		var data = {};
 
-		return data;
+		return {};
 	};
 
-	ReturnObj.getAccountAlerts = function() {
-		var data = {};
+	ReturnObj.getAccountAlerts = function(accountId) {
 
-		return data;
+		return Promise.resolve(jQuery.ajax({
+			type: "GET",
+			url: "/account/" + accountId + "/data",
+			accept: "application/json",
+			contentType: "application/json"
+		})).catch(function(e) {
+			this.handleServerError(e);
+			return [];
+		}.bind(this)).then(function(data) {
+			return data.alerts;
+		});
 	};
 
 	return ReturnObj;

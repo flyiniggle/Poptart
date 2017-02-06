@@ -119,14 +119,15 @@ Poptart.Account = function() {
 	}
 
 	function displayAccountAlerts(data) {
+		var alertsHtml = nunjucks.render("/components/alerts/alerts.ninja", {alerts: data});
 
-		return data;
+		jQuery("#alertsContent").html(alertsHtml);
 	}
 
 	ReturnObj.init = function() {
 		Poptart.Account.Service.getAccountSummary(accountId).then(displayAccountSummary);
 		Poptart.Account.Service.getAccountHoldings(accountId).then(displayAccountHoldings);
-		//Poptart.Account.Service.getAccountAlerts(accountId).then(displayAccountAlerts);
+		Poptart.Account.Service.getAccountAlerts(accountId).then(displayAccountAlerts);
 	};
 
 	ReturnObj.updateHoldings = function() {
