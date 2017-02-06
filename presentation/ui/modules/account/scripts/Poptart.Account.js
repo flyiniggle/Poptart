@@ -23,11 +23,38 @@ Poptart.Account = function() {
 				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "*", hidden: true},
 				{headerText: "Segment", key: "segment", dataType: "string", width: "*"},
 				{headerText: "Quantity", key: "quantity", dataType: "number", width: "*"},
-				{headerText: "Value", key: "value", dataType: "number", width: "*"},
+				{
+					headerText: "Value",
+					key: "value",
+					dataType: "number",
+					width: "*",
+					unbound: true,
+					formula: function(row) {
+						return row.quantity * row.last_price;
+					}
+				},
 				{headerText: "Expected Quantity", key: "expected_quantity", dataType: "number", width: "*"},
 				{headerText: "Expected Value", key: "expected_value", dataType: "number", width: "*"},
-				{headerText: "Quantity Drift", key: "quantity_drift", dataType: "number", width: "*"},
-				{headerText: "Value Drift", key: "value_drift", dataType: "number", width: "*"},
+				{
+					headerText: "Quantity Drift",
+					key: "quantity_drift",
+					dataType: "number",
+					width: "*",
+					unbound: true,
+					formula: function(row) {
+						return Math.abs(row.expected_quantity - row.quantity);
+					}
+				},
+				{
+					headerText: "Value Drift",
+					key: "value_drift",
+					dataType: "number",
+					width: "*",
+					unbound: true,
+					formula: function(row) {
+						return Math.abs(row.expected_value - row.value);
+					}
+				},
 				{headerText: "Price", key: "last_price", dataType: "number", width: "*"}
 			],
 			features: [

@@ -46,11 +46,8 @@ Poptart.Account.Service = function() {
 					security: sec.description,
 					segment: sec.segment,
 					quantity: record.quantity,
-					value: record.value,
-					expected_quantity: record.expected_quantity,
 					expected_value: record.expected_value,
-					quantity_drift: record.quantity_drift,
-					value_drift: record.value_drift,
+					expected_quantity: record.expected_quantity,
 					last_price: sec.last_price
 				};
 			});
