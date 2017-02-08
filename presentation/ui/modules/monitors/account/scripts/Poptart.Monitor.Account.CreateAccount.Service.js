@@ -1,5 +1,5 @@
 Poptart.Monitor.Account.CreateAccount.Service = function() {
-	var ReturnObj = Object.create(Poptart.Services.service, {});
+	var ReturnObj = Object.create(Poptart.Services.Service, {});
 
 	ReturnObj.saveAccount = function(data) {
 		var payload = {

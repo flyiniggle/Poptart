@@ -1,31 +1,49 @@
-Poptart.Services = function() {
-	return {};
-}();
+(function() {
+	var S;
 
-Poptart.Services.service = function() {
+	S = Poptart.Services = {};
 
-	return {
-		handleServerError: function(error) {
-			var serverErrorContainer = document.createElement("div"),
-				serverErrorInterior = document.createElement("div"),
-				serverErrorClose = document.createElement("span");
+	S.Service = function() {
 
-			serverErrorContainer.setAttribute("id", "serverError");
-			serverErrorInterior.setAttribute("id", "serverErrorInterior");
-			serverErrorClose.setAttribute("id", "serverErrorClose");
-			serverErrorClose.className = "ion-android-close";
+		return {
+			handleServerError: function(error) {
+				var serverErrorContainer = document.createElement("div"),
+					serverErrorInterior = document.createElement("div"),
+					serverErrorClose = document.createElement("span");
 
-			serverErrorContainer.appendChild(serverErrorInterior);
-			serverErrorInterior.appendChild(serverErrorClose);
-			serverErrorInterior.innerHTML += nunjucks.render('support/error/error.ninja', JSON.parse(error.responseText));
+				serverErrorContainer.setAttribute("id", "serverError");
+				serverErrorInterior.setAttribute("id", "serverErrorInterior");
+				serverErrorClose.setAttribute("id", "serverErrorClose");
+				serverErrorClose.className = "ion-android-close";
 
-			jQuery("body").prepend(serverErrorContainer);
-			jQuery("#serverErrorClose").on("click", this.closeServerErrorNotification);
-		},
+				serverErrorContainer.appendChild(serverErrorInterior);
+				serverErrorInterior.appendChild(serverErrorClose);
+				serverErrorInterior.innerHTML += nunjucks.render('support/error/error.ninja', JSON.parse(error.responseText));
 
-		closeServerErrorNotification: function() {
-			jQuery("#serverError").remove();
-		}
+				jQuery("body").prepend(serverErrorContainer);
+				jQuery("#serverErrorClose").on("click", this.closeServerErrorNotification);
+			},
+
+			closeServerErrorNotification: function() {
+				jQuery("#serverError").remove();
+			}
+		};
+
+	}();
+
+	S.AsyncService = Object.create(Poptart.Services.Service);
+
+	S.AsyncService.makeRequest = function(options) {
+		jQuery.extend(options, {
+			type: "GET",
+			accept: "application/json",
+			contentType: "application/json"
+		});
+
+		return Promise.resolve(jQuery.ajax(options)).catch(function(e) {
+			this.handleServerError(e);
+			return [];
+		}.bind(this));
 	};
 
-}();
+})();

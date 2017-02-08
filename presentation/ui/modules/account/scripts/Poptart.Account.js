@@ -116,6 +116,8 @@ Poptart.Account = function() {
 				}
 			]
 		});
+
+
 	}
 
 	function displayAccountAlerts(data) {
@@ -125,9 +127,9 @@ Poptart.Account = function() {
 	}
 
 	ReturnObj.init = function() {
-		Poptart.Account.Service.getAccountSummary(accountId).then(displayAccountSummary);
-		Poptart.Account.Service.getAccountHoldings(accountId).then(displayAccountHoldings);
-		Poptart.Account.Service.getAccountAlerts(accountId).then(displayAccountAlerts);
+		Poptart.Account.Service.SummaryService.get(accountId).then(displayAccountSummary);
+		Poptart.Account.Service.HoldingsService.get(accountId).then(displayAccountHoldings);
+		Poptart.Account.Service.AlertsService.get(accountId).then(displayAccountAlerts);
 	};
 
 	ReturnObj.updateHoldings = function() {

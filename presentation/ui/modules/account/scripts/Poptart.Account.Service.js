@@ -1,23 +1,13 @@
 Poptart.Account.Service = function() {
 	"use strict";
-	var ReturnObj = Object.create(Poptart.Services.service, {});
+	var ReturnObj = Object.create(Poptart.Services.Service, {});
 
-	ReturnObj.getAccountSummary = function(accountId) {
+	ReturnObj.SummaryService = Object.create(Poptart.Services.AsyncService, {});
+	ReturnObj.SummaryService.get = function(accountId) {
 
-		return Promise.resolve(jQuery.ajax({
-			type: "GET",
-			url: "/account/" + accountId + "/data",
-			accept: "application/json",
-			contentType: "application/json"
-		})).catch(function(e) {
-			this.handleServerError(e);
-			return {
-				account: "",
-				description: "",
-				manager: "",
-				client: ""
-			};
-		}.bind(this)).then(function(data) {
+		return this.makeRequest({
+			url: "/account/" + accountId + "/data"
+		}).then(function(data) {
 			data = data.account;
 			return {
 				account: data.name,
@@ -25,19 +15,16 @@ Poptart.Account.Service = function() {
 				manager: data.manager,
 				client: data.client_1_id
 			};
+		}).catch(function(error) {
+			return alert(error);
 		});
 	};
 
-	ReturnObj.getAccountHoldings = function(accountId) {
-		return Promise.resolve(jQuery.ajax({
-			type: "GET",
-			url: "/account/" + accountId + "/holdings/",
-			accept: "application/json",
-			contentType: "application/json"
-		})).catch(function(e) {
-			this.handleServerError(e);
-			return [];
-		}.bind(this)).then(function(data) {
+	ReturnObj.HoldingsService = Object.create(Poptart.Services.AsyncService, {});
+	ReturnObj.HoldingsService.get = function(accountId) {
+		return this.makeRequest({
+			url: "/account/" + accountId + "/holdings"
+		}).then(function(data) {
 			return data.map(function(record) {
 				var sec = record.security;
 
@@ -56,23 +43,20 @@ Poptart.Account.Service = function() {
 		});
 	};
 
-	ReturnObj.setAccountHoldings = function() {
+	ReturnObj.HoldingsService.set = function() {
 
 		return {};
 	};
 
-	ReturnObj.getAccountAlerts = function(accountId) {
+	ReturnObj.AlertsService = Object.create(Poptart.Services.AsyncService, {});
+	ReturnObj.AlertsService.get = function(accountId) {
 
-		return Promise.resolve(jQuery.ajax({
-			type: "GET",
-			url: "/account/" + accountId + "/data",
-			accept: "application/json",
-			contentType: "application/json"
-		})).catch(function(e) {
-			this.handleServerError(e);
-			return [];
-		}.bind(this)).then(function(data) {
+		return this.makeRequest({
+			url: "/account/" + accountId + "/data"
+		}).then(function(data) {
 			return data.alerts;
+		}).catch(function(error) {
+			return alert(error);
 		});
 	};
 
