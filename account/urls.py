@@ -1,7 +1,5 @@
 from django.conf.urls import url
 
-from . import views
-
 from account.views import AccountMonitor, AccountSummary, AccountDetail, AccountHoldings, DemoData
 
 urlpatterns = [

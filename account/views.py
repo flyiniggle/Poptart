@@ -1,6 +1,5 @@
 import simplejson as json
 from random import randrange
-import ast
 
 from django.views.generic import View
 from django.http import HttpResponse
