@@ -28,6 +28,10 @@ module.exports = function(grunt) {
 			css: {
 				files: ['presentation/ui/**/*.css'],
 				tasks: ['sync', 'newer:cssmin']
+			},
+			less: {
+				files: ['presentation/ui/css/ignite/themes/infragistics/LESS/*.less'],
+				tasks: ['less', 'newer:cssmin']
 			}
 		},
 		uglify: {
@@ -51,6 +55,15 @@ module.exports = function(grunt) {
 				dest: 'presentation/static/ui/',
 				ext: '.min.css',
 				expand: true
+			}
+		},
+		less: {
+			options: {
+				cwd: 'presentation/ui/css/ignite/themes/infragistics',
+				paths: ['/LESS']
+			},
+			files: {
+				'infragistics.theme.css': 'infragistics.theme.less'
 			}
 		},
 		eslint: {
