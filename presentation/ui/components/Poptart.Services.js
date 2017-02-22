@@ -31,19 +31,49 @@
 
 	}();
 
-	S.AsyncService = Object.create(Poptart.Services.Service);
+	(function() {
+		var promise, cache;
 
-	S.AsyncService.makeRequest = function(options) {
-		jQuery.extend(options, {
-			type: "GET",
-			accept: "application/json",
-			contentType: "application/json"
-		});
+		S.AsyncService = Object.create(Poptart.Services.Service);
 
-		return Promise.resolve(jQuery.ajax(options)).catch(function(e) {
-			this.handleServerError(e);
-			return [];
-		}.bind(this));
-	};
+		S.AsyncService.promiseMeACache = function(options) {
+			jQuery.extend(options, {
+				type: "GET",
+				accept: "application/json",
+				contentType: "application/json"
+			});
+
+			if(!promise) {
+				promise = Promise.resolve(jQuery.ajax(options)).catch(function(e) {
+					this.handleServerError(e);
+					return;
+				}.bind(this)).then(function(data) {
+					cache = data;
+					return cache;
+				});
+
+				return promise;
+			} else if (!promise.isFulfilled()) {
+				return promise;
+			}
+
+			return Promise.resolve(cache);
+		};
+
+		S.AsyncService.promiseMe = function(options) {
+			jQuery.extend(options, {
+				type: "GET",
+				accept: "application/json",
+				contentType: "application/json"
+			});
+
+			return Promise.resolve(jQuery.ajax(options)).catch(function(e) {
+				this.handleServerError(e);
+				return;
+			}.bind(this)).then(function(data) {
+				return data;
+			});
+		};
+	})();
 
 })();

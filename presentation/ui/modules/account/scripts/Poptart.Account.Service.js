@@ -5,7 +5,7 @@ Poptart.Account.Service = function() {
 	ReturnObj.SummaryService = Object.create(Poptart.Services.AsyncService, {});
 	ReturnObj.SummaryService.get = function(accountId) {
 
-		return this.makeRequest({
+		return this.promiseMe({
 			url: "/account/" + accountId + "/data"
 		}).then(function(data) {
 			data = data.account;
@@ -22,7 +22,7 @@ Poptart.Account.Service = function() {
 
 	ReturnObj.HoldingsService = Object.create(Poptart.Services.AsyncService, {});
 	ReturnObj.HoldingsService.get = function(accountId) {
-		return this.makeRequest({
+		return this.promiseMeACache({
 			url: "/account/" + accountId + "/holdings"
 		}).then(function(data) {
 			return data.map(function(record) {
@@ -51,7 +51,7 @@ Poptart.Account.Service = function() {
 	ReturnObj.AlertsService = Object.create(Poptart.Services.AsyncService, {});
 	ReturnObj.AlertsService.get = function(accountId) {
 
-		return this.makeRequest({
+		return this.promiseMe({
 			url: "/account/" + accountId + "/data"
 		}).then(function(data) {
 			return data.alerts;

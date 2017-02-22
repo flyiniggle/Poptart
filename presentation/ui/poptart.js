@@ -252,5 +252,9 @@ Poptart.Ignite = {
 	 */
 	constants: {
 		INPUT_HEIGHT: "20px"
+	},
+	loaderConfig: {
+		scriptPath: '/ui/scripts/ignite',
+		cssPath: '/ui/css/ignite'
 	}
 };

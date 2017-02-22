@@ -22,6 +22,20 @@
 
 {% block main %}
 	<div class="row">
+		<div>
+			<div class="panelHeader">
+				<h3>Holdings:</h3>
+			</div>
+			<div id="accountHoldingsChart"></div>
+		</div>
+		<div>
+			<div class="panelHeader">
+				<h3>Drift:</h3>
+			</div>
+			<div id="accountDriftChart"></div>
+		</div>
+	</div>
+	<div class="row">
 		<div class="panelHeader">
 			<h3>Account Holdings:</h3>
 		</div>
