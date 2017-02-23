@@ -1,0 +1,18 @@
+#accountHoldingsChartContainer, #accountDriftChartContainer {
+	display: inline-block;
+	float: left;
+	width: 47%;
+}
+
+#accountHoldingsChartContainer {
+	padding-right: 6%;
+}
+
+#accountHoldingsChart, #accountHoldingsChartLegend {
+	display: inline-block;
+}
+
+#accountHoldingsChart_chart_container, #accountDriftChart_chart_container, #accountHoldingsChartLegend {
+	background-color: rgba(0, 0, 0, 0);
+	border: none;
+}

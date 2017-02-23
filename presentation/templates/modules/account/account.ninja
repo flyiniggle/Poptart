@@ -1,5 +1,10 @@
 {% extends 'BaseLayout.ninja' %}
 
+{% block css %}
+	{{ super() }}
+	<link href="/ui/modules/account/css/styles.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
 {% block main_nav %}
 	{{ super() }}
 	<a class="navigationLink" href="/monitors/account">Account Monitor</a>
@@ -22,13 +27,14 @@
 
 {% block main %}
 	<div class="row">
-		<div>
+		<div id="accountHoldingsChartContainer">
 			<div class="panelHeader">
 				<h3>Holdings:</h3>
 			</div>
 			<div id="accountHoldingsChart"></div>
+			<div id="accountHoldingsChartLegend"></div>
 		</div>
-		<div>
+		<div id="accountDriftChartContainer">
 			<div class="panelHeader">
 				<h3>Drift:</h3>
 			</div>

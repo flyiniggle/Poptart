@@ -121,12 +121,11 @@ Poptart.Account = function() {
 	function displayAccountHoldingsCharts(data) {
 		jQuery("#accountDriftChart").igDataChart({
 			dataSource: data,
-			width: "45%",
 			height: "300px",
 			axes: [{
 				name: "xAxis",
 				type: "categoryX",
-				label: "Holding",
+				label: "security",
 				labelTopMargin: 5
 			}, {
 				name: "yAxis",
@@ -144,6 +143,19 @@ Poptart.Account = function() {
 				valueMemberPath: "quantity"
 			}]
 		});
+		jQuery("#accountHoldingsChart").igPieChart({
+			dataSource: data,
+			width: "49%",
+			height: "300px",
+			dataValue: "quantity",
+			dataLabel: "security",
+			legend: {
+				element: "accountHoldingsChartLegend",
+				type: "item",
+				height: "300px",
+				width: "49%"
+			}
+		});
 	}
 
 	function displayAccountAlerts(data) {
@@ -155,7 +167,7 @@ Poptart.Account = function() {
 	ReturnObj.init = function() {
 		var loaderConfig = Object.create(Poptart.Ignite.loaderConfig, {});
 
-		loaderConfig.resources = "igGrid.Updating,igDataChart.Category";
+		loaderConfig.resources = "igGrid.Updating,igDataChart.Category,igPieChart";
 		loaderConfig.ready = function() {
 			Poptart.Account.Service.SummaryService.get(accountId).then(displayAccountSummary);
 			Poptart.Account.Service.HoldingsService.get(accountId).then(displayAccountHoldings);
