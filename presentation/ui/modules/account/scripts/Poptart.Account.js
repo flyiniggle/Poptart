@@ -66,53 +66,17 @@ Poptart.Account = function() {
 					enableDeleteRow: true,
 					autoCommit: false,
 					columnSettings: [
-						{
-							columnKey: "pk",
-							readOnly: true
-						},
-						{
-							columnKey: "ticker",
-							readOnly: true
-						},
-						{
-							columnKey: "security",
-							readOnly: true
-						},
-						{
-							columnKey: "CUSIP",
-							readOnly: true
-						},
-						{
-							columnKey: "quantityDrift",
-							readOnly: true
-						},
-						{
-							columnKey: "value",
-							readOnly: true
-						},
-						{
-							columnKey: "valueDrift",
-							readOnly: true
-						},
-						{
-							columnKey: "securityLastPrice",
-							readOnly: true
-						},
-						{
-							columnKey: "quantity",
-							editorType: "numeric",
-							readOnly: false
-						},
-						{
-							columnKey: "expectedQuantity",
-							editorType: "numeric",
-							readOnly: false
-						},
-						{
-							columnKey: "expectedValue",
-							editorType: "currency",
-							readOnly: false
-						}
+						{columnKey: "pk", readOnly: true},
+						{columnKey: "ticker", readOnly: true},
+						{columnKey: "security", readOnly: true},
+						{columnKey: "CUSIP", readOnly: true},
+						{columnKey: "quantityDrift", readOnly: true},
+						{columnKey: "value", readOnly: true},
+						{columnKey: "valueDrift", readOnly: true},
+						{columnKey: "securityLastPrice", readOnly: true},
+						{columnKey: "quantity", editorType: "numeric", readOnly: false},
+						{columnKey: "expectedQuantity", editorType: "numeric", readOnly: false},
+						{columnKey: "expectedValue", editorType: "currency", readOnly: false}
 					]
 				}
 			]
