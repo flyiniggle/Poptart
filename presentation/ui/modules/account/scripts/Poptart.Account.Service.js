@@ -30,12 +30,13 @@ Poptart.Account.Service = function() {
 
 				return {
 					CUSIP: sec.CUSIP,
+					ticker: sec.ticker,
 					security: sec.description,
 					segment: sec.segment,
 					quantity: record.quantity,
-					expected_value: record.expected_value,
-					expected_quantity: record.expected_quantity,
-					last_price: sec.last_price
+					expectedValue: record.expected_value,
+					expectedQuantity: record.expected_quantity,
+					lastPrice: sec.last_price
 				};
 			});
 		}).catch(function(error) {

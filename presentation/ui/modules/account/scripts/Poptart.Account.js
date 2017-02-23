@@ -19,9 +19,9 @@ Poptart.Account = function() {
 			primaryKey: "CUSIP",
 			autoGenerateColumns: false,
 			columns: [
-				{headerText: 'Security', key: "security", dataType: "string", width: "*"},
+				{headerText: 'Security', key: "ticker", dataType: "string", width: "*"},
+				{headerText: 'Description', key: "security", dataType: "string", width: "*"},
 				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "*", hidden: true},
-				{headerText: "Segment", key: "segment", dataType: "string", width: "*"},
 				{headerText: "Quantity", key: "quantity", dataType: "number", width: "*"},
 				{
 					headerText: "Value",
@@ -30,32 +30,33 @@ Poptart.Account = function() {
 					width: "*",
 					unbound: true,
 					formula: function(row) {
-						return row.quantity * row.last_price;
+						return row.quantity * row.lastPrice;
 					}
 				},
-				{headerText: "Expected Quantity", key: "expected_quantity", dataType: "number", width: "*"},
-				{headerText: "Expected Value", key: "expected_value", dataType: "number", width: "*"},
+				{headerText: "Expected Quantity", key: "expectedQuantity", dataType: "number", width: "*"},
+				{headerText: "Expected Value", key: "expectedValue", dataType: "number", width: "*"},
 				{
 					headerText: "Quantity Drift",
-					key: "quantity_drift",
+					key: "quantityDrift",
 					dataType: "number",
 					width: "*",
 					unbound: true,
 					formula: function(row) {
-						return Math.abs(row.expected_quantity - row.quantity);
+						return Math.abs(row.expectedQuantity - row.quantity);
 					}
 				},
 				{
 					headerText: "Value Drift",
-					key: "value_drift",
+					key: "valueDrift",
 					dataType: "number",
 					width: "*",
 					unbound: true,
 					formula: function(row) {
-						return Math.abs(row.expected_value - row.value);
+						return Math.abs(row.expectedValue - row.value);
 					}
 				},
-				{headerText: "Price", key: "last_price", dataType: "number", width: "*"}
+				{headerText: "Segment", key: "segment", dataType: "string", width: "*"},
+				{headerText: "Price", key: "lastPrice", dataType: "number", width: "*"}
 			],
 			features: [
 				{
@@ -70,15 +71,15 @@ Poptart.Account = function() {
 							readOnly: true
 						},
 						{
-							columnKey: "securityId",
+							columnKey: "ticker",
 							readOnly: true
 						},
 						{
-							columnKey: "securityName",
+							columnKey: "security",
 							readOnly: true
 						},
 						{
-							columnKey: "segment",
+							columnKey: "CUSIP",
 							readOnly: true
 						},
 						{
@@ -125,7 +126,7 @@ Poptart.Account = function() {
 			axes: [{
 				name: "xAxis",
 				type: "categoryX",
-				label: "security",
+				label: "ticker",
 				labelTopMargin: 5
 			}, {
 				name: "yAxis",
@@ -148,7 +149,7 @@ Poptart.Account = function() {
 			width: "49%",
 			height: "300px",
 			dataValue: "quantity",
-			dataLabel: "security",
+			dataLabel: "ticker",
 			legend: {
 				element: "accountHoldingsChartLegend",
 				type: "item",
