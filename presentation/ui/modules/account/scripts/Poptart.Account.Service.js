@@ -29,6 +29,7 @@ Poptart.Account.Service = function() {
 				var sec = record.security;
 
 				return {
+					pk: record.pk,
 					CUSIP: sec.CUSIP,
 					ticker: sec.ticker,
 					security: sec.description,

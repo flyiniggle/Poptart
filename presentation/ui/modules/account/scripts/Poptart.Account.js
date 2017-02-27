@@ -16,7 +16,7 @@ Poptart.Account = function() {
 			autoCommit: true,
 			dataSource: data,
 			dataSourceType: "json",
-			primaryKey: "CUSIP",
+			primaryKey: "pk",
 			autoGenerateColumns: false,
 			columns: [
 				{headerText: 'Security', key: "ticker", dataType: "string", width: "*"},
@@ -56,7 +56,9 @@ Poptart.Account = function() {
 					}
 				},
 				{headerText: "Segment", key: "segment", dataType: "string", width: "*"},
-				{headerText: "Price", key: "lastPrice", dataType: "number", width: "*"}
+				{headerText: "Price", key: "lastPrice", dataType: "number", width: "*"},
+				//hidden columns
+				{headerText: "pk", key: "pk", dataType: "number", hidden: true}
 			],
 			features: [
 				{

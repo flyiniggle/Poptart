@@ -12,6 +12,10 @@
 	display: inline-block;
 }
 
+#accountHoldingsChart, #accountDriftChart {
+	margin-top:10px;;
+}
+
 #accountHoldingsChart_chart_container, #accountDriftChart_chart_container, #accountHoldingsChartLegend {
 	background-color: rgba(0, 0, 0, 0);
 	border: none;
