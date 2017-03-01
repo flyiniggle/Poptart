@@ -134,7 +134,7 @@ Poptart.Account = function() {
 	ReturnObj.init = function() {
 		var loaderConfig = Object.create(Poptart.Ignite.loaderConfig, {});
 
-		loaderConfig.resources = "igGrid.Adding.Updating,igDataChart.Category,igPieChart";
+		loaderConfig.resources = "igGrid.Updating,igDataChart.Category,igPieChart";
 		loaderConfig.ready = function() {
 			Poptart.Account.Service.SummaryService.get(accountId).then(displayAccountSummary);
 			Poptart.Account.Service.HoldingsService.get(accountId).then(displayAccountHoldings);

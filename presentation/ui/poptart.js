@@ -10,14 +10,10 @@ var Poptart = function() {
 
 	//Global Setup
 	///////////////
-
-	//jQuery
 	jQuery.noConflict();
 
-	//Nunjucks
 	nunjucks.configure('/templates');
 
-	//Knockout
 	//Allow script bindings for knockout
 	var render = function(options) {
 		var rendered = [], key, val;
@@ -156,15 +152,6 @@ var Poptart = function() {
 
 		return target;
 	};
-
-	//Ignite
-	jQuery.ig.dependencies.push({
-		widget: "Adding",
-		parentWidget: "igGrid,igHierarchicalGrid",
-		dependency: [{name: "igGrid"}, {name: "igEditors"}, {name: "igValidator"}, {name: "GridShared"}],
-		scripts: ["/ui/components/Poptart.Ignite.Grid.Adding.min.js"],
-		css: []
-	});
 
 	// Public methods
 	///////////////////
