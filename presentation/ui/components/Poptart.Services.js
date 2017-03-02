@@ -32,11 +32,11 @@
 	}();
 
 	(function() {
-		var promise, cache;
-
 		S.AsyncService = Object.create(Poptart.Services.Service);
 
 		S.AsyncService.promiseMeACache = function(options) {
+			var promise, cache;
+
 			jQuery.extend(options, {
 				type: "GET",
 				accept: "application/json",
