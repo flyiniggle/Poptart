@@ -12,7 +12,7 @@ var Poptart = function() {
 	///////////////
 	jQuery.noConflict();
 
-	nunjucks.configure('/templates');
+	nunjucks.configure('/templates', {web: {useCache: false}, noCache: true});
 
 	//Allow script bindings for knockout
 	var render = function(options) {
@@ -70,7 +70,7 @@ var Poptart = function() {
 	//Register knockout components
 	/////////////////////////////////
 
-	//Register knockout bindings3+
+	//Register knockout bindings3
 	/////////////////////////////////
 	ko.bindingHandlers.IgCurrencyEditor = {
 		init: function(element, valueAccessor) {
