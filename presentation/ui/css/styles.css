@@ -49,6 +49,33 @@ body {
 	padding: 2px;
 	font-weight: bold;
 	background-color: rgb(61, 61, 61);
+	border-bottom: 3px solid rgb(53, 148, 209);
+	border-radius: 3px;
+}
+
+.panelToolBar {
+	width: 100%;
+	height: 30px;
+	background-color: rgb(117, 169, 203);
+	padding: 2px;
+	vertical-align: middle;
+}
+
+.panelToolBarGroup {
+	height: 25px;
+	padding-right: 10px;
+	padding-left: 10px;
+	border-right: 1px solid rgb(61, 61, 61);
+	float: left;
+}
+
+.panelToolBarGroup:first-child {
+	margin-left: 15px;
+	border-left: 1px solid rgb(61, 61, 61);
+}
+
+.panelToolBar >> .ui-igcombo-wrapper {
+	vertical-align: middle;
 }
 
 #controlsContainer {

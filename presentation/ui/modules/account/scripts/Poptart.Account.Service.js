@@ -50,6 +50,27 @@ Poptart.Account.Service = function() {
 		return {};
 	};
 
+	ReturnObj.SecuritiesService = Object.create(Poptart.Services.AsyncService, {});
+	ReturnObj.SecuritiesService.get = function() {
+		return this.promiseMeACache({
+			url: "/account/securities"
+		}).then(function(data) {
+			return data.map(function(sec) {
+
+				return {
+					pk: sec.pk,
+					CUSIP: sec.CUSIP,
+					ticker: sec.ticker,
+					security: sec.description,
+					segment: sec.segment,
+					lastPrice: sec.last_price
+				};
+			});
+		}).catch(function(error) {
+			return alert(error);
+		});
+	};
+
 	ReturnObj.AlertsService = Object.create(Poptart.Services.AsyncService, {});
 	ReturnObj.AlertsService.get = function(accountId) {
 

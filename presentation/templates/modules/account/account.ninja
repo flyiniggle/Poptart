@@ -45,6 +45,13 @@
 		<div class="panelHeader">
 			<h3>Account Holdings:</h3>
 		</div>
+		<div class="panelToolBar">
+			<div class="panelToolBarGroup">
+				<form>
+					<label for="addHolding">Add Holdings: </label><input id="addHolding"/>
+				</form>
+			</div>
+		</div>
 		<table id="accountHoldingsTable"></table>
 	</div>
 {% endblock %}

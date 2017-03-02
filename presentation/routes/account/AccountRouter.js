@@ -11,6 +11,8 @@ module.exports = function(express) {
 
 	router.post('/create', accountController.createAccount);
 
+	router.get('/securities', accountController.getSecurities);
+
 	router.get('/:acct_id', accountController.getAccount);
 
 	router.get('/:acct_id/data', accountController.getAccountData);

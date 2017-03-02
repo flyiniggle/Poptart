@@ -21,7 +21,6 @@ Poptart.Account = function() {
 			columns: [
 				{headerText: 'Security', key: "ticker", dataType: "string", width: "*"},
 				{headerText: 'Description', key: "security", dataType: "string", width: "*"},
-				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "*", hidden: true},
 				{headerText: "Quantity", key: "quantity", dataType: "number", width: "*"},
 				{
 					headerText: "Value",
@@ -58,7 +57,8 @@ Poptart.Account = function() {
 				{headerText: "Segment", key: "segment", dataType: "string", width: "*"},
 				{headerText: "Price", key: "lastPrice", dataType: "number", width: "*"},
 				//hidden columns
-				{headerText: "pk", key: "pk", dataType: "number", hidden: true}
+				{headerText: "pk", key: "pk", dataType: "number", hidden: true},
+				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "*", hidden: true}
 			],
 			features: [
 				{
@@ -82,6 +82,32 @@ Poptart.Account = function() {
 					]
 				}
 			]
+		});
+	}
+
+	function displaySecurityList(data) {
+		jQuery("#addHolding").igCombo({
+			textKey: "ticker",
+			valueKey: "pk",
+			autoComplete: true,
+			mode: 'editable',
+			height: Poptart.Ignite.constants.INPUT_HEIGHT,
+			dataSource: new jQuery.ig.DataSource({
+				dataSource: data,
+				schema: new jQuery.ig.DataSchema("json", {
+					fields: [
+						{name: "pk", type: "number"},
+						{name: "ticker", type: "string"},
+						{name: "CUSIP", type: "number"},
+						{name: "segment", type: "number"},
+						{name: "lastPrice", type: "number"},
+						{name: "security", type: "string"}
+					]
+				})
+			}),
+			selectionChanged: function(evt, ui) {
+				jQuery("#accountHoldingsTable").igGridUpdating("addRow", ui.items[0].data);
+			}
 		});
 	}
 
@@ -134,12 +160,13 @@ Poptart.Account = function() {
 	ReturnObj.init = function() {
 		var loaderConfig = Object.create(Poptart.Ignite.loaderConfig, {});
 
-		loaderConfig.resources = "igGrid.Updating,igDataChart.Category,igPieChart";
+		loaderConfig.resources = "igGrid.Updating,igDataChart.Category,igPieChart,igCombo";
 		loaderConfig.ready = function() {
 			Poptart.Account.Service.SummaryService.get(accountId).then(displayAccountSummary);
 			Poptart.Account.Service.HoldingsService.get(accountId).then(displayAccountHoldings);
 			Poptart.Account.Service.HoldingsService.get(accountId).then(displayAccountHoldingsCharts);
 			Poptart.Account.Service.AlertsService.get(accountId).then(displayAccountAlerts);
+			Poptart.Account.Service.SecuritiesService.get().then(displaySecurityList);
 		};
 		jQuery.ig.loader(loaderConfig);
 	};

@@ -32,6 +32,13 @@ const AccountController = function() {
 		marshaller.send();
 	};
 
+	self.getSecurities = function(req, res) {
+		const service = securityMonitorService.getSecurities(res);
+
+		service.on("end", processGetSecurities);
+		service.send();
+	};
+
 	self.createAccount = function(req, res) {
 		const data = querystring.stringify(req.body),
 			service = accountService.createAccount(res, data);
@@ -124,6 +131,24 @@ const AccountController = function() {
 			serverError.send(500);
 		} else {
 			res.end();
+		}
+	}
+
+	function processGetSecurities(res, data) {
+		var JSONData;
+
+		try {
+			JSONData = JSON.parse(data);
+		} catch(e) {
+			logging.error("Could not parse data: %s", data);
+		}
+
+		if(JSONData.error) {
+			let serverError = new ServerError(res, JSONData.error);
+
+			serverError.send(500);
+		} else {
+			res.send(JSONData);
 		}
 	}
 };
