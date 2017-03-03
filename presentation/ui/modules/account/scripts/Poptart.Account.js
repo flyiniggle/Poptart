@@ -144,8 +144,13 @@ Poptart.Account = function() {
 						{name: "security", type: "string"}
 					]
 				})
-			})
-		}).on("keyup", function(e) {
+			}),
+			selectionChanging: function(e) {
+				if (e.keyCode === 13) {
+					e.preventDefault();
+				}
+			}
+		}).on("keydown", function(e) {
 			var combo, securities, table, firstEmptyRow, i;
 
 			if(e.keyCode === 13) {
