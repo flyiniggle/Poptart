@@ -14,7 +14,10 @@ Poptart.Account = function() {
 		jQuery("#accountHoldingsTable").igGrid({
 			width: '100%',
 			autoCommit: true,
-			dataSource: data,
+			dataSource: new jQuery.ig.DataSource({
+				dataSource: data,
+				type: "json"
+			}),
 			dataSourceType: "json",
 			primaryKey: "pk",
 			autoGenerateColumns: false,
@@ -63,7 +66,7 @@ Poptart.Account = function() {
 			features: [
 				{
 					name: "Updating",
-					editMode: "row",
+					editMode: "cell",
 					enableAddRow: false,
 					enableDeleteRow: true,
 					autoCommit: false,
@@ -76,9 +79,38 @@ Poptart.Account = function() {
 						{columnKey: "value", readOnly: true},
 						{columnKey: "valueDrift", readOnly: true},
 						{columnKey: "securityLastPrice", readOnly: true},
-						{columnKey: "quantity", editorType: "numeric", readOnly: false},
-						{columnKey: "expectedQuantity", editorType: "numeric", readOnly: false},
-						{columnKey: "expectedValue", editorType: "currency", readOnly: false}
+						{
+							columnKey: "quantity",
+							editorType: "numeric",
+							readOnly: false,
+							editorOptions: {
+								blur: function() {
+									jQuery("#accountHoldingsTable").igGridUpdating("endEdit", true, true);
+								}
+							}
+						},
+						{
+							columnKey: "expectedQuantity",
+							editorType: "numeric",
+							readOnly: false,
+							editorOptions: {
+								blur: function() {
+									jQuery("#accountHoldingsTable").igGridUpdating("endEdit", true, true);
+								}
+							}
+						},
+						{
+							columnKey: "expectedValue",
+							editorType: "currency",
+							readOnly: false,
+							editorOptions: {
+								blur: function() {
+									jQuery("#accountHoldingsTable").igGridUpdating("endEdit", true, true);
+								}
+							}
+						},
+						{columnKey: "segment", readOnly: true},
+						{columnKey: "lastPrice", readOnly: true}
 					]
 				}
 			]
@@ -91,7 +123,15 @@ Poptart.Account = function() {
 			valueKey: "pk",
 			autoComplete: true,
 			mode: 'editable',
+			selectItemBySpaceKey: true,
+			multiSelection: {
+				enabled: true,
+				addWithKeyModifier: false,
+				showCheckboxes: false,
+				itemSeparator: ', '
+			},
 			height: Poptart.Ignite.constants.INPUT_HEIGHT,
+			width: "500px",
 			dataSource: new jQuery.ig.DataSource({
 				dataSource: data,
 				schema: new jQuery.ig.DataSchema("json", {
@@ -104,9 +144,37 @@ Poptart.Account = function() {
 						{name: "security", type: "string"}
 					]
 				})
-			}),
-			selectionChanged: function(evt, ui) {
-				jQuery("#accountHoldingsTable").igGridUpdating("addRow", ui.items[0].data);
+			})
+		}).on("keyup", function(e) {
+			var combo, securities, table, firstEmptyRow, i;
+
+			if(e.keyCode === 13) {
+				combo = jQuery("#addHolding");
+				table = jQuery("#accountHoldingsTable");
+				securities = combo.igCombo("selectedItems");
+
+				combo.igCombo("select",
+					combo.igCombo("activeIndex"),
+					{
+						closeDropDown: "true",
+						focusCombo: "false",
+						additive: "true",
+						keepInputText: "true",
+						keepHighlighting: "true"
+					}
+				);
+
+				for(i = 0; i < securities.length; i++) {
+					table.igGridUpdating("addRow", securities[i].data);
+				}
+
+				combo.igCombo("deselectAll");
+
+				firstEmptyRow = table.igGrid("option", "dataSource").dataView().findIndex(function(item) {
+					return !item.quantity;
+				});
+
+				table.igGridUpdating("startEdit", table.igGrid("getElementInfo", table.igGrid("rowAt", firstEmptyRow)).rowId, "quantity");
 			}
 		});
 	}
