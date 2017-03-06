@@ -3,6 +3,145 @@ Poptart.Account = function() {
 	var ReturnObj = {},
 		accountId = window.location.href.split("/").pop();
 
+	function getTableColumns() {
+		return [
+			{headerText: 'Security', key: "ticker", dataType: "string", width: "85px"},
+			{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
+			{headerText: 'Description', key: "security", dataType: "string", width: "250px"},
+			{headerText: "Quantity", key: "quantity", dataType: "number", width: "85px"},
+			{
+				headerText: "Value",
+				key: "value",
+				dataType: "number",
+				width: "85px",
+				unbound: true,
+				formula: function(row) {
+					return row.quantity * row.lastPrice;
+				}
+			},
+			{headerText: "Expected Quantity", key: "expectedQuantity", dataType: "number", width: "110px"},
+			{headerText: "Expected Value", key: "expectedValue", dataType: "number", width: "100px"},
+			{
+				headerText: "Quantity Drift",
+				key: "quantityDrift",
+				dataType: "number",
+				width: "100px",
+				unbound: true,
+				formula: function(row) {
+					return Math.abs(row.expectedQuantity - row.quantity);
+				}
+			},
+			{
+				headerText: "Value Drift",
+				key: "valueDrift",
+				dataType: "number",
+				width: "85px",
+				unbound: true,
+				formula: function(row) {
+					return Math.abs(row.expectedValue - row.value);
+				}
+			},
+			{headerText: "Segment", key: "segment", dataType: "string", width: "85px"},
+			{headerText: "Price", key: "lastPrice", dataType: "number", width: "85px"},
+			//hidden columns
+			{headerText: "pk", key: "pk", dataType: "number", hidden: true}
+		];
+	}
+
+	function getUpdatingSettings(table, data) {
+		var securityEditorSettings, enableAdd, enableDelete;
+
+		if(table.attr("id") === "accountHoldingsTable") {
+			enableDelete = true;
+			securityEditorSettings = {columnKey: "ticker", readOnly: true};
+		} else {
+			enableDelete = false;
+			securityEditorSettings = {
+				columnKey: "ticker",
+				readOnly: false,
+				editorType: "combo",
+				editorOptions: {
+					textKey: "ticker",
+					valueKey: "pk",
+					autoComplete: true,
+					mode: 'editable',
+					selectItemBySpaceKey: true,
+					height: Poptart.Ignite.constants.INPUT_HEIGHT,
+					dataSource: new jQuery.ig.DataSource({
+						dataSource: data,
+						schema: new jQuery.ig.DataSchema("json", {
+							fields: [
+								{name: "pk", type: "number"},
+								{name: "ticker", type: "string"},
+								{name: "CUSIP", type: "number"},
+								{name: "segment", type: "number"},
+								{name: "lastPrice", type: "number"},
+								{name: "security", type: "string"}
+							]
+						})
+					}),
+					selectionChanged: function(evt, ui) {
+						table.igGridUpdating("updateRow", table.igGrid("option", "dataSource").dataView()[0].pk, ui.items[0].data);
+						table.igGridUpdating("startEdit", table.igGrid("option", "dataSource").dataView()[0].pk, "quantity");
+					},
+					blur: function() {
+						table.igGridUpdating("endEdit", true, true);
+					}
+				}
+			};
+		}
+
+		return {
+			name: "Updating",
+			editMode: "cell",
+			enableAddRow: false,
+			enableDeleteRow: enableDelete,
+			autoCommit: false,
+			columnSettings: [
+				{columnKey: "pk", readOnly: true},
+				securityEditorSettings,
+				{columnKey: "security", readOnly: true},
+				{columnKey: "CUSIP", readOnly: true},
+				{columnKey: "quantityDrift", readOnly: true},
+				{columnKey: "value", readOnly: true},
+				{columnKey: "valueDrift", readOnly: true},
+				{columnKey: "securityLastPrice", readOnly: true},
+				{
+					columnKey: "quantity",
+					editorType: "numeric",
+					readOnly: false,
+					editorOptions: {
+						blur: function() {
+							table.igGridUpdating("endEdit", true, true);
+						}
+					}
+				},
+				{
+					columnKey: "expectedQuantity",
+					editorType: "numeric",
+					readOnly: false,
+					editorOptions: {
+						blur: function() {
+							table.igGridUpdating("endEdit", true, true);
+						}
+					}
+				},
+				{
+					columnKey: "expectedValue",
+					editorType: "currency",
+					readOnly: false,
+					editorOptions: {
+						blur: function() {
+							table.igGridUpdating("endEdit", true, true);
+						}
+					}
+				},
+				{columnKey: "segment", readOnly: true},
+				{columnKey: "lastPrice", readOnly: true}
+			]
+		};
+	}
+
 	function displayAccountSummary(data) {
 		jQuery("#accountName").html(data.account);
 		jQuery("#accountDescription").html(data.description);
@@ -11,7 +150,8 @@ Poptart.Account = function() {
 	}
 
 	function displayAccountHoldings(data) {
-		var tableEle = jQuery("#accountHoldingsTable")
+		var tableEle = jQuery("#accountHoldingsTable");
+
 		tableEle.igGrid({
 			width: '100%',
 			autoCommit: true,
@@ -22,166 +162,37 @@ Poptart.Account = function() {
 			dataSourceType: "json",
 			primaryKey: "pk",
 			autoGenerateColumns: false,
-			columns: [
-				{headerText: 'Security', key: "ticker", dataType: "string", width: "*"},
-				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "*"},
-				{headerText: 'Description', key: "security", dataType: "string", width: "*"},
-				{headerText: "Quantity", key: "quantity", dataType: "number", width: "*"},
-				{
-					headerText: "Value",
-					key: "value",
-					dataType: "number",
-					width: "*",
-					unbound: true,
-					formula: function(row) {
-						return row.quantity * row.lastPrice;
-					}
-				},
-				{headerText: "Expected Quantity", key: "expectedQuantity", dataType: "number", width: "*"},
-				{headerText: "Expected Value", key: "expectedValue", dataType: "number", width: "*"},
-				{
-					headerText: "Quantity Drift",
-					key: "quantityDrift",
-					dataType: "number",
-					width: "*",
-					unbound: true,
-					formula: function(row) {
-						return Math.abs(row.expectedQuantity - row.quantity);
-					}
-				},
-				{
-					headerText: "Value Drift",
-					key: "valueDrift",
-					dataType: "number",
-					width: "*",
-					unbound: true,
-					formula: function(row) {
-						return Math.abs(row.expectedValue - row.value);
-					}
-				},
-				{headerText: "Segment", key: "segment", dataType: "string", width: "*"},
-				{headerText: "Price", key: "lastPrice", dataType: "number", width: "*"},
-				//hidden columns
-				{headerText: "pk", key: "pk", dataType: "number", hidden: true}
-			],
-			features: [
-				{
-					name: "Updating",
-					editMode: "cell",
-					enableAddRow: false,
-					enableDeleteRow: true,
-					autoCommit: false,
-					columnSettings: [
-						{columnKey: "pk", readOnly: true},
-						{columnKey: "ticker", readOnly: true},
-						{columnKey: "security", readOnly: true},
-						{columnKey: "CUSIP", readOnly: true},
-						{columnKey: "quantityDrift", readOnly: true},
-						{columnKey: "value", readOnly: true},
-						{columnKey: "valueDrift", readOnly: true},
-						{columnKey: "securityLastPrice", readOnly: true},
-						{
-							columnKey: "quantity",
-							editorType: "numeric",
-							readOnly: false,
-							editorOptions: {
-								blur: function() {
-									tableEle.igGridUpdating("endEdit", true, true);
-								}
-							}
-						},
-						{
-							columnKey: "expectedQuantity",
-							editorType: "numeric",
-							readOnly: false,
-							editorOptions: {
-								blur: function() {
-									tableEle.igGridUpdating("endEdit", true, true);
-								}
-							}
-						},
-						{
-							columnKey: "expectedValue",
-							editorType: "currency",
-							readOnly: false,
-							editorOptions: {
-								blur: function() {
-									tableEle.igGridUpdating("endEdit", true, true);
-								}
-							}
-						},
-						{columnKey: "segment", readOnly: true},
-						{columnKey: "lastPrice", readOnly: true}
-					]
-				}
-			]
+			columns: getTableColumns(),
+			features: [getUpdatingSettings(tableEle)]
 		});
 	}
 
-	function displaySecurityList(data) {
-		jQuery("#addHolding").igCombo({
-			textKey: "ticker",
-			valueKey: "pk",
-			autoComplete: true,
-			mode: 'editable',
-			selectItemBySpaceKey: true,
-			multiSelection: {
-				enabled: true,
-				addWithKeyModifier: false,
-				showCheckboxes: false,
-				itemSeparator: ', '
-			},
-			height: Poptart.Ignite.constants.INPUT_HEIGHT,
-			width: "500px",
+	function displaySecurityAddingTable(data) {
+		var tableEle = jQuery("#addHolding");
+
+		tableEle.igGrid({
+			width: '100%',
+			autoCommit: true,
+			showHeader: false,
 			dataSource: new jQuery.ig.DataSource({
-				dataSource: data,
-				schema: new jQuery.ig.DataSchema("json", {
-					fields: [
-						{name: "pk", type: "number"},
-						{name: "ticker", type: "string"},
-						{name: "CUSIP", type: "number"},
-						{name: "segment", type: "number"},
-						{name: "lastPrice", type: "number"},
-						{name: "security", type: "string"}
-					]
-				})
+				dataSource: [{
+					pk: 1,
+					CUSIP: "",
+					ticker: "",
+					security: "",
+					segment: "",
+					quantity: "",
+					expectedValue: "",
+					expectedQuantity: "",
+					lastPrice: ""
+				}],
+				type: "json"
 			}),
-			selectionChanging: function(e) {
-				if (e.keyCode === 13) {
-					e.preventDefault();
-				}
-			}
-		}).on("keydown", function(e) {
-			var combo, securities, table, firstEmptyRow, i;
-
-			if(e.keyCode === 13) {
-				combo = jQuery("#addHolding");
-				table = jQuery("#accountHoldingsTable");
-				securities = combo.igCombo("selectedItems");
-
-				combo.igCombo("select",
-					combo.igCombo("activeIndex"),
-					{
-						closeDropDown: "true",
-						focusCombo: "false",
-						additive: "true",
-						keepInputText: "true",
-						keepHighlighting: "true"
-					}
-				);
-
-				for(i = 0; i < securities.length; i++) {
-					table.igGridUpdating("addRow", securities[i].data);
-				}
-
-				combo.igCombo("deselectAll");
-
-				firstEmptyRow = table.igGrid("option", "dataSource").dataView().findIndex(function(item) {
-					return !item.quantity;
-				});
-
-				table.igGridUpdating("startEdit", table.igGrid("getElementInfo", table.igGrid("rowAt", firstEmptyRow)).rowId, "quantity");
-			}
+			dataSourceType: "json",
+			primaryKey: "pk",
+			autoGenerateColumns: false,
+			columns: getTableColumns(),
+			features: [getUpdatingSettings(tableEle, data)]
 		});
 	}
 
@@ -240,7 +251,7 @@ Poptart.Account = function() {
 			Poptart.Account.Service.HoldingsService.get(accountId).then(displayAccountHoldings);
 			Poptart.Account.Service.HoldingsService.get(accountId).then(displayAccountHoldingsCharts);
 			Poptart.Account.Service.AlertsService.get(accountId).then(displayAccountAlerts);
-			Poptart.Account.Service.SecuritiesService.get().then(displaySecurityList);
+			Poptart.Account.Service.SecuritiesService.get().then(displaySecurityAddingTable);
 		};
 		jQuery.ig.loader(loaderConfig);
 	};
