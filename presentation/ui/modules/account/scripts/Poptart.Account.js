@@ -11,7 +11,8 @@ Poptart.Account = function() {
 	}
 
 	function displayAccountHoldings(data) {
-		var tableEle = jQuery("#accountHoldingsTable")
+		var tableEle = jQuery("#accountHoldingsTable");
+
 		tableEle.igGrid({
 			width: '100%',
 			autoCommit: true,
