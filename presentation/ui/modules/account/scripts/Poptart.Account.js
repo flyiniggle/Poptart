@@ -11,7 +11,8 @@ Poptart.Account = function() {
 	}
 
 	function displayAccountHoldings(data) {
-		jQuery("#accountHoldingsTable").igGrid({
+		var tableEle = jQuery("#accountHoldingsTable")
+		tableEle.igGrid({
 			width: '100%',
 			autoCommit: true,
 			dataSource: new jQuery.ig.DataSource({
@@ -23,6 +24,7 @@ Poptart.Account = function() {
 			autoGenerateColumns: false,
 			columns: [
 				{headerText: 'Security', key: "ticker", dataType: "string", width: "*"},
+				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "*"},
 				{headerText: 'Description', key: "security", dataType: "string", width: "*"},
 				{headerText: "Quantity", key: "quantity", dataType: "number", width: "*"},
 				{
@@ -60,8 +62,7 @@ Poptart.Account = function() {
 				{headerText: "Segment", key: "segment", dataType: "string", width: "*"},
 				{headerText: "Price", key: "lastPrice", dataType: "number", width: "*"},
 				//hidden columns
-				{headerText: "pk", key: "pk", dataType: "number", hidden: true},
-				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "*", hidden: true}
+				{headerText: "pk", key: "pk", dataType: "number", hidden: true}
 			],
 			features: [
 				{
@@ -85,7 +86,7 @@ Poptart.Account = function() {
 							readOnly: false,
 							editorOptions: {
 								blur: function() {
-									jQuery("#accountHoldingsTable").igGridUpdating("endEdit", true, true);
+									tableEle.igGridUpdating("endEdit", true, true);
 								}
 							}
 						},
@@ -95,7 +96,7 @@ Poptart.Account = function() {
 							readOnly: false,
 							editorOptions: {
 								blur: function() {
-									jQuery("#accountHoldingsTable").igGridUpdating("endEdit", true, true);
+									tableEle.igGridUpdating("endEdit", true, true);
 								}
 							}
 						},
@@ -105,7 +106,7 @@ Poptart.Account = function() {
 							readOnly: false,
 							editorOptions: {
 								blur: function() {
-									jQuery("#accountHoldingsTable").igGridUpdating("endEdit", true, true);
+									tableEle.igGridUpdating("endEdit", true, true);
 								}
 							}
 						},
