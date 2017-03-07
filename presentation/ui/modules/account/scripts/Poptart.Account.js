@@ -49,13 +49,20 @@ Poptart.Account = function() {
 	}
 
 	function getUpdatingSettings(table, data) {
-		var securityEditorSettings, enableAdd, enableDelete;
+		var securityEditorSettings, enableDelete, editMode,
+			blurHandler, editEndedHandler,
+			doneLabel = "Done";
 
 		if(table.attr("id") === "accountHoldingsTable") {
+			editMode = "cell";
 			enableDelete = true;
+			blurHandler = tableBlurHandler(table);
 			securityEditorSettings = {columnKey: "ticker", readOnly: true};
 		} else {
+			editMode = "row";
 			enableDelete = false;
+			editEndedHandler = tableAddEditEndingHandler;
+			doneLabel = "Add";
 			securityEditorSettings = {
 				columnKey: "ticker",
 				readOnly: false,
@@ -64,8 +71,9 @@ Poptart.Account = function() {
 					textKey: "ticker",
 					valueKey: "pk",
 					autoComplete: true,
+					autoSelectFirstMatch: false,
 					mode: 'editable',
-					selectItemBySpaceKey: true,
+					selectItemBySpaceKey: false,
 					height: Poptart.Ignite.constants.INPUT_HEIGHT,
 					dataSource: new jQuery.ig.DataSource({
 						dataSource: data,
@@ -80,12 +88,16 @@ Poptart.Account = function() {
 							]
 						})
 					}),
-					selectionChanged: function(evt, ui) {
-						table.igGridUpdating("updateRow", table.igGrid("option", "dataSource").dataView()[0].pk, ui.items[0].data);
-						table.igGridUpdating("startEdit", table.igGrid("option", "dataSource").dataView()[0].pk, "quantity");
-					},
-					blur: function() {
-						table.igGridUpdating("endEdit", true, true);
+					selectionChanging: function(evt, ui) {
+						if(ui.items.length) {
+							try {
+								table.igGridUpdating("updateRow", table.igGrid("option", "dataSource").dataView()[0].pk, ui.items[0].data);
+							} catch(e) {
+								table.igGridUpdating("endEdit");
+								table.igGridUpdating("updateRow", table.igGrid("option", "dataSource").dataView()[0].pk, ui.items[0].data);
+							}
+							table.igGridUpdating("startEdit", table.igGrid("option", "dataSource").dataView()[0].pk, "quantity");
+						}
 					}
 				}
 			};
@@ -93,10 +105,12 @@ Poptart.Account = function() {
 
 		return {
 			name: "Updating",
-			editMode: "cell",
+			editMode: editMode,
 			enableAddRow: false,
 			enableDeleteRow: enableDelete,
 			autoCommit: false,
+			doneLabel: doneLabel,
+			editCellEnded: editEndedHandler,
 			columnSettings: [
 				{columnKey: "pk", readOnly: true},
 				securityEditorSettings,
@@ -111,9 +125,7 @@ Poptart.Account = function() {
 					editorType: "numeric",
 					readOnly: false,
 					editorOptions: {
-						blur: function() {
-							table.igGridUpdating("endEdit", true, true);
-						}
+						blur: blurHandler
 					}
 				},
 				{
@@ -121,9 +133,7 @@ Poptart.Account = function() {
 					editorType: "numeric",
 					readOnly: false,
 					editorOptions: {
-						blur: function() {
-							table.igGridUpdating("endEdit", true, true);
-						}
+						blur: blurHandler
 					}
 				},
 				{
@@ -131,15 +141,43 @@ Poptart.Account = function() {
 					editorType: "currency",
 					readOnly: false,
 					editorOptions: {
-						blur: function() {
-							table.igGridUpdating("endEdit", true, true);
-						}
+						blur: blurHandler
 					}
 				},
 				{columnKey: "segment", readOnly: true},
 				{columnKey: "lastPrice", readOnly: true}
 			]
 		};
+	}
+
+	function tableBlurHandler(table) {
+		return function() {
+			table.igGridUpdating("endEdit", true, true);
+		};
+	}
+
+	function tableAddEditEndingHandler(evt, ui) {
+		var addingTable = jQuery("#addHolding"),
+			dataSource = addingTable.igGrid("option", "dataSource");
+
+		if(ui.update) {
+			jQuery("#accountHoldingsTable").igGridUpdating("addRow", dataSource.data()[0]);
+			addingTable.igGridUpdating("updateRow",
+				addingTable.igGrid("option", "dataSource").dataView()[0].pk,
+				{
+					pk: 1,
+					CUSIP: "",
+					ticker: "",
+					security: "",
+					segment: "",
+					quantity: "",
+					expectedValue: "",
+					expectedQuantity: "",
+					lastPrice: ""
+				});
+
+			addingTable.igGridUpdating("startEdit", 1, "ticker");
+		}
 	}
 
 	function displayAccountSummary(data) {
