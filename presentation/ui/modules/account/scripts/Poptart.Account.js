@@ -88,16 +88,24 @@ Poptart.Account = function() {
 							]
 						})
 					}),
-					selectionChanging: function(evt, ui) {
+					selectionChangied: function(evt, ui) {
 						if(ui.items.length) {
 							try {
 								table.igGridUpdating("updateRow", table.igGrid("option", "dataSource").dataView()[0].pk, ui.items[0].data);
+								table.igGridUpdating("updateRow", table.igGrid("option", "dataSource").dataView()[0].pk, ui.items[0].data);
+
 							} catch(e) {
 								table.igGridUpdating("endEdit");
 								table.igGridUpdating("updateRow", table.igGrid("option", "dataSource").dataView()[0].pk, ui.items[0].data);
 							}
-							table.igGridUpdating("startEdit", table.igGrid("option", "dataSource").dataView()[0].pk, "quantity");
 						}
+					},
+					rendered: function(evt, ui) {
+						jQuery(ui.element).on("keyup", function(evt) {
+							if(evt.keyCode === 9 || evt.keyCode === 13) {
+								table.igGridUpdating("startEdit", table.igGrid("option", "dataSource").dataView()[0].pk, "quantity");
+							}
+						});
 					}
 				}
 			};
