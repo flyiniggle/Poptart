@@ -110,7 +110,7 @@ Poptart.Account = function() {
 			enableDeleteRow: enableDelete,
 			autoCommit: false,
 			doneLabel: doneLabel,
-			editCellEnded: editEndedHandler,
+			editRowEnded: editEndedHandler,
 			columnSettings: [
 				{columnKey: "pk", readOnly: true},
 				securityEditorSettings,
