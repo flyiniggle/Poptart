@@ -11,7 +11,8 @@ Poptart.Account = function() {
 	}
 
 	function displayAccountHoldings(data) {
-		var tableEle = jQuery("#accountHoldingsTable")
+		var tableEle = jQuery("#accountHoldingsTable");
+
 		tableEle.igGrid({
 			width: '100%',
 			autoCommit: true,
@@ -147,12 +148,7 @@ Poptart.Account = function() {
 						{name: "security", type: "string"}
 					]
 				})
-			}),
-			selectionChanging: function(e) {
-				if (e.keyCode === 13) {
-					e.preventDefault();
-				}
-			}
+			})
 		}).on("keydown", function(e) {
 			var combo, securities, table, firstEmptyRow, i;
 
