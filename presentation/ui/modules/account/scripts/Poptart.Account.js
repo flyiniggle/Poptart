@@ -124,6 +124,8 @@ Poptart.Account = function() {
 			valueKey: "pk",
 			autoComplete: true,
 			mode: 'editable',
+			delayInputChangeProcessing: 0,
+			autoSelectFirstMatch: false,
 			selectItemBySpaceKey: true,
 			multiSelection: {
 				enabled: true,
