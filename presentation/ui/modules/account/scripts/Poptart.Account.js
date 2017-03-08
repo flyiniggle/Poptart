@@ -72,6 +72,7 @@ Poptart.Account = function() {
 					valueKey: "pk",
 					autoComplete: true,
 					autoSelectFirstMatch: false,
+					delayInputChangeProcessing: 0,
 					mode: 'editable',
 					selectItemBySpaceKey: false,
 					height: Poptart.Ignite.constants.INPUT_HEIGHT,
@@ -100,12 +101,11 @@ Poptart.Account = function() {
 							}
 						}
 					},
-					rendered: function(evt, ui) {
-						jQuery(ui.element).on("keyup", function(evt) {
-							if(evt.keyCode === 9 || evt.keyCode === 13) {
-								table.igGridUpdating("startEdit", table.igGrid("option", "dataSource").dataView()[0].pk, "quantity");
-							}
-						});
+					dropDownClosing: function(evt, ui) {
+						var combo = jQuery(ui.element);
+
+						combo.igCombo("select", combo.igCombo("itemsFromIndex", combo.igCombo("activeIndex")));
+
 					}
 				}
 			};
