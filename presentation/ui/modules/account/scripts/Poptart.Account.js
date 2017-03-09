@@ -229,6 +229,12 @@ Poptart.Account = function() {
 		jQuery("#alertsContent").html(alertsHtml);
 	}
 
+	function saveAccount() {
+		var data = jQuery("#accountHoldingsTable").igGrid("option", "dataSource").data();
+
+		Poptart.Account.Service.HoldingsService.set(accountId, data);
+	}
+
 	ReturnObj.init = function() {
 		var loaderConfig = Object.create(Poptart.Ignite.loaderConfig, {});
 
@@ -241,6 +247,8 @@ Poptart.Account = function() {
 			Poptart.Account.Service.SecuritiesService.get().then(displaySecurityList);
 		};
 		jQuery.ig.loader(loaderConfig);
+
+		jQuery("#saveAccount").on("click", saveAccount);
 	};
 
 	ReturnObj.updateHoldings = function() {

@@ -45,9 +45,17 @@ Poptart.Account.Service = function() {
 		});
 	};
 
-	ReturnObj.HoldingsService.set = function() {
+	ReturnObj.HoldingsService.set = function(accountId, data) {
 
-		return {};
+		return this.promiseMe({
+			url: "/account/" + accountId,
+			type: "POST",
+			data: JSON.stringify(data)
+		}).then(function(data) {
+			return data;
+		}).catch(function(error) {
+			return alert(error);
+		});
 	};
 
 	ReturnObj.SecuritiesService = Object.create(Poptart.Services.AsyncService, {});

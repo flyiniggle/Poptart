@@ -37,11 +37,11 @@
 		S.AsyncService.promiseMeACache = function(options) {
 			var promise, cache;
 
-			jQuery.extend(options, {
+			jQuery.extend({
 				type: "GET",
 				accept: "application/json",
 				contentType: "application/json"
-			});
+			}, options);
 
 			if(!promise) {
 				promise = Promise.resolve(jQuery.ajax(options)).catch(function(e) {
@@ -61,11 +61,11 @@
 		};
 
 		S.AsyncService.promiseMe = function(options) {
-			jQuery.extend(options, {
+			jQuery.extend({
 				type: "GET",
 				accept: "application/json",
 				contentType: "application/json"
-			});
+			}, options);
 
 			return Promise.resolve(jQuery.ajax(options)).catch(function(e) {
 				this.handleServerError(e);

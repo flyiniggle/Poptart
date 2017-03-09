@@ -47,6 +47,12 @@ const AccountController = function() {
 		service.post(data);
 	};
 
+	self.saveAccount = function(req, res) {
+		const data = JSON.stringify(req.body),
+			service = accountService;
+
+		logging.log(data);
+	};
 
 	// Request Callbacks
 	function processAccountData(res, accountData) {

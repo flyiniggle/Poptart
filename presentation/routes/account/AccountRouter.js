@@ -15,6 +15,8 @@ module.exports = function(express) {
 
 	router.get('/:acct_id', accountController.getAccount);
 
+	router.post('/:acct_id', accountController.saveAccount);
+
 	router.get('/:acct_id/data', accountController.getAccountData);
 
 	router.get('/:acct_id/holdings', accountController.getAccountHoldings);
