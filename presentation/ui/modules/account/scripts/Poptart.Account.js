@@ -24,27 +24,27 @@ Poptart.Account = function() {
 			primaryKey: "pk",
 			autoGenerateColumns: false,
 			columns: [
-				{headerText: 'Security', key: "ticker", dataType: "string", width: "*"},
-				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "*"},
-				{headerText: 'Description', key: "security", dataType: "string", width: "*"},
-				{headerText: "Quantity", key: "quantity", dataType: "number", width: "*"},
+				{headerText: 'Security', key: "ticker", dataType: "string", width: "115px"},
+				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
+				{headerText: 'Description', key: "security", dataType: "string", width: "200px"},
+				{headerText: "Quantity", key: "quantity", dataType: "number", width: "85px"},
 				{
 					headerText: "Value",
 					key: "value",
 					dataType: "number",
-					width: "*",
+					width: "85px",
 					unbound: true,
 					formula: function(row) {
 						return row.quantity * row.lastPrice;
 					}
 				},
-				{headerText: "Expected Quantity", key: "expectedQuantity", dataType: "number", width: "*"},
-				{headerText: "Expected Value", key: "expectedValue", dataType: "number", width: "*"},
+				{headerText: "Expected Quantity", key: "expectedQuantity", dataType: "number", width: "100px"},
+				{headerText: "Expected Value", key: "expectedValue", dataType: "number", width: "100px"},
 				{
 					headerText: "Quantity Drift",
 					key: "quantityDrift",
 					dataType: "number",
-					width: "*",
+					width: "100px",
 					unbound: true,
 					formula: function(row) {
 						return Math.abs(row.expectedQuantity - row.quantity);
@@ -54,14 +54,14 @@ Poptart.Account = function() {
 					headerText: "Value Drift",
 					key: "valueDrift",
 					dataType: "number",
-					width: "*",
+					width: "100px",
 					unbound: true,
 					formula: function(row) {
 						return Math.abs(row.expectedValue - row.value);
 					}
 				},
-				{headerText: "Segment", key: "segment", dataType: "string", width: "*"},
-				{headerText: "Price", key: "lastPrice", dataType: "number", width: "*"},
+				{headerText: "Segment", key: "segment", dataType: "string", width: "85px"},
+				{headerText: "Price", key: "lastPrice", dataType: "number", width: "85px"},
 				//hidden columns
 				{headerText: "pk", key: "pk", dataType: "number", hidden: true}
 			],
@@ -125,6 +125,8 @@ Poptart.Account = function() {
 			valueKey: "pk",
 			autoComplete: true,
 			mode: 'editable',
+			delayInputChangeProcessing: 0,
+			autoSelectFirstMatch: false,
 			selectItemBySpaceKey: true,
 			multiSelection: {
 				enabled: true,
@@ -146,12 +148,7 @@ Poptart.Account = function() {
 						{name: "security", type: "string"}
 					]
 				})
-			}),
-			selectionChanging: function(e) {
-				if (e.keyCode === 13) {
-					e.preventDefault();
-				}
-			}
+			})
 		}).on("keydown", function(e) {
 			var combo, securities, table, firstEmptyRow, i;
 
