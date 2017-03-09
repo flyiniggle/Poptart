@@ -5,7 +5,7 @@ Poptart.Account = function() {
 
 	function getTableColumns() {
 		return [
-			{headerText: 'Security', key: "ticker", dataType: "string", width: "85px"},
+			{headerText: 'Security', key: "ticker", dataType: "string", width: "115px"},
 			{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
 			{headerText: 'Description', key: "security", dataType: "string", width: "250px"},
 			{headerText: "Quantity", key: "quantity", dataType: "number", width: "85px"},
@@ -69,7 +69,7 @@ Poptart.Account = function() {
 				editorType: "combo",
 				editorOptions: {
 					textKey: "ticker",
-					valueKey: "pk",
+					valueKey: "ticker",
 					autoComplete: true,
 					autoSelectFirstMatch: false,
 					delayInputChangeProcessing: 0,
