@@ -10,10 +10,14 @@ var Poptart = function() {
 
 	//Global Setup
 	///////////////
+
+	// jQuery
 	jQuery.noConflict();
 
+	// Nunucks
 	nunjucks.configure('/templates', {web: {useCache: false}, noCache: true});
 
+	// Knockout
 	//Allow script bindings for knockout
 	var render = function(options) {
 		var rendered = [], key, val;
@@ -152,6 +156,18 @@ var Poptart = function() {
 
 		return target;
 	};
+
+	// Ignites
+	jQuery.ig.dependencies.push({
+		widget: "Adding",
+		parentWidget: "igGrid,igHierarchicalGrid",
+		dependency: [{name: "igGrid"}, {name: "igEditors"}, {name: "igValidator"}, {name: "GridShared"}],
+		scripts: ["/ui/components/Poptart.Ignite.Adding.min.js"]
+	});
+
+	/*jQuery.ig.dependencies.find(function(item) {
+		return item.widget === "igGrid";
+	}).dependency.push({name: "igGridAdding"});*/
 
 	// Public methods
 	///////////////////

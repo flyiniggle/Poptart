@@ -67,9 +67,12 @@ Poptart.Account = function() {
 			],
 			features: [
 				{
+					name: "Adding"
+				},
+				{
 					name: "Updating",
 					editMode: "cell",
-					enableAddRow: false,
+					enableAddRow: true,
 					enableDeleteRow: true,
 					autoCommit: false,
 					columnSettings: [
@@ -238,7 +241,7 @@ Poptart.Account = function() {
 	ReturnObj.init = function() {
 		var loaderConfig = Object.create(Poptart.Ignite.loaderConfig, {});
 
-		loaderConfig.resources = "igGrid.Updating,igDataChart.Category,igPieChart,igCombo";
+		loaderConfig.resources = "igGrid.Updating.Adding,igDataChart.Category,igPieChart,igCombo";
 		loaderConfig.ready = function() {
 			Poptart.Account.Service.SummaryService.get(accountId).then(displayAccountSummary);
 			Poptart.Account.Service.HoldingsService.get(accountId).then(displayAccountHoldings);
