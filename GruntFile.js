@@ -59,11 +59,19 @@ module.exports = function(grunt) {
 		},
 		less: {
 			options: {
-				cwd: 'presentation/ui/css/ignite/themes/infragistics',
 				paths: ['/LESS']
 			},
-			files: {
-				'infragistics.theme.css': 'infragistics.theme.less'
+			ignite: {
+				files: [
+					{
+						dest: 'presentation/ui/css/ignite/themes/infragistics/infragistics.theme.css',
+						src: 'presentation/ui/css/ignite/themes/infragistics/LESS/infragistics.theme.less'
+					},
+					{
+						dest: 'presentation/ui/css/ignite/themes/infragistics/poptart.infragistics.modules.css',
+						src: 'presentation/ui/css/ignite/themes/infragistics/LESS/poptart.infragistics.modules.less'
+					}
+				]
 			}
 		},
 		eslint: {

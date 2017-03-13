@@ -11,6 +11,7 @@
 	<link href="/ui/css/ionicons/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
 	<link href="/ui/css/ignite/structure/infragistics.css" rel="stylesheet" type="text/css"/>
 	<link href="/ui/css/ignite/themes/infragistics/infragistics.theme.css" rel="stylesheet"/>
+	<link href="/ui/css/ignite/themes/infragistics/poptart.infragistics.modules.css" rel="stylesheet"/>
 	<link href="/ui/css/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
 	<link href="/ui/css/jquery-ui/custom/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
 

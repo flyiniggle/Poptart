@@ -1,8 +1,11 @@
 (function() {
-	var dataModel = {
+	var dataModel, addingRowCounter;
+
+	dataModel = {
 		model: [],
-		addNewRow: function(row) {
+		addNewRow: function(rowId, row) {
 			this.model.push({
+				rowId: rowId,
 				row: row
 			});
 			return this.model;
@@ -120,10 +123,11 @@
 					touchDeleteClick: jQuery.proxy(this._touchDeleteButtonClick, this),
 					touchDeleteKeyUp: jQuery.proxy(this._touchDeleteButtonKeyUp, this)
 				};
-			this._addNewRowHandlers = this._addNewRowHandlers ||
+			this._addingRowHandlers = this._addNewRowHandlers ||
 				{
-					focus: jQuery.proxy(this._addRowFocus, this),
-					blur: jQuery.proxy(this._addRowBlur, this)
+					//"focus": this._addRowFocus.bind(this),
+					//"blur": this._addRowBlur.bind(this),
+					"click": this._addingRowClick.bind(this)
 				};
 			this._validationHandlers = this._validationHandlers ||
 				{
@@ -172,6 +176,9 @@
 			}
 			this._addAddingRow();
 		},
+		_addingRowClick: function(evt) {
+			this._addAddingRow();
+		},
 		_generateDummyLayout: function(cols) {
 			var i, layout = [[]];
 
@@ -180,7 +187,7 @@
 			}
 			return layout;
 		},
-		_createAddingRowHtml: function(visibleColumns, fixed) {
+		_createAddingRowHtml: function(rowId, visibleColumns, fixed) {
 			var newRow = document.createElement("tr"),
 				layout, i, j;
 
@@ -189,18 +196,25 @@
 				for(j = 0; j < layout[i].length; j++) {
 					jQuery("<td></td>")
 						.html(j === 0 ? "Add..." : "")
+						.attr("id", "addingRow" + rowId)
 						//.attr("aria-readonly", !!layout[i][j].col.readOnly)
 						.attr("aria-describedby", this.grid.id() + "_" + layout[i][j].col.key)
 						.attr("colspan", layout[i][j].cs || 1)
 						.attr("rowspan", layout[i][j].rs || 1)
+						.addClass("ui-iggrid-adding-row-cell")
 						.appendTo(newRow);
 				}
 			}
 
+			jQuery(newRow)
+				.addClass("ui-iggrid-adding-row")
+				.on(this._addingRowHandlers);
+
 			return newRow;
 		},
 		_addAddingRow: function() {
-			var fixed, thead, visibleColumns,
+			var rowId = addingRowCounter++,
+				fixed, thead, visibleColumns,
 				initialHiddenColumns, newAddingRow, i, j;
 
 			fixed = this.grid.hasFixedColumns();
@@ -222,8 +236,8 @@
 				}
 			}
 			//numOfCols = this.grid._isMultiRowGrid() ? this.grid._recordHorizontalSize() : visibleColumns.length;
-			newAddingRow = this._createAddingRowHtml(visibleColumns, fixed);
-			this.model.addNewRow(newAddingRow);
+			newAddingRow = this._createAddingRowHtml(rowId, visibleColumns, fixed);
+			this.model.addNewRow(rowId, newAddingRow);
 			thead.append(newAddingRow);
 		},
 		_injectGrid: function(gridInstance, isRebind) {

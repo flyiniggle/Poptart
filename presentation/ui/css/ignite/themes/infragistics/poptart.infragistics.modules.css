@@ -1,0 +1,3 @@
+.ui-iggrid thead .ui-iggrid-new-row:first-child {
+  border-left: 1px solid #ddd;
+}
