@@ -380,21 +380,10 @@
 			element = this.model.getCell(rowModel, columnKey).cell;
 			element.addClass(this.css.editingCell);
 
+			providerWrapper = this._getEditorForCell(columnKey, element);
+
 			this._trigger(this.events.editAddingCellStarted);
 			/*
-
-			if(element) {
-				editor = this.editorForCell(element, true);
-				providerWrapper = this._providerForKey(columnKey);
-				if(providerWrapper) {
-					provider = providerWrapper.igEditorFilter("option", "provider")
-				} else {
-					return false
-				}
-				height = element.outerHeight();
-				width = element.outerWidth();
-				width = this._isLastScrollableCell(element) ? width - this.grid._scrollbarWidth() : width
-			}
 			if(value === undefined) {
 				value = this._getLatestValues(rowId, columnKey);
 				value = value === undefined ? null : value
@@ -427,6 +416,104 @@
 				this._selectionToggle(element)
 			}
 			return true*/
+		},
+		_getEditorForCell: function(columnKey, element) {
+			var height = element.outerHeight(),
+				width = this._isLastScrollableCell(element) ? element.outerWidth() - this.grid._scrollbarWidth() : width,
+				editorElement = jQuery("<input type='text'/>"),
+				columnSettings, editorOptions, elem,
+				providerWrapper, provider, wrapper;
+
+			editorElement.appendTo(element);
+			columnSettings = this.options.columnSettings.find(function(column) {
+				return column.columnKey === columnKey;
+			});
+
+			provider = this._getProviderForKey(columnKey, columnSettings);
+
+			editorOptions = columnSettings.editorOptions;
+
+			elem = provider.createEditor(this._editorCallbacks, columnKey, editorOptions, this._getNextTabIndex(), columnSettings.format, editorElement);
+
+			//provider.attachErrorEvents(vh.errorShowing, vh.errorShown, vh.errorHidden);
+			if(!element) {
+				//elem.addClass(this.css.editor).css({marginLeft: editorMargins.x + "px", marginTop: editorMargins.y + "px"});
+				elem.css("position", "absolute");
+			}
+			providerWrapper = elem.igEditorFilter({provider: provider});
+			return providerWrapper
+			;
+		},
+		_getProviderForKey: function(column, setting) {
+			var dataType = column.dataType,
+				format = column.format,
+				editorType = setting ? setting.editorType : null,
+				provider;
+
+			if(dataType === "bool") {
+				editorType = "checkbox";
+			} else if (format === "currency") {
+				editorType === "percent";
+			} else if (dataType === "number") {
+				editorType === "numeric";
+			} else if (dataType === "string") {
+				editorType === "text";
+			} else if (dataType === "date") {
+				editorType === "date";
+			}
+
+			switch(editorType) {
+			case "checkbox":
+				provider = new jQuery.ig.EditorProviderBoolean;
+				break;
+			case "combo":
+				if(dataType === "object") {
+					provider = new jQuery.ig.EditorProviderObjectCombo;
+				} else {
+					provider = new jQuery.ig.EditorProviderCombo;
+				}
+				break;
+			case "rating":
+				provider = new jQuery.ig.EditorProviderRating;
+				break;
+			case "mask":
+				provider = new jQuery.ig.EditorProviderMask;
+				break;
+			case "currency":
+				provider = new jQuery.ig.EditorProviderCurrency;
+				break;
+			case "percent":
+				provider = new jQuery.ig.EditorProviderPercent;
+				break;
+			case "numeric":
+				provider = new jQuery.ig.EditorProviderNumeric;
+				break;
+			case "text":
+				provider = new jQuery.ig.EditorProviderText;
+				break;
+			case "datePicker":
+				provider = new jQuery.ig.EditorProviderDatePicker;
+				break;
+			case "date":
+				provider = new jQuery.ig.EditorProviderDate;
+				break;
+			default:
+				throw new TypeError("Please provide an editor type.");
+			}
+
+			return provider;
+		},
+		_isLastScrollableCell: function(cell) {
+			return (cell &&
+				cell.is(":last-child") &&
+				(parseInt(cell.css("padding-right"), 10) > 12 || this.grid._hscrollbar().is(":visible") && this.grid._hasVerticalScrollbar) &&
+				this.grid.scrollContainer() &&
+				this.grid.scrollContainer().has(cell).length);
+		},
+		_getNextTabIndex: function() {
+			var gti = this.grid.options.tabIndex;
+
+			return gti + 1;
 		},
 		_injectGrid: function(gridInstance, isRebind) {
 			//var hg, cl;
