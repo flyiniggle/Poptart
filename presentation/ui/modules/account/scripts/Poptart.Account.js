@@ -67,7 +67,14 @@ Poptart.Account = function() {
 			],
 			features: [
 				{
-					name: "Adding"
+					name: "Adding",
+					columnSettings: [
+						{
+							columnKey: "security",
+							readOnly: false,
+							editorType: "text"
+						}
+					]
 				},
 				{
 					name: "Updating",

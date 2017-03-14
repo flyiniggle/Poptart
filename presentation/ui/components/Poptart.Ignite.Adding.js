@@ -1,5 +1,9 @@
 (function() {
-	var dataModel, addingRowCounter;
+	"use strict";
+
+	var addingRowCounter = 0,
+		addingRowIdPrefix = "addingRow",
+		dataModel;
 
 	dataModel = {
 		model: [],
@@ -9,25 +13,28 @@
 				row: row
 			});
 			return this.model;
+		},
+		getRowById: function(id) {
+			return this.model.filter(function(row) {
+				return row.rowId === id;
+			});
 		}
 	};
 
 	jQuery.widget("Poptart.igGridAdding", {
 		options: {
-			columns: [],
+			columnSettings: [],
 			startEditTriggers: []
 		},
 		events: {
-			editRowStarting: "editRowStarting",
-			editRowStarted: "editRowStarted",
-			editRowEnding: "editRowEnding",
-			editRowEnded: "editRowEnded",
-			editCellStarting: "editCellStarting",
-			editCellStarted: "editCellStarted",
-			editCellEnding: "editCellEnding",
-			editCellEnded: "editCellEnded",
-			rowAdding: "rowAdding",
-			rowAdded: "rowAdded"
+			editAddingRowStarting: "editAddingRowStarting",
+			editAddingRowStarted: "editAddingRowStarted",
+			editAddingCellStarting: "editAddingCellStarting",
+			editAddingCellStarted: "editAddingCellStarted",
+			editAddingCellEnding: "editAddingCellEnding",
+			editAddingCellEnded: "editAddingCellEnded",
+			rowAddingAdding: "rowAdding",
+			rowAddingAdded: "rowAdded"
 		},
 		css: {},
 		_create: function() {
@@ -174,10 +181,14 @@
 			if(ui.owner.id() !== this.grid.id()) {
 				return;
 			}
-			this._addAddingRow();
+			this._addAddingRow(evt);
+			this.options.columnSettings = jQuery.extend(this.element.igGridUpdating("option", "columnSettings"), this.options.columnSettings);
 		},
 		_addingRowClick: function(evt) {
-			this._addAddingRow();
+			var target = evt.target,
+				row = (target.nodeName.toLowerCase() === "td") ? jQuery(target) : target.closest("tr");
+
+			this._startEditCell(row.attr("id"));
 		},
 		_generateDummyLayout: function(cols) {
 			var i, layout = [[]];
@@ -196,7 +207,7 @@
 				for(j = 0; j < layout[i].length; j++) {
 					jQuery("<td></td>")
 						.html(j === 0 ? "Add..." : "")
-						.attr("id", "addingRow" + rowId)
+						.attr("id", rowId)
 						//.attr("aria-readonly", !!layout[i][j].col.readOnly)
 						.attr("aria-describedby", this.grid.id() + "_" + layout[i][j].col.key)
 						.attr("colspan", layout[i][j].cs || 1)
@@ -212,10 +223,14 @@
 
 			return newRow;
 		},
-		_addAddingRow: function() {
-			var rowId = addingRowCounter++,
+		_addAddingRow: function(evt) {
+			var rowId = addingRowIdPrefix + addingRowCounter++,
 				fixed, thead, visibleColumns,
 				initialHiddenColumns, newAddingRow, i, j;
+
+			if(!this._trigger(this.events.rowAddingAdding, evt)) {
+				return false;
+			}
 
 			fixed = this.grid.hasFixedColumns();
 			if(fixed) {
@@ -239,6 +254,71 @@
 			newAddingRow = this._createAddingRowHtml(rowId, visibleColumns, fixed);
 			this.model.addNewRow(rowId, newAddingRow);
 			thead.append(newAddingRow);
+			this._trigger(this.events.rowAddingAdded, evt);
+		},
+		_startEditCell: function(row, column) {
+			var visibleCols = this.grid._visibleColumns(),
+				rowModel = this.model.getRowById(row),
+				visibleColumnKeys,
+				providerWrapper, provider, validator, args, editor, newValue, width, height;
+
+			if(!column) {
+				visibleColumnKeys = visibleCols.map(function(item) {
+					return item.key;
+				});
+				column = this.options.columnSettings.find(function(item) {
+					return (!item.readOnly && visibleColumnKeys.indexOf(item.columnKey) >= 0);
+				});
+			}
+
+			console.log(column)
+			/*columnKey = columnKey || this._getColumnKeyForCell(element);
+
+			if(element) {
+				element.addClass(this.css.editingCell);
+				editor = this.editorForCell(element, true);
+				providerWrapper = this._providerForKey(columnKey);
+				if(providerWrapper) {
+					provider = providerWrapper.igEditorFilter("option", "provider")
+				} else {
+					return false
+				}
+				height = element.outerHeight();
+				width = element.outerWidth();
+				width = this._isLastScrollableCell(element) ? width - this.grid._scrollbarWidth() : width
+			}
+			if(value === undefined) {
+				value = this._getLatestValues(rowId, columnKey);
+				value = value === undefined ? null : value
+			}
+			args = {owner: this, rowID: rowId, columnIndex: this.grid.getVisibleIndexByKey(columnKey), columnKey: columnKey, editor: editor, value: value, rowAdding: isAdding};
+			if(!suppress && !this._trigger(this.events.editCellStarting, evt, args)) {
+				if(editor) {
+					provider.setValue(null)
+				}
+				element.removeClass(this.css.editingCell);
+				return false
+			}
+			if(editor) {
+				providerWrapper.css("z-index", 1);
+				providerWrapper.prependTo(element);
+				provider.setSize(Math.max(8, width), Math.max(10, height));
+				validator = provider.validator();
+				newValue = args.value;
+				provider.setValue(newValue)
+			}
+			this._originalValues = this._originalValues || {};
+			this._originalValues[columnKey] = editor && newValue === value ? provider.getValue() : value;
+			this._trigger(this.events.editCellStarted, evt, args);
+			if(focus && editor) {
+				this._activateEditor(providerWrapper)
+			}
+			this.hideDeleteButton();
+			this._editingForRowId = rowId;
+			if(this.options.editMode === "cell" && !isAdding) {
+				this._selectionToggle(element)
+			}
+			return true*/
 		},
 		_injectGrid: function(gridInstance, isRebind) {
 			//var hg, cl;
