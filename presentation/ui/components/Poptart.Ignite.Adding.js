@@ -4,7 +4,6 @@
 	var addingRowIdPrefix = "addingRow",
 		dataModel;
 
-
 	dataModel = {
 		model: [],
 		addNewRow: function(rowId, row) {
@@ -360,7 +359,7 @@
 			var visibleCols = this.grid._visibleColumns(),
 				rowModel = typeof row === "string" ? this.model.getRowById(row) : row,
 				visibleColumnKeys, columnKey, element,
-				providerWrapper, provider, validator, args, editor, newValue, width, height;
+				providerWrapper, provider, validator, args, editor, editorElement, newValue, width, height;
 
 			if(!this._trigger(this.events.editAddingCellStarting)) {
 				return false;
@@ -380,7 +379,16 @@
 			element = this.model.getCell(rowModel, columnKey).cell;
 			element.addClass(this.css.editingCell);
 
-			providerWrapper = this._getEditorForCell(columnKey, element);
+			editor = this._getEditorForCell(columnKey, element);
+			providerWrapper = editor.providerWrapper;
+			provider = editor.provider;
+			editorElement = editor.baseElement;
+
+			providerWrapper
+				.prependTo(element)
+				.focus();
+
+			provider.setValue(0);
 
 			this._trigger(this.events.editAddingCellStarted);
 			/*
@@ -419,30 +427,43 @@
 		},
 		_getEditorForCell: function(columnKey, element) {
 			var height = element.outerHeight(),
-				width = this._isLastScrollableCell(element) ? element.outerWidth() - this.grid._scrollbarWidth() : width,
+				width = this._isLastScrollableCell(element) ? element.outerWidth() - this.grid._scrollbarWidth() : element.outerWidth(),
+				cellPaddingLeft = element.css("paddingLeft"),
+				cellPaddingRight = element.css("paddingRight"),
+				cellPaddingTop = element.css("paddingTop"),
+				cellPaddingBottom = element.css("paddingBottom"),
 				editorElement = jQuery("<input type='text'/>"),
-				columnSettings, editorOptions, elem,
-				providerWrapper, provider, wrapper;
+				columnSettings, editorOptions,
+				providerWrapper, provider;
 
-			editorElement.appendTo(element);
 			columnSettings = this.options.columnSettings.find(function(column) {
 				return column.columnKey === columnKey;
 			});
 
 			provider = this._getProviderForKey(columnKey, columnSettings);
 
-			editorOptions = columnSettings.editorOptions;
+			editorOptions = columnSettings.editorOptions || {};
+			editorOptions.width = width + "px";
+			editorOptions.height = height + "px";
 
-			elem = provider.createEditor(this._editorCallbacks, columnKey, editorOptions, this._getNextTabIndex(), columnSettings.format, editorElement);
+			providerWrapper = provider.createEditor(this._editorCallbacks, columnKey, editorOptions, this._getNextTabIndex(), columnSettings.format, editorElement);
 
-			//provider.attachErrorEvents(vh.errorShowing, vh.errorShown, vh.errorHidden);
-			if(!element) {
-				//elem.addClass(this.css.editor).css({marginLeft: editorMargins.x + "px", marginTop: editorMargins.y + "px"});
-				elem.css("position", "absolute");
-			}
-			providerWrapper = elem.igEditorFilter({provider: provider});
-			return providerWrapper
-			;
+			providerWrapper
+				.addClass(this.css.editor)
+				.css({
+					"position": "absolute",
+					"z-index": 1,
+					"marginLeft": "-" + cellPaddingLeft,
+					"marginRight": "-" + cellPaddingRight,
+					"marginTop": "-" + cellPaddingTop,
+					"marginBottom": "-" + cellPaddingBottom
+				});
+
+			return {
+				provider: provider,
+				providerWrapper: providerWrapper,
+				baseElement: editorElement
+			};
 		},
 		_getProviderForKey: function(column, setting) {
 			var dataType = column.dataType,
