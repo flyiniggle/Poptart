@@ -216,7 +216,7 @@
 			this._addingRowHandlers = this._addNewRowHandlers ||
 				{
 					//"focus": this._addRowFocus.bind(this),
-					//"blur": this._addRowBlur.bind(this),
+					//"blur": this._addingRowBlur.bind(this),
 					"click": this._addingRowClick.bind(this)
 				};
 			this._validationHandlers = this._validationHandlers ||
@@ -299,6 +299,10 @@
 				columnKey = targetType === "td" ? jQuery(target).data("columnKey") : null,
 				row = (target.nodeName.toLowerCase() === "tr") ? jQuery(target) : jQuery(target.closest("tr")),
 				columnIsReadOnly;
+
+			if (this.activeEditor && jQuery.contains(this.activeEditor.providerWrapper[0], evt.target[0])) {
+				return false;
+			}
 
 			if(columnKey) {
 				columnIsReadOnly = this._getColumnSettings(columnKey).readOnly;
@@ -421,57 +425,35 @@
 
 			this.activeEditor = this._getEditorForCell(columnKey, element);
 			this.activeEditor.provider.setValue(0);
-			this.activeEditor.providerWrapper.prependTo(element);
-			this.activeEditor.baseElement
-				.focus()
-				.on("blur", {rowModel: rowModel, columnKey: columnKey},
+			this.activeEditor.providerWrapper
+				.prependTo(element)
+				.find("input")
+				.on("blur",
+					{rowModel: rowModel, columnKey: columnKey},
 					(function(evt) {
 						this._saveEdit(evt.data.rowModel, evt.data.columnKey, this.activeEditor.provider.getValue());
-					}).bind(this));
+					}).bind(this))
+				.focus();
 
 			this._trigger(this.events.editAddingCellStarted);
 			/*
-			if(value === undefined) {
-				value = this._getLatestValues(rowId, columnKey);
-				value = value === undefined ? null : value
-			}
+
 			args = {owner: this, rowID: rowId, columnIndex: this.grid.getVisibleIndexByKey(columnKey), columnKey: columnKey, editor: editor, value: value, rowAdding: isAdding};
-			if(!suppress && !this._trigger(this.events.editCellStarting, evt, args)) {
-				if(editor) {
-					provider.setValue(null)
-				}
-				element.removeClass(this.css.editingCell);
-				return false
-			}
-			if(editor) {
-				providerWrapper.css("z-index", 1);
-				providerWrapper.prependTo(element);
-				provider.setSize(Math.max(8, width), Math.max(10, height));
-				validator = provider.validator();
-				newValue = args.value;
-				provider.setValue(newValue)
-			}
-			this._originalValues = this._originalValues || {};
-			this._originalValues[columnKey] = editor && newValue === value ? provider.getValue() : value;
+
 			this._trigger(this.events.editCellStarted, evt, args);
 			if(focus && editor) {
 				this._activateEditor(providerWrapper)
 			}
 			this.hideDeleteButton();
 			this._editingForRowId = rowId;
-			if(this.options.editMode === "cell" && !isAdding) {
-				this._selectionToggle(element)
-			}
 			return true*/
 		},
 		_getEditorForCell: function(columnKey, element) {
-			var height = element.outerHeight(),
-				width = this._isLastScrollableCell(element) ? element.outerWidth() - this.grid._scrollbarWidth() : element.outerWidth(),
+			var width = this._isLastScrollableCell(element) ? element.outerWidth() - this.grid._scrollbarWidth() : element.outerWidth(),
 				cellPaddingLeft = element.css("paddingLeft"),
 				cellPaddingRight = element.css("paddingRight"),
 				cellPaddingTop = element.css("paddingTop"),
 				cellPaddingBottom = element.css("paddingBottom"),
-				editorElement = jQuery("<input type='text'/>"),
 				columnSettings, editorOptions,
 				providerWrapper, provider;
 
@@ -480,10 +462,10 @@
 			provider = this._getProviderForKey(columnKey, columnSettings);
 
 			editorOptions = columnSettings.editorOptions || {};
-			editorOptions.width = width + "px";
-			editorOptions.height = height + "px";
+			editorOptions.width = editorOptions.width || width + "px";
+			editorOptions.height = element.outerHeight() + "px";
 
-			providerWrapper = provider.createEditor(this._editorCallbacks, columnKey, editorOptions, this._getNextTabIndex(), columnSettings.format, editorElement);
+			providerWrapper = provider.createEditor(this._editorCallbacks, columnKey, editorOptions, this._getNextTabIndex(), columnSettings.format);
 
 			providerWrapper
 				.addClass(this.css.editor)
@@ -498,8 +480,7 @@
 
 			return {
 				provider: provider,
-				providerWrapper: providerWrapper,
-				baseElement: editorElement
+				providerWrapper: providerWrapper
 			};
 		},
 		_getProviderForKey: function(column, setting) {
@@ -576,6 +557,7 @@
 		},
 		_endEdit: function(row) {
 			this.activeEditor.providerWrapper.remove();
+			delete this.activeEditor;
 			if(row) {
 				this._updateUiRow(row);
 			}

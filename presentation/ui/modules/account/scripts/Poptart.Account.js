@@ -17,7 +17,7 @@ Poptart.Account = function() {
 			width: '100%',
 			autoCommit: true,
 			dataSource: new jQuery.ig.DataSource({
-				dataSource: data,
+				dataSource: data[0],
 				type: "json"
 			}),
 			dataSourceType: "json",
@@ -69,6 +69,34 @@ Poptart.Account = function() {
 				{
 					name: "Adding",
 					columnSettings: [
+						{
+							columnKey: "ticker",
+							readOnly: false,
+							editorType: "combo",
+							editorOptions: {
+								textKey: "ticker",
+								valueKey: "pk",
+								autoComplete: true,
+								mode: 'editable',
+								autoSelectFirstMatch: false,
+								selectItemBySpaceKey: true,
+								//height: Poptart.Ignite.constants.INPUT_HEIGHT,
+								//width: "500px",
+								dataSource: new jQuery.ig.DataSource({
+									dataSource: data[1],
+									schema: new jQuery.ig.DataSchema("json", {
+										fields: [
+											{name: "pk", type: "number"},
+											{name: "ticker", type: "string"},
+											{name: "CUSIP", type: "number"},
+											{name: "segment", type: "number"},
+											{name: "lastPrice", type: "number"},
+											{name: "security", type: "string"}
+										]
+									})
+								})
+							}
+						}
 					]
 				},
 				{
@@ -125,36 +153,7 @@ Poptart.Account = function() {
 	}
 
 	function displaySecurityList(data) {
-		jQuery("#addHolding").igCombo({
-			textKey: "ticker",
-			valueKey: "pk",
-			autoComplete: true,
-			mode: 'editable',
-			delayInputChangeProcessing: 0,
-			autoSelectFirstMatch: false,
-			selectItemBySpaceKey: true,
-			multiSelection: {
-				enabled: true,
-				addWithKeyModifier: false,
-				showCheckboxes: false,
-				itemSeparator: ', '
-			},
-			height: Poptart.Ignite.constants.INPUT_HEIGHT,
-			width: "500px",
-			dataSource: new jQuery.ig.DataSource({
-				dataSource: data,
-				schema: new jQuery.ig.DataSchema("json", {
-					fields: [
-						{name: "pk", type: "number"},
-						{name: "ticker", type: "string"},
-						{name: "CUSIP", type: "number"},
-						{name: "segment", type: "number"},
-						{name: "lastPrice", type: "number"},
-						{name: "security", type: "string"}
-					]
-				})
-			})
-		}).on("keydown", function(e) {
+		/*jQuery("#addHolding").igCombo().on("keydown", function(e) {
 			var combo, securities, table, firstEmptyRow, i;
 
 			if(e.keyCode === 13) {
@@ -185,7 +184,7 @@ Poptart.Account = function() {
 
 				table.igGridUpdating("startEdit", table.igGrid("getElementInfo", table.igGrid("rowAt", firstEmptyRow)).rowId, "quantity");
 			}
-		});
+		});*/
 	}
 
 	function displayAccountHoldingsCharts(data) {
@@ -246,10 +245,9 @@ Poptart.Account = function() {
 		loaderConfig.resources = "igGrid.Updating.Adding,igDataChart.Category,igPieChart,igCombo";
 		loaderConfig.ready = function() {
 			Poptart.Account.Service.SummaryService.get(accountId).then(displayAccountSummary);
-			Poptart.Account.Service.HoldingsService.get(accountId).then(displayAccountHoldings);
+			Promise.all([Poptart.Account.Service.HoldingsService.get(accountId), Poptart.Account.Service.SecuritiesService.get()]).then(displayAccountHoldings);
 			Poptart.Account.Service.HoldingsService.get(accountId).then(displayAccountHoldingsCharts);
 			Poptart.Account.Service.AlertsService.get(accountId).then(displayAccountAlerts);
-			Poptart.Account.Service.SecuritiesService.get().then(displaySecurityList);
 		};
 		jQuery.ig.loader(loaderConfig);
 
