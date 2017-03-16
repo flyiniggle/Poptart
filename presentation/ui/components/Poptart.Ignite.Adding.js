@@ -6,6 +6,9 @@
 
 	dataModel = {
 		model: [],
+		events: {
+			updated: "modelUpdated"
+		},
 		addNewRow: function(rowId, row) {
 			this.model.push({
 				rowId: rowId,
@@ -44,6 +47,17 @@
 			return rowData.columnData.find(function(column) {
 				return column.key === columnKey;
 			});
+		},
+		updateColumnData: function(row, columnKey, value) {
+			var rowData = typeof row === "string" ? this.getRowById(row) : row,
+				cell;
+
+			cell = rowData.columnData.find(function(column) {
+				return column.key === columnKey;
+			});
+
+			cell.value = value;
+			return cell;
 		}
 	};
 
@@ -81,17 +95,22 @@
 				throw new TypeError("The parameter 'columnKey' must be specified.");
 			}
 
-			rowModel = typeof row === "string" ? this.model.getRowById(row) : row;
+			rowModel = this._getRow(row);
 
-			columnIsReadOnly = this.options.columnSettings.find(function(column) {
-				return column.key === columnKey;
-			}).readOnly;
+			columnIsReadOnly = this._getColumnSettings(columnKey).readOnly;
 
 			if(columnIsReadOnly) {
 				throw new TypeError("The column " + columnKey + " is read only.");
 			}
 
 			return this._startEditCell(rowModel.attr("id"), columnKey);
+		},
+		endEditCell: function(row, columnKey, update) {
+			if (update) {
+				this._saveEdit();
+			} else {
+				this._cancelEdit();
+			}
 		},
 		startEditRow: function(row) {
 			var rowModel;
@@ -100,7 +119,7 @@
 				throw new TypeError("The parameter 'row' must be a valid row data model reference or row ID number.");
 			}
 
-			rowModel = typeof row === "string" ? this.model.getRowById(row) : row;
+			rowModel = this._getRow(row);
 
 			return this._startEditRow(rowModel);
 		},
@@ -150,7 +169,7 @@
 			}
 		},
 		_createHandlers: function() {
-			this._stopEditingHandler = this._stopEditingHandler || jQuery.proxy(this._stopEditing, this);
+			this._stopEditingHandler = this._stopEditingHandler || jQuery.proxy(this._cancelEdit, this);
 			this._gridHandlers = this._gridHandlers ||
 				{
 					stopEditing: this._stopEditingHandler,
@@ -227,6 +246,13 @@
 				iggridrendered: this._gridHandlers.rendered
 			});
 		},
+		_bindModelEvents: function() {
+			var events = {};
+
+			events[this.model.events.updated] = this._updateUiRow.bind(this);
+
+			jQuery(this.model).on(events);
+		},
 		_analyzeEditTriggers: function() {
 			var trg = this.options.startEditTriggers, key;
 
@@ -258,9 +284,7 @@
 				columnIsReadOnly;
 
 			if(columnKey) {
-				columnIsReadOnly = this.options.columnSettings.find(function(column) {
-					return column.columnKey === columnKey;
-				}).readOnly;
+				columnIsReadOnly = this._getColumnSettings(columnKey).readOnly;
 			}
 
 			if(targetType === "td" && !columnIsReadOnly) {
@@ -339,7 +363,7 @@
 		},
 		_startEditRow: function(row) {
 			var visibleCols = this.grid._visibleColumns(),
-				rowModel = typeof row === "string" ? this.model.getRowById(row) : row,
+				rowModel = this._getRow(row),
 				visibleColumnKeys, firstEditableColumn;
 
 			visibleColumnKeys = visibleCols.map(function(item) {
@@ -357,9 +381,8 @@
 		},
 		_startEditCell: function(row, column) {
 			var visibleCols = this.grid._visibleColumns(),
-				rowModel = typeof row === "string" ? this.model.getRowById(row) : row,
-				visibleColumnKeys, columnKey, element,
-				providerWrapper, provider, validator, args, editor, editorElement, newValue, width, height;
+				rowModel = this._getRow(row),
+				visibleColumnKeys, columnKey, element;
 
 			if(!this._trigger(this.events.editAddingCellStarting)) {
 				return false;
@@ -379,16 +402,15 @@
 			element = this.model.getCell(rowModel, columnKey).cell;
 			element.addClass(this.css.editingCell);
 
-			editor = this._getEditorForCell(columnKey, element);
-			providerWrapper = editor.providerWrapper;
-			provider = editor.provider;
-			editorElement = editor.baseElement;
-
-			providerWrapper
-				.prependTo(element)
-				.focus();
-
-			provider.setValue(0);
+			this.activeEditor = this._getEditorForCell(columnKey, element);
+			this.activeEditor.provider.setValue(0);
+			this.activeEditor.providerWrapper.prependTo(element);
+			this.activeEditor.baseElement
+				.focus()
+				.on("blur", {rowModel: rowModel, columnKey: columnKey},
+					(function(evt) {
+						this._saveEdit(evt.data.rowModel, evt.data.columnKey, this.activeEditor.provider.getValue());
+					}).bind(this));
 
 			this._trigger(this.events.editAddingCellStarted);
 			/*
@@ -436,9 +458,7 @@
 				columnSettings, editorOptions,
 				providerWrapper, provider;
 
-			columnSettings = this.options.columnSettings.find(function(column) {
-				return column.columnKey === columnKey;
-			});
+			columnSettings = this._getColumnSettings(columnKey);
 
 			provider = this._getProviderForKey(columnKey, columnSettings);
 
@@ -524,6 +544,55 @@
 
 			return provider;
 		},
+		_cancelEdit: function(evt) {
+			this._endEdit(evt);
+		},
+		_saveEdit: function(row, column, value) {
+			var cell = this.model.getCell(row, column),
+				columnSettings;
+
+			columnSettings = this._getColumnSettings(cell.key);
+
+			this.model.updateColumnData(row, column, value);
+			this._updateUiCell(cell.cell, columnSettings, row, value);
+			this._endEdit(row);
+		},
+		_endEdit: function(row) {
+			this.activeEditor.providerWrapper.remove();
+			if(row) {
+				this._updateUiRow(row);
+			}
+			//this.activeEditor.element.removeClass(this.css.editingCell);
+		},
+		_updateUiRow: function(row) {
+			var visibleCols = this.grid._visibleColumns(),
+				columnSettings = this.options.columnSettings,
+				setting, rowModel,
+				settingFilter, i, value;
+
+			settingFilter = function(visibleColumn) {
+				return function(column) {
+					return column.columnKey === visibleColumn.key;
+				};
+			};
+
+			for(i = visibleCols.length - 1; i > -1; i--) {
+				setting = columnSettings.find(settingFilter(visibleCols[i])) || {};
+
+				if(setting.readOnly && (setting.formula || setting.template)) {
+					this._updateUiCell(this.model.getCell(rowModel, visibleCols[i]), setting, row, value);
+				}
+			}
+		},
+		_updateUiCell: function(cell, settings, rowModel, value) {
+			if(settings.formula) {
+				cell.html(settings.formula(value, rowModel));
+			} else if(settings.template) {
+				cell.html(jQuery.ig.tmp(settings.template, {value: value, row: rowModel}));
+			} else {
+				cell.html(value);
+			}
+		},
 		_isLastScrollableCell: function(cell) {
 			return (cell &&
 				cell.is(":last-child") &&
@@ -535,6 +604,18 @@
 			var gti = this.grid.options.tabIndex;
 
 			return gti + 1;
+		},
+		_getRow: function(row) {
+			return typeof row === "string" ? this.model.getRowById(row) : row;
+		},
+		_getColumnSettings: function(columnKey) {
+			var columnSettings;
+
+			columnSettings = this.options.columnSettings.find(function(settings) {
+				return settings.columnKey === columnKey;
+			});
+
+			return columnSettings || {};
 		},
 		_injectGrid: function(gridInstance, isRebind) {
 			//var hg, cl;
@@ -556,6 +637,7 @@
 			}*/
 			this._createHandlers();
 			this._bindGridEvents();
+			this._bindModelEvents();
 			this._analyzeEditTriggers();
 			/*
 			if(this.grid.options._isHierarchicalGrid && this.grid._originalOptions) {

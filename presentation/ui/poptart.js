@@ -158,6 +158,10 @@ var Poptart = function() {
 	};
 
 	// Ignites
+	jQuery.ig.tmpl = function(path, data) {
+		return nunjucks.render(path, data);
+	};
+
 	jQuery.ig.dependencies.push({
 		widget: "Adding",
 		parentWidget: "igGrid,igHierarchicalGrid",
