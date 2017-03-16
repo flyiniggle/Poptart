@@ -79,7 +79,7 @@ Poptart.Account = function() {
 				{
 					name: "Updating",
 					editMode: "cell",
-					enableAddRow: true,
+					enableAddRow: false,
 					enableDeleteRow: true,
 					autoCommit: false,
 					columnSettings: [
