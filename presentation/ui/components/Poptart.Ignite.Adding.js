@@ -272,6 +272,23 @@
 				return;
 			}
 			this.options.columnSettings = jQuery.extend(this.element.igGridUpdating("option", "columnSettings"), this.options.columnSettings);
+			this.options.columnSettings = this.options.columnSettings.map((function(settings) {
+				var gridColumnSettings = this.grid.options.columns.find(function(gridColumn) {
+					return gridColumn.key === settings.columnKey;
+				});
+
+				if(gridColumnSettings) {
+					if(!settings.formula && gridColumnSettings.formula) {
+						settings.formula = gridColumnSettings.formula;
+					}
+
+					if(!settings.template && gridColumnSettings.template) {
+						settings.template = gridColumnSettings.template;
+					}
+				}
+
+				return settings;
+			}).bind(this));
 			this.model.columns = this.grid.options.columns;
 			this.model.visibleColumns = this.grid._visibleColumns(this.grid.hasFixedColumns());
 			this._addAddingRow(evt);
@@ -567,7 +584,7 @@
 		_updateUiRow: function(row) {
 			var visibleCols = this.grid._visibleColumns(),
 				columnSettings = this.options.columnSettings,
-				setting, rowModel,
+				setting,
 				settingFilter, i, value;
 
 			settingFilter = function(visibleColumn) {
@@ -580,15 +597,17 @@
 				setting = columnSettings.find(settingFilter(visibleCols[i])) || {};
 
 				if(setting.readOnly && (setting.formula || setting.template)) {
-					this._updateUiCell(this.model.getCell(rowModel, visibleCols[i]), setting, row, value);
+					this._updateUiCell(this.model.getCell(row, visibleCols[i].key).cell, setting, row, value);
 				}
 			}
 		},
 		_updateUiCell: function(cell, settings, rowModel, value) {
+			var rowData = this._getRowForRendering(rowModel);
+
 			if(settings.formula) {
-				cell.html(settings.formula(value, rowModel));
+				cell.html(settings.formula(rowData));
 			} else if(settings.template) {
-				cell.html(jQuery.ig.tmp(settings.template, {value: value, row: rowModel}));
+				cell.html(jQuery.ig.tmp(settings.template, rowData));
 			} else {
 				cell.html(value);
 			}
@@ -607,6 +626,15 @@
 		},
 		_getRow: function(row) {
 			return typeof row === "string" ? this.model.getRowById(row) : row;
+		},
+		_getRowForRendering: function(rowModel) {
+			var renderableRow = {};
+
+			rowModel.columnData.forEach(function(column) {
+				renderableRow[column.key] = column.value;
+			});
+
+			return renderableRow;
 		},
 		_getColumnSettings: function(columnKey) {
 			var columnSettings;
@@ -657,15 +685,6 @@
 			if(window.navigator.msPointerEnabled || window.navigator.pointerEnabled) {
 				this.grid.element.css("-ms-touch-action", "none");
 				this.grid.element.css("touch-action", "none");
-			}
-			if(String(this.grid.options.templatingEngine).toLowerCase() === "jsrender") {
-				this._jsr = true;
-				if(this.options.rowEditDialogOptions.dialogTemplate && typeof this.options.rowEditDialogOptions.dialogTemplate === "string") {
-					jQuery.templates(this.grid.id() + "_rowEditDialogTemplate", this.options.rowEditDialogOptions.dialogTemplate);
-				}
-				if(this.options.rowEditDialogOptions.editorsTemplate && typeof this.options.rowEditDialogOptions.editorsTemplate === "string") {
-					jQuery.templates(this.grid.id() + "_rowEditDialogEditorsTemplate", this.options.rowEditDialogOptions.editorsTemplate);
-				}
 			}*/
 		}
 	});
