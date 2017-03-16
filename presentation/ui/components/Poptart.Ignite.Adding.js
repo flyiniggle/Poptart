@@ -285,6 +285,12 @@
 					if(!settings.template && gridColumnSettings.template) {
 						settings.template = gridColumnSettings.template;
 					}
+
+					if(!settings.mapper && gridColumnSettings.mapper) {
+						settings.mapper = gridColumnSettings.mapper;
+					}
+
+					settings.dataType = gridColumnSettings.dataType;
 				}
 
 				return settings;
@@ -484,7 +490,7 @@
 			};
 		},
 		_getProviderForKey: function(column, setting) {
-			var dataType = column.dataType,
+			var dataType = setting ? setting.dataType : null,
 				format = column.format,
 				editorType = setting ? setting.editorType : null,
 				provider;
@@ -578,7 +584,7 @@
 			for(i = visibleCols.length - 1; i > -1; i--) {
 				setting = columnSettings.find(settingFilter(visibleCols[i])) || {};
 
-				if(setting.readOnly && (setting.formula || setting.template)) {
+				if((setting.dataType === "object" && setting.mapper) || (setting.readOnly && (setting.formula || setting.template))) {
 					this._updateUiCell(this.model.getCell(row, visibleCols[i].key).cell, setting, row, value);
 				}
 			}
@@ -590,6 +596,8 @@
 				cell.html(settings.formula(rowData));
 			} else if(settings.template) {
 				cell.html(jQuery.ig.tmp(settings.template, rowData));
+			} else if(settings.mapper) {
+				cell.html(settings.mapper(value));
 			} else {
 				cell.html(value);
 			}

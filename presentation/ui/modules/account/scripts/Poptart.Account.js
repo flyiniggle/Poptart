@@ -24,7 +24,15 @@ Poptart.Account = function() {
 			primaryKey: "pk",
 			autoGenerateColumns: false,
 			columns: [
-				{headerText: 'Security', key: "ticker", dataType: "string", width: "115px"},
+				{
+					headerText: 'Security',
+					key: "ticker",
+					dataType: "object",
+					width: "115px",
+					mapper: function(security) {
+						return security.ticker;
+					}
+				},
 				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
 				{headerText: 'Description', key: "security", dataType: "string", width: "200px"},
 				{headerText: "Quantity", key: "quantity", dataType: "number", width: "85px"},
@@ -95,6 +103,27 @@ Poptart.Account = function() {
 										]
 									})
 								})
+							}
+						},
+						{
+							columnKey: "CUSIP",
+							readOnly: true,
+							formula: function(row) {
+								return row.ticker.CUSIP;
+							}
+						},
+						{
+							columnKey: "security",
+							readOnly: true,
+							formula: function(row) {
+								return row.ticker.security;
+							}
+						},
+						{
+							columnKey: "lastPrice",
+							readOnly: true,
+							formula: function(row) {
+								return row.ticker.lastPrice;
 							}
 						}
 					]
