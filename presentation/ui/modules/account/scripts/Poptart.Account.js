@@ -30,7 +30,7 @@ Poptart.Account = function() {
 					dataType: "object",
 					width: "115px",
 					mapper: function(security) {
-						return security.ticker;
+						return security.ticker || "";
 					}
 				},
 				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
@@ -109,28 +109,36 @@ Poptart.Account = function() {
 							columnKey: "CUSIP",
 							readOnly: true,
 							formula: function(row) {
-								return row.ticker.CUSIP;
+								var securityObject = row.ticker || {};
+
+								return securityObject.CUSIP;
 							}
 						},
 						{
 							columnKey: "security",
 							readOnly: true,
 							formula: function(row) {
-								return row.ticker.security;
+								var securityObject = row.ticker || {};
+
+								return securityObject.security || "";
 							}
 						},
 						{
 							columnKey: "value",
 							readOnly: true,
 							formula: function(row) {
-								return row.ticker.lastPrice * row.quantity;
+								var securityObject = row.ticker || {};
+
+								return (securityObject.lastPrice || 0) * row.quantity;
 							}
 						},
 						{
 							columnKey: "lastPrice",
 							readOnly: true,
 							formula: function(row) {
-								return row.ticker.lastPrice;
+								var securityObject = row.ticker || {};
+
+								return securityObject.lastPrice || "";
 							}
 						}
 					]

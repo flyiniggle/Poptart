@@ -6,9 +6,6 @@
 
 	dataModel = {
 		model: [],
-		events: {
-			updated: "modelUpdated"
-		},
 		addNewRow: function(rowId, row) {
 			this.model.push({
 				rowId: rowId,
@@ -123,51 +120,6 @@
 
 			return this._startEditRow(rowModel);
 		},
-		_addDSSuccessHandler: function() {
-			var fS, grid = this.grid;
-
-			if(this._addChangesSuccessHandler !== null && this._addChangesSuccessHandler !== undefined) {
-				grid.dataSource._removeChangesSuccessHandler(this._addChangesSuccessHandler);
-			}
-			fS = this.options.saveChangesSuccessHandler;
-			if(fS) {
-				if(jQuery.type(fS) === "string" && window[fS] && jQuery.type(window[fS]) === "function") {
-					fS = window[fS];
-				}
-			}
-			if(jQuery.type(fS) !== "function") {
-				fS = null;
-			}
-			this._addChangesSuccessHandler = function(data) {
-				if(grid.rows().parent().find("." + grid.css.deletedRecord).length) {
-					grid._renderData();
-				}
-				grid.rows().removeClass(grid.css.modifiedRecord);
-				if(fS) {
-					fS(data);
-				}
-			};
-			grid.dataSource._addChangesSuccessHandler(this._addChangesSuccessHandler);
-		},
-		_addDSErrorHandler: function() {
-			var fE;
-
-			if(this._addChangesErrorHandler !== null && this._addChangesErrorHandler !== undefined) {
-				this.grid.dataSource._removeChangesErrorHandler(this._addChangesErrorHandler);
-			}
-			if(this.options.saveChangesErrorHandler) {
-				fE = this.options.saveChangesErrorHandler;
-				if(jQuery.type(fE) === "string" && window[fE] && jQuery.type(window[fE]) === "function") {
-					fE = window[fE];
-				}
-				if(jQuery.type(fE) === "function") {
-					this._addChangesErrorHandler = function(jqXHR, textStatus, errorThrown) {
-						fE(jqXHR, textStatus, errorThrown);
-					};
-					this.grid.dataSource._addChangesErrorHandler(this._addChangesErrorHandler);
-				}
-			}
-		},
 		_createHandlers: function() {
 			this._stopEditingHandler = this._stopEditingHandler || jQuery.proxy(this._cancelEdit, this);
 			this._gridHandlers = this._gridHandlers ||
@@ -213,12 +165,20 @@
 					touchDeleteClick: jQuery.proxy(this._touchDeleteButtonClick, this),
 					touchDeleteKeyUp: jQuery.proxy(this._touchDeleteButtonKeyUp, this)
 				};
-			this._addingRowHandlers = this._addNewRowHandlers ||
+			this._addingRowHandlers = this._addingRowHandlers ||
 				{
 					//"focus": this._addRowFocus.bind(this),
-					//"blur": this._addingRowBlur.bind(this),
+					"blur": this._blur.bind(this),
+					"keypress": this._keyPress.bind(this),
 					"click": this._addingRowClick.bind(this)
 				};
+			/*this._addingCellHandlers = this._addingCellHandlers ||
+				{
+					//"focus": this._addRowFocus.bind(this),
+					//"blur": this._blur.bind(this),
+					"keydown": this._keyDown.bind(this),
+					"click": this._addingRowClick.bind(this)
+				};*/
 			this._validationHandlers = this._validationHandlers ||
 				{
 					errorShowing: jQuery.proxy(this._editorErrorShowing, this),
@@ -245,13 +205,6 @@
 				//iggridheaderrenderedinternal: this._gridHandlers.headerRendered,
 				iggridrendered: this._gridHandlers.rendered
 			});
-		},
-		_bindModelEvents: function() {
-			var events = {};
-
-			events[this.model.events.updated] = this._updateUiRow.bind(this);
-
-			jQuery(this.model).on(events);
 		},
 		_analyzeEditTriggers: function() {
 			var trg = this.options.startEditTriggers, key;
@@ -318,6 +271,48 @@
 				this._startEditCell(row.data("rowId"), columnKey);
 			} else {
 				this._startEditRow(row.data("rowId"));
+			}
+		},
+		_keyPress: function(evt) {
+			if(evt.keyCode === 9) {
+				evt.preventDefault();
+				this._navigateLeft();
+				return false;
+			}
+		},
+		_blur: function(evt) {
+			evt.preventDefault();
+			this._saveEdit(evt.data.rowModel, evt.data.columnKey, this.activeEditor.provider.getValue());
+			return false;
+		},
+		_navigateLeft: function() {
+			var rowModel = this.activeEditor.rowModel,
+				cells = rowModel.cells, currentCellIndex, nextEditableCell;
+
+			if(!this.activeEditor) {
+				return;
+			}
+
+			currentCellIndex = cells.indexOf(this.activeEditor.cell);
+
+			nextEditableCell = (function nextEditableCell(cells, currentCellIndex) {
+				var isLastCell = (currentCellIndex === cells.length - 1),
+					nextCell;
+
+				if(isLastCell) {
+					return false;
+				}
+
+				nextCell = this._getColumnSettings(cells[++currentCellIndex].key);
+
+				return (!nextCell.readOnly) ? nextCell : nextEditableCell.call(this, cells, currentCellIndex);
+			}).call(this, cells, currentCellIndex);
+
+			if(nextEditableCell) {
+				//this._endEdit(rowModel);
+				this._startEditCell(rowModel, nextEditableCell.columnKey);
+			} else {
+				console.log("end");
 			}
 		},
 		_generateDummyLayout: function(cols) {
@@ -409,7 +404,7 @@
 		_startEditCell: function(row, column) {
 			var visibleCols = this.grid._visibleColumns(),
 				rowModel = this._getRow(row),
-				visibleColumnKeys, columnKey, element;
+				newEditor, visibleColumnKeys, columnKey, element;
 
 			if(!this._trigger(this.events.editAddingCellStarting)) {
 				return false;
@@ -426,21 +421,23 @@
 				columnKey = column;
 			}
 
-			element = this.model.getCell(rowModel, columnKey).cell;
-			element.addClass(this.css.editingCell);
+			element = this.model.getCell(rowModel, columnKey);
+			element.cell.addClass(this.css.editingCell);
 
-			this.activeEditor = this._getEditorForCell(columnKey, element);
-			this.activeEditor.provider.setValue(0);
-			this.activeEditor.providerWrapper
-				.prependTo(element)
+			newEditor = this._getEditorForCell(columnKey, element, rowModel);
+
+			newEditor.provider.setValue(0);
+			newEditor.providerWrapper
+				.prependTo(element.cell)
 				.find("input")
-				.on("blur",
-					{rowModel: rowModel, columnKey: columnKey},
-					(function(evt) {
-						this._saveEdit(evt.data.rowModel, evt.data.columnKey, this.activeEditor.provider.getValue());
-					}).bind(this))
-				.focus();
+				.focus()
+				.on({
+					"blur": this._addingRowHandlers.blur,
+					"keypress": this._addingRowHandlers.keypress
+				},
+				{rowModel: rowModel, columnKey: columnKey});
 
+			this.activeEditor = newEditor;
 			this._trigger(this.events.editAddingCellStarted);
 			/*
 
@@ -454,8 +451,9 @@
 			this._editingForRowId = rowId;
 			return true*/
 		},
-		_getEditorForCell: function(columnKey, element) {
-			var width = this._isLastScrollableCell(element) ? element.outerWidth() - this.grid._scrollbarWidth() : element.outerWidth(),
+		_getEditorForCell: function(columnKey, cell, rowModel) {
+			var element = cell.cell,
+				width = this._isLastScrollableCell(element) ? element.outerWidth() - this.grid._scrollbarWidth() : element.outerWidth(),
 				cellPaddingLeft = element.css("paddingLeft"),
 				cellPaddingRight = element.css("paddingRight"),
 				cellPaddingTop = element.css("paddingTop"),
@@ -486,7 +484,9 @@
 
 			return {
 				provider: provider,
-				providerWrapper: providerWrapper
+				providerWrapper: providerWrapper,
+				cell: cell,
+				rowModel: rowModel
 			};
 		},
 		_getProviderForKey: function(column, setting) {
@@ -557,16 +557,22 @@
 
 			columnSettings = this._getColumnSettings(cell.key);
 
+			if(!value) {
+				if(columnSettings.dataType === "object") {
+					value = {};
+				}
+			}
+
 			this.model.updateColumnData(row, column, value);
 			this._updateUiCell(cell.cell, columnSettings, row, value);
 			this._endEdit(row);
 		},
 		_endEdit: function(row) {
 			this.activeEditor.providerWrapper.remove();
-			delete this.activeEditor;
 			if(row) {
 				this._updateUiRow(row);
 			}
+			delete this.activeEditor;
 			//this.activeEditor.element.removeClass(this.css.editingCell);
 		},
 		_updateUiRow: function(row) {
@@ -599,7 +605,7 @@
 			} else if(settings.mapper) {
 				value = value || rowModel.columnData.find(function(column) {
 					return column.key === settings.columnKey;
-				});
+				}).value;
 
 				cell.html(settings.mapper(value));
 			} else {
@@ -643,8 +649,6 @@
 			//var hg, cl;
 
 			this.grid = gridInstance;
-			this._addDSSuccessHandler();
-			this._addDSErrorHandler();
 			if(isRebind) {
 				return;
 			}
@@ -659,7 +663,6 @@
 			}*/
 			this._createHandlers();
 			this._bindGridEvents();
-			this._bindModelEvents();
 			this._analyzeEditTriggers();
 			/*
 			if(this.grid.options._isHierarchicalGrid && this.grid._originalOptions) {
