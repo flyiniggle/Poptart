@@ -224,7 +224,7 @@
 			if(ui.owner.id() !== this.grid.id()) {
 				return;
 			}
-			this.options.columnSettings = jQuery.extend(this.element.igGridUpdating("option", "columnSettings"), this.options.columnSettings);
+			this.options.columnSettings = jQuery.extend(true, this.element.igGridUpdating("option", "columnSettings"), this.options.columnSettings);
 			this.options.columnSettings = this.options.columnSettings.map((function(settings) {
 				var gridColumnSettings = this.grid.options.columns.find(function(gridColumn) {
 					return gridColumn.key === settings.columnKey;
@@ -244,6 +244,10 @@
 					}
 
 					settings.dataType = gridColumnSettings.dataType;
+				}
+
+				if(settings.readOnly !== false) {
+					settings.readOnly = true;
 				}
 
 				return settings;
@@ -274,9 +278,13 @@
 			}
 		},
 		_keyPress: function(evt) {
-			if(evt.keyCode === 9) {
+			if(evt.keyCode === jQuery.ui.keyCode.TAB) {
 				evt.preventDefault();
-				this._navigateLeft();
+				if(evt.shiftKey) {
+					this._navigateRight();
+				} else {
+					this._navigateLeft();
+				}
 				return false;
 			}
 		},
@@ -287,16 +295,20 @@
 		},
 		_navigateLeft: function() {
 			var rowModel = this.activeEditor.rowModel,
-				cells = rowModel.cells, currentCellIndex, nextEditableCell;
+				cells, currentCellIndex, nextEditableCell;
 
 			if(!this.activeEditor) {
 				return;
 			}
 
+			cells = rowModel.cells.filter((function(cell) {
+				return !this._getColumnSettings(cell.key).readOnly;
+			}).bind(this));
+
 			currentCellIndex = cells.indexOf(this.activeEditor.cell);
 
 			nextEditableCell = (function nextEditableCell(cells, currentCellIndex) {
-				var isLastCell = (currentCellIndex === cells.length - 1),
+				var isLastCell = (currentCellIndex === (cells.length - 1)),
 					nextCell;
 
 				if(isLastCell) {
@@ -309,7 +321,38 @@
 			}).call(this, cells, currentCellIndex);
 
 			if(nextEditableCell) {
-				//this._endEdit(rowModel);
+				this._startEditCell(rowModel, nextEditableCell.columnKey);
+			} else {
+				console.log("end");
+			}
+		},
+		_navigateRight: function() {
+			var rowModel = this.activeEditor.rowModel,
+				cells, currentCellIndex, nextEditableCell;
+
+			if(!this.activeEditor) {
+				return;
+			}
+			cells = rowModel.cells.filter((function(cell) {
+				return !this._getColumnSettings(cell.key).readOnly;
+			}).bind(this));
+
+			currentCellIndex = cells.indexOf(this.activeEditor.cell);
+
+			nextEditableCell = (function nextEditableCell(cells, currentCellIndex) {
+				var isFirstCell = (currentCellIndex === 0),
+					nextCell;
+
+				if(isFirstCell) {
+					return false;
+				}
+
+				nextCell = this._getColumnSettings(cells[--currentCellIndex].key);
+
+				return (!nextCell.readOnly) ? nextCell : nextEditableCell.call(this, cells, currentCellIndex);
+			}).call(this, cells, currentCellIndex);
+
+			if(nextEditableCell) {
 				this._startEditCell(rowModel, nextEditableCell.columnKey);
 			} else {
 				console.log("end");
@@ -416,7 +459,7 @@
 				});
 				columnKey = this.options.columnSettings.find(function(item) {
 					return (!item.readOnly && visibleColumnKeys.indexOf(item.columnKey) >= 0);
-				}) || column;
+				}).columnKey;
 			} else {
 				columnKey = column;
 			}
@@ -425,7 +468,6 @@
 			element.cell.addClass(this.css.editingCell);
 
 			newEditor = this._getEditorForCell(columnKey, element, rowModel);
-
 			newEditor.provider.setValue(0);
 			newEditor.providerWrapper
 				.prependTo(element.cell)

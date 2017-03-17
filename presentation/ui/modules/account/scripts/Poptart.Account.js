@@ -132,6 +132,7 @@ Poptart.Account = function() {
 								return (securityObject.lastPrice || 0) * row.quantity;
 							}
 						},
+						{columnKey: "quantityDrift", readOnly: true},
 						{
 							columnKey: "lastPrice",
 							readOnly: true,
