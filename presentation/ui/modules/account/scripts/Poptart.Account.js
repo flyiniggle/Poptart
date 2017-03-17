@@ -120,6 +120,13 @@ Poptart.Account = function() {
 							}
 						},
 						{
+							columnKey: "value",
+							readOnly: true,
+							formula: function(row) {
+								return row.ticker.lastPrice * row.quantity;
+							}
+						},
+						{
 							columnKey: "lastPrice",
 							readOnly: true,
 							formula: function(row) {

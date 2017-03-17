@@ -597,6 +597,10 @@
 			} else if(settings.template) {
 				cell.html(jQuery.ig.tmp(settings.template, rowData));
 			} else if(settings.mapper) {
+				value = value || rowModel.columnData.find(function(column) {
+					return column.key === settings.columnKey;
+				});
+
 				cell.html(settings.mapper(value));
 			} else {
 				cell.html(value);
