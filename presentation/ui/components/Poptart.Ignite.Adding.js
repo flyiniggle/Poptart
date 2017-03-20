@@ -26,6 +26,11 @@
 			});
 			return this.model;
 		},
+		removeRow: function(row) {
+			var rowData = typeof row === "string" ? this.getRowById(row) : row;
+
+			this.model.slice(this.model.indexOf(rowData));
+		},
 		getRowById: function(id) {
 			return this.model.find(function(row) {
 				return row.rowId === id;
@@ -242,6 +247,9 @@
 					if(!settings.mapper && gridColumnSettings.mapper) {
 						settings.mapper = gridColumnSettings.mapper;
 					}
+					if(gridColumnSettings.hidden) {
+						settings.readOnly = true;
+					}
 
 					settings.dataType = gridColumnSettings.dataType;
 				}
@@ -289,17 +297,31 @@
 			}
 		},
 		_blur: function(evt) {
+			var rowModel = evt.data.rowModel;
+
 			evt.preventDefault();
-			this._saveEdit(evt.data.rowModel, evt.data.columnKey, this.activeEditor.provider.getValue());
+			this._saveEdit(rowModel, evt.data.columnKey, this.activeEditor.provider.getValue());
+
+			if(!(jQuery(evt.relatedTarget).closest("tr")[0] === rowModel.row)) {
+				if(this._isAddingRowFilledOut(rowModel)) {
+					this._commitRow(rowModel);
+					this._addAddingRow();
+				}
+			}
 			return false;
 		},
 		_navigateLeft: function() {
-			var rowModel = this.activeEditor.rowModel,
+			var rowModel, field,
 				cells, currentCellIndex, nextEditableCell;
 
 			if(!this.activeEditor) {
 				return;
 			}
+			field = this.activeEditor.providerWrapper.find("input");
+			field.off("blur", this._addingRowHandlers.blur);
+			field.blur();
+
+			rowModel = this.activeEditor.rowModel;
 
 			cells = rowModel.cells.filter((function(cell) {
 				return !this._getColumnSettings(cell.key).readOnly;
@@ -317,13 +339,20 @@
 
 				nextCell = this._getColumnSettings(cells[++currentCellIndex].key);
 
-				return (!nextCell.readOnly) ? nextCell : nextEditableCell.call(this, cells, currentCellIndex);
+				return (nextCell.readOnly === false) ? nextCell : nextEditableCell.call(this, cells, currentCellIndex);
 			}).call(this, cells, currentCellIndex);
 
+			this._saveEdit(rowModel, this.activeEditor.cell.key, this.activeEditor.provider.getValue());
 			if(nextEditableCell) {
 				this._startEditCell(rowModel, nextEditableCell.columnKey);
 			} else {
-				console.log("end");
+				if(this._isLastAddingRow(rowModel)) {
+					this._addAddingRow();
+				}
+				if(this._isAddingRowFilledOut(rowModel)) {
+					this._commitRow(rowModel);
+				}
+				this._startEditRow(this.model.model[this.model.model.indexOf(rowModel) + 1]);
 			}
 		},
 		_navigateRight: function() {
@@ -355,7 +384,7 @@
 			if(nextEditableCell) {
 				this._startEditCell(rowModel, nextEditableCell.columnKey);
 			} else {
-				console.log("end");
+				//this._endRowEdit(rowModel);
 			}
 		},
 		_generateDummyLayout: function(cols) {
@@ -392,39 +421,6 @@
 				.on(this._addingRowHandlers);
 
 			return newRow;
-		},
-		_addAddingRow: function(evt) {
-			var rowId = addingRowIdPrefix + this.addingRowCounter++,
-				fixed, thead, visibleColumns,
-				initialHiddenColumns, newAddingRow, i, j;
-
-			if(!this._trigger(this.events.rowAddingAdding, evt)) {
-				return false;
-			}
-
-			fixed = this.grid.hasFixedColumns();
-			if(fixed) {
-				thead = this.grid.fixedHeadersTable().children("thead");
-			} else {
-				thead = this.grid.headersTable().children("thead");
-			}
-			visibleColumns = jQuery.extend([], this.grid._visibleColumns(fixed));
-			initialHiddenColumns = this.grid._initialHiddenColumns;
-			if(initialHiddenColumns && initialHiddenColumns.length) {
-				for(i = 0; i < initialHiddenColumns.length; i++) {
-					for(j = 0; j < visibleColumns.length; j++) {
-						if(initialHiddenColumns[i].key === visibleColumns[j].key) {
-							jQuery.ig.removeFromArray(visibleColumns, j, j);
-							break;
-						}
-					}
-				}
-			}
-			//numOfCols = this.grid._isMultiRowGrid() ? this.grid._recordHorizontalSize() : visibleColumns.length;
-			newAddingRow = this._createAddingRowHtml(rowId, visibleColumns, fixed);
-			this.model.addNewRow(rowId, newAddingRow);
-			thead.append(newAddingRow);
-			this._trigger(this.events.rowAddingAdded, evt);
 		},
 		_startEditRow: function(row) {
 			var visibleCols = this.grid._visibleColumns(),
@@ -591,7 +587,7 @@
 			return provider;
 		},
 		_cancelEdit: function(evt) {
-			this._endEdit(evt);
+			this._endCellEdit(evt);
 		},
 		_saveEdit: function(row, column, value) {
 			var cell = this.model.getCell(row, column),
@@ -607,15 +603,57 @@
 
 			this.model.updateColumnData(row, column, value);
 			this._updateUiCell(cell.cell, columnSettings, row, value);
-			this._endEdit(row);
+			this._endCellEdit(row);
 		},
-		_endEdit: function(row) {
+		_endCellEdit: function(row) {
 			this.activeEditor.providerWrapper.remove();
 			if(row) {
 				this._updateUiRow(row);
 			}
 			delete this.activeEditor;
 			//this.activeEditor.element.removeClass(this.css.editingCell);
+		},
+		_addAddingRow: function() {
+			var rowId = addingRowIdPrefix + this.addingRowCounter++,
+				fixed, thead, visibleColumns,
+				initialHiddenColumns, newAddingRow, i, j;
+
+			if(!this._trigger(this.events.rowAddingAdding)) {
+				return false;
+			}
+
+			fixed = this.grid.hasFixedColumns();
+			if(fixed) {
+				thead = this.grid.fixedHeadersTable().children("thead");
+			} else {
+				thead = this.grid.headersTable().children("thead");
+			}
+			visibleColumns = jQuery.extend([], this.grid._visibleColumns(fixed));
+			initialHiddenColumns = this.grid._initialHiddenColumns;
+			if(initialHiddenColumns && initialHiddenColumns.length) {
+				for(i = 0; i < initialHiddenColumns.length; i++) {
+					for(j = 0; j < visibleColumns.length; j++) {
+						if(initialHiddenColumns[i].key === visibleColumns[j].key) {
+							jQuery.ig.removeFromArray(visibleColumns, j, j);
+							break;
+						}
+					}
+				}
+			}
+			//numOfCols = this.grid._isMultiRowGrid() ? this.grid._recordHorizontalSize() : visibleColumns.length;
+			newAddingRow = this._createAddingRowHtml(rowId, visibleColumns, fixed);
+			this.model.addNewRow(rowId, newAddingRow);
+			thead.append(newAddingRow);
+			this._trigger(this.events.rowAddingAdded);
+		},
+		_removeAddingRow: function(rowModel) {
+			rowModel.row.remove();
+			this.model.model.slice(this.model.model.indexOf(rowModel));
+		},
+		_isLastAddingRow: function(rowModel) {
+			var rowIndex = this.model.model.indexOf(rowModel);
+
+			return (rowIndex === (this.model.model.length - 1));
 		},
 		_updateUiRow: function(row) {
 			var visibleCols = this.grid._visibleColumns(),
@@ -653,6 +691,26 @@
 			} else {
 				cell.html(value);
 			}
+		},
+		_commitRow: function(row) {
+			var rowModel = this._getRow(row),
+				renderableRow = this._getRowForRendering(rowModel),
+				renderer = this.options.newRowFormatter,
+				newRowData;
+
+			newRowData = renderer ? renderer(renderableRow) : renderableRow;
+			this.element.igGridUpdating("addRow", newRowData);
+			this._removeAddingRow(rowModel);
+		},
+		_isAddingRowFilledOut: function(row) {
+			var rowModel = this._getRow(row),
+				editableCells = rowModel.columnData.filter((function(cell) {
+					return this._getColumnSettings(cell.key).readOnly === false;
+				}).bind(this));
+
+			return !editableCells.find(function(cell) {
+				return !cell.value;
+			});
 		},
 		_isLastScrollableCell: function(cell) {
 			return (cell &&

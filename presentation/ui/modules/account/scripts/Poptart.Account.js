@@ -76,6 +76,22 @@ Poptart.Account = function() {
 			features: [
 				{
 					name: "Adding",
+					newRowFormatter: function(row) {
+						return {
+							ticker: row.ticker.ticker,
+							CUSIP: row.ticker.CUSIP,
+							security: row.ticker.security,
+							quantity: row.quantity,
+							value: row.value,
+							expectedQuantity: row.expectedQuantity,
+							expectedValue: row.expectedValue,
+							quantityDrift: row.quantityDrift,
+							valueDrift: row.valueDrift,
+							segment: row.segment,
+							lastPrice: row.lastPrice,
+							pk: row.CUSIP
+						};
+					},
 					columnSettings: [
 						{
 							columnKey: "ticker",
@@ -151,14 +167,13 @@ Poptart.Account = function() {
 					enableDeleteRow: true,
 					autoCommit: false,
 					columnSettings: [
-						{columnKey: "pk", readOnly: true},
+						//{columnKey: "pk", readOnly: true},
 						{columnKey: "ticker", readOnly: true},
 						{columnKey: "security", readOnly: true},
 						{columnKey: "CUSIP", readOnly: true},
 						{columnKey: "quantityDrift", readOnly: true},
 						{columnKey: "value", readOnly: true},
 						{columnKey: "valueDrift", readOnly: true},
-						{columnKey: "securityLastPrice", readOnly: true},
 						{
 							columnKey: "quantity",
 							editorType: "numeric",
