@@ -177,13 +177,6 @@
 					"keypress": this._keyPress.bind(this),
 					"click": this._addingRowClick.bind(this)
 				};
-			/*this._addingCellHandlers = this._addingCellHandlers ||
-				{
-					//"focus": this._addRowFocus.bind(this),
-					//"blur": this._blur.bind(this),
-					"keydown": this._keyDown.bind(this),
-					"click": this._addingRowClick.bind(this)
-				};*/
 			this._validationHandlers = this._validationHandlers ||
 				{
 					errorShowing: jQuery.proxy(this._editorErrorShowing, this),
@@ -451,7 +444,6 @@
 						.html(j === 0 ? "Add..." : "")
 						.data("columnKey", layout[i][j].col.key)
 						.attr("id", rowId + "_" + layout[i][j].col.key)
-						//.attr("aria-readonly", !!layout[i][j].col.readOnly)
 						.attr("aria-describedby", this.grid.id() + "_" + layout[i][j].col.key)
 						.attr("colspan", layout[i][j].cs || 1)
 						.attr("rowspan", layout[i][j].rs || 1)
@@ -509,18 +501,16 @@
 			element.cell.addClass(this.css.editingCell);
 
 			newEditor = this._getEditorForCell(columnKey, element, rowModel);
-			newEditor.provider.setValue(0);
 			newEditor.providerWrapper
 				.prependTo(element.cell)
 				.find("input")
-				.focus()
 				.on({
 					"blur": this._addingRowHandlers.blur,
 					"keypress": this._addingRowHandlers.keypress
 				},
 				{rowModel: rowModel, columnKey: columnKey});
 
-			this.activeEditor = newEditor;
+			this._activateEditor(newEditor);
 			this._trigger(this.events.editAddingCellStarted);
 			/*
 
@@ -529,10 +519,7 @@
 			this._trigger(this.events.editCellStarted, evt, args);
 			if(focus && editor) {
 				this._activateEditor(providerWrapper)
-			}
-			this.hideDeleteButton();
-			this._editingForRowId = rowId;
-			return true*/
+			}*/
 		},
 		_getEditorForCell: function(columnKey, cell, rowModel) {
 			var element = cell.cell,
@@ -549,11 +536,15 @@
 			provider = this._getProviderForKey(columnKey, columnSettings);
 
 			editorOptions = columnSettings.editorOptions || {};
-			editorOptions.width = editorOptions.width || width + "px";
-			editorOptions.height = element.outerHeight() + "px";
+
+			if(!((columnSettings.editorType === "checkbox") || (columnSettings.dataType === "bool"))) {
+				editorOptions.width = editorOptions.width || width + "px";
+				editorOptions.height = element.outerHeight() + "px";
+			}
 
 			providerWrapper = provider.createEditor(this._editorCallbacks, columnKey, editorOptions, this._getNextTabIndex(), columnSettings.format);
 
+			providerWrapper.igEditorFilter({provider: provider});
 			providerWrapper
 				.addClass(this.css.editor)
 				.css({
@@ -562,7 +553,9 @@
 					"marginLeft": "-" + cellPaddingLeft,
 					"marginRight": "-" + cellPaddingRight,
 					"marginTop": "-" + cellPaddingTop,
-					"marginBottom": "-" + cellPaddingBottom
+					"marginBottom": "-" + cellPaddingBottom,
+					"width": width + "px",
+					"height": element.outerHeight() + "px"
 				});
 
 			return {
@@ -631,6 +624,13 @@
 
 			return provider;
 		},
+		_activateEditor: function(editor) {
+			if(editor.providerWrapper.data("igEditorFilter")) {
+				editor.providerWrapper.igEditorFilter("setFocus");
+			}
+
+			this.activeEditor = editor;
+		},
 		_cancelEdit: function(evt) {
 			this._endCellEdit(evt);
 		},
@@ -656,7 +656,7 @@
 				this._updateUiRow(row);
 			}
 			delete this.activeEditor;
-			//this.activeEditor.element.removeClass(this.css.editingCell);
+			this.activeEditor.element.removeClass(this.css.editingCell);
 		},
 		_addAddingRow: function() {
 			var rowId = addingRowIdPrefix + this.addingRowCounter++,
@@ -800,15 +800,8 @@
 			if(isRebind) {
 				return;
 			}
-			/*this._dialogInvalid = true;
-			this._defaultDialogTemplate = "<table><colgroup><col></col><col></col></colgroup><tbody data-render-tmpl></tbody></table>";*/
+
 			this._editors = this._editors || {};
-			/*if(this.options.excelNavigationMode && this.options.editMode !== "cell" && this.options.editMode !== "row") {
-				throw new Error(jQuery.ig.GridUpdating.locale.excelNavigationNotSupportedWithCurrentEditMode)
-			}
-			if(this.grid._isMultiRowGrid() && this.options.editMode !== "dialog") {
-				throw new Error(jQuery.ig.GridUpdating.locale.multiRowGridNotSupportedWithCurrentEditMode)
-			}*/
 			this._createHandlers();
 			this._bindGridEvents();
 			this._analyzeEditTriggers();

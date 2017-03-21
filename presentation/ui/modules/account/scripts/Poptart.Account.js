@@ -167,7 +167,7 @@ Poptart.Account = function() {
 					enableDeleteRow: true,
 					autoCommit: false,
 					columnSettings: [
-						//{columnKey: "pk", readOnly: true},
+						{columnKey: "pk", readOnly: true},
 						{columnKey: "ticker", readOnly: true},
 						{columnKey: "security", readOnly: true},
 						{columnKey: "CUSIP", readOnly: true},
@@ -210,41 +210,6 @@ Poptart.Account = function() {
 				}
 			]
 		});
-	}
-
-	function displaySecurityList(data) {
-		/*jQuery("#addHolding").igCombo().on("keydown", function(e) {
-			var combo, securities, table, firstEmptyRow, i;
-
-			if(e.keyCode === 13) {
-				combo = jQuery("#addHolding");
-				table = jQuery("#accountHoldingsTable");
-				securities = combo.igCombo("selectedItems");
-
-				combo.igCombo("select",
-					combo.igCombo("activeIndex"),
-					{
-						closeDropDown: "true",
-						focusCombo: "false",
-						additive: "true",
-						keepInputText: "true",
-						keepHighlighting: "true"
-					}
-				);
-
-				for(i = 0; i < securities.length; i++) {
-					table.igGridUpdating("addRow", securities[i].data);
-				}
-
-				combo.igCombo("deselectAll");
-
-				firstEmptyRow = table.igGrid("option", "dataSource").dataView().findIndex(function(item) {
-					return !item.quantity;
-				});
-
-				table.igGridUpdating("startEdit", table.igGrid("getElementInfo", table.igGrid("rowAt", firstEmptyRow)).rowId, "quantity");
-			}
-		});*/
 	}
 
 	function displayAccountHoldingsCharts(data) {
