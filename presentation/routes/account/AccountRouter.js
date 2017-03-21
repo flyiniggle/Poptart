@@ -9,6 +9,12 @@ module.exports = function(express) {
 		res.render("modules/monitors/account/createaccount.ninja");
 	});
 
+	router.get('/test/test1', function(req, res) {
+		res.render("modules/account/accounttest1.ninja");
+	});
+
+	router.get('/test/test1/data', accountController.getTest1);
+
 	router.post('/create', accountController.createAccount);
 
 	router.get('/securities', accountController.getSecurities);

@@ -54,6 +54,10 @@ const AccountController = function() {
 		logging.log(data);
 	};
 
+	self.getTest1 = function(req, res) {
+		res.send([]);
+	};
+
 	// Request Callbacks
 	function processAccountData(res, accountData) {
 		var responseData = {},
