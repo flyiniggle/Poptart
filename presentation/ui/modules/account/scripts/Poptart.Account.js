@@ -167,7 +167,7 @@ Poptart.Account = function() {
 					enableDeleteRow: true,
 					autoCommit: false,
 					columnSettings: [
-						//{columnKey: "pk", readOnly: true},
+						{columnKey: "pk", readOnly: true},
 						{columnKey: "ticker", readOnly: true},
 						{columnKey: "security", readOnly: true},
 						{columnKey: "CUSIP", readOnly: true},
