@@ -177,13 +177,6 @@
 					"keypress": this._keyPress.bind(this),
 					"click": this._addingRowClick.bind(this)
 				};
-			/*this._addingCellHandlers = this._addingCellHandlers ||
-				{
-					//"focus": this._addRowFocus.bind(this),
-					//"blur": this._blur.bind(this),
-					"keydown": this._keyDown.bind(this),
-					"click": this._addingRowClick.bind(this)
-				};*/
 			this._validationHandlers = this._validationHandlers ||
 				{
 					errorShowing: jQuery.proxy(this._editorErrorShowing, this),
@@ -526,10 +519,7 @@
 			this._trigger(this.events.editCellStarted, evt, args);
 			if(focus && editor) {
 				this._activateEditor(providerWrapper)
-			}
-			this.hideDeleteButton();
-			this._editingForRowId = rowId;
-			return true*/
+			}*/
 		},
 		_getEditorForCell: function(columnKey, cell, rowModel) {
 			var element = cell.cell,
@@ -547,7 +537,7 @@
 
 			editorOptions = columnSettings.editorOptions || {};
 
-			if(!((columnSettings.editorType === "checkbox") || (columnSettings.dataType === "bool"))){
+			if(!((columnSettings.editorType === "checkbox") || (columnSettings.dataType === "bool"))) {
 				editorOptions.width = editorOptions.width || width + "px";
 				editorOptions.height = element.outerHeight() + "px";
 			}
@@ -666,7 +656,7 @@
 				this._updateUiRow(row);
 			}
 			delete this.activeEditor;
-			//this.activeEditor.element.removeClass(this.css.editingCell);
+			this.activeEditor.element.removeClass(this.css.editingCell);
 		},
 		_addAddingRow: function() {
 			var rowId = addingRowIdPrefix + this.addingRowCounter++,
@@ -810,15 +800,8 @@
 			if(isRebind) {
 				return;
 			}
-			/*this._dialogInvalid = true;
-			this._defaultDialogTemplate = "<table><colgroup><col></col><col></col></colgroup><tbody data-render-tmpl></tbody></table>";*/
+
 			this._editors = this._editors || {};
-			/*if(this.options.excelNavigationMode && this.options.editMode !== "cell" && this.options.editMode !== "row") {
-				throw new Error(jQuery.ig.GridUpdating.locale.excelNavigationNotSupportedWithCurrentEditMode)
-			}
-			if(this.grid._isMultiRowGrid() && this.options.editMode !== "dialog") {
-				throw new Error(jQuery.ig.GridUpdating.locale.multiRowGridNotSupportedWithCurrentEditMode)
-			}*/
 			this._createHandlers();
 			this._bindGridEvents();
 			this._analyzeEditTriggers();
