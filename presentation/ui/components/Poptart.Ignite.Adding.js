@@ -356,14 +356,20 @@
 			}
 		},
 		_navigateRight: function() {
-			var rowModel = this.activeEditor.rowModel,
+			var rowModel, field, lastEditableCell,
 				cells, currentCellIndex, nextEditableCell;
 
 			if(!this.activeEditor) {
 				return;
 			}
+			field = this.activeEditor.providerWrapper.find("input");
+			field.off("blur", this._addingRowHandlers.blur);
+			field.blur();
+
+			rowModel = this.activeEditor.rowModel;
+
 			cells = rowModel.cells.filter((function(cell) {
-				return !this._getColumnSettings(cell.key).readOnly;
+				return this._getColumnSettings(cell.key).readOnly === false;
 			}).bind(this));
 
 			currentCellIndex = cells.indexOf(this.activeEditor.cell);
@@ -378,13 +384,20 @@
 
 				nextCell = this._getColumnSettings(cells[--currentCellIndex].key);
 
-				return (!nextCell.readOnly) ? nextCell : nextEditableCell.call(this, cells, currentCellIndex);
+				return (nextCell.readOnly === false) ? nextCell : nextEditableCell.call(this, cells, currentCellIndex);
 			}).call(this, cells, currentCellIndex);
 
+			this._saveEdit(rowModel, this.activeEditor.cell.key, this.activeEditor.provider.getValue());
 			if(nextEditableCell) {
 				this._startEditCell(rowModel, nextEditableCell.columnKey);
 			} else {
-				//this._endRowEdit(rowModel);
+				if(!this._isFirstRow(rowModel)) {
+					lastEditableCell = Array.from(cells).reverse()[0].key;
+					this._startEditCell(this.model.model[this.model.model.indexOf(rowModel) - 1], lastEditableCell);
+				}
+				if(this._isAddingRowFilledOut(rowModel)) {
+					this._commitRow(rowModel);
+				}
 			}
 		},
 		_generateDummyLayout: function(cols) {
@@ -654,6 +667,9 @@
 			var rowIndex = this.model.model.indexOf(rowModel);
 
 			return (rowIndex === (this.model.model.length - 1));
+		},
+		_isFirstRow: function(rowModel) {
+			return this.model.model.indexOf(rowModel) === 0;
 		},
 		_updateUiRow: function(row) {
 			var visibleCols = this.grid._visibleColumns(),
