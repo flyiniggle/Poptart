@@ -655,8 +655,8 @@
 			if(row) {
 				this._updateUiRow(row);
 			}
+			this.activeEditor.cell.cell.removeClass(this.css.editingCell);
 			delete this.activeEditor;
-			this.activeEditor.element.removeClass(this.css.editingCell);
 		},
 		_addAddingRow: function() {
 			var rowId = addingRowIdPrefix + this.addingRowCounter++,
