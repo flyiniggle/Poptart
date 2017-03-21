@@ -388,12 +388,10 @@ Poptart.Account.Test1 = function() {
 						},
 						{
 							columnKey: "noBuy",
-							//editorType: "checkbox",
 							readOnly: false
 						},
 						{
 							columnKey: "noSell",
-							//editorType: "checkbox",
 							readOnly: false
 						},
 						{columnKey: "weight", readOnly: false}
@@ -412,7 +410,7 @@ Poptart.Account.Test1 = function() {
 						{columnKey: "CUSIP", readOnly: true},
 						{columnKey: "noBuy", readOnly: false},
 						{columnKey: "noSell", readOnly: false},
-						{columnKey: "weight", readOnly: false},
+						{columnKey: "weight", readOnly: false, editorType: "numeric"},
 						{columnKey: "lastPrice", readOnly: true}
 					]
 				}
