@@ -288,12 +288,17 @@
 		_keyPress: function(evt) {
 			if(evt.keyCode === jQuery.ui.keyCode.TAB) {
 				evt.preventDefault();
+				evt.stopPropagation();
 				if(evt.shiftKey) {
-					this._navigateRight();
-				} else {
 					this._navigateLeft();
+				} else {
+					this._navigateRight();
 				}
 				return false;
+			} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
+				evt.preventDefault();
+				evt.stopPropagation();
+				this._navigateDown();
 			}
 		},
 		_blur: function(evt) {
@@ -310,7 +315,7 @@
 			}
 			return false;
 		},
-		_navigateLeft: function() {
+		_navigateRight: function() {
 			var rowModel, field,
 				cells, currentCellIndex, nextEditableCell;
 
@@ -355,7 +360,7 @@
 				this._startEditRow(this.model.model[this.model.model.indexOf(rowModel) + 1]);
 			}
 		},
-		_navigateRight: function() {
+		_navigateLeft: function() {
 			var rowModel, field, lastEditableCell,
 				cells, currentCellIndex, nextEditableCell;
 
@@ -399,6 +404,33 @@
 					this._commitRow(rowModel);
 				}
 			}
+		},
+		_navigateDown: function() {
+			var field, rowModel, nextRowModel,
+				currentRowIndex, columnKey;
+
+			if(!this.activeEditor) {
+				return;
+			}
+			field = this.activeEditor.providerWrapper.find("input");
+			field.off("blur", this._addingRowHandlers.blur);
+			field.blur();
+
+			rowModel = this.activeEditor.rowModel;
+			columnKey = this.activeEditor.cell.key;
+			currentRowIndex = this.model.model.indexOf(rowModel);
+			nextRowModel = this.model.model[currentRowIndex + 1];
+
+			this._saveEdit(rowModel, this.activeEditor.cell.key, this.activeEditor.provider.getValue());
+
+			if(this._isAddingRowFilledOut(rowModel)) {
+				this._commitRow(rowModel);
+			}
+			if(!nextRowModel) {
+				this._addAddingRow();
+				nextRowModel = this.model.model[currentRowIndex + 1];
+			}
+			this._startEditCell(nextRowModel, columnKey);
 		},
 		_generateDummyLayout: function(cols) {
 			var i, layout = [[]];
