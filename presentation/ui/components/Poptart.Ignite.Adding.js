@@ -264,7 +264,7 @@
 				row = (target.nodeName.toLowerCase() === "tr") ? jQuery(target) : jQuery(target.closest("tr")),
 				columnIsReadOnly;
 
-			if (this.activeEditor && jQuery.contains(this.activeEditor.providerWrapper[0], evt.target[0])) {
+			if (this.activeEditor && this.activeEditor.cell.cell[0] === evt.currentTarget) {
 				return false;
 			}
 
@@ -455,7 +455,8 @@
 			jQuery(newRow)
 				.data("rowId", rowId)
 				.addClass("ui-iggrid-adding-row")
-				.on(this._addingRowHandlers);
+				.on("click", "td", this._addingRowHandlers.click)
+				.on("blur", this._addingRowHandlers.blur);
 
 			return newRow;
 		},
