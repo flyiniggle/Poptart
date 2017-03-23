@@ -315,7 +315,7 @@
 			if(!this.activeEditor) {
 				return;
 			}
-			field = this.activeEditor.providerWrapper.find("input");
+			field = this.activeEditor.providerWrapper;
 			field.off("blur", this._addingRowHandlers.blur);
 			field.blur();
 
@@ -360,7 +360,7 @@
 			if(!this.activeEditor) {
 				return;
 			}
-			field = this.activeEditor.providerWrapper.find("input");
+			field = this.activeEditor.providerWrapper;
 			field.off("blur", this._addingRowHandlers.blur);
 			field.blur();
 
@@ -405,7 +405,7 @@
 			if(!this.activeEditor) {
 				return;
 			}
-			field = this.activeEditor.providerWrapper.find("input");
+			field = this.activeEditor.providerWrapper;
 			field.off("blur", this._addingRowHandlers.blur);
 			field.blur();
 
@@ -504,11 +504,11 @@
 			newEditor = this._getEditorForCell(columnKey, element, rowModel);
 			newEditor.providerWrapper
 				.prependTo(element.cell)
-				.find("input")
 				.on({
 					"blur": this._addingRowHandlers.blur,
 					"keypress": this._addingRowHandlers.keypress
 				},
+				"input, div.ui-checkbox-container",
 				{rowModel: rowModel, columnKey: columnKey});
 
 			this._activateEditor(newEditor);
