@@ -30,7 +30,7 @@ Poptart.Account = function() {
 					dataType: "object",
 					width: "115px",
 					mapper: function(security) {
-						return security.ticker || "";
+						return security ? security.ticker : "";
 					}
 				},
 				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
@@ -314,7 +314,7 @@ Poptart.Account.Test1 = function() {
 					dataType: "object",
 					width: "115px",
 					mapper: function(security) {
-						return security.ticker || "";
+						return security ? security.ticker : "";
 					}
 				},
 				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
