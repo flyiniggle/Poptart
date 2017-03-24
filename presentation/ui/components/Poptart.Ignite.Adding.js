@@ -455,7 +455,7 @@
 			for(i = 0; i < layout.length; i++) {
 				for(j = 0; j < layout[i].length; j++) {
 					jQuery("<td></td>")
-						.html(j === 0 ? "Add..." : "")
+						.html("--")
 						.data("columnKey", layout[i][j].col.key)
 						.attr("id", rowId + "_" + layout[i][j].col.key)
 						.attr("aria-describedby", this.grid.id() + "_" + layout[i][j].col.key)
