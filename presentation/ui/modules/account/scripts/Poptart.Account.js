@@ -337,7 +337,7 @@ Poptart.Account.Test1 = function() {
 							noBuy: row.noBuy,
 							noSell: row.noSell,
 							weight: row.weight,
-							lastPrice: row.lastPrice,
+							lastPrice: row.ticker.lastPrice,
 							pk: row.CUSIP
 						};
 					},
@@ -394,7 +394,16 @@ Poptart.Account.Test1 = function() {
 							columnKey: "noSell",
 							readOnly: false
 						},
-						{columnKey: "weight", readOnly: false}
+						{columnKey: "weight", readOnly: false},
+						{
+							columnKey: "lastPrice",
+							readOnly: true,
+							formula: function(row) {
+								var securityObject = row.ticker || {};
+
+								return securityObject.lastPrice || "";
+							}
+						}
 					]
 				},
 				{
