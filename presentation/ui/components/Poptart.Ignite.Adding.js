@@ -287,7 +287,6 @@
 				} else {
 					this._navigateRight();
 				}
-				return false;
 			} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
 				evt.preventDefault();
 				evt.stopPropagation();
@@ -316,8 +315,8 @@
 				return;
 			}
 			field = this.activeEditor.providerWrapper;
-			field.off("blur", this._addingRowHandlers.blur);
-			field.blur();
+			field.off("blur", "input, div.ui-checkbox-container", this._addingRowHandlers.blur);
+			field.find("input").blur();
 
 			rowModel = this.activeEditor.rowModel;
 
@@ -361,8 +360,8 @@
 				return;
 			}
 			field = this.activeEditor.providerWrapper;
-			field.off("blur", this._addingRowHandlers.blur);
-			field.blur();
+			field.off("blur", "input, div.ui-checkbox-container", this._addingRowHandlers.blur);
+			field.find("input").blur();
 
 			rowModel = this.activeEditor.rowModel;
 
@@ -455,8 +454,7 @@
 			jQuery(newRow)
 				.data("rowId", rowId)
 				.addClass("ui-iggrid-adding-row")
-				.on("click", "td", this._addingRowHandlers.click)
-				.on("blur", this._addingRowHandlers.blur);
+				.on("click", "td", this._addingRowHandlers.click);
 
 			return newRow;
 		},
@@ -504,12 +502,11 @@
 			newEditor = this._getEditorForCell(columnKey, element, rowModel);
 			newEditor.providerWrapper
 				.prependTo(element.cell)
-				.on({
-					"blur": this._addingRowHandlers.blur,
-					"keypress": this._addingRowHandlers.keypress
-				},
-				"input, div.ui-checkbox-container",
-				{rowModel: rowModel, columnKey: columnKey});
+				.on(
+					{"keypress": this._addingRowHandlers.keypress, "blur": this._addingRowHandlers.blur},
+					"input, div.ui-checkbox-container",
+					{rowModel: rowModel, columnKey: columnKey}
+				);
 
 			this._activateEditor(newEditor);
 			this._trigger(this.events.editAddingCellStarted);
@@ -525,10 +522,10 @@
 		_getEditorForCell: function(columnKey, cell, rowModel) {
 			var element = cell.cell,
 				width = this._isLastScrollableCell(element) ? element.outerWidth() - this.grid._scrollbarWidth() : element.outerWidth(),
-				cellPaddingLeft = element.css("paddingLeft"),
-				cellPaddingRight = element.css("paddingRight"),
-				cellPaddingTop = element.css("paddingTop"),
-				cellPaddingBottom = element.css("paddingBottom"),
+				cellPaddingLeft = parseInt(element.css("paddingLeft").split("px")[0]) + 1,
+				cellPaddingRight = parseInt(element.css("paddingRight").split("px")[0]) + 1,
+				cellPaddingTop = parseInt(element.css("paddingTop").split("px")[0]) + 2 ,
+				cellPaddingBottom = parseInt(element.css("paddingBottom").split("px")[0]) - 1,
 				columnSettings, editorOptions,
 				providerWrapper, provider;
 
@@ -541,6 +538,9 @@
 			if(!((columnSettings.editorType === "checkbox") || (columnSettings.dataType === "bool"))) {
 				editorOptions.width = editorOptions.width || width + "px";
 				editorOptions.height = element.outerHeight() + "px";
+			} else {
+				editorOptions.width = "16px";
+				editorOptions.height = "16px";
 			}
 
 			providerWrapper = provider.createEditor(this._editorCallbacks, columnKey, editorOptions, this._getNextTabIndex(), columnSettings.format);
@@ -551,9 +551,9 @@
 				.css({
 					"position": "absolute",
 					"z-index": 1,
-					"marginLeft": "-" + cellPaddingLeft,
+					"marginLeft": "-" + cellPaddingLeft + "px",
 					"marginRight": "-" + cellPaddingRight,
-					"marginTop": "-" + cellPaddingTop,
+					"marginTop": "-" + cellPaddingTop + "px",
 					"marginBottom": "-" + cellPaddingBottom,
 					"width": width + "px",
 					"height": element.outerHeight() + "px"
@@ -630,6 +630,7 @@
 				editor.providerWrapper.igEditorFilter("setFocus");
 			}
 
+			editor.provider.setSize();
 			this.activeEditor = editor;
 		},
 		_cancelEdit: function(evt) {
