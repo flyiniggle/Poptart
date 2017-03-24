@@ -760,20 +760,18 @@
 		_updateUiCell: function(cell, settings, rowModel, value) {
 			var rowData = this._getRowForRendering(rowModel);
 
-			if(value !== undefined) {
-				if(settings.formula) {
-					cell.html(settings.formula(rowData));
-				} else if(settings.template) {
-					cell.html(jQuery.ig.tmp(settings.template, rowData));
-				} else if(settings.mapper) {
-					value = value || rowModel.columnData.find(function(column) {
-							return column.key === settings.columnKey;
-						}).value;
+			if(settings.formula) {
+				cell.html(settings.formula(rowData));
+			} else if(settings.template) {
+				cell.html(jQuery.ig.tmp(settings.template, rowData));
+			} else if(settings.mapper) {
+				value = value || rowModel.columnData.find(function(column) {
+					return column.key === settings.columnKey;
+				}).value;
 
-					cell.html(settings.mapper(value));
-				} else {
-					cell.html(value);
-				}
+				cell.html(settings.mapper(value));
+			} else {
+				cell.html(value);
 			}
 		},
 		_commitRow: function(row) {
