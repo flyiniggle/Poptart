@@ -172,8 +172,8 @@
 				};
 			this._addingRowHandlers = this._addingRowHandlers ||
 				{
-					//"focus": this._addRowFocus.bind(this),
 					"blur": this._blur.bind(this),
+					"keydown": this._keyDown.bind(this),
 					"keypress": this._keyPress.bind(this),
 					"click": this._addingRowClick.bind(this)
 				};
@@ -288,6 +288,13 @@
 					this._navigateRight();
 				}
 			} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
+				evt.preventDefault();
+				evt.stopPropagation();
+				this._navigateDown();
+			}
+		},
+		_keyDown: function(evt) {
+			if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
 				evt.preventDefault();
 				evt.stopPropagation();
 				this._navigateDown();
@@ -514,6 +521,9 @@
 					{rowModel: rowModel, columnKey: columnKey},
 					this._addingRowHandlers.blur
 				);
+			if(this._getColumnSettings(columnKey).editorType === "combo") {
+				newEditor.providerWrapper.on("keydown", this._addingRowHandlers.keydown);
+			}
 
 			this._activateEditor(newEditor);
 			newEditor.provider.setValue(this.model.getColumnData(row, columnKey).value);
