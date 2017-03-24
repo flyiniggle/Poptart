@@ -2,7 +2,7 @@
 	"use strict";
 
 	var addingRowIdPrefix = "addingRow",
-		dataModel;
+		dataModel, defaultEditorValues;
 
 	dataModel = {
 		model: [],
@@ -20,7 +20,7 @@
 				columnData: this.columns.map(function(column) {
 					return {
 						key: column.key,
-						value: ""
+						value: undefined
 					};
 				})
 			});
@@ -61,6 +61,14 @@
 			cell.value = value;
 			return cell;
 		}
+	};
+
+	defaultEditorValues = {
+		"combo": {},
+		"checkbox": false,
+		"numeric": 0,
+		"text": "",
+		"percent": 0
 	};
 
 	jQuery.widget("Poptart.igGridAdding", {
@@ -486,7 +494,8 @@
 		_startEditCell: function(row, column) {
 			var visibleCols = this.grid._visibleColumns(),
 				rowModel = this._getRow(row),
-				newEditor, visibleColumnKeys, columnKey, element;
+				newEditor, visibleColumnKeys, columnKey, element,
+				storedValue, startingValue;
 
 			if(!this._trigger(this.events.editAddingCellStarting)) {
 				return false;
@@ -502,6 +511,8 @@
 			} else {
 				columnKey = column;
 			}
+
+			storedValue = this.model.getColumnData(row, columnKey).value;
 
 			element = this.model.getCell(rowModel, columnKey);
 			element.cell.addClass(this.css.editingCell);
@@ -526,7 +537,8 @@
 			}
 
 			this._activateEditor(newEditor);
-			newEditor.provider.setValue(this.model.getColumnData(row, columnKey).value);
+			startingValue = (storedValue === undefined) ? defaultEditorValues[newEditor.editorType] : storedValue;
+			newEditor.provider.setValue(startingValue);
 			this._trigger(this.events.editAddingCellStarted);
 			/*
 
@@ -544,12 +556,13 @@
 				cellPaddingRight = parseInt(element.css("paddingRight").split("px")[0]) + 1,
 				cellPaddingTop = parseInt(element.css("paddingTop").split("px")[0]) + 2 ,
 				cellPaddingBottom = parseInt(element.css("paddingBottom").split("px")[0]) - 1,
-				columnSettings, editorOptions,
+				providerData, columnSettings, editorOptions,
 				providerWrapper, provider;
 
 			columnSettings = this._getColumnSettings(columnKey);
 
-			provider = this._getProviderForKey(columnKey, columnSettings);
+			providerData = this._getProviderForKey(columnKey, columnSettings);
+			provider = providerData.provider;
 
 			editorOptions = columnSettings.editorOptions || {};
 
@@ -581,7 +594,8 @@
 				provider: provider,
 				providerWrapper: providerWrapper,
 				cell: cell,
-				rowModel: rowModel
+				rowModel: rowModel,
+				editorType: providerData.editorType
 			};
 		},
 		_getProviderForKey: function(column, setting) {
@@ -641,7 +655,7 @@
 				throw new TypeError("Please provide an editor type.");
 			}
 
-			return provider;
+			return {provider: provider, editorType: editorType};
 		},
 		_activateEditor: function(editor) {
 			if(editor.providerWrapper.data("igEditorFilter")) {
@@ -777,7 +791,7 @@
 				}).bind(this));
 
 			return !editableCells.find(function(cell) {
-				return !cell.value;
+				return cell.value === undefined;
 			});
 		},
 		_isLastScrollableCell: function(cell) {
