@@ -503,12 +503,20 @@
 			newEditor.providerWrapper
 				.prependTo(element.cell)
 				.on(
-					{"keypress": this._addingRowHandlers.keypress, "blur": this._addingRowHandlers.blur},
+					"keypress",
 					"input, div.ui-checkbox-container",
-					{rowModel: rowModel, columnKey: columnKey}
+					{rowModel: rowModel, columnKey: columnKey},
+					this._addingRowHandlers.keypress
+				)
+				.on(
+					"blur",
+					"input, div.ui-checkbox-container",
+					{rowModel: rowModel, columnKey: columnKey},
+					this._addingRowHandlers.blur
 				);
 
 			this._activateEditor(newEditor);
+			newEditor.provider.setValue(this.model.getColumnData(row, columnKey).value);
 			this._trigger(this.events.editAddingCellStarted);
 			/*
 
