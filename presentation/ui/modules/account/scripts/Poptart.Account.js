@@ -484,7 +484,7 @@ Poptart.Account.Test2 = function() {
 					name: "Adding",
 					newRowFormatter: function(row) {
 						return {
-							ticker: row.ticker.ticker,
+							ticker: row.ticker,
 							CUSIP: row.ticker.CUSIP,
 							tradeType: row.tradeType,
 							tradeQuantity: row.tradeQuantity,
