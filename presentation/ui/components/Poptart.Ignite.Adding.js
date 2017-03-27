@@ -309,9 +309,12 @@
 			}
 		},
 		_blur: function(evt) {
-			var rowModel = evt.data.rowModel;
+			var rowModel = evt.data.rowModel,
+				field;
 
-			evt.preventDefault();
+			field = this.activeEditor.providerWrapper;
+			field.off("blur", "input, div.ui-checkbox-container", this._addingRowHandlers.blur);
+			field.find("input").blur();
 			this._saveEdit(rowModel, evt.data.columnKey, this.activeEditor.provider.getValue());
 
 			if(!(jQuery(evt.relatedTarget).closest("tr")[0] === rowModel.row)) {
