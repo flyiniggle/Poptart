@@ -14,15 +14,22 @@ module.exports = function(config) {
 		// list of files / patterns to load in the browser
 		files: [
 			'static/ui/scripts/*.js',
+			'static/ui/scripts/ignite/*.js',
+			'static/ui/scripts/ignite/modules/*.js',
 			'static/ui/poptart.min.js',
 			'static/ui/**/*.min.js',
 			'static/ui/components/**/*.min.js',
 			'static/ui/modules/**/*.min.js',
-			'test/client/*.js'
+			'test/client/*.js',
+			'./node_modules/phantomjs-polyfill-find/find-polyfill.js'
 		],
 
 		// list of files to exclude
 		exclude: [],
+
+		proxies: {
+			'/ui/': '/base/static/'
+		},
 
 		// preprocess matching files before serving them to the browser
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -41,7 +48,7 @@ module.exports = function(config) {
 
 		// level of logging
 		// possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-		logLevel: config.LOG_INFO,
+		logLevel: config.LOG_DEBUG,
 
 		// enable / disable watching file and executing tests whenever any file changes
 		autoWatch: true,
@@ -49,6 +56,10 @@ module.exports = function(config) {
 		// start these browsers
 		// available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
 		browsers: ['Chrome', 'PhantomJS'],
+
+		client: {
+			captureConsole: true
+		},
 
 		// Continuous Integration mode
 		// if true, Karma captures browsers, runs the tests and exits

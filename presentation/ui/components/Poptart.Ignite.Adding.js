@@ -133,6 +133,9 @@
 
 			return this._startEditRow(rowModel);
 		},
+		addAddingRow: function() {
+			this._addAddingRow();
+		},
 		_createHandlers: function() {
 			this._stopEditingHandler = this._stopEditingHandler || jQuery.proxy(this._cancelEdit, this);
 			this._gridHandlers = this._gridHandlers ||
