@@ -102,7 +102,7 @@ module.exports = function(grunt) {
 		karma: {
 			options: {
 				configFile: 'karma.conf.js',
-				singleRun: true
+				//singleRun: true
 			},
 			unit: {
 				options: {
@@ -121,14 +121,14 @@ module.exports = function(grunt) {
 			integration: {
 				options: {
 					files: [
-						'static/ui/scripts/*.js',
-						'static/ui/scripts/ignite/*.js',
-						'static/ui/scripts/ignite/modules/*.js',
-						'static/ui/poptart.min.js',
-						'static/ui/**/*.min.js',
-						'static/ui/components/**/*.min.js',
-						'static/ui/modules/**/*.min.js',
-						'test/client/integration/*.js'
+						{pattern: 'static/ui/scripts/*.js', noCache: true},
+						{pattern: 'static/ui/scripts/ignite/*.js', noCache: true},
+						{pattern: 'static/ui/scripts/ignite/modules/*.js', noCache: true},
+						{pattern: 'static/ui/poptart.min.js', noCache: true},
+						{pattern: 'static/ui/**/*.min.js', noCache: true},
+						{pattern: 'static/ui/components/**/*.min.js', noCache: true},
+						{pattern: 'static/ui/modules/**/*.min.js', noCache: true},
+						{pattern: 'test/client/integration/*.js', noCache: true}
 					]
 				}
 			}

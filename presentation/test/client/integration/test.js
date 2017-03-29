@@ -22,9 +22,9 @@ describe("Poptart", function() {
 						{
 							name: "Adding",
 							columnSettings: [
-								{columnKey: "number", readOnly: false},
-								{columnKey: "text", readOnly: false},
-								{columnKey: "bool", readOnly: false},
+								{columnKey: "number", editorType: "numeric", readOnly: false},
+								{columnKey: "text", editorType: "text", readOnly: false},
+								{columnKey: "bool", editorType: "checkbox", readOnly: false},
 								{columnKey: "pk", readOnly: true}
 							]
 						},
@@ -58,10 +58,17 @@ describe("Poptart", function() {
 			});
 
 			it("should start editing the first adding row", function() {
+				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId");
 
-				tableEle.igGridAdding("startEditCell", 0);
-
+				tableEle.igGridAdding("startEditRow", firstAddingRowId);
 				tableEle.find(".ui-iggrid-adding-row-cell:first").should.have.class("ui-iggrid-editingcell");
+			});
+
+			it("should start editing the text column of the first adding row", function() {
+				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId");
+
+				tableEle.igGridAdding("startEditCell", firstAddingRowId, "text");
+				jQuery("#" + firstAddingRowId + "_text").should.have.class("ui-iggrid-editingcell");
 			});
 		});
 	});

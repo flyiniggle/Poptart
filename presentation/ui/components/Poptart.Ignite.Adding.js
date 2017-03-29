@@ -113,7 +113,7 @@
 				throw new TypeError("The column " + columnKey + " is read only.");
 			}
 
-			return this._startEditCell(rowModel.attr("id"), columnKey);
+			return this._startEditCell(rowModel, columnKey);
 		},
 		endEditCell: function(row, columnKey, update) {
 			if (update) {
@@ -477,7 +477,7 @@
 				.addClass("ui-iggrid-adding-row")
 				.on("click", "td", this._addingRowHandlers.click);
 
-			return newRow;
+			return jQuery(newRow);
 		},
 		_startEditRow: function(row) {
 			var visibleCols = this.grid._visibleColumns(),
