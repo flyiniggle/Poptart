@@ -1,19 +1,11 @@
 var assert = chai.assert;
 
 describe("Poptart", function() {
-	describe("#basic", function() {
-		it("should return a map", function() {
-			assert.isObject(Poptart, "Poptart is not a map.");
-		});
-	});
-
 	describe("#infragistics", function() {
-		describe("#adding", function() {
-			it("should add a new adding row", function() {
-				var tableEle = jQuery("<table></table>"),
-					addingRowSelector = ".ui-iggrid-adding-row",
-					addingRowsLength;
+		describe("#tableAdding", function() {
+			var tableEle = jQuery("<table></table>");
 
+			before(function() {
 				tableEle.appendTo(jQuery("body"));
 
 				tableEle.igGrid({
@@ -49,6 +41,11 @@ describe("Poptart", function() {
 						}
 					]
 				});
+			});
+
+			it("should add a new adding row", function() {
+				var addingRowSelector = ".ui-iggrid-adding-row",
+					addingRowsLength;
 
 				tableEle.igGridAdding("addAddingRow");
 				addingRowsLength = jQuery(addingRowSelector).length;
@@ -58,6 +55,13 @@ describe("Poptart", function() {
 				addingRowsLength = jQuery(addingRowSelector).length;
 				assert.equal(addingRowsLength, 3, "Expected 2 adding rows but found " + addingRowsLength);
 
+			});
+
+			it("should start editing the first adding row", function() {
+
+				tableEle.igGridAdding("startEditCell", 0);
+
+				tableEle.find(".ui-iggrid-adding-row-cell:first").should.have.class("ui-iggrid-editingcell");
 			});
 		});
 	});

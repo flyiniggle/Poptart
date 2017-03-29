@@ -12,17 +12,6 @@ module.exports = function(config) {
 		frameworks: ['mocha', 'chai', 'sinon', 'jquery-chai'],
 
 		// list of files / patterns to load in the browser
-		files: [
-			'static/ui/scripts/*.js',
-			'static/ui/scripts/ignite/*.js',
-			'static/ui/scripts/ignite/modules/*.js',
-			'static/ui/poptart.min.js',
-			'static/ui/**/*.min.js',
-			'static/ui/components/**/*.min.js',
-			'static/ui/modules/**/*.min.js',
-			'test/client/*.js',
-			'./node_modules/phantomjs-polyfill-find/find-polyfill.js'
-		],
 
 		// list of files to exclude
 		exclude: [],

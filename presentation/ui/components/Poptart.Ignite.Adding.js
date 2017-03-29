@@ -125,7 +125,7 @@
 		startEditRow: function(row) {
 			var rowModel;
 
-			if(!row) {
+			if(typeof row === "undefined") {
 				throw new TypeError("The parameter 'row' must be a valid row data model reference or row ID number.");
 			}
 

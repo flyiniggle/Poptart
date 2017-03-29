@@ -100,9 +100,37 @@ module.exports = function(grunt) {
 			}
 		},
 		karma: {
-			unit: {
+			options: {
 				configFile: 'karma.conf.js',
 				singleRun: true
+			},
+			unit: {
+				options: {
+					files: [
+						'static/ui/scripts/*.js',
+						'static/ui/scripts/ignite/*.js',
+						'static/ui/scripts/ignite/modules/*.js',
+						'static/ui/poptart.min.js',
+						'static/ui/**/*.min.js',
+						'static/ui/components/**/*.min.js',
+						'static/ui/modules/**/*.min.js',
+						'test/client/unit/*.js'
+					]
+				}
+			},
+			integration: {
+				options: {
+					files: [
+						'static/ui/scripts/*.js',
+						'static/ui/scripts/ignite/*.js',
+						'static/ui/scripts/ignite/modules/*.js',
+						'static/ui/poptart.min.js',
+						'static/ui/**/*.min.js',
+						'static/ui/components/**/*.min.js',
+						'static/ui/modules/**/*.min.js',
+						'test/client/integration/*.js'
+					]
+				}
 			}
 		},
 		mochaTest: {
@@ -118,7 +146,7 @@ module.exports = function(grunt) {
 	grunt.loadTasks('tasks');
 
 	grunt.registerTask('default', ['lint', 'test']);
-	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit']);
+	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit', 'karma:integration']);
 	grunt.registerTask('lint', ['eslint:all']);
 	grunt.registerTask('build-static', ['uglify-build-all-javascript-file-mapping', 'sync', 'uglify', 'cssmin']);
 
