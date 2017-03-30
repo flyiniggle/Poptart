@@ -114,7 +114,7 @@ module.exports = function(grunt) {
 						'static/ui/**/*.min.js',
 						'static/ui/components/**/*.min.js',
 						'static/ui/modules/**/*.min.js',
-						'test/client/unit/*.js'
+						'test/client/unit/**/*.js'
 					]
 				}
 			},
