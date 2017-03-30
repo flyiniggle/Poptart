@@ -68,7 +68,21 @@ describe("Poptart", function() {
 				assert.property(rowModel, "row", "Row model did not have a 'row' property.");
 				assert.property(rowModel, "cells", "Row model did not have a 'cells' property.");
 				assert.property(rowModel, "columnData", "Row model did not have a 'columnData' property.");
+				rowModel.row.should.have.prop("tagName", "TR");
 				assert.equal(firstAddingRowId, rowModel.rowId, "Expected row ID of " + firstAddingRowId + " but got " + rowModel.rowId + ".");
+			});
+
+			it("should return a cell", function() {
+				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+					column = "bool",
+					cell;
+
+				cell = addingWidget.model.getCell(firstAddingRowId, column);
+
+				assert.property(cell, "key", "Cell model did not have a 'key' property.");
+				assert.property(cell, "cell", "Cell model did not have a 'cell' property.");
+				cell.cell.should.have.prop("tagName", "TD");
+				assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
 			});
 
 			it("should add a new row model", function() {
