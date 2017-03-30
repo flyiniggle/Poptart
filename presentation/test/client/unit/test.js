@@ -85,6 +85,19 @@ describe("Poptart", function() {
 				assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
 			});
 
+			it("should return column data", function() {
+				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+					column = "bool",
+					cell;
+
+				cell = addingWidget.model.getColumnData(firstAddingRowId, column);
+
+				assert.property(cell, "key", "Cell model did not have a 'key' property.");
+				assert.property(cell, "value", "Cell model did not have a 'value' property.");
+				assert.isUndefined(cell.value, "Expected cell value to be undefined at start");
+				assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
+			});
+
 			it("should add a new row model", function() {
 				var newRowId = "newRow",
 					rowModel, newAddingRow;
