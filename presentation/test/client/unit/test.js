@@ -94,7 +94,7 @@ describe("Poptart", function() {
 
 				assert.property(cell, "key", "Cell model did not have a 'key' property.");
 				assert.property(cell, "value", "Cell model did not have a 'value' property.");
-				assert.isUndefined(cell.value, "Expected cell value to be undefined at start");
+				assert.isUndefined(cell.value, "Expected cell value to be undefined at start.");
 				assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
 			});
 
@@ -117,6 +117,48 @@ describe("Poptart", function() {
 				addingWidget.model.removeRow(firstAddingRowId);
 
 				assert.lengthOf(addingWidget.model.model, 0, "Expected 0 row models but got " + addingWidget.model.model.length + ".");
+			});
+
+			it("should update boolean column data", function() {
+				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+					column = "bool",
+					cell;
+
+				cell = addingWidget.model.updateColumnData(firstAddingRowId, column, true);
+
+				assert.property(cell, "key", "Cell model did not have a 'key' property.");
+				assert.property(cell, "value", "Cell model did not have a 'value' property.");
+				assert.isTrue(cell.value, "Expected cell value to be true.");
+				assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
+
+				cell = addingWidget.model.updateColumnData(firstAddingRowId, column, false);
+				assert.isFalse(cell.value, "Expected cell value to be false.");
+			});
+
+			it("should update text column data", function() {
+				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+					column = "bool",
+					cell;
+
+				cell = addingWidget.model.updateColumnData(firstAddingRowId, column, "lala");
+
+				assert.property(cell, "key", "Cell model did not have a 'key' property.");
+				assert.property(cell, "value", "Cell model did not have a 'value' property.");
+				assert.equal('lala', cell.value, "Expected cell value to be 'lala'.");
+				assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
+			});
+
+			it("should update numeric column data", function() {
+				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+					column = "bool",
+					cell;
+
+				cell = addingWidget.model.updateColumnData(firstAddingRowId, column, 2);
+
+				assert.property(cell, "key", "Cell model did not have a 'key' property.");
+				assert.property(cell, "value", "Cell model did not have a 'value' property.");
+				assert.equal(2, cell.value, "Expected cell value to be 2.");
+				assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
 			});
 		});
 	});
