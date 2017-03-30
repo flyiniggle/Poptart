@@ -9,11 +9,14 @@ describe("Poptart", function() {
 
 	describe("#infragistics", function() {
 		describe("#tableAdding", function() {
-			var tableEle = jQuery("<table></table>"), addingWidget;
+			var tableEle, addingWidget;
 
 			before(function() {
+				tableEle = jQuery("<table></table>");
 				tableEle.appendTo(jQuery("body"));
+			});
 
+			beforeEach(function() {
 				tableEle.igGrid({
 					dataSource: [],
 					dataSourceType: "json",
@@ -51,6 +54,10 @@ describe("Poptart", function() {
 				addingWidget = tableEle.data("Poptart-igGridAdding");
 			});
 
+			afterEach(function() {
+				tableEle.igGrid("destroy");
+			});
+
 			it("should return a row model", function() {
 				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
 					rowModel;
@@ -73,10 +80,17 @@ describe("Poptart", function() {
 
 				rowModel = addingWidget.model.model[1];
 
-				assert.lengthOf(addingWidget.model.model, 2, "Expected 2 row models but got " + addingWidget.model.length + ".");
+				assert.lengthOf(addingWidget.model.model, 2, "Expected 2 row models but got " + addingWidget.model.model.length + ".");
 				assert.equal(newRowId, rowModel.rowId, "Expected second rowModel to have ID of " + newRowId + " but found " + rowModel.rowId + ".");
 			});
 
+			it("should remove a row model", function() {
+				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId");
+
+				addingWidget.model.removeRow(firstAddingRowId);
+
+				assert.lengthOf(addingWidget.model.model, 0, "Expected 0 row models but got " + addingWidget.model.model.length + ".");
+			});
 		});
 	});
 });

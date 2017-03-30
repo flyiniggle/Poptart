@@ -5,7 +5,6 @@
 		dataModel, defaultEditorValues;
 
 	dataModel = {
-		model: [],
 		addNewRow: function(rowId, row) {
 			this.model.push({
 				rowId: rowId,
@@ -29,7 +28,7 @@
 		removeRow: function(row) {
 			var rowData = typeof row === "string" ? this.getRowById(row) : row;
 
-			this.model.slice(this.model.indexOf(rowData));
+			this.model.splice(this.model.indexOf(rowData), 1);
 		},
 		getRowById: function(id) {
 			return this.model.find(function(row) {
@@ -92,6 +91,7 @@
 		},
 		_create: function() {
 			this.model = Object.create(dataModel);
+			this.model.model = [];
 			this.addingRowCounter = 0;
 		},
 		startEditCell: function(row, columnKey) {
