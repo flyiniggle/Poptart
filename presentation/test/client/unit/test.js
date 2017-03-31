@@ -176,7 +176,7 @@ describe("Poptart", function() {
 			});
 
 			describe("#Adding", function() {
-				describe("#getColumnSettings", function() {
+				describe("#_getColumnSettings", function() {
 					it("should return column settings for text", function() {
 						var columnSettings;
 
@@ -241,6 +241,35 @@ describe("Poptart", function() {
 						assert.propertyVal(columnSettings, "readOnly", false, "The Read Only setting was not false.");
 						assert.propertyVal(columnSettings, "editorType", "checkbox", "Expected an editor type of 'checkbox' but got " + columnSettings.editorType + ".");
 						//assert.propertyVal(columnSettings, "dataType", "bool", "Expected a data type of 'bool' but got " + columnSettings.dataType + ".");
+					});
+				});
+
+				describe("#_getRowForRendering", function() {
+					it("should return keys for each column", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							row = addingWidget._getRowForRendering(firstAddingRowId);
+
+						assert.property(row, "text", "Renderable row did not have a key for the 'text' column.");
+						assert.property(row, "number", "Renderable row did not have a key for the 'number' column.");
+						assert.property(row, "bool", "Renderable row did not have a key for the 'bool' column.");
+					});
+
+					it("should return values for each column", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							textVal = "test!",
+							numberVal = 5,
+							boolVal = true,
+							row;
+
+						addingWidget.model.updateColumnData(firstAddingRowId, "text", textVal);
+						addingWidget.model.updateColumnData(firstAddingRowId, "number", numberVal);
+						addingWidget.model.updateColumnData(firstAddingRowId, "bool", boolVal);
+
+						row = addingWidget._getRowForRendering(firstAddingRowId);
+
+						assert.propertyVal(row, "text", textVal, "Expected " + textVal + " for text column value but got " + row.text + ".");
+						assert.propertyVal(row, "number", numberVal, "Expected " + numberVal + " for number column value but got " + row.number + ".");
+						assert.propertyVal(row, "bool", boolVal, "Expected " + boolVal + " for bool column value but got " + row.bool + ".");
 					});
 				});
 			});

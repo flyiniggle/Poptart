@@ -815,8 +815,9 @@
 		_getRow: function(row) {
 			return typeof row === "string" ? this.model.getRowById(row) : row;
 		},
-		_getRowForRendering: function(rowModel) {
-			var renderableRow = {};
+		_getRowForRendering: function(row) {
+			var rowModel = this._getRow(row),
+				renderableRow = {};
 
 			rowModel.columnData.forEach(function(column) {
 				renderableRow[column.key] = column.value;
