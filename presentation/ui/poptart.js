@@ -158,8 +158,8 @@ var Poptart = function() {
 	};
 
 	// Ignites
-	jQuery.ig.tmpl = function(path, data) {
-		return nunjucks.render(path, data);
+	jQuery.ig.tmpl = function(template, data) {
+		return nunjucks.renderString(template, data);
 	};
 
 	jQuery.ig.dependencies.push({

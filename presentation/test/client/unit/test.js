@@ -22,10 +22,30 @@ describe("Poptart", function() {
 					dataSourceType: "json",
 					primaryKey: "pk",
 					columns: [
-						{headerText: "number", key: "number", datatype: "number"},
-						{headerText: "text", key: "text", datatype: "text"},
-						{headerText: "bool", key: "bool", datatype: "bool"},
-						{headerText: "pk", key: "pk", datatype: "number"}
+						{headerText: "number", key: "number", dataType: "number"},
+						{headerText: "text", key: "text", dataType: "string"},
+						{headerText: "bool", key: "bool", dataType: "bool"},
+						{headerText: "template", key: "template", dataType: "string", template: "{{template}} template!"},
+						{
+							headerText: "formula",
+							key: "formula",
+							dataType: "number",
+							unbound: true,
+							formula: function(row) {
+								return row.formulaHelper;
+							}
+						},
+						{
+							headerText: "object",
+							key: "object",
+							dataType: "object",
+							mapper: function(obj) {
+								console.log(obj)
+								return obj.testKey;
+							}
+						},
+						{headerText: "pk", key: "pk", dataType: "number"},
+						{headerText: "formulaHelper", key: "formulaHelper", dataType: "string", hidden: true}
 					],
 					features: [
 						{
@@ -34,6 +54,7 @@ describe("Poptart", function() {
 								{columnKey: "number", editorType: "numeric", readOnly: false},
 								{columnKey: "text", editorType: "text", readOnly: false},
 								{columnKey: "bool", editorType: "checkbox", readOnly: false},
+								{columnKey: "template", readOnly: true},
 								{columnKey: "pk", readOnly: true}
 							]
 						},
@@ -225,8 +246,8 @@ describe("Poptart", function() {
 
 						assert.propertyVal(columnSettings,
 							"dataType",
-							"string",
-							"Expected a data type of 'string' but got " + columnSettings.dataType + ".");
+							"number",
+							"Expected a data type of 'number' but got " + columnSettings.dataType + ".");
 					});
 
 					it("should return column settings for bool", function() {
@@ -240,7 +261,7 @@ describe("Poptart", function() {
 							"Expected column settings columnKey to be 'bool' but got " + columnSettings.columnKey + ".");
 						assert.propertyVal(columnSettings, "readOnly", false, "The Read Only setting was not false.");
 						assert.propertyVal(columnSettings, "editorType", "checkbox", "Expected an editor type of 'checkbox' but got " + columnSettings.editorType + ".");
-						//assert.propertyVal(columnSettings, "dataType", "bool", "Expected a data type of 'bool' but got " + columnSettings.dataType + ".");
+						assert.propertyVal(columnSettings, "dataType", "bool", "Expected a data type of 'bool' but got " + columnSettings.dataType + ".");
 					});
 				});
 
@@ -295,6 +316,84 @@ describe("Poptart", function() {
 
 						cell = addingWidget.model.getCell(firstAddingRowId, "bool");
 						assert.isFalse(addingWidget._isLastScrollableCell(cell.cell), "Should have returned false but returned true.");
+					});
+				});
+
+				describe("#_updateUiCell", function() {
+					it("should display a new text value.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							columnKey = "text",
+							textVal = "test!",
+							rowModel, cell, columnSettings;
+
+						rowModel = addingWidget.model.getRowById(firstAddingRowId);
+						cell = addingWidget.model.getCell(firstAddingRowId, columnKey).cell;
+						columnSettings = addingWidget._getColumnSettings(columnKey);
+						addingWidget._updateUiCell(cell, columnSettings, rowModel, textVal);
+
+						cell.should.have.html(textVal);
+					});
+
+					it("should display a new number value.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							columnKey = "number",
+							numVal = 5,
+							rowModel, cell, columnSettings;
+
+						rowModel = rowModel = addingWidget.model.getRowById(firstAddingRowId);
+						cell = addingWidget.model.getCell(firstAddingRowId, columnKey).cell;
+						columnSettings = addingWidget._getColumnSettings(columnKey);
+						addingWidget._updateUiCell(cell, columnSettings, rowModel, numVal);
+
+						cell.should.have.html(numVal.toString());
+					});
+
+					it("should display a new template value.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							columnKey = "template",
+							rowModel, cell, columnSettings;
+
+						addingWidget.model.updateColumnData(firstAddingRowId, columnKey, "A working");
+
+						rowModel = addingWidget.model.getRowById(firstAddingRowId);
+						cell = addingWidget.model.getCell(firstAddingRowId, columnKey).cell;
+						columnSettings = addingWidget._getColumnSettings(columnKey);
+						addingWidget._updateUiCell(cell, columnSettings, rowModel);
+
+						cell.should.have.html("A working template!");
+					});
+
+					it("should display a new formula value.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							columnKey = "formula",
+							helperValue = "test!",
+							rowModel, cell, columnSettings;
+
+						addingWidget.model.updateColumnData(firstAddingRowId, "formulaHelper", helperValue);
+
+						rowModel = rowModel = addingWidget.model.getRowById(firstAddingRowId);
+						cell = addingWidget.model.getCell(firstAddingRowId, columnKey).cell;
+						columnSettings = addingWidget._getColumnSettings(columnKey);
+						addingWidget._updateUiCell(cell, columnSettings, rowModel, helperValue);
+
+						cell.should.have.html(helperValue);
+					});
+
+					it("should display a new mapped value.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							columnKey = "object",
+							objValue = {testKey: "test!"},
+							rowModel, cell, columnSettings;
+
+						//addingWidget.model.updateColumnData(firstAddingRowId, "formulaHelper", objValue);
+
+						rowModel = addingWidget.model.getRowById(firstAddingRowId);
+						cell = addingWidget.model.getCell(firstAddingRowId, columnKey).cell;
+						columnSettings = addingWidget._getColumnSettings(columnKey);
+
+						addingWidget._updateUiCell(cell, columnSettings, rowModel, objValue);
+
+						cell.should.have.html("test!");
 					});
 				});
 			});

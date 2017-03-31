@@ -230,40 +230,52 @@
 			}
 		},
 		_headerRendered: function(evt, ui) {
+			var gridColumnSettings;
+
 			if(ui.owner.id() !== this.grid.id()) {
 				return;
 			}
-			this.options.columnSettings = jQuery.extend(true, this.element.igGridUpdating("option", "columnSettings"), this.options.columnSettings);
-			this.options.columnSettings = this.options.columnSettings.map((function(settings) {
-				var gridColumnSettings = this.grid.options.columns.find(function(gridColumn) {
-					return gridColumn.key === settings.columnKey;
+
+			gridColumnSettings = this.grid.options.columns.map(function(settings) {
+				var copiedSettings = {};
+
+				copiedSettings.columnKey = settings.key;
+				copiedSettings.dataType = settings.dataType;
+
+				if(settings.formula) {
+					copiedSettings.formula = settings.formula;
+				}
+				if(settings.template) {
+					copiedSettings.template = settings.template;
+				}
+				if(settings.mapper) {
+					copiedSettings.mapper = settings.mapper;
+				}
+				if(settings.hidden) {
+					copiedSettings.hidden = settings.hidden;
+					copiedSettings.readOnly = true;
+				}
+
+				return copiedSettings;
+			});
+
+			this.element.igGridUpdating("option", "columnSettings").forEach(function(settings) {
+				var gridSettings = gridColumnSettings.find(function(i) {
+					return i.columnKey === settings.columnKey;
 				});
 
-				if(gridColumnSettings) {
-					if(!settings.formula && gridColumnSettings.formula) {
-						settings.formula = gridColumnSettings.formula;
-					}
+				jQuery.extend(true, gridSettings, settings);
+			});
 
-					if(!settings.template && gridColumnSettings.template) {
-						settings.template = gridColumnSettings.template;
-					}
+			this.options.columnSettings.forEach(function(settings) {
+				var gridSettings = gridColumnSettings.find(function(i) {
+					return i.columnKey === settings.columnKey;
+				});
 
-					if(!settings.mapper && gridColumnSettings.mapper) {
-						settings.mapper = gridColumnSettings.mapper;
-					}
-					if(gridColumnSettings.hidden) {
-						settings.readOnly = true;
-					}
+				jQuery.extend(true, gridSettings, settings);
+			});
 
-					settings.dataType = gridColumnSettings.dataType;
-				}
-
-				if(settings.readOnly !== false) {
-					settings.readOnly = true;
-				}
-
-				return settings;
-			}).bind(this));
+			this.options.columnSettings = gridColumnSettings;
 			this.model.columns = this.grid.options.columns;
 			this.model.visibleColumns = this.grid._visibleColumns(this.grid.hasFixedColumns());
 			this._addAddingRow(evt);
@@ -765,11 +777,11 @@
 		},
 		_updateUiCell: function(cell, settings, rowModel, value) {
 			var rowData = this._getRowForRendering(rowModel);
-
+console.log(settings)
 			if(settings.formula) {
 				cell.html(settings.formula(rowData));
 			} else if(settings.template) {
-				cell.html(jQuery.ig.tmp(settings.template, rowData));
+				cell.html(jQuery.ig.tmpl(settings.template, rowData));
 			} else if(settings.mapper) {
 				value = value || rowModel.columnData.find(function(column) {
 					return column.key === settings.columnKey;
@@ -779,6 +791,8 @@
 			} else {
 				cell.html(value);
 			}
+
+			return cell;
 		},
 		_commitRow: function(row) {
 			var rowModel = this._getRow(row),
