@@ -745,7 +745,7 @@
 		},
 		_removeAddingRow: function(rowModel) {
 			rowModel.row.remove();
-			this.model.model.slice(this.model.model.indexOf(rowModel));
+			this.model.removeRow(rowModel);
 		},
 		_isLastAddingRow: function(rowModel) {
 			var rowIndex = this.model.model.indexOf(rowModel);

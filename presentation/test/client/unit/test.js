@@ -40,7 +40,6 @@ describe("Poptart", function() {
 							key: "object",
 							dataType: "object",
 							mapper: function(obj) {
-								console.log(obj)
 								return obj.testKey;
 							}
 						},
@@ -394,6 +393,17 @@ describe("Poptart", function() {
 						addingWidget._updateUiCell(cell, columnSettings, rowModel, objValue);
 
 						cell.should.have.html("test!");
+					});
+				});
+
+				describe("#_removeAddingRow", function() {
+					it("should remove the only adding row.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							rowModel = addingWidget.model.getRowById(firstAddingRowId);
+
+						addingWidget._removeAddingRow(rowModel);
+
+						assert.equal(jQuery(".ui-iggrid-adding-row").length, 0, "Expected not to find any adding rows");
 					});
 				});
 			});
