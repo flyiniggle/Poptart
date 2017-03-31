@@ -777,7 +777,7 @@
 		},
 		_updateUiCell: function(cell, settings, rowModel, value) {
 			var rowData = this._getRowForRendering(rowModel);
-console.log(settings)
+
 			if(settings.formula) {
 				cell.html(settings.formula(rowData));
 			} else if(settings.template) {
