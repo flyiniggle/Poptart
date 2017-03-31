@@ -801,11 +801,15 @@
 			});
 		},
 		_isLastScrollableCell: function(cell) {
-			return (cell &&
+			return cell && cell.is(":last-child");
+
+			/*This is the original check from infragistics, but I don't know what all it does or if it's relevant to us
+			(cell &&
 				cell.is(":last-child") &&
 				(parseInt(cell.css("padding-right"), 10) > 12 || this.grid._hscrollbar().is(":visible") && this.grid._hasVerticalScrollbar) &&
 				this.grid.scrollContainer() &&
 				this.grid.scrollContainer().has(cell).length);
+			 */
 		},
 		_getNextTabIndex: function() {
 			var gti = this.grid.options.tabIndex;

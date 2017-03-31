@@ -272,6 +272,31 @@ describe("Poptart", function() {
 						assert.propertyVal(row, "bool", boolVal, "Expected " + boolVal + " for bool column value but got " + row.bool + ".");
 					});
 				});
+
+				describe("#_isLastScrollableCell", function() {
+					it("should return true for the last column", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							column = "pk",
+							cell;
+
+						cell = addingWidget.model.getCell(firstAddingRowId, column);
+						assert.isTrue(addingWidget._isLastScrollableCell(cell.cell), "Should have returned true but returned false.");
+					});
+
+					it("should return true for other columns", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							cell;
+
+						cell = addingWidget.model.getCell(firstAddingRowId, "text");
+						assert.isFalse(addingWidget._isLastScrollableCell(cell.cell), "Should have returned false but returned true.");
+
+						cell = addingWidget.model.getCell(firstAddingRowId, "number");
+						assert.isFalse(addingWidget._isLastScrollableCell(cell.cell), "Should have returned false but returned true.");
+
+						cell = addingWidget.model.getCell(firstAddingRowId, "bool");
+						assert.isFalse(addingWidget._isLastScrollableCell(cell.cell), "Should have returned false but returned true.");
+					});
+				});
 			});
 		});
 	});
