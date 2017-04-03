@@ -425,6 +425,20 @@ describe("Poptart", function() {
 						assert.equal(jQuery(".ui-iggrid-adding-row").length, 0, "Expected not to find any adding rows");
 					});
 				});
+
+				describe("#_addAddingRow", function() {
+					it("should add a new adding row.", function() {
+						var addingRowSelector = ".ui-iggrid-adding-row";
+
+						addingWidget._addAddingRow();
+						assert.equal(jQuery(addingRowSelector).length, 2, "Expected an adding row to be added.");
+						assert.equal(addingWidget.model.model.length, 2, "Expected an adding row model to be added.");
+
+						addingWidget._addAddingRow();
+						assert.equal(jQuery(addingRowSelector).length, 3, "Expected another adding row to be added.");
+						assert.equal(addingWidget.model.model.length, 3, "Expected another adding row model to be added.");
+					});
+				});
 			});
 		});
 	});
