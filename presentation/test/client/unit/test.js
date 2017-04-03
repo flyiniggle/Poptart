@@ -439,6 +439,38 @@ describe("Poptart", function() {
 						assert.equal(addingWidget.model.model.length, 3, "Expected another adding row model to be added.");
 					});
 				});
+
+				describe("#_createAddingRowHtml", function() {
+					it("should return a row with a cell for each visible column.", function() {
+						var columns = [{key: "test1"}, {key: "test2"}, {key: "test3"}, {key: "test4"}],
+							rowId = "addingRowTest",
+							html, cell;
+
+						html = addingWidget._createAddingRowHtml(rowId, columns, false);
+						html.should.have.data("rowId", rowId);
+						assert.equal(html.find("td").length, 4, "Did not find the expected number of cells.");
+
+						cell = html.children(":first-child");
+						cell.should.have.data("columnKey", columns[0].key);
+						cell.should.have.attr("id", rowId + "_" + columns[0].key);
+						cell.should.have.class("ui-iggrid-adding-row-cell");
+
+						cell = cell.next();
+						cell.should.have.data("columnKey", columns[1].key);
+						cell.should.have.attr("id", rowId + "_" + columns[1].key);
+						cell.should.have.class("ui-iggrid-adding-row-cell");
+
+						cell = cell.next();
+						cell.should.have.data("columnKey", columns[2].key);
+						cell.should.have.attr("id", rowId + "_" + columns[2].key);
+						cell.should.have.class("ui-iggrid-adding-row-cell");
+
+						cell = cell.next();
+						cell.should.have.data("columnKey", columns[3].key);
+						cell.should.have.attr("id", rowId + "_" + columns[3].key);
+						cell.should.have.class("ui-iggrid-adding-row-cell");
+					});
+				});
 			});
 		});
 	});
