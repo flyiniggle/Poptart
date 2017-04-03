@@ -384,8 +384,6 @@ describe("Poptart", function() {
 							objValue = {testKey: "test!"},
 							rowModel, cell, columnSettings;
 
-						//addingWidget.model.updateColumnData(firstAddingRowId, "formulaHelper", objValue);
-
 						rowModel = addingWidget.model.getRowById(firstAddingRowId);
 						cell = addingWidget.model.getCell(firstAddingRowId, columnKey).cell;
 						columnSettings = addingWidget._getColumnSettings(columnKey);
@@ -393,6 +391,27 @@ describe("Poptart", function() {
 						addingWidget._updateUiCell(cell, columnSettings, rowModel, objValue);
 
 						cell.should.have.html("test!");
+					});
+				});
+
+				describe("#_updateUiRow", function() {
+					it("updated calculated columns when a row is edited.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							rowModel = addingWidget.model.getRowById(firstAddingRowId),
+							formulaHelperValue = "Formula test!",
+							objValue = {testKey: "Object test!"},
+							formulaCell, objCell;
+
+						addingWidget.model.updateColumnData(firstAddingRowId, "formulaHelper", formulaHelperValue);
+						addingWidget.model.updateColumnData(firstAddingRowId, "object", objValue);
+
+						addingWidget._updateUiRow(rowModel);
+
+						formulaCell = addingWidget.model.getCell(firstAddingRowId, "formula").cell;
+						objCell = addingWidget.model.getCell(firstAddingRowId, "object").cell;
+
+						objCell.should.have.html(objValue.testKey);
+						formulaCell.should.have.html(formulaHelperValue);
 					});
 				});
 

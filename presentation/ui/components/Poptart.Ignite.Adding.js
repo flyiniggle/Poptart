@@ -770,7 +770,7 @@
 			for(i = visibleCols.length - 1; i > -1; i--) {
 				setting = columnSettings.find(settingFilter(visibleCols[i])) || {};
 
-				if((setting.dataType === "object" && setting.mapper) || (setting.readOnly && (setting.formula || setting.template))) {
+				if((setting.dataType === "object" && setting.hasOwnProperty("mapper")) || setting.hasOwnProperty("formula") || setting.hasOwnProperty("template")) {
 					this._updateUiCell(this.model.getCell(row, visibleCols[i].key).cell, setting, row, value);
 				}
 			}
