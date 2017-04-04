@@ -5,7 +5,6 @@
 		dataModel, defaultEditorValues;
 
 	dataModel = {
-		model: [],
 		addNewRow: function(rowId, row) {
 			this.model.push({
 				rowId: rowId,
@@ -29,7 +28,7 @@
 		removeRow: function(row) {
 			var rowData = typeof row === "string" ? this.getRowById(row) : row;
 
-			this.model.slice(this.model.indexOf(rowData));
+			this.model.splice(this.model.indexOf(rowData), 1);
 		},
 		getRowById: function(id) {
 			return this.model.find(function(row) {
@@ -92,6 +91,7 @@
 		},
 		_create: function() {
 			this.model = Object.create(dataModel);
+			this.model.model = [];
 			this.addingRowCounter = 0;
 		},
 		startEditCell: function(row, columnKey) {
@@ -113,7 +113,7 @@
 				throw new TypeError("The column " + columnKey + " is read only.");
 			}
 
-			return this._startEditCell(rowModel.attr("id"), columnKey);
+			return this._startEditCell(rowModel, columnKey);
 		},
 		endEditCell: function(row, columnKey, update) {
 			if (update) {
@@ -125,13 +125,16 @@
 		startEditRow: function(row) {
 			var rowModel;
 
-			if(!row) {
+			if(typeof row === "undefined") {
 				throw new TypeError("The parameter 'row' must be a valid row data model reference or row ID number.");
 			}
 
 			rowModel = this._getRow(row);
 
 			return this._startEditRow(rowModel);
+		},
+		addAddingRow: function() {
+			this._addAddingRow();
 		},
 		_createHandlers: function() {
 			this._stopEditingHandler = this._stopEditingHandler || jQuery.proxy(this._cancelEdit, this);
@@ -227,40 +230,52 @@
 			}
 		},
 		_headerRendered: function(evt, ui) {
+			var gridColumnSettings;
+
 			if(ui.owner.id() !== this.grid.id()) {
 				return;
 			}
-			this.options.columnSettings = jQuery.extend(true, this.element.igGridUpdating("option", "columnSettings"), this.options.columnSettings);
-			this.options.columnSettings = this.options.columnSettings.map((function(settings) {
-				var gridColumnSettings = this.grid.options.columns.find(function(gridColumn) {
-					return gridColumn.key === settings.columnKey;
+
+			gridColumnSettings = this.grid.options.columns.map(function(settings) {
+				var copiedSettings = {};
+
+				copiedSettings.columnKey = settings.key;
+				copiedSettings.dataType = settings.dataType;
+
+				if(settings.formula) {
+					copiedSettings.formula = settings.formula;
+				}
+				if(settings.template) {
+					copiedSettings.template = settings.template;
+				}
+				if(settings.mapper) {
+					copiedSettings.mapper = settings.mapper;
+				}
+				if(settings.hidden) {
+					copiedSettings.hidden = settings.hidden;
+					copiedSettings.readOnly = true;
+				}
+
+				return copiedSettings;
+			});
+
+			this.element.igGridUpdating("option", "columnSettings").forEach(function(settings) {
+				var gridSettings = gridColumnSettings.find(function(i) {
+					return i.columnKey === settings.columnKey;
 				});
 
-				if(gridColumnSettings) {
-					if(!settings.formula && gridColumnSettings.formula) {
-						settings.formula = gridColumnSettings.formula;
-					}
+				jQuery.extend(true, gridSettings, settings);
+			});
 
-					if(!settings.template && gridColumnSettings.template) {
-						settings.template = gridColumnSettings.template;
-					}
+			this.options.columnSettings.forEach(function(settings) {
+				var gridSettings = gridColumnSettings.find(function(i) {
+					return i.columnKey === settings.columnKey;
+				});
 
-					if(!settings.mapper && gridColumnSettings.mapper) {
-						settings.mapper = gridColumnSettings.mapper;
-					}
-					if(gridColumnSettings.hidden) {
-						settings.readOnly = true;
-					}
+				jQuery.extend(true, gridSettings, settings);
+			});
 
-					settings.dataType = gridColumnSettings.dataType;
-				}
-
-				if(settings.readOnly !== false) {
-					settings.readOnly = true;
-				}
-
-				return settings;
-			}).bind(this));
+			this.options.columnSettings = gridColumnSettings;
 			this.model.columns = this.grid.options.columns;
 			this.model.visibleColumns = this.grid._visibleColumns(this.grid.hasFixedColumns());
 			this._addAddingRow(evt);
@@ -423,7 +438,7 @@
 				return;
 			}
 			field = this.activeEditor.providerWrapper;
-			field.off("blur", this._addingRowHandlers.blur);
+			field.off("blur", "input, div.ui-checkbox-container", this._addingRowHandlers.blur);
 			field.blur();
 
 			rowModel = this.activeEditor.rowModel;
@@ -474,7 +489,7 @@
 				.addClass("ui-iggrid-adding-row")
 				.on("click", "td", this._addingRowHandlers.click);
 
-			return newRow;
+			return jQuery(newRow);
 		},
 		_startEditRow: function(row) {
 			var visibleCols = this.grid._visibleColumns(),
@@ -610,13 +625,7 @@
 			if(dataType === "bool") {
 				editorType = "checkbox";
 			} else if (format === "currency") {
-				editorType === "percent";
-			} else if (dataType === "number") {
-				editorType === "numeric";
-			} else if (dataType === "string") {
-				editorType === "text";
-			} else if (dataType === "date") {
-				editorType === "date";
+				editorType = "currency";
 			}
 
 			switch(editorType) {
@@ -730,7 +739,7 @@
 		},
 		_removeAddingRow: function(rowModel) {
 			rowModel.row.remove();
-			this.model.model.slice(this.model.model.indexOf(rowModel));
+			this.model.removeRow(rowModel);
 		},
 		_isLastAddingRow: function(rowModel) {
 			var rowIndex = this.model.model.indexOf(rowModel);
@@ -755,7 +764,7 @@
 			for(i = visibleCols.length - 1; i > -1; i--) {
 				setting = columnSettings.find(settingFilter(visibleCols[i])) || {};
 
-				if((setting.dataType === "object" && setting.mapper) || (setting.readOnly && (setting.formula || setting.template))) {
+				if((setting.dataType === "object" && setting.hasOwnProperty("mapper")) || setting.hasOwnProperty("formula") || setting.hasOwnProperty("template")) {
 					this._updateUiCell(this.model.getCell(row, visibleCols[i].key).cell, setting, row, value);
 				}
 			}
@@ -766,7 +775,7 @@
 			if(settings.formula) {
 				cell.html(settings.formula(rowData));
 			} else if(settings.template) {
-				cell.html(jQuery.ig.tmp(settings.template, rowData));
+				cell.html(jQuery.ig.tmpl(settings.template, rowData));
 			} else if(settings.mapper) {
 				value = value || rowModel.columnData.find(function(column) {
 					return column.key === settings.columnKey;
@@ -776,6 +785,8 @@
 			} else {
 				cell.html(value);
 			}
+
+			return cell;
 		},
 		_commitRow: function(row) {
 			var rowModel = this._getRow(row),
@@ -798,11 +809,15 @@
 			});
 		},
 		_isLastScrollableCell: function(cell) {
-			return (cell &&
+			return cell && cell.is(":last-child");
+
+			/*This is the original check from infragistics, but I don't know what all it does or if it's relevant to us
+			(cell &&
 				cell.is(":last-child") &&
 				(parseInt(cell.css("padding-right"), 10) > 12 || this.grid._hscrollbar().is(":visible") && this.grid._hasVerticalScrollbar) &&
 				this.grid.scrollContainer() &&
 				this.grid.scrollContainer().has(cell).length);
+			 */
 		},
 		_getNextTabIndex: function() {
 			var gti = this.grid.options.tabIndex;
@@ -812,8 +827,9 @@
 		_getRow: function(row) {
 			return typeof row === "string" ? this.model.getRowById(row) : row;
 		},
-		_getRowForRendering: function(rowModel) {
-			var renderableRow = {};
+		_getRowForRendering: function(row) {
+			var rowModel = this._getRow(row),
+				renderableRow = {};
 
 			rowModel.columnData.forEach(function(column) {
 				renderableRow[column.key] = column.value;

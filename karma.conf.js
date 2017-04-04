@@ -12,17 +12,13 @@ module.exports = function(config) {
 		frameworks: ['mocha', 'chai', 'sinon', 'jquery-chai'],
 
 		// list of files / patterns to load in the browser
-		files: [
-			'static/ui/scripts/*.js',
-			'static/ui/poptart.min.js',
-			'static/ui/**/*.min.js',
-			'static/ui/components/**/*.min.js',
-			'static/ui/modules/**/*.min.js',
-			'test/client/*.js'
-		],
 
 		// list of files to exclude
 		exclude: [],
+
+		proxies: {
+			'/ui/': '/base/static/'
+		},
 
 		// preprocess matching files before serving them to the browser
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -48,7 +44,11 @@ module.exports = function(config) {
 
 		// start these browsers
 		// available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-		browsers: ['Chrome', 'PhantomJS'],
+		browsers: ['Chrome', 'PhantomJS', 'Firefox', 'Edge'],
+
+		client: {
+			captureConsole: true
+		},
 
 		// Continuous Integration mode
 		// if true, Karma captures browsers, runs the tests and exits
