@@ -608,7 +608,7 @@ describe("Poptart", function() {
 				});
 
 				describe("#_navigateDown", function() {
-					it("should open an editor in the same column of the next row", function() {
+					it("should open an editor in the same column of the next row.", function() {
 						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
 							column = "number",
 							nextRowModel, nextCell;
@@ -627,7 +627,100 @@ describe("Poptart", function() {
 						assert.equal(addingWidget.activeEditor.rowModel, nextRowModel, "Active editor was not in the correct row.");
 
 						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-						assert.isTrue(addingWidget._startEditCell.calledTwice, "_startEditCell was not called.")
+						assert.isTrue(addingWidget._startEditCell.calledTwice, "_startEditCell was not called.");
+					});
+
+					it("should add a new row when on the last adding row.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							addingRowsSelector = ".ui-iggrid-adding-row",
+							column = "number",
+							nextRowModel, nextCell;
+
+						sinon.spy(addingWidget, "_addAddingRow");
+						addingWidget._startEditCell(firstAddingRowId, column);
+						addingWidget._navigateDown();
+
+						assert.isTrue(addingWidget._addAddingRow.calledOnce, "_addAddingRow was not called.");
+						assert.equal(addingWidget.model.model.length, 2, "Row model did not contain a new row.");
+						assert.equal(jQuery(addingRowsSelector).length, 2, "Table header did not contain a new row.");
+
+						nextRowModel = addingWidget.model.model[1];
+						nextCell = addingWidget.model.getCell(nextRowModel.rowId, column);
+
+						assert.equal(addingWidget.activeEditor.cell, nextCell, "Active editor was not in the correct cell.");
+						assert.equal(addingWidget.activeEditor.rowModel, nextRowModel, "Active editor was not in the correct row.");
+
+						addingWidget._navigateDown();
+
+						assert.isTrue(addingWidget._addAddingRow.calledTwice, "_addAddingRow was not called.");
+						assert.equal(addingWidget.model.model.length, 3, "Row model did not contain a new row.");
+						assert.equal(jQuery(addingRowsSelector).length, 3, "Table header did not contain a new row.");
+
+						nextRowModel = addingWidget.model.model[2];
+						nextCell = addingWidget.model.getCell(nextRowModel.rowId, column);
+
+						assert.equal(addingWidget.activeEditor.cell, nextCell, "Active editor was not in the correct cell.");
+						assert.equal(addingWidget.activeEditor.rowModel, nextRowModel, "Active editor was not in the correct row.");
+					});
+				});
+
+				describe("#_navigateLeft", function() {
+					it("should open an editor in the previous column of the same row.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							column = "text",
+							previousCell;
+
+						sinon.spy(addingWidget, "_saveEdit");
+						sinon.spy(addingWidget, "_startEditCell");
+
+						addingWidget._startEditCell(firstAddingRowId, column);
+						addingWidget._navigateLeft();
+
+						previousCell = addingWidget.model.getCell(firstAddingRowId, "number");
+
+						assert.equal(addingWidget.activeEditor.cell, previousCell, "Active editor was not in the correct cell.");
+						assert.equal(addingWidget.activeEditor.rowModel.rowId, firstAddingRowId, "Active editor was not in the correct row.");
+
+						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
+						assert.isTrue(addingWidget._startEditCell.calledTwice, "_startEditCell was not called.");
+					});
+
+					it("should open an editor in the last editable column of the previous row.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							startingColumn = "number",
+							endingColumn = "bool",
+							endingCell;
+
+						sinon.spy(addingWidget, "_saveEdit");
+						sinon.spy(addingWidget, "_startEditCell");
+
+						addingWidget.addAddingRow();
+						addingWidget._startEditCell(addingWidget.model.model[1].rowId, startingColumn);
+						addingWidget._navigateLeft();
+
+						endingCell = addingWidget.model.getCell(firstAddingRowId, endingColumn);
+
+						assert.equal(addingWidget.activeEditor.cell, endingCell, "Active editor was not in the correct cell.");
+						assert.equal(addingWidget.activeEditor.rowModel.rowId, firstAddingRowId, "Active editor was not in the correct row.");
+
+						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
+						assert.isTrue(addingWidget._startEditCell.calledTwice, "_startEditCell was not called.");
+					});
+
+					it("should close the active editor if on the first editable cell of the first row.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							startingColumn = "number";
+
+						sinon.spy(addingWidget, "_saveEdit");
+						sinon.spy(addingWidget, "_startEditCell");
+
+						addingWidget._startEditCell(firstAddingRowId, startingColumn);
+						addingWidget._navigateLeft();
+
+						assert.isUndefined(addingWidget.activeEditor, "There should be no active editor.");
+
+						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
+						assert.isTrue(addingWidget._startEditCell.calledOnce, "_startEditCell was not called only once.");
 					});
 				});
 			});
