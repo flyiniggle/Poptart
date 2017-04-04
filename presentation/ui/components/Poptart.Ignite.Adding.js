@@ -438,7 +438,7 @@
 				return;
 			}
 			field = this.activeEditor.providerWrapper;
-			field.off("blur", this._addingRowHandlers.blur);
+			field.off("blur", "input, div.ui-checkbox-container", this._addingRowHandlers.blur);
 			field.blur();
 
 			rowModel = this.activeEditor.rowModel;

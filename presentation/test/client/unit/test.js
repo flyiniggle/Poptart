@@ -606,6 +606,30 @@ describe("Poptart", function() {
 						cell.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
 					});
 				});
+
+				describe("#_navigateDown", function() {
+					it("should open an editor in the same column of the next row", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							column = "number",
+							nextRowModel, nextCell;
+
+						sinon.spy(addingWidget, "_saveEdit");
+						sinon.spy(addingWidget, "_startEditCell");
+
+						addingWidget.addAddingRow();
+						addingWidget._startEditCell(firstAddingRowId, column);
+						addingWidget._navigateDown();
+
+						nextRowModel = addingWidget.model.model[1];
+						nextCell = addingWidget.model.getCell(nextRowModel.rowId, column);
+
+						assert.equal(addingWidget.activeEditor.cell, nextCell, "Active editor was not in the correct cell.");
+						assert.equal(addingWidget.activeEditor.rowModel, nextRowModel, "Active editor was not in the correct row.");
+
+						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
+						assert.isTrue(addingWidget._startEditCell.calledTwice, "_startEditCell was not called.")
+					});
+				});
 			});
 		});
 	});
