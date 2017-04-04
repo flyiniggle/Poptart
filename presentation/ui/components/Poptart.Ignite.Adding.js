@@ -625,13 +625,7 @@
 			if(dataType === "bool") {
 				editorType = "checkbox";
 			} else if (format === "currency") {
-				editorType === "percent";
-			} else if (dataType === "number") {
-				editorType === "numeric";
-			} else if (dataType === "string") {
-				editorType === "text";
-			} else if (dataType === "date") {
-				editorType === "date";
+				editorType = "currency";
 			}
 
 			switch(editorType) {

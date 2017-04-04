@@ -32,7 +32,7 @@ describe("Poptart", function() {
 							dataType: "number",
 							unbound: true,
 							formula: function(row) {
-								return row.formulaHelper;
+								return row ? row.formulaHelper : "";
 							}
 						},
 						{
@@ -40,7 +40,7 @@ describe("Poptart", function() {
 							key: "object",
 							dataType: "object",
 							mapper: function(obj) {
-								return obj.testKey;
+								return obj ? obj.testKey : "";
 							}
 						},
 						{headerText: "pk", key: "pk", dataType: "number"},
@@ -469,6 +469,141 @@ describe("Poptart", function() {
 						cell.should.have.data("columnKey", columns[3].key);
 						cell.should.have.attr("id", rowId + "_" + columns[3].key);
 						cell.should.have.class("ui-iggrid-adding-row-cell");
+					});
+				});
+
+				describe("#_getProviderForKey", function() {
+					it("should return a text editor provider.", function() {
+						var provider = addingWidget._getProviderForKey({}, {editorType: "text"});
+
+						assert.equal(provider.editorType, "text", "The property editorType did not match expected.");
+						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderText.prototype, "The provider was not the expected type.");
+					});
+
+					it("should return a checkbox provider.", function() {
+						var provider = addingWidget._getProviderForKey({}, {editorType: "checkbox"});
+
+						assert.equal(provider.editorType, "checkbox", "The property editorType did not match expected.");
+						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderBoolean.prototype, "The provider was not the expected type.");
+					});
+
+					it("should return a checkbox provider.", function() {
+						var provider = addingWidget._getProviderForKey({}, {dataType: "bool"});
+
+						assert.equal(provider.editorType, "checkbox", "The property editorType did not match expected.");
+						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderBoolean.prototype, "The provider was not the expected type.");
+					});
+
+					it("should return a currency provider.", function() {
+						var provider = addingWidget._getProviderForKey({format: "currency"}, {});
+
+						assert.equal(provider.editorType, "currency", "The property editorType did not match expected.");
+						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderCurrency.prototype, "The provider was not the expected type.");
+					});
+
+					it("should return a currency provider.", function() {
+						var provider = addingWidget._getProviderForKey({}, {editorType: "currency"});
+
+						assert.equal(provider.editorType, "currency", "The property editorType did not match expected.");
+						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderCurrency.prototype, "The provider was not the expected type.");
+					});
+
+					it("should return a object combo provider.", function() {
+						var provider = addingWidget._getProviderForKey({}, {dataType: "object", editorType: "combo"});
+
+						assert.equal(provider.editorType, "combo", "The property editorType did not match expected.");
+						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderObjectCombo.prototype, "The provider was not the expected type.");
+					});
+
+					it("should return a combo provider.", function() {
+						var provider = addingWidget._getProviderForKey({}, {dataType: "string", editorType: "combo"});
+
+						assert.equal(provider.editorType, "combo", "The property editorType did not match expected.");
+						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderCombo.prototype, "The provider was not the expected type.");
+					});
+
+					it("should return a rating provider.", function() {
+						var provider = addingWidget._getProviderForKey({}, {editorType: "rating"});
+
+						assert.equal(provider.editorType, "rating", "The property editorType did not match expected.");
+						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderRating.prototype, "The provider was not the expected type.");
+					});
+
+					it("should return a mask provider.", function() {
+						var provider = addingWidget._getProviderForKey({}, {editorType: "mask"});
+
+						assert.equal(provider.editorType, "mask", "The property editorType did not match expected.");
+						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderMask.prototype, "The provider was not the expected type.");
+					});
+
+					it("should return a percent provider.", function() {
+						var provider = addingWidget._getProviderForKey({}, {editorType: "percent"});
+
+						assert.equal(provider.editorType, "percent", "The property editorType did not match expected.");
+						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderPercent.prototype, "The provider was not the expected type.");
+					});
+
+					it("should return a date provider.", function() {
+						var provider = addingWidget._getProviderForKey({}, {editorType: "date"});
+
+						assert.equal(provider.editorType, "date", "The property editorType did not match expected.");
+						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderDate.prototype, "The provider was not the expected type.");
+					});
+
+					it("should return a date picker provider.", function() {
+						var provider = addingWidget._getProviderForKey({}, {editorType: "datePicker"});
+
+						assert.equal(provider.editorType, "datePicker", "The property editorType did not match expected.");
+						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderDatePicker.prototype, "The provider was not the expected type.");
+					});
+
+					it("should throw an error.", function() {
+						assert.throws(function() {
+							addingWidget._getProviderForKey({}, {});
+						},
+						TypeError,
+						"Please provide an editor type."
+						);
+					});
+				});
+
+				describe("#_getEditorForCell", function() {
+					it("should return information for the text column.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							rowModel = addingWidget.model.getRowById(firstAddingRowId),
+							cell = addingWidget.model.getCell(firstAddingRowId, "text"),
+							editorInfo = addingWidget._getEditorForCell("text", cell, rowModel);
+
+						assert.equal(Object.getPrototypeOf(editorInfo.provider), jQuery.ig.EditorProviderText.prototype, "Editor did not have the correct provider.");
+						editorInfo.providerWrapper.should.have.class(addingWidget.css.editor);
+						assert.equal(editorInfo.cell, cell, "Cells did not match.");
+						assert.equal(editorInfo.rowModel, rowModel, "Row models did not match.");
+					});
+				});
+
+				describe("#_startEditCell", function() {
+					it("should create an editor for the text column in the first row.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							column = "text",
+							cell = addingWidget.model.getCell(firstAddingRowId, column);
+
+						addingWidget._startEditCell(firstAddingRowId, column);
+
+						assert.equal(addingWidget.activeEditor.cell, cell, "Active editor was not in the correct cell.");
+						cell.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
+					});
+				});
+
+				describe("#_startEditRow", function() {
+					it("should create an editor for the text column in the first row.", function() {
+						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
+							column = "number",
+							cell = addingWidget.model.getCell(firstAddingRowId, column);
+
+						addingWidget._startEditRow(firstAddingRowId);
+
+						assert.equal(addingWidget.activeEditor.cell, cell, "Active editor was not in the first editable cell.");
+						cell.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
 					});
 				});
 			});
