@@ -120,7 +120,7 @@ describe("Poptart", function() {
 
 						assert.property(cell, "key", "Cell model did not have a 'key' property.");
 						assert.property(cell, "value", "Cell model did not have a 'value' property.");
-						assert.isUndefined(cell.value, "Expected cell value to be undefined at start.");
+						assert.isFalse(cell.value, "Expected cell value to be false at start.");
 						assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
 					});
 				});
