@@ -101,8 +101,7 @@ module.exports = function(grunt) {
 		},
 		karma: {
 			options: {
-				configFile: 'karma.conf.js',
-				singleRun: true
+				configFile: 'karma.conf.js'
 			},
 			unit: {
 				options: {
@@ -115,7 +114,9 @@ module.exports = function(grunt) {
 						'static/ui/components/**/*.min.js',
 						'static/ui/modules/**/*.min.js',
 						'test/client/unit/**/*.js'
-					]
+					],
+					browsers: ['Chrome', 'PhantomJS', 'Firefox', 'Edge'],
+					singleRun: true
 				}
 			},
 			integration: {
@@ -129,7 +130,25 @@ module.exports = function(grunt) {
 						{pattern: 'static/ui/components/**/*.min.js', noCache: true},
 						{pattern: 'static/ui/modules/**/*.min.js', noCache: true},
 						{pattern: 'test/client/integration/*.js', noCache: true}
-					]
+					],
+					browsers: ['Chrome', 'PhantomJS', 'Firefox', 'Edge'],
+					singleRun: true
+				}
+			},
+			dev: {
+				options: {
+					files: [
+						{pattern: 'static/ui/scripts/*.js', noCache: true},
+						{pattern: 'static/ui/scripts/ignite/*.js', noCache: true},
+						{pattern: 'static/ui/scripts/ignite/modules/*.js', noCache: true},
+						{pattern: 'static/ui/poptart.min.js', noCache: true},
+						{pattern: 'static/ui/**/*.min.js', noCache: true},
+						{pattern: 'static/ui/components/**/*.min.js', noCache: true},
+						{pattern: 'static/ui/modules/**/*.min.js', noCache: true},
+						{pattern: 'test/client/**/*.js', noCache: true}
+					],
+					browsers: ['PhantomJS'],
+					singleRun: false
 				}
 			}
 		},
