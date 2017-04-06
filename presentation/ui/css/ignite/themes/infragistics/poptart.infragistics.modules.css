@@ -8,3 +8,10 @@
 .ui-iggrid thead .ui-iggrid-adding-row-cell:last-child {
   border-right: 1px solid #ddd;
 }
+.ui-iggrid-addingBarButton {
+  width: 100%;
+}
+.ui-iggrid-addingBarButtonArrow {
+  padding-left: 10px;
+  padding-right: 10px;
+}
