@@ -98,7 +98,7 @@
 			rowAddingAdded: "rowAdded"
 		},
 		css: {
-			addRowBar: "ui-iggrid-addingBar",
+			addRowBarCell: "ui-iggrid-addingBarCell",
 			editingCell: "ui-iggrid-editingcell",
 			editor: "ui-iggrid-editor"
 		},
@@ -478,17 +478,10 @@
 		},
 		_createAddBarHtml: function() {
 			var bar = jQuery("<tr></tr>"),
-				cell = jQuery("<td></td>"),
-				button = jQuery("<button></button>"),
-				arrowSpan = "<span class='ui-iggrid-addingBarButtonArrow ion-android-arrow-down'></span>";
-
-			button.attr("type", "button")
-				.addClass("ui-iggrid-addingBarButton btn btn-default")
-				.html(arrowSpan + "add to table" + arrowSpan)
-				.appendTo(cell);
+				cell = jQuery("<td></td>");
 
 			cell.attr("colspan", this.grid._visibleColumns().length)
-				.addClass(this.css.addRowBar)
+				.addClass(this.css.addRowBarCell)
 				.appendTo(bar);
 
 			bar.attr("id", "addingRowBar");
