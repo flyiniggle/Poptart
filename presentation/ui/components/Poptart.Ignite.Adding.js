@@ -98,6 +98,7 @@
 			rowAddingAdded: "rowAdded"
 		},
 		css: {
+			addRowBar: "ui-iggrid-addingBar",
 			editingCell: "ui-iggrid-editingcell",
 			editor: "ui-iggrid-editor"
 		},
@@ -242,7 +243,7 @@
 			}
 		},
 		_headerRendered: function(evt, ui) {
-			var gridColumnSettings;
+			var gridColumnSettings, fixed, thead;
 
 			if(ui.owner.id() !== this.grid.id()) {
 				return;
@@ -293,6 +294,15 @@
 
 				jQuery.extend(true, gridSettings, settings);
 			});
+
+			fixed = this.grid.hasFixedColumns();
+			if(fixed) {
+				thead = this.grid.fixedHeadersTable().children("thead");
+			} else {
+				thead = this.grid.headersTable().children("thead");
+			}
+
+			thead.append(this._createAddBarHtml());
 
 			this.model.columnSettings = this.options.columnSettings = gridColumnSettings;
 			this.model.visibleColumns = this.grid._visibleColumns(this.grid.hasFixedColumns());
@@ -465,6 +475,25 @@
 				layout[0].push({col: cols[i], rs: 1, cs: 1});
 			}
 			return layout;
+		},
+		_createAddBarHtml: function() {
+			var bar = jQuery("<tr></tr>"),
+				cell = jQuery("<td></td>"),
+				button = jQuery("<button></button>"),
+				arrowSpan = "<span class='ui-iggrid-addingBarButtonArrow ion-android-arrow-down'></span>";
+
+			button.attr("type", "button")
+				.addClass("ui-iggrid-addingBarButton btn btn-default")
+				.html(arrowSpan + "add to table" + arrowSpan)
+				.appendTo(cell);
+
+			cell.attr("colspan", this.grid._visibleColumns().length)
+				.addClass(this.css.addRowBar)
+				.appendTo(bar);
+
+			bar.attr("id", "addingRowBar");
+
+			return bar;
 		},
 		_createAddingRowHtml: function(rowId, visibleColumns, fixed) {
 			var newRow = document.createElement("tr"),
@@ -708,19 +737,13 @@
 		},
 		_addAddingRow: function() {
 			var rowId = addingRowIdPrefix + this.addingRowCounter++,
-				fixed, thead, visibleColumns,
+				fixed, visibleColumns,
 				initialHiddenColumns, newAddingRow, newAddingRowModel, i, j;
 
 			if(!this._trigger(this.events.rowAddingAdding)) {
 				return false;
 			}
 
-			fixed = this.grid.hasFixedColumns();
-			if(fixed) {
-				thead = this.grid.fixedHeadersTable().children("thead");
-			} else {
-				thead = this.grid.headersTable().children("thead");
-			}
 			visibleColumns = jQuery.extend([], this.grid._visibleColumns(fixed));
 			initialHiddenColumns = this.grid._initialHiddenColumns;
 			if(initialHiddenColumns && initialHiddenColumns.length) {
@@ -737,7 +760,7 @@
 			newAddingRow = this._createAddingRowHtml(rowId, visibleColumns, fixed);
 			newAddingRowModel = this.model.addNewRow(rowId, newAddingRow);
 			this._updateUiRow(newAddingRowModel);
-			thead.append(newAddingRow);
+			jQuery("#addingRowBar").before(newAddingRow);
 			this._trigger(this.events.rowAddingAdded);
 		},
 		_removeAddingRow: function(rowModel) {
