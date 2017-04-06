@@ -54,6 +54,19 @@ const AccountController = function() {
 		logging.log(data);
 	};
 
+	self.getTest1 = function(req, res) {
+		res.send([]);
+	};
+
+	self.getTest2 = function(req, res) {
+		res.send([{
+			ticker: {ticker: "AMGN"},
+			CUSIP: 31162100,
+			lastPrice: 61.8,
+			pk: 1
+		}]);
+	};
+
 	// Request Callbacks
 	function processAccountData(res, accountData) {
 		var responseData = {},

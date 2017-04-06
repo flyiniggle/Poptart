@@ -2,11 +2,11 @@
 	"use strict";
 
 	var addingRowIdPrefix = "addingRow",
-		dataModel, defaultEditorValues;
+		dataModel, defaultValues;
 
 	dataModel = {
 		addNewRow: function(rowId, row) {
-			this.model.push({
+			var newRowModel = {
 				rowId: rowId,
 				row: row,
 				cells: this.visibleColumns.map(function(column) {
@@ -16,14 +16,17 @@
 					};
 
 				}),
-				columnData: this.columns.map(function(column) {
+				columnData: this.columnSettings.map(function(column) {
 					return {
-						key: column.key,
-						value: undefined
+						key: column.columnKey,
+						value: column.default || this.getDefaultValue(column)
 					};
-				})
-			});
-			return this.model;
+				}.bind(this))
+			};
+
+			this.model.push(newRowModel);
+
+			return newRowModel;
 		},
 		removeRow: function(row) {
 			var rowData = typeof row === "string" ? this.getRowById(row) : row;
@@ -59,13 +62,22 @@
 
 			cell.value = value;
 			return cell;
+		},
+		getDefaultValue: function(columnSetting) {
+			var dataType = columnSetting.dataType,
+				defaultValue;
+
+			defaultValue = defaultValues[dataType];
+
+			return defaultValue === undefined ? "" : defaultValue;
 		}
 	};
 
-	defaultEditorValues = {
-		"combo": {},
-		"checkbox": false,
-		"numeric": 0,
+	defaultValues = {
+		"object": {},
+		"combo": "",
+		"bool": false,
+		"number": 0,
 		"text": "",
 		"percent": 0
 	};
@@ -245,6 +257,9 @@
 				if(settings.formula) {
 					copiedSettings.formula = settings.formula;
 				}
+				if(settings.formatter) {
+					copiedSettings.formatter = settings.formatter;
+				}
 				if(settings.template) {
 					copiedSettings.template = settings.template;
 				}
@@ -253,6 +268,10 @@
 				}
 				if(settings.hidden) {
 					copiedSettings.hidden = settings.hidden;
+					copiedSettings.readOnly = true;
+				}
+				if(settings.unbound) {
+					copiedSettings.unbound = settings.unbound;
 					copiedSettings.readOnly = true;
 				}
 
@@ -275,8 +294,7 @@
 				jQuery.extend(true, gridSettings, settings);
 			});
 
-			this.options.columnSettings = gridColumnSettings;
-			this.model.columns = this.grid.options.columns;
+			this.model.columnSettings = this.options.columnSettings = gridColumnSettings;
 			this.model.visibleColumns = this.grid._visibleColumns(this.grid.hasFixedColumns());
 			this._addAddingRow(evt);
 		},
@@ -332,12 +350,6 @@
 			field.find("input").blur();
 			this._saveEdit(rowModel, evt.data.columnKey, this.activeEditor.provider.getValue());
 
-			if(!(jQuery(evt.relatedTarget).closest("tr")[0] === rowModel.row)) {
-				if(this._isAddingRowFilledOut(rowModel)) {
-					this._commitRow(rowModel);
-					this._addAddingRow();
-				}
-			}
 			return false;
 		},
 		_navigateRight: function() {
@@ -379,9 +391,6 @@
 				if(this._isLastAddingRow(rowModel)) {
 					this._addAddingRow();
 				}
-				if(this._isAddingRowFilledOut(rowModel)) {
-					this._commitRow(rowModel);
-				}
 				this._startEditRow(this.model.model[this.model.model.indexOf(rowModel) + 1]);
 			}
 		},
@@ -420,14 +429,9 @@
 			this._saveEdit(rowModel, this.activeEditor.cell.key, this.activeEditor.provider.getValue());
 			if(nextEditableCell) {
 				this._startEditCell(rowModel, nextEditableCell.columnKey);
-			} else {
-				if(!this._isFirstRow(rowModel)) {
-					lastEditableCell = Array.from(cells).reverse()[0].key;
-					this._startEditCell(this.model.model[this.model.model.indexOf(rowModel) - 1], lastEditableCell);
-				}
-				if(this._isAddingRowFilledOut(rowModel)) {
-					this._commitRow(rowModel);
-				}
+			} else if(!this._isFirstRow(rowModel)) {
+				lastEditableCell = Array.from(cells).reverse()[0].key;
+				this._startEditCell(this.model.model[this.model.model.indexOf(rowModel) - 1], lastEditableCell);
 			}
 		},
 		_navigateDown: function() {
@@ -448,9 +452,6 @@
 
 			this._saveEdit(rowModel, this.activeEditor.cell.key, this.activeEditor.provider.getValue());
 
-			if(this._isAddingRowFilledOut(rowModel)) {
-				this._commitRow(rowModel);
-			}
 			if(!nextRowModel) {
 				this._addAddingRow();
 				nextRowModel = this.model.model[currentRowIndex + 1];
@@ -467,13 +468,14 @@
 		},
 		_createAddingRowHtml: function(rowId, visibleColumns, fixed) {
 			var newRow = document.createElement("tr"),
-				layout, i, j;
+				layout, i, j, settings;
 
 			layout = this.grid._isMultiRowGrid() ? this.grid._multiRowLayoutRenderingHelper(fixed) : this._generateDummyLayout(visibleColumns);
 			for(i = 0; i < layout.length; i++) {
 				for(j = 0; j < layout[i].length; j++) {
+					settings = this._getColumnSettings(layout[i][j].col.key);
 					jQuery("<td></td>")
-						.html("--")
+						.html(this.model.getDefaultValue(settings))
 						.data("columnKey", layout[i][j].col.key)
 						.attr("id", rowId + "_" + layout[i][j].col.key)
 						.attr("aria-describedby", this.grid.id() + "_" + layout[i][j].col.key)
@@ -555,7 +557,7 @@
 			}
 
 			this._activateEditor(newEditor);
-			startingValue = (storedValue === undefined) ? defaultEditorValues[newEditor.editorType] : storedValue;
+			startingValue = (storedValue === undefined) ? defaultValues[newEditor.editorType] : storedValue;
 			newEditor.provider.setValue(startingValue);
 			this._trigger(this.events.editAddingCellStarted);
 			/*
@@ -707,7 +709,7 @@
 		_addAddingRow: function() {
 			var rowId = addingRowIdPrefix + this.addingRowCounter++,
 				fixed, thead, visibleColumns,
-				initialHiddenColumns, newAddingRow, i, j;
+				initialHiddenColumns, newAddingRow, newAddingRowModel, i, j;
 
 			if(!this._trigger(this.events.rowAddingAdding)) {
 				return false;
@@ -733,7 +735,8 @@
 			}
 			//numOfCols = this.grid._isMultiRowGrid() ? this.grid._recordHorizontalSize() : visibleColumns.length;
 			newAddingRow = this._createAddingRowHtml(rowId, visibleColumns, fixed);
-			this.model.addNewRow(rowId, newAddingRow);
+			newAddingRowModel = this.model.addNewRow(rowId, newAddingRow);
+			this._updateUiRow(newAddingRowModel);
 			thead.append(newAddingRow);
 			this._trigger(this.events.rowAddingAdded);
 		},
@@ -798,7 +801,7 @@
 			this.element.igGridUpdating("addRow", newRowData);
 			this._removeAddingRow(rowModel);
 		},
-		_isAddingRowFilledOut: function(row) {
+		/*_isAddingRowFilledOut: function(row) {
 			var rowModel = this._getRow(row),
 				editableCells = rowModel.columnData.filter((function(cell) {
 					return this._getColumnSettings(cell.key).readOnly === false;
@@ -807,7 +810,7 @@
 			return !editableCells.find(function(cell) {
 				return cell.value === undefined;
 			});
-		},
+		},*/
 		_isLastScrollableCell: function(cell) {
 			return cell && cell.is(":last-child");
 

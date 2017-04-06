@@ -30,7 +30,7 @@ Poptart.Account = function() {
 					dataType: "object",
 					width: "115px",
 					mapper: function(security) {
-						return security.ticker || "";
+						return security ? security.ticker : "";
 					}
 				},
 				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
@@ -288,4 +288,302 @@ Poptart.Account = function() {
 	};
 
 	return ReturnObj;
+}();
+
+Poptart.Account.Test1 = function() {
+	"use string";
+	var ReturnObject = {};
+
+	function displayAccountHoldings(data) {
+		var tableEle = jQuery("#accountHoldingsTable");
+
+		tableEle.igGrid({
+			width: '100%',
+			autoCommit: true,
+			dataSource: new jQuery.ig.DataSource({
+				dataSource: data[0],
+				type: "json"
+			}),
+			dataSourceType: "json",
+			primaryKey: "pk",
+			autoGenerateColumns: false,
+			columns: [
+				{
+					headerText: 'Security',
+					key: "ticker",
+					dataType: "object",
+					width: "115px",
+					mapper: function(security) {
+						return security ? security.ticker : "";
+					}
+				},
+				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
+				{headerText: 'Description', key: "security", dataType: "string", width: "200px"},
+				{headerText: 'Do Not Buy', key: "noBuy", dataType: "bool", width: "85px"},
+				{headerText: 'Do Not Sell', key: "noSell", dataType: "bool", width: "85px"},
+				{headerText: "Weight", key: "weight", dataType: "number", width: "85px"},
+				{headerText: "Price", key: "lastPrice", dataType: "number", width: "85px"},
+				//hidden columns
+				{headerText: "pk", key: "pk", dataType: "number", hidden: true}
+			],
+			features: [
+				{
+					name: "Adding",
+					newRowFormatter: function(row) {
+						return {
+							ticker: row.ticker.ticker,
+							CUSIP: row.ticker.CUSIP,
+							security: row.ticker.security,
+							noBuy: row.noBuy,
+							noSell: row.noSell,
+							weight: row.weight,
+							lastPrice: row.ticker.lastPrice,
+							pk: row.CUSIP
+						};
+					},
+					columnSettings: [
+						{
+							columnKey: "ticker",
+							readOnly: false,
+							editorType: "combo",
+							editorOptions: {
+								textKey: "ticker",
+								valueKey: "pk",
+								autoComplete: true,
+								mode: 'editable',
+								autoSelectFirstMatch: false,
+								selectItemBySpaceKey: true,
+								dataSource: new jQuery.ig.DataSource({
+									dataSource: data[1],
+									schema: new jQuery.ig.DataSchema("json", {
+										fields: [
+											{name: "pk", type: "number"},
+											{name: "ticker", type: "string"},
+											{name: "CUSIP", type: "number"},
+											{name: "segment", type: "number"},
+											{name: "lastPrice", type: "number"},
+											{name: "security", type: "string"}
+										]
+									})
+								})
+							}
+						},
+						{
+							columnKey: "CUSIP",
+							readOnly: true,
+							formula: function(row) {
+								var securityObject = row.ticker || {};
+
+								return securityObject.CUSIP;
+							}
+						},
+						{
+							columnKey: "security",
+							readOnly: true,
+							formula: function(row) {
+								var securityObject = row.ticker || {};
+
+								return securityObject.security || "";
+							}
+						},
+						{
+							columnKey: "noBuy",
+							readOnly: false
+						},
+						{
+							columnKey: "noSell",
+							readOnly: false
+						},
+						{columnKey: "weight", readOnly: false},
+						{
+							columnKey: "lastPrice",
+							readOnly: true,
+							formula: function(row) {
+								var securityObject = row.ticker || {};
+
+								return securityObject.lastPrice || "";
+							}
+						}
+					]
+				},
+				{
+					name: "Updating",
+					editMode: "cell",
+					enableAddRow: false,
+					enableDeleteRow: true,
+					autoCommit: false,
+					columnSettings: [
+						//{columnKey: "pk", readOnly: true},
+						{columnKey: "ticker", readOnly: true},
+						{columnKey: "security", readOnly: true},
+						{columnKey: "CUSIP", readOnly: true},
+						{columnKey: "noBuy", readOnly: false},
+						{columnKey: "noSell", readOnly: false},
+						{columnKey: "weight", readOnly: false, editorType: "numeric"},
+						{columnKey: "lastPrice", readOnly: true}
+					]
+				}
+			]
+		});
+	}
+
+	ReturnObject.init = function() {
+		var loaderConfig = Object.create(Poptart.Ignite.loaderConfig, {});
+
+		loaderConfig.resources = "igGrid.Updating.Adding,igDataChart.Category,igPieChart,igCombo";
+		loaderConfig.ready = function() {
+			Promise.all([
+				jQuery.get("/account/test/test1/data", {
+					accept: "application/json",
+					contentType: "application/json"
+				}), Poptart.Account.Service.SecuritiesService.get()]).then(displayAccountHoldings);
+		};
+		jQuery.ig.loader(loaderConfig);
+
+	};
+
+	return ReturnObject;
+}();
+
+Poptart.Account.Test2 = function() {
+	"use string";
+	var ReturnObject = {};
+
+	function displayAccountHoldings(data) {
+		var tableEle = jQuery("#accountHoldingsTable");
+
+		tableEle.igGrid({
+			width: '100%',
+			autoCommit: true,
+			dataSource: new jQuery.ig.DataSource({
+				dataSource: data[0],
+				type: "json"
+			}),
+			dataSourceType: "json",
+			primaryKey: "pk",
+			autoGenerateColumns: false,
+			columns: [
+				{
+					headerText: 'Security',
+					key: "ticker",
+					dataType: "object",
+					width: "115px",
+					mapper: function(security) {
+						return security ? security.ticker.ticker : "";
+					}
+				},
+				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
+				{headerText: 'Trade Type', key: "tradeType", dataType: "string", width: "200px"},
+				{headerText: 'Trade Quantity', key: "tradeQuantity", dataType: "number", width: "85px"},
+				{headerText: "Price", key: "lastPrice", dataType: "number", width: "85px"},
+				//hidden columns
+				{headerText: "pk", key: "pk", dataType: "number", hidden: true}
+			],
+			features: [
+				{
+					name: "Adding",
+					newRowFormatter: function(row) {
+						return {
+							ticker: row.ticker,
+							CUSIP: row.ticker.CUSIP,
+							tradeType: row.tradeType,
+							tradeQuantity: row.tradeQuantity,
+							lastPrice: row.ticker.lastPrice
+						};
+					},
+					columnSettings: [
+						{
+							columnKey: "ticker",
+							readOnly: false,
+							editorType: "combo",
+							mapper: function(security) {
+								return security ? security.ticker : "";
+							},
+							editorOptions: {
+								textKey: "ticker",
+								valueKey: "pk",
+								autoComplete: true,
+								mode: 'editable',
+								autoSelectFirstMatch: false,
+								selectItemBySpaceKey: true,
+								dataSource: new jQuery.ig.DataSource({
+									dataSource: data[1],
+									schema: new jQuery.ig.DataSchema("json", {
+										fields: [
+											{name: "pk", type: "number"},
+											{name: "ticker", type: "string"},
+											{name: "CUSIP", type: "number"},
+											{name: "segment", type: "number"},
+											{name: "lastPrice", type: "number"},
+											{name: "security", type: "string"}
+										]
+									})
+								})
+							}
+						},
+						{
+							columnKey: "CUSIP",
+							readOnly: true,
+							formula: function(row) {
+								var securityObject = row.ticker || {};
+
+								return securityObject.CUSIP;
+							}
+						},
+						{
+							columnKey: "lastPrice",
+							readOnly: true,
+							formula: function(row) {
+								var securityObject = row.ticker || {};
+
+								return securityObject.lastPrice || "";
+							}
+						}
+					]
+				},
+				{
+					name: "Updating",
+					editMode: "cell",
+					enableAddRow: false,
+					enableDeleteRow: true,
+					autoCommit: false,
+					columnSettings: [
+						{columnKey: "pk", readOnly: true},
+						{columnKey: "ticker", readOnly: true},
+						{columnKey: "CUSIP", readOnly: true},
+						{
+							columnKey: "tradeType",
+							readOnly: false,
+							editorType: "combo",
+							editorOptions: {
+								dataSource: ["buy long", "sell short"],
+								mode: 'editable',
+								autoSelectFirstMatch: false,
+								selectItemBySpaceKey: true
+							}
+						},
+						{columnKey: "tradeQuantity", readOnly: false, editorType: "numeric"},
+						{columnKey: "lastPrice", readOnly: true}
+					]
+				}
+			]
+		});
+	}
+
+	ReturnObject.init = function() {
+		var loaderConfig = Object.create(Poptart.Ignite.loaderConfig, {});
+
+		loaderConfig.resources = "igGrid.Updating.Adding,igDataChart.Category,igPieChart,igCombo";
+		loaderConfig.ready = function() {
+			Promise.all([
+				jQuery.get("/account/test/test2/data", {
+					accept: "application/json",
+					contentType: "application/json"
+				}), Poptart.Account.Service.SecuritiesService.get()]).then(displayAccountHoldings);
+		};
+		jQuery.ig.loader(loaderConfig);
+
+	};
+
+	return ReturnObject;
 }();
