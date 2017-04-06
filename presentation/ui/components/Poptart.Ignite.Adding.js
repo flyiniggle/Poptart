@@ -302,7 +302,11 @@
 				thead = this.grid.headersTable().children("thead");
 			}
 
-			thead.append(this._createAddBarHtml());
+			this._createAddBarHtml()
+				.appendTo(thead)
+				.on("click", function() {
+					this._commitRows();
+				}.bind(this));
 
 			this.model.columnSettings = this.options.columnSettings = gridColumnSettings;
 			this.model.visibleColumns = this.grid._visibleColumns(this.grid.hasFixedColumns());
@@ -814,15 +818,22 @@
 
 			return cell;
 		},
-		_commitRow: function(row) {
-			var rowModel = this._getRow(row),
-				renderableRow = this._getRowForRendering(rowModel),
+		_commitRows: function() {
+			var rowModels = this.model.model,
 				renderer = this.options.newRowFormatter,
-				newRowData;
+				newRowData, i;
 
-			newRowData = renderer ? renderer(renderableRow) : renderableRow;
-			this.element.igGridUpdating("addRow", newRowData);
-			this._removeAddingRow(rowModel);
+			for(i = rowModels.length - 1; i > -1; i--) {
+				var rowModel = rowModels[i],
+					renderableRow = this._getRowForRendering(rowModel);
+
+				newRowData = renderer ? renderer(renderableRow) : renderableRow;
+				this.element.igGridUpdating("addRow", newRowData);
+
+				this._removeAddingRow(rowModel);
+			}
+
+			this._addAddingRow();
 		},
 		/*_isAddingRowFilledOut: function(row) {
 			var rowModel = this._getRow(row),
