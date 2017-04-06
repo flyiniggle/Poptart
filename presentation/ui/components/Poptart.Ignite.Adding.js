@@ -515,6 +515,41 @@
 
 			return jQuery(newRow);
 		},
+		_createAddingRowButtonsHtml: function() {
+			var container = jQuery("<div></div>"),
+				addButton = jQuery("<button></button>");
+
+			addButton.addClass("ion-android-checkmark-circle btn btn-success ui-iggrid-adding-add-row-button")
+				.attr("type", "button")
+				.appendTo(container);
+
+			container.addClass("ui-iggrid-adding-add-row-button-container");
+
+			return container;
+
+		},
+		_addAddingButton: function(row) {
+			var rowModel = this._getRow(row),
+				addingButton = this._createAddingRowButtonsHtml(),
+				rowLocation;
+
+			addingButton.appendTo(this.grid.element)
+				.on("click", "button", function() {
+					this._commitRow(rowModel);
+					this._addAddingRow();
+				}.bind(this));
+
+			rowLocation = rowModel.row.offset();
+
+			rowLocation.left += this.grid.element.width();
+			rowLocation.left -= (addingButton.width() + 15);
+			rowLocation.top += rowModel.row.height();
+
+			addingButton.offset(rowLocation);
+		},
+		_removeAddingButton: function() {
+			jQuery(".ui-iggrid-adding-add-row-button-container").remove();
+		},
 		_startEditRow: function(row) {
 			var visibleCols = this.grid._visibleColumns(),
 				rowModel = this._getRow(row),
@@ -581,6 +616,7 @@
 			this._activateEditor(newEditor);
 			startingValue = (storedValue === undefined) ? defaultValues[newEditor.editorType] : storedValue;
 			newEditor.provider.setValue(startingValue);
+			this._addAddingButton(rowModel);
 			this._trigger(this.events.editAddingCellStarted);
 			/*
 
@@ -721,6 +757,7 @@
 			this._endCellEdit(row);
 		},
 		_endCellEdit: function(row) {
+			this._removeAddingButton();
 			this.activeEditor.providerWrapper.remove();
 			if(row) {
 				this._updateUiRow(row);

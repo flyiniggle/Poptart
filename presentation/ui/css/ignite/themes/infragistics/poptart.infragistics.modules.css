@@ -15,3 +15,12 @@
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
 }
+.ui-iggrid-adding-add-row-button-container {
+  height: 22px;
+  width: 22px;
+  font-size: 22px;
+  position: absolute;
+}
+.ui-iggrid-adding-add-row-button {
+  font-size: 22px;
+}
