@@ -336,7 +336,17 @@
 			}
 		},
 		_keyPress: function(evt) {
-			if(evt.keyCode === jQuery.ui.keyCode.TAB) {
+			if(jQuery(evt.currentTarget).hasClass(this.css.addRowButton)) {
+				if(evt.keyCode === jQuery.ui.keyCode.TAB) {
+					if(evt.shiftKey) {
+						this._navigateFromAddButton("left", jQuery(evt.currentTarget).closest("tr").data("rowId"));
+					} else {
+						this._navigateFromAddButton("right", jQuery(evt.currentTarget).closest("tr").data("rowId"));
+					}
+				} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
+					jQuery(evt.currentTarget).trigger("mousedown");
+				}
+			} else if(evt.keyCode === jQuery.ui.keyCode.TAB) {
 				evt.preventDefault();
 				evt.stopPropagation();
 				if(evt.shiftKey) {
@@ -399,7 +409,11 @@
 				cells, currentCellIndex, nextEditableCell;
 
 			if(!this.activeEditor) {
-				return;
+				if(this._isLastAddingRow(rowModel)) {
+					this._addAddingRow();
+				}
+				this._endRowEdit();
+				this._startEditRow(this.model.model[this.model.model.indexOf(rowModel) + 1]);
 			}
 			field = this.activeEditor.providerWrapper;
 			field.off("blur", "input, div.ui-checkbox-container", this._addingRowHandlers.blur);
@@ -430,11 +444,7 @@
 			if(nextEditableCell) {
 				this._startEditCell(rowModel, nextEditableCell.columnKey);
 			} else {
-				if(this._isLastAddingRow(rowModel)) {
-					this._addAddingRow();
-				}
-				this._endRowEdit();
-				this._startEditRow(this.model.model[this.model.model.indexOf(rowModel) + 1]);
+				jQuery("." + this.css.addRowButton).focus();
 			}
 		},
 		_navigateLeft: function() {
@@ -502,6 +512,25 @@
 				nextRowModel = this.model.model[currentRowIndex + 1];
 			}
 			this._startEditCell(nextRowModel, columnKey);
+		},
+		_navigateFromAddButton: function(where, row) {
+			var rowModel = this._getRow(row),
+				cells, lastEditableCell;
+
+			if(where === "right") {
+				if(this._isLastAddingRow(rowModel)) {
+					this._addAddingRow();
+				}
+				this._endRowEdit();
+				this._startEditRow(this.model.model[this.model.model.indexOf(rowModel) + 1]);
+			} else if(where === "left") {
+				cells = rowModel.cells.filter((function(cell) {
+					return this._getColumnSettings(cell.key).readOnly === false;
+				}).bind(this));
+				lastEditableCell = Array.from(cells).reverse()[0].key;
+				this._endRowEdit();
+				this._startEditCell(rowModel, lastEditableCell);
+			}
 		},
 		_generateDummyLayout: function(cols) {
 			var i, layout = [[]];
@@ -571,9 +600,13 @@
 
 			addingButton.appendTo(rowModel.row)
 				.on("mousedown", "button", function() {
+					this._removeAddingButton();
 					this._commitRow(rowModel);
-					this._addAddingRow();
-				}.bind(this));
+					if(this.model.model.length < 1) {
+						this._addAddingRow();
+					}
+				}.bind(this))
+				.on("keypress", "button", this._addingRowHandlers.keypress);
 
 			rowLocation = rowModel.row.offset();
 
