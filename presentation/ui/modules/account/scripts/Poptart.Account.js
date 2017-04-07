@@ -338,7 +338,7 @@ Poptart.Account.Test1 = function() {
 							noSell: row.noSell,
 							weight: row.weight,
 							lastPrice: row.ticker.lastPrice,
-							pk: row.CUSIP
+							pk: row.ticker.CUSIP + row.ticker.security
 						};
 					},
 					columnSettings: [
@@ -488,7 +488,8 @@ Poptart.Account.Test2 = function() {
 							CUSIP: row.ticker.CUSIP,
 							tradeType: row.tradeType,
 							tradeQuantity: row.tradeQuantity,
-							lastPrice: row.ticker.lastPrice
+							lastPrice: row.ticker.lastPrice,
+							pk: row.ticker.CUSIP + row.ticker.security
 						};
 					},
 					columnSettings: [
