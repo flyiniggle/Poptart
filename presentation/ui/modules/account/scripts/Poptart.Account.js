@@ -556,7 +556,7 @@ Poptart.Account.Test2 = function() {
 							readOnly: false,
 							editorType: "combo",
 							editorOptions: {
-								dataSource: ["buy long", "sell short"],
+								dataSource: ["buy long", "sell long"],
 								mode: 'editable',
 								autoSelectFirstMatch: false,
 								selectItemBySpaceKey: true
