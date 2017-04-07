@@ -98,7 +98,9 @@
 			rowAddingAdded: "rowAdded"
 		},
 		css: {
+			addingRow: "ui-iggrid-adding-row",
 			addRowBarCell: "ui-iggrid-addingBarCell",
+			addRowButton: "ui-iggrid-adding-add-row-button",
 			editingCell: "ui-iggrid-editingcell",
 			editor: "ui-iggrid-editor"
 		},
@@ -196,6 +198,8 @@
 				};
 			this._addingRowHandlers = this._addingRowHandlers ||
 				{
+					"mouseenter": this._mouseEnter.bind(this),
+					"mouseleave": this._mouseLeave.bind(this),
 					"blur": this._blur.bind(this),
 					"keydown": this._keyDown.bind(this),
 					"keypress": this._keyPress.bind(this),
@@ -302,7 +306,9 @@
 				thead = this.grid.headersTable().children("thead");
 			}
 
-			thead.append(this._createAddBarHtml());
+			thead.append(this._createAddBarHtml())
+				.on("mouseenter", "." + this.css.addingRow, this._addingRowHandlers.mouseenter)
+				.on("mouseleave", "." + this.css.addingRow, this._addingRowHandlers.mouseleave);
 
 			this.model.columnSettings = this.options.columnSettings = gridColumnSettings;
 			this.model.visibleColumns = this.grid._visibleColumns(this.grid.hasFixedColumns());
@@ -359,8 +365,34 @@
 			field.off("blur", "input, div.ui-checkbox-container", this._addingRowHandlers.blur);
 			field.find("input").blur();
 			this._saveEdit(rowModel, evt.data.columnKey, this.activeEditor.provider.getValue());
+			this._endRowEdit();
 
 			return false;
+		},
+		_mouseEnter: function(evt) {
+			var row = jQuery(evt.currentTarget);
+
+			if(row.prop("tagName").toLowerCase() !== "tr") {
+				row = row.closest("tr");
+			}
+
+			row.children("td").addClass("ui-state-hover");
+			if(!this.activeEditor) {
+				this._addAddingButton(row.data("rowId"));
+			}
+		},
+		_mouseLeave: function(evt) {
+			var row = jQuery(evt.currentTarget);
+
+			if(row.prop("tagName").toLowerCase() !== "tr") {
+				row = row.closest("tr");
+			}
+
+			row.children("td").removeClass("ui-state-hover");
+
+			if(!this.activeEditor) {
+				this._removeAddingButton();
+			}
 		},
 		_navigateRight: function() {
 			var rowModel, field,
@@ -401,6 +433,7 @@
 				if(this._isLastAddingRow(rowModel)) {
 					this._addAddingRow();
 				}
+				this._endRowEdit();
 				this._startEditRow(this.model.model[this.model.model.indexOf(rowModel) + 1]);
 			}
 		},
@@ -441,6 +474,7 @@
 				this._startEditCell(rowModel, nextEditableCell.columnKey);
 			} else if(!this._isFirstRow(rowModel)) {
 				lastEditableCell = Array.from(cells).reverse()[0].key;
+				this._endRowEdit();
 				this._startEditCell(this.model.model[this.model.model.indexOf(rowModel) - 1], lastEditableCell);
 			}
 		},
@@ -461,6 +495,7 @@
 			nextRowModel = this.model.model[currentRowIndex + 1];
 
 			this._saveEdit(rowModel, this.activeEditor.cell.key, this.activeEditor.provider.getValue());
+			this._endRowEdit();
 
 			if(!nextRowModel) {
 				this._addAddingRow();
@@ -510,7 +545,7 @@
 
 			jQuery(newRow)
 				.data("rowId", rowId)
-				.addClass("ui-iggrid-adding-row")
+				.addClass(this.css.addingRow)
 				.on("click", "td", this._addingRowHandlers.click);
 
 			return jQuery(newRow);
@@ -519,7 +554,8 @@
 			var container = jQuery("<div></div>"),
 				addButton = jQuery("<button></button>");
 
-			addButton.addClass("ion-android-checkmark-circle btn btn-success ui-iggrid-adding-add-row-button")
+			addButton.addClass("ion-android-checkmark-circle btn btn-success ")
+				.addClass(this.css.addRowButton)
 				.attr("type", "button")
 				.appendTo(container);
 
@@ -533,8 +569,8 @@
 				addingButton = this._createAddingRowButtonsHtml(),
 				rowLocation;
 
-			addingButton.appendTo(this.grid.element)
-				.on("click", "button", function() {
+			addingButton.appendTo(rowModel.row)
+				.on("mousedown", "button", function() {
 					this._commitRow(rowModel);
 					this._addAddingRow();
 				}.bind(this));
@@ -542,8 +578,8 @@
 			rowLocation = rowModel.row.offset();
 
 			rowLocation.left += this.grid.element.width();
-			rowLocation.left -= (addingButton.width() + 15);
-			rowLocation.top += rowModel.row.height();
+			rowLocation.left -= (addingButton.width() + 10);
+			rowLocation.top += (rowModel.row.height() - 1);
 
 			addingButton.offset(rowLocation);
 		},
@@ -757,13 +793,15 @@
 			this._endCellEdit(row);
 		},
 		_endCellEdit: function(row) {
-			this._removeAddingButton();
 			this.activeEditor.providerWrapper.remove();
 			if(row) {
 				this._updateUiRow(row);
 			}
 			this.activeEditor.cell.cell.removeClass(this.css.editingCell);
 			delete this.activeEditor;
+		},
+		_endRowEdit: function() {
+			this._removeAddingButton();
 		},
 		_addAddingRow: function() {
 			var rowId = addingRowIdPrefix + this.addingRowCounter++,
