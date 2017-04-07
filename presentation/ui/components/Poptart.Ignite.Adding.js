@@ -345,6 +345,7 @@
 					}
 				} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
 					jQuery(evt.currentTarget).trigger("mousedown");
+					this._startEditRow(this.model.model[this.model.model.length - 1]);
 				}
 			} else if(evt.keyCode === jQuery.ui.keyCode.TAB) {
 				evt.preventDefault();
