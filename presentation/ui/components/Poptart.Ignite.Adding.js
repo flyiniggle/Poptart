@@ -341,7 +341,7 @@
 					if(evt.shiftKey) {
 						this._navigateFromAddButton("left", jQuery(evt.currentTarget).closest("tr").data("rowId"));
 					} else {
-						this._navigateFromAddButton("right", jQuery(evt.currentTarget).closest("tr").data("rowId"));
+						//this._navigateFromAddButton("right", jQuery(evt.currentTarget).closest("tr").data("rowId"));
 					}
 				} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
 					jQuery(evt.currentTarget).trigger("mousedown");
@@ -356,16 +356,28 @@
 					this._navigateRight();
 				}
 			} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
-				evt.preventDefault();
+
+				/*evt.preventDefault();
 				evt.stopPropagation();
-				this._navigateDown();
+				this.activeEditor.providerWrapper.find("input, div.ui-checkbox-container").blur();
+				jQuery(".ui-iggrid-adding-add-row-button").focus()//.trigger("mousedown");
+				this._startEditRow(this.model.model[this.model.model.length - 1]);*/
 			}
 		},
 		_keyDown: function(evt) {
+			var row;
+
 			if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
 				evt.preventDefault();
 				evt.stopPropagation();
-				this._navigateDown();
+				row = jQuery(evt.currentTarget).closest("tr").data("rowId");
+				this.activeEditor.providerWrapper.find("input, div.ui-checkbox-container").blur();
+				this._removeAddingButton();
+				this._commitRow(row);
+				if(this.model.model.length < 1) {
+					this._addAddingRow();
+				}
+				this._startEditRow(this.model.model[this.model.model.length - 1]);
 			}
 		},
 		_blur: function(evt) {
@@ -523,7 +535,7 @@
 					this._addAddingRow();
 				}
 				this._endRowEdit();
-				this._startEditRow(this.model.model[this.model.model.indexOf(rowModel) + 1]);
+				this._startEditRow(this.model.model[this.model.model.indexOf(rowModel)]);
 			} else if(where === "left") {
 				cells = rowModel.cells.filter((function(cell) {
 					return this._getColumnSettings(cell.key).readOnly === false;

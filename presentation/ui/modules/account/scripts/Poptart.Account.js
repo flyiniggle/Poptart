@@ -473,8 +473,15 @@ Poptart.Account.Test2 = function() {
 					}
 				},
 				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
+				{headerText: 'Pos. Type', key: "posType", dataType: "string", width: "85px"},
+				{headerText: 'Cur. Qty', key: "cq", dataType: "number", width: "85px"},
 				{headerText: 'Trade Type', key: "tradeType", dataType: "string", width: "200px"},
-				{headerText: 'Trade Quantity', key: "tradeQuantity", dataType: "number", width: "85px"},
+				{headerText: 'Trade Qty', key: "tradeQuantity", dataType: "number", width: "85px"},
+				{headerText: 'Exp. Qty', key: "eq", dataType: "number", width: "85px"},
+				{headerText: 'Exp. Amt', key: "ea", dataType: "number", width: "85px"},
+				{headerText: 'Exp. %', key: "ep", dataType: "number", width: "85px"},
+				{headerText: 'Custom %', key: "cp", dataType: "number", width: "85px"},
+				{headerText: 'Drift %', key: "dp", dataType: "number", width: "85px"},
 				{headerText: "Price", key: "lastPrice", dataType: "number", width: "85px"},
 				//hidden columns
 				{headerText: "pk", key: "pk", dataType: "number", hidden: true}
@@ -486,6 +493,13 @@ Poptart.Account.Test2 = function() {
 						return {
 							ticker: row.ticker,
 							CUSIP: row.ticker.CUSIP,
+							posType: "long",
+							cq: Math.floor(Math.random() * (1000 - 50)) + 50,
+							eq: Math.floor(Math.random() * (1000 - 50)) + 50,
+							ea: Math.floor(Math.random() * (11000 - 100)) + 100,
+							ep: (Math.floor(Math.random() * (100 - 0)) + 0) * .01,
+							cp: (Math.floor(Math.random() * (100 - 0)) + 0) * .01,
+							dp: (Math.floor(Math.random() * (100 - 0)) + 0) * .01,
 							tradeType: row.tradeType,
 							tradeQuantity: row.tradeQuantity,
 							lastPrice: row.ticker.lastPrice,
