@@ -47,24 +47,8 @@ describe("Poptart", function() {
 				tableEle.igGrid("destroy");
 			});
 
-			it("should add a new adding row", function() {
-				var addingRowSelector = ".ui-iggrid-adding-row",
-					addingRowsLength;
-
-				tableEle.igGridAdding("addAddingRow");
-				addingRowsLength = jQuery(addingRowSelector).length;
-				assert.equal(addingRowsLength, 2, "Expected 2 adding rows but found " + addingRowsLength);
-
-				tableEle.igGridAdding("addAddingRow");
-				addingRowsLength = jQuery(addingRowSelector).length;
-				assert.equal(addingRowsLength, 3, "Expected 2 adding rows but found " + addingRowsLength);
-
-			});
-
 			it("should start editing the first adding row", function() {
-				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId");
-
-				tableEle.igGridAdding("startEditRow", firstAddingRowId);
+				tableEle.igGridAdding("startEdit");
 				tableEle.find(".ui-iggrid-adding-row-cell:first").should.have.class("ui-iggrid-editingcell");
 			});
 
@@ -122,7 +106,6 @@ describe("Poptart", function() {
 					column = "text",
 					event;
 
-				sinon.spy(addingWidget, "_navigateDown");
 				sinon.spy(addingWidget, "_saveEdit");
 				addingWidget._startEditCell(firstAddingRowId, column);
 				event = new jQuery.Event("keypress",
@@ -132,7 +115,6 @@ describe("Poptart", function() {
 					});
 				addingWidget.activeEditor.providerWrapper.trigger(event);
 
-				assert.isTrue(addingWidget._navigateDown.calledOnce, "_navigateDown was not called exactly once.");
 				assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
 			});
 		});

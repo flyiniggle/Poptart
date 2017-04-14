@@ -607,63 +607,6 @@ describe("Poptart", function() {
 					});
 				});
 
-				describe("#_navigateDown", function() {
-					it("should open an editor in the same column of the next row.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							column = "number",
-							nextRowModel, nextCell;
-
-						sinon.spy(addingWidget, "_saveEdit");
-						sinon.spy(addingWidget, "_startEditCell");
-
-						addingWidget.addAddingRow();
-						addingWidget._startEditCell(firstAddingRowId, column);
-						addingWidget._navigateDown();
-
-						nextRowModel = addingWidget.model.model[1];
-						nextCell = addingWidget.model.getCell(nextRowModel.rowId, column);
-
-						assert.equal(addingWidget.activeEditor.cell, nextCell, "Active editor was not in the correct cell.");
-						assert.equal(addingWidget.activeEditor.rowModel, nextRowModel, "Active editor was not in the correct row.");
-
-						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-						assert.isTrue(addingWidget._startEditCell.calledTwice, "_startEditCell was not called.");
-					});
-
-					it("should add a new row when on the last adding row.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							addingRowsSelector = ".ui-iggrid-adding-row",
-							column = "number",
-							nextRowModel, nextCell;
-
-						sinon.spy(addingWidget, "_addAddingRow");
-						addingWidget._startEditCell(firstAddingRowId, column);
-						addingWidget._navigateDown();
-
-						assert.isTrue(addingWidget._addAddingRow.calledOnce, "_addAddingRow was not called.");
-						assert.equal(addingWidget.model.model.length, 2, "Row model did not contain a new row.");
-						assert.equal(jQuery(addingRowsSelector).length, 2, "Table header did not contain a new row.");
-
-						nextRowModel = addingWidget.model.model[1];
-						nextCell = addingWidget.model.getCell(nextRowModel.rowId, column);
-
-						assert.equal(addingWidget.activeEditor.cell, nextCell, "Active editor was not in the correct cell.");
-						assert.equal(addingWidget.activeEditor.rowModel, nextRowModel, "Active editor was not in the correct row.");
-
-						addingWidget._navigateDown();
-
-						assert.isTrue(addingWidget._addAddingRow.calledTwice, "_addAddingRow was not called.");
-						assert.equal(addingWidget.model.model.length, 3, "Row model did not contain a new row.");
-						assert.equal(jQuery(addingRowsSelector).length, 3, "Table header did not contain a new row.");
-
-						nextRowModel = addingWidget.model.model[2];
-						nextCell = addingWidget.model.getCell(nextRowModel.rowId, column);
-
-						assert.equal(addingWidget.activeEditor.cell, nextCell, "Active editor was not in the correct cell.");
-						assert.equal(addingWidget.activeEditor.rowModel, nextRowModel, "Active editor was not in the correct row.");
-					});
-				});
-
 				describe("#_navigateLeft", function() {
 					it("should open an editor in the previous column of the same row.", function() {
 						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
@@ -746,7 +689,7 @@ describe("Poptart", function() {
 						assert.isTrue(addingWidget._startEditCell.calledTwice, "_startEditCell was not called.");
 					});
 
-					it("should open an editor in the first editable column of the next row.", function() {
+					it("should do nothing.", function() {
 						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
 							startingColumn = "bool",
 							nextColumn = "number",
@@ -775,14 +718,14 @@ describe("Poptart", function() {
 							nextCell;
 
 						sinon.spy(addingWidget, "_saveEdit");
-						sinon.spy(addingWidget, "_startEditCell");
+						sinon.spy(addingWidget, "_startEdit");
 ;
 						addingWidget._startEditCell(firstAddingRowId, startingColumn);
 						addingWidget._navigateRight();
 
-						nextCell = addingWidget.model.getCell(addingWidget.model.model[1].rowId, nextColumn);
+						nextCell = addingWidget.model.getCell(nextColumn);
 
-						assert.equal(addingWidget.model.model.length, 2, "Row model did not contain a new row.");
+						assert.equal(addingWidget.model.addingRow.length, 2, "Row model did not contain a new row.");
 						assert.equal(jQuery(".ui-iggrid-adding-row").length, 2, "Table header did not contain a new row.");
 
 						assert.equal(addingWidget.activeEditor.cell, nextCell, "Active editor was not in the correct cell.");
