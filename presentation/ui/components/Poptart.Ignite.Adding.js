@@ -543,8 +543,7 @@
 				if(!firstEditableColumn) {
 					throw new TypeError("There are no visible editable columns.");
 				}
-
-				return this.startEdit(firstEditableColumn.columnKey);
+				return this._startEdit(firstEditableColumn.columnKey);
 			}
 
 			if(!this._trigger(this.events.editAddingCellStarting)) {
