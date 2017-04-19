@@ -47,27 +47,26 @@ describe("Poptart", function() {
 				tableEle.igGrid("destroy");
 			});
 
-			it("should start editing the first adding row", function() {
+			it("should start editing the adding row", function() {
 				tableEle.igGridAdding("startEdit");
 				tableEle.find(".ui-iggrid-adding-row-cell:first").should.have.class("ui-iggrid-editingcell");
 			});
 
-			it("should start editing the text column of the first adding row", function() {
+			it("should start editing the text column of the adding row", function() {
 				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId");
 
-				tableEle.igGridAdding("startEditCell", firstAddingRowId, "text");
+				tableEle.igGridAdding("startEdit", "text");
 				jQuery("#" + firstAddingRowId + "_text").should.have.class("ui-iggrid-editingcell");
 			});
 
 			it("should save and trigger right navigation when pressing tab.", function() {
 				var addingWidget = tableEle.data("Poptart-igGridAdding"),
-					firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
 					column = "number",
 					event;
 
 				sinon.spy(addingWidget, "_navigateRight");
 				sinon.spy(addingWidget, "_saveEdit");
-				addingWidget._startEditCell(firstAddingRowId, column);
+				addingWidget._startEdit(column);
 				event = new jQuery.Event("keypress",
 					{
 						keyCode: jQuery.ui.keyCode.TAB,
@@ -81,13 +80,12 @@ describe("Poptart", function() {
 
 			it("should save and trigger left navigation when pressing shift + tab.", function() {
 				var addingWidget = tableEle.data("Poptart-igGridAdding"),
-					firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
 					column = "text",
 					event;
 
 				sinon.spy(addingWidget, "_navigateLeft");
 				sinon.spy(addingWidget, "_saveEdit");
-				addingWidget._startEditCell(firstAddingRowId, column);
+				addingWidget._startEdit(column);
 				event = new jQuery.Event("keypress",
 					{
 						keyCode: jQuery.ui.keyCode.TAB,
@@ -100,22 +98,7 @@ describe("Poptart", function() {
 				assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
 			});
 
-			it("should save and trigger down navigation when pressing enter.", function() {
-				var addingWidget = tableEle.data("Poptart-igGridAdding"),
-					firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-					column = "text",
-					event;
-
-				sinon.spy(addingWidget, "_saveEdit");
-				addingWidget._startEditCell(firstAddingRowId, column);
-				event = new jQuery.Event("keypress",
-					{
-						keyCode: jQuery.ui.keyCode.ENTER,
-						target: addingWidget.activeEditor.providerWrapper.find("input")[0]
-					});
-				addingWidget.activeEditor.providerWrapper.trigger(event);
-
-				assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
+			it("should commit the adding row when enter is pressed.", function() {
 			});
 		});
 	});

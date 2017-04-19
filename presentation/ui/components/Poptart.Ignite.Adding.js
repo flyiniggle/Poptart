@@ -98,27 +98,6 @@
 			this.model = Object.create(dataModel);
 			this.addingRowCounter = 0;
 		},
-		startEditCell: function(row, columnKey) {
-			var rowModel, columnIsReadOnly;
-
-			if(!row) {
-				throw new TypeError("The parameter 'row' must be a valid row data model reference or row ID number.");
-			}
-
-			if(!columnKey) {
-				throw new TypeError("The parameter 'columnKey' must be specified.");
-			}
-
-			rowModel = this._getRow(row);
-
-			columnIsReadOnly = this._getColumnSettings(columnKey).readOnly;
-
-			if(columnIsReadOnly) {
-				throw new TypeError("The column " + columnKey + " is read only.");
-			}
-
-			return this._startEditCell(rowModel, columnKey);
-		},
 		endEditCell: function(row, columnKey, update) {
 			if (update) {
 				this._saveEdit();
