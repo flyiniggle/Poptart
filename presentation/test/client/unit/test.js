@@ -79,29 +79,13 @@ describe("Poptart", function() {
 			});
 
 			describe("#model", function() {
-				describe("#getRowById", function() {
-					it("should return a row model", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							rowModel;
-
-						rowModel = addingWidget.model.getRowById(firstAddingRowId);
-
-						assert.property(rowModel, "rowId", "Row model did not have a 'rowId' property.");
-						assert.property(rowModel, "row", "Row model did not have a 'row' property.");
-						assert.property(rowModel, "cells", "Row model did not have a 'cells' property.");
-						assert.property(rowModel, "columnData", "Row model did not have a 'columnData' property.");
-						rowModel.row.should.have.prop("tagName", "TR");
-						assert.equal(firstAddingRowId, rowModel.rowId, "Expected row ID of " + firstAddingRowId + " but got " + rowModel.rowId + ".");
-					});
-				});
 
 				describe("#getCell", function() {
 					it("should return a cell", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							column = "bool",
+						var column = "bool",
 							cell;
 
-						cell = addingWidget.model.getCell(firstAddingRowId, column);
+						cell = addingWidget.model.getCell(column);
 
 						assert.property(cell, "key", "Cell model did not have a 'key' property.");
 						assert.property(cell, "cell", "Cell model did not have a 'cell' property.");
@@ -112,11 +96,10 @@ describe("Poptart", function() {
 
 				describe("#getColumnData", function() {
 					it("should return column data", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							column = "bool",
+						var column = "bool",
 							cell;
 
-						cell = addingWidget.model.getColumnData(firstAddingRowId, column);
+						cell = addingWidget.model.getColumnData(column);
 
 						assert.property(cell, "key", "Cell model did not have a 'key' property.");
 						assert.property(cell, "value", "Cell model did not have a 'value' property.");
@@ -127,52 +110,35 @@ describe("Poptart", function() {
 
 				describe("#addNewRow", function() {
 					it("should add a new row model", function() {
-						var newRowId = "newRow",
-							rowModel, newAddingRow;
-
-						newAddingRow = addingWidget._createAddingRowHtml(newRowId, addingWidget.grid._visibleColumns(false), false);
-						addingWidget.model.addNewRow("newRow", newAddingRow);
-
-						rowModel = addingWidget.model.model[1];
-
-						assert.lengthOf(addingWidget.model.model, 2, "Expected 2 row models but got " + addingWidget.model.model.length + ".");
-						assert.equal(newRowId, rowModel.rowId, "Expected second rowModel to have ID of " + newRowId + " but found " + rowModel.rowId + ".");
 					});
 				});
 
 				describe("#removeRow", function() {
 					it("should remove a row model", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId");
-
-						addingWidget.model.removeRow(firstAddingRowId);
-
-						assert.lengthOf(addingWidget.model.model, 0, "Expected 0 row models but got " + addingWidget.model.model.length + ".");
 					});
 				});
 
 				describe("#updateColumnData", function() {
 					it("should update boolean column data", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							column = "bool",
+						var column = "bool",
 							cell;
 
-						cell = addingWidget.model.updateColumnData(firstAddingRowId, column, true);
+						cell = addingWidget.model.updateColumnData(column, true);
 
 						assert.property(cell, "key", "Cell model did not have a 'key' property.");
 						assert.property(cell, "value", "Cell model did not have a 'value' property.");
 						assert.isTrue(cell.value, "Expected cell value to be true.");
 						assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
 
-						cell = addingWidget.model.updateColumnData(firstAddingRowId, column, false);
+						cell = addingWidget.model.updateColumnData(column, false);
 						assert.isFalse(cell.value, "Expected cell value to be false.");
 					});
 
 					it("should update text column data", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							column = "bool",
+						var column = "bool",
 							cell;
 
-						cell = addingWidget.model.updateColumnData(firstAddingRowId, column, "lala");
+						cell = addingWidget.model.updateColumnData(column, "lala");
 
 						assert.property(cell, "key", "Cell model did not have a 'key' property.");
 						assert.property(cell, "value", "Cell model did not have a 'value' property.");
@@ -181,11 +147,10 @@ describe("Poptart", function() {
 					});
 
 					it("should update numeric column data", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							column = "bool",
+						var column = "bool",
 							cell;
 
-						cell = addingWidget.model.updateColumnData(firstAddingRowId, column, 2);
+						cell = addingWidget.model.updateColumnData(column, 2);
 
 						assert.property(cell, "key", "Cell model did not have a 'key' property.");
 						assert.property(cell, "value", "Cell model did not have a 'value' property.");
@@ -266,8 +231,7 @@ describe("Poptart", function() {
 
 				describe("#_getRowForRendering", function() {
 					it("should return keys for each column", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							row = addingWidget._getRowForRendering(firstAddingRowId);
+						var row = addingWidget._getRowForRendering();
 
 						assert.property(row, "text", "Renderable row did not have a key for the 'text' column.");
 						assert.property(row, "number", "Renderable row did not have a key for the 'number' column.");
@@ -275,17 +239,16 @@ describe("Poptart", function() {
 					});
 
 					it("should return values for each column", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							textVal = "test!",
+						var textVal = "test!",
 							numberVal = 5,
 							boolVal = true,
 							row;
 
-						addingWidget.model.updateColumnData(firstAddingRowId, "text", textVal);
-						addingWidget.model.updateColumnData(firstAddingRowId, "number", numberVal);
-						addingWidget.model.updateColumnData(firstAddingRowId, "bool", boolVal);
+						addingWidget.model.updateColumnData("text", textVal);
+						addingWidget.model.updateColumnData("number", numberVal);
+						addingWidget.model.updateColumnData("bool", boolVal);
 
-						row = addingWidget._getRowForRendering(firstAddingRowId);
+						row = addingWidget._getRowForRendering();
 
 						assert.propertyVal(row, "text", textVal, "Expected " + textVal + " for text column value but got " + row.text + ".");
 						assert.propertyVal(row, "number", numberVal, "Expected " + numberVal + " for number column value but got " + row.number + ".");
@@ -295,100 +258,88 @@ describe("Poptart", function() {
 
 				describe("#_isLastScrollableCell", function() {
 					it("should return true for the last column", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							column = "pk",
+						var column = "pk",
 							cell;
 
-						cell = addingWidget.model.getCell(firstAddingRowId, column);
+						cell = addingWidget.model.getCell(column);
 						assert.isTrue(addingWidget._isLastScrollableCell(cell.cell), "Should have returned true but returned false.");
 					});
 
 					it("should return true for other columns", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							cell;
+						var cell;
 
-						cell = addingWidget.model.getCell(firstAddingRowId, "text");
+						cell = addingWidget.model.getCell("text");
 						assert.isFalse(addingWidget._isLastScrollableCell(cell.cell), "Should have returned false but returned true.");
 
-						cell = addingWidget.model.getCell(firstAddingRowId, "number");
+						cell = addingWidget.model.getCell("number");
 						assert.isFalse(addingWidget._isLastScrollableCell(cell.cell), "Should have returned false but returned true.");
 
-						cell = addingWidget.model.getCell(firstAddingRowId, "bool");
+						cell = addingWidget.model.getCell("bool");
 						assert.isFalse(addingWidget._isLastScrollableCell(cell.cell), "Should have returned false but returned true.");
 					});
 				});
 
 				describe("#_updateUiCell", function() {
 					it("should display a new text value.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							columnKey = "text",
+						var columnKey = "text",
 							textVal = "test!",
-							rowModel, cell, columnSettings;
+							cell, columnSettings;
 
-						rowModel = addingWidget.model.getRowById(firstAddingRowId);
-						cell = addingWidget.model.getCell(firstAddingRowId, columnKey).cell;
+						cell = addingWidget.model.getCell(columnKey).cell;
 						columnSettings = addingWidget._getColumnSettings(columnKey);
-						addingWidget._updateUiCell(cell, columnSettings, rowModel, textVal);
+						addingWidget._updateUiCell(cell, columnSettings, textVal);
 
 						cell.should.have.html(textVal);
 					});
 
 					it("should display a new number value.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							columnKey = "number",
+						var columnKey = "number",
 							numVal = 5,
-							rowModel, cell, columnSettings;
+							cell, columnSettings;
 
-						rowModel = rowModel = addingWidget.model.getRowById(firstAddingRowId);
-						cell = addingWidget.model.getCell(firstAddingRowId, columnKey).cell;
+						cell = addingWidget.model.getCell(columnKey).cell;
 						columnSettings = addingWidget._getColumnSettings(columnKey);
-						addingWidget._updateUiCell(cell, columnSettings, rowModel, numVal);
+						addingWidget._updateUiCell(cell, columnSettings, numVal);
 
 						cell.should.have.html(numVal.toString());
 					});
 
 					it("should display a new template value.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							columnKey = "template",
-							rowModel, cell, columnSettings;
+						var columnKey = "template",
+							cell, columnSettings;
 
-						addingWidget.model.updateColumnData(firstAddingRowId, columnKey, "A working");
+						addingWidget.model.updateColumnData(columnKey, "A working");
 
-						rowModel = addingWidget.model.getRowById(firstAddingRowId);
-						cell = addingWidget.model.getCell(firstAddingRowId, columnKey).cell;
+						cell = addingWidget.model.getCell(columnKey).cell;
 						columnSettings = addingWidget._getColumnSettings(columnKey);
-						addingWidget._updateUiCell(cell, columnSettings, rowModel);
+						addingWidget._updateUiCell(cell, columnSettings);
 
 						cell.should.have.html("A working template!");
 					});
 
 					it("should display a new formula value.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							columnKey = "formula",
+						var columnKey = "formula",
 							helperValue = "test!",
-							rowModel, cell, columnSettings;
+							cell, columnSettings;
 
-						addingWidget.model.updateColumnData(firstAddingRowId, "formulaHelper", helperValue);
+						addingWidget.model.updateColumnData("formulaHelper", helperValue);
 
-						rowModel = rowModel = addingWidget.model.getRowById(firstAddingRowId);
-						cell = addingWidget.model.getCell(firstAddingRowId, columnKey).cell;
+						cell = addingWidget.model.getCell(columnKey).cell;
 						columnSettings = addingWidget._getColumnSettings(columnKey);
-						addingWidget._updateUiCell(cell, columnSettings, rowModel, helperValue);
+						addingWidget._updateUiCell(cell, columnSettings, helperValue);
 
 						cell.should.have.html(helperValue);
 					});
 
 					it("should display a new mapped value.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							columnKey = "object",
+						var columnKey = "object",
 							objValue = {testKey: "test!"},
-							rowModel, cell, columnSettings;
+							cell, columnSettings;
 
-						rowModel = addingWidget.model.getRowById(firstAddingRowId);
-						cell = addingWidget.model.getCell(firstAddingRowId, columnKey).cell;
+						cell = addingWidget.model.getCell(columnKey).cell;
 						columnSettings = addingWidget._getColumnSettings(columnKey);
 
-						addingWidget._updateUiCell(cell, columnSettings, rowModel, objValue);
+						addingWidget._updateUiCell(cell, columnSettings, objValue);
 
 						cell.should.have.html("test!");
 					});
@@ -396,19 +347,17 @@ describe("Poptart", function() {
 
 				describe("#_updateUiRow", function() {
 					it("updated calculated columns when a row is edited.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							rowModel = addingWidget.model.getRowById(firstAddingRowId),
-							formulaHelperValue = "Formula test!",
+						var formulaHelperValue = "Formula test!",
 							objValue = {testKey: "Object test!"},
 							formulaCell, objCell;
 
-						addingWidget.model.updateColumnData(firstAddingRowId, "formulaHelper", formulaHelperValue);
-						addingWidget.model.updateColumnData(firstAddingRowId, "object", objValue);
+						addingWidget.model.updateColumnData("formulaHelper", formulaHelperValue);
+						addingWidget.model.updateColumnData("object", objValue);
 
-						addingWidget._updateUiRow(rowModel);
+						addingWidget._updateUiRow();
 
-						formulaCell = addingWidget.model.getCell(firstAddingRowId, "formula").cell;
-						objCell = addingWidget.model.getCell(firstAddingRowId, "object").cell;
+						formulaCell = addingWidget.model.getCell("formula").cell;
+						objCell = addingWidget.model.getCell("object").cell;
 
 						objCell.should.have.html(objValue.testKey);
 						formulaCell.should.have.html(formulaHelperValue);
@@ -417,26 +366,11 @@ describe("Poptart", function() {
 
 				describe("#_removeAddingRow", function() {
 					it("should remove the only adding row.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							rowModel = addingWidget.model.getRowById(firstAddingRowId);
-
-						addingWidget._removeAddingRow(rowModel);
-
-						assert.equal(jQuery(".ui-iggrid-adding-row").length, 0, "Expected not to find any adding rows");
 					});
 				});
 
 				describe("#_addAddingRow", function() {
 					it("should add a new adding row.", function() {
-						var addingRowSelector = ".ui-iggrid-adding-row";
-
-						addingWidget._addAddingRow();
-						assert.equal(jQuery(addingRowSelector).length, 2, "Expected an adding row to be added.");
-						assert.equal(addingWidget.model.model.length, 2, "Expected an adding row model to be added.");
-
-						addingWidget._addAddingRow();
-						assert.equal(jQuery(addingRowSelector).length, 3, "Expected another adding row to be added.");
-						assert.equal(addingWidget.model.model.length, 3, "Expected another adding row model to be added.");
 					});
 				});
 
@@ -569,170 +503,94 @@ describe("Poptart", function() {
 
 				describe("#_getEditorForCell", function() {
 					it("should return information for the text column.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							rowModel = addingWidget.model.getRowById(firstAddingRowId),
-							cell = addingWidget.model.getCell(firstAddingRowId, "text"),
-							editorInfo = addingWidget._getEditorForCell("text", cell, rowModel);
+						var cell = addingWidget.model.getCell("text"),
+							editorInfo = addingWidget._getEditorForCell("text", cell);
 
 						assert.equal(Object.getPrototypeOf(editorInfo.provider), jQuery.ig.EditorProviderText.prototype, "Editor did not have the correct provider.");
 						editorInfo.providerWrapper.should.have.class(addingWidget.css.editor);
 						assert.equal(editorInfo.cell, cell, "Cells did not match.");
-						assert.equal(editorInfo.rowModel, rowModel, "Row models did not match.");
 					});
 				});
 
-				describe("#_startEditCell", function() {
-					it("should create an editor for the text column in the first row.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							column = "text",
-							cell = addingWidget.model.getCell(firstAddingRowId, column);
+				describe("#_startEdit", function() {
+					it("should create an editor for the text column.", function() {
+						var column = "text",
+							cell = addingWidget.model.getCell(column);
 
-						addingWidget._startEditCell(firstAddingRowId, column);
-
+						addingWidget._startEdit(column);
 						assert.equal(addingWidget.activeEditor.cell, cell, "Active editor was not in the correct cell.");
 						cell.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
 					});
-				});
 
-				describe("#_startEditRow", function() {
-					it("should create an editor for the text column in the first row.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							column = "number",
-							cell = addingWidget.model.getCell(firstAddingRowId, column);
+					it("should create an editor for the text column.", function() {
+						var column = "number",
+							cell = addingWidget.model.getCell(column);
 
-						addingWidget._startEditRow(firstAddingRowId);
-
+						addingWidget._startEdit(column);
 						assert.equal(addingWidget.activeEditor.cell, cell, "Active editor was not in the first editable cell.");
 						cell.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
 					});
 				});
 
 				describe("#_navigateLeft", function() {
-					it("should open an editor in the previous column of the same row.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							column = "text",
+					it("should open an editor in the previous column.", function() {
+						var column = "text",
 							previousCell;
 
 						sinon.spy(addingWidget, "_saveEdit");
-						sinon.spy(addingWidget, "_startEditCell");
+						sinon.spy(addingWidget, "_startEdit");
 
-						addingWidget._startEditCell(firstAddingRowId, column);
+						addingWidget._startEdit(column);
 						addingWidget._navigateLeft();
 
-						previousCell = addingWidget.model.getCell(firstAddingRowId, "number");
+						previousCell = addingWidget.model.getCell("number");
 
 						assert.equal(addingWidget.activeEditor.cell, previousCell, "Active editor was not in the correct cell.");
-						assert.equal(addingWidget.activeEditor.rowModel.rowId, firstAddingRowId, "Active editor was not in the correct row.");
 
 						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-						assert.isTrue(addingWidget._startEditCell.calledTwice, "_startEditCell was not called.");
+						assert.isTrue(addingWidget._startEdit.calledTwice, "_startEdit was not called.");
 					});
 
-					it("should open an editor in the last editable column of the previous row.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							startingColumn = "number",
-							endingColumn = "bool",
-							endingCell;
+					it("should close the active editor if on the first editable cell.", function() {
+						var startingColumn = "number";
 
 						sinon.spy(addingWidget, "_saveEdit");
-						sinon.spy(addingWidget, "_startEditCell");
+						sinon.spy(addingWidget, "_startEdit");
 
-						addingWidget.addAddingRow();
-						addingWidget._startEditCell(addingWidget.model.model[1].rowId, startingColumn);
-						addingWidget._navigateLeft();
-
-						endingCell = addingWidget.model.getCell(firstAddingRowId, endingColumn);
-
-						assert.equal(addingWidget.activeEditor.cell, endingCell, "Active editor was not in the correct cell.");
-						assert.equal(addingWidget.activeEditor.rowModel.rowId, firstAddingRowId, "Active editor was not in the correct row.");
-
-						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-						assert.isTrue(addingWidget._startEditCell.calledTwice, "_startEditCell was not called.");
-					});
-
-					it("should close the active editor if on the first editable cell of the first row.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							startingColumn = "number";
-
-						sinon.spy(addingWidget, "_saveEdit");
-						sinon.spy(addingWidget, "_startEditCell");
-
-						addingWidget._startEditCell(firstAddingRowId, startingColumn);
+						addingWidget._startEdit(startingColumn);
 						addingWidget._navigateLeft();
 
 						assert.isUndefined(addingWidget.activeEditor, "There should be no active editor.");
 
 						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-						assert.isTrue(addingWidget._startEditCell.calledOnce, "_startEditCell was not called only once.");
+						assert.isTrue(addingWidget._startEdit.calledOnce, "_startEdit was not called only once.");
 					});
 				});
 
 				describe("#_navigateRight", function() {
-					it("should open an editor in the next column of the same row.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							startingColumn = "number",
+					it("should open an editor in the next column.", function() {
+						var startingColumn = "number",
 							nextColumn = "text",
 							nextCell;
 
 						sinon.spy(addingWidget, "_saveEdit");
-						sinon.spy(addingWidget, "_startEditCell");
-
-						addingWidget._startEditCell(firstAddingRowId, startingColumn);
-						addingWidget._navigateRight();
-
-						nextCell = addingWidget.model.getCell(firstAddingRowId, nextColumn);
-
-						assert.equal(addingWidget.activeEditor.cell, nextCell, "Active editor was not in the correct cell.");
-						assert.equal(addingWidget.activeEditor.rowModel.rowId, firstAddingRowId, "Active editor was not in the correct row.");
-
-						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-						assert.isTrue(addingWidget._startEditCell.calledTwice, "_startEditCell was not called.");
-					});
-
-					it("should do nothing.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							startingColumn = "bool",
-							nextColumn = "number",
-							nextCell;
-
-						sinon.spy(addingWidget, "_saveEdit");
-						sinon.spy(addingWidget, "_startEditCell");
-
-						addingWidget.addAddingRow();
-						addingWidget._startEditCell(firstAddingRowId, startingColumn);
-						addingWidget._navigateRight();
-
-						nextCell = addingWidget.model.getCell(addingWidget.model.model[1].rowId, nextColumn);
-
-						assert.equal(addingWidget.activeEditor.cell, nextCell, "Active editor was not in the correct cell.");
-						assert.equal(addingWidget.activeEditor.rowModel.rowId, addingWidget.model.model[1].rowId, "Active editor was not in the correct row.");
-
-						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-						assert.isTrue(addingWidget._startEditCell.calledTwice, "_startEditCell was not called.");
-					});
-
-					it("should add a new row and open an editor in the first editable column of the next row.", function() {
-						var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-							startingColumn = "bool",
-							nextColumn = "number",
-							nextCell;
-
-						sinon.spy(addingWidget, "_saveEdit");
 						sinon.spy(addingWidget, "_startEdit");
-;
-						addingWidget._startEditCell(firstAddingRowId, startingColumn);
+
+						addingWidget._startEdit(startingColumn);
 						addingWidget._navigateRight();
 
 						nextCell = addingWidget.model.getCell(nextColumn);
 
-						assert.equal(addingWidget.model.addingRow.length, 2, "Row model did not contain a new row.");
-						assert.equal(jQuery(".ui-iggrid-adding-row").length, 2, "Table header did not contain a new row.");
-
 						assert.equal(addingWidget.activeEditor.cell, nextCell, "Active editor was not in the correct cell.");
-						assert.equal(addingWidget.activeEditor.rowModel.rowId, addingWidget.model.model[1].rowId, "Active editor was not in the correct row.");
 
 						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-						assert.isTrue(addingWidget._startEditCell.calledTwice, "_startEditCell was not called.");
+						assert.isTrue(addingWidget._startEdit.calledTwice, "_startEdit was not called.");
+					});
+
+					it("should do nothing when on the submit button.", function() {
+					});
+
+					it("should navigate to the submit button.", function() {
 					});
 				});
 			});

@@ -14,7 +14,6 @@
 						key: column.key,
 						cell: jQuery(row).find("#" + rowId + "_" + column.key)
 					};
-
 				}),
 				columnData: this.columnSettings.map(function(column) {
 					return {
@@ -412,7 +411,7 @@
 				return (nextCell.readOnly === false) ? nextCell : nextEditableCell.call(this, cells, currentCellIndex);
 			}).call(this, cells, currentCellIndex);
 
-			this._saveEdit(rowModel, this.activeEditor.cell.key, this.activeEditor.provider.getValue());
+			this._saveEdit(this.activeEditor.cell.key, this.activeEditor.provider.getValue());
 			if(nextEditableCell) {
 				this._startEdit(nextEditableCell.columnKey);
 			} else {
@@ -548,24 +547,6 @@
 		},
 		_removeAddingButton: function() {
 			jQuery(".ui-iggrid-adding-add-row-button-container").remove();
-		},
-		_startEditR: function(row) {
-			var visibleCols = this.grid._visibleColumns(),
-				rowModel = this._getRow(row),
-				visibleColumnKeys, firstEditableColumn;
-
-			visibleColumnKeys = visibleCols.map(function(item) {
-				return item.key;
-			});
-			firstEditableColumn = this.options.columnSettings.find(function(item) {
-				return (!item.readOnly && visibleColumnKeys.indexOf(item.columnKey) >= 0);
-			});
-
-			if(!firstEditableColumn) {
-				throw new TypeError("There are no visible editable columns.");
-			}
-
-			return this._startEditCell(rowModel, firstEditableColumn.columnKey);
 		},
 		_startEdit: function(column) {
 			var visibleCols = this.grid._visibleColumns(),
@@ -800,7 +781,7 @@
 			}
 			//numOfCols = this.grid._isMultiRowGrid() ? this.grid._recordHorizontalSize() : visibleColumns.length;
 			newAddingRow = this._createAddingRowHtml(rowId, visibleColumns, fixed);
-			this.model.addNewRow(newAddingRow);
+			this.model.addNewRow(rowId, newAddingRow);
 			this._updateUiRow();
 			jQuery("#addingRowBar").before(newAddingRow);
 			this._trigger(this.events.rowAddingAdded);
