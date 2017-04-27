@@ -76,7 +76,7 @@ module.exports = function(grunt) {
 		grunt.config.set("uglify", uglify);
 	});
 
-	grunt.registerTask("nunjucks-precompile-mapping", "Set src and destmappings for precompiling nunjucks templates for client side use.", function() {
+	grunt.registerTask("nunjucks-precompile-mapping", "Set src and dest mappings for precompiling nunjucks templates for client side use.", function() {
 		var nunjucksBuild = grunt.config.get('nunjucks'),
 			modules = grunt.file.expand({
 				filter: 'isDirectory',

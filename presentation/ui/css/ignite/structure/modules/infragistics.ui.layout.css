@@ -10,6 +10,7 @@
 .ig-layout-vertical{overflow:auto}
 .ig-layout-vertical-item{margin:5px;width:10%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-o-box-sizing:border-box;box-sizing:border-box;border:1px solid #D3D3D3;height:100px;overflow:hidden}
 .ig-layout-border{position:relative;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-o-box-sizing:border-box;box-sizing:border-box}
+.ig-layout-border-item-hidden{display:none}
 .ig-layout-border-item{position:relative}
 .ig-layout-border-container{height:100%;width:100%}
 .ig-layout-border-wrapper1{position:relative;float:left;width:100%}
