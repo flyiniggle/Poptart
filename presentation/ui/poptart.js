@@ -2,6 +2,7 @@ var Poptart = function() {
 	"use strict";
 
 	var ReturnObj = {
+		nunjucks: {},
 		Monitor: {
 			Account: {}
 		},
@@ -15,7 +16,9 @@ var Poptart = function() {
 	jQuery.noConflict();
 
 	// Nunucks
-	nunjucks.configure('/templates', {web: {useCache: false}, noCache: true});
+	window.nunjucksPrecompiled = {};
+	ReturnObj.nunjucks = new nunjucks.Environment(new nunjucks.PrecompiledLoader(Object.create(window.nunjucksPrecompiled, {})), {web: {useCache: false}, noCache: true})
+	//nunjucks.configure('/templates', {web: {useCache: false}, noCache: true});
 
 	// Knockout
 	//Allow script bindings for knockout
@@ -158,8 +161,14 @@ var Poptart = function() {
 	};
 
 	// Ignites
+	console.log(jQuery.ig.tmpl)
 	jQuery.ig.tmpl = function(template, data) {
-		return nunjucks.renderString(template, data);
+
+		try {
+			return Poptart.nunjucks.render(template, data);
+		} catch(e) {
+			return nunjucks.renderString(template, data);
+		}
 	};
 
 	jQuery.ig.dependencies.push({
@@ -278,6 +287,7 @@ Poptart.Ignite = {
 		cssPath: '/ui/css/ignite'
 	}
 };
+
 
 //Polyfills
 /////////////

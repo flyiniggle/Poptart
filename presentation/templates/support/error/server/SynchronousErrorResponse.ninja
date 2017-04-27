@@ -1,5 +1,5 @@
 {% extends "BaseLayout.ninja" %}
 
 {% block main %}
-	{% include 'error.ninja' %}
+	{% include 'support/error/shared/error.ninja' %}
 {% endblock %}

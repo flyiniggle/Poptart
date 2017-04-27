@@ -25,6 +25,10 @@ module.exports = function(grunt) {
 				files: ['presentation/ui/**/*.js'],
 				tasks: ['sync', 'uglify-build-all-javascript-file-mapping', 'newer:uglify']
 			},
+			nunjucks: {
+				files: ['presentation/templates/**/client/*.*', 'presentation/templates/**/shared/*.*'],
+				tasks: ['nunjucks-precompile-mapping', 'newer:nunjucks']
+			},
 			css: {
 				files: ['presentation/ui/**/*.css'],
 				tasks: ['sync', 'newer:cssmin']
@@ -43,6 +47,10 @@ module.exports = function(grunt) {
 			options: {
 				sourceMap: true,
 				compress: false
+			}
+		},
+		nunjucks: {
+			precompile: {
 			}
 		},
 		cssmin: {
@@ -148,7 +156,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['lint', 'test']);
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit', 'karma:integration']);
 	grunt.registerTask('lint', ['eslint:all']);
-	grunt.registerTask('build-static', ['uglify-build-all-javascript-file-mapping', 'sync', 'uglify', 'cssmin']);
+	grunt.registerTask('build-static', ['uglify-build-all-javascript-file-mapping', 'nunjucks-precompile-mapping', 'nunjucks', 'sync', 'uglify', 'cssmin']);
 
 	/*grunt.event.on('watch', function(action, filepath, target) {
 

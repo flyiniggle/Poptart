@@ -35,7 +35,7 @@ Poptart.Account = function() {
 				},
 				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
 				{headerText: 'Description', key: "security", dataType: "string", width: "200px"},
-				{headerText: "Quantity", key: "quantity", dataType: "number", width: "85px"},
+				{headerText: "Quantity", key: "quantity", dataType: "number", width: "85px", template: "{{CUSIP}} meh"},
 				{
 					headerText: "Value",
 					key: "value",
@@ -253,7 +253,7 @@ Poptart.Account = function() {
 	}
 
 	function displayAccountAlerts(data) {
-		var alertsHtml = nunjucks.render("/components/alerts/alerts.ninja", {alerts: data});
+		var alertsHtml = Poptart.nunjucks.render("presentation/templates/components/alerts/shared/alerts.ninja", {alerts: data});
 
 		jQuery("#alertsContent").html(alertsHtml);
 	}
