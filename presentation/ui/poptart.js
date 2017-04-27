@@ -161,15 +161,20 @@ var Poptart = function() {
 	};
 
 	// Ignites
-	console.log(jQuery.ig.tmpl)
-	jQuery.ig.tmpl = function(template, data) {
+	Object.defineProperty(jQuery.ig,
+		"tmpl",
+		{
+			value: function(template, data) {
 
-		try {
-			return Poptart.nunjucks.render(template, data);
-		} catch(e) {
-			return nunjucks.renderString(template, data);
+				try {
+					return Poptart.nunjucks.render(template, data);
+				} catch(e) {
+					return nunjucks.renderString(template, data);
+				}
+			},
+			configurable: false
 		}
-	};
+	);
 
 	jQuery.ig.dependencies.push({
 		widget: "Adding",
