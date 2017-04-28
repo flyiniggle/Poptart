@@ -35,7 +35,7 @@ Poptart.Account = function() {
 				},
 				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
 				{headerText: 'Description', key: "security", dataType: "string", width: "200px"},
-				{headerText: "Quantity", key: "quantity", dataType: "number", width: "85px", template: "{{CUSIP}} meh"},
+				{headerText: "Quantity", key: "quantity", dataType: "number", width: "85px"},
 				{
 					headerText: "Value",
 					key: "value",
