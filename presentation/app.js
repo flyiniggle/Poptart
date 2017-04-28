@@ -63,7 +63,7 @@ nunjucks.configure(path.join(__dirname, "templates"), {
 
 // Routes for static files
 app.use("/ui", express.static(path.join(__dirname, "static", "ui")));
-app.use("/templates", express.static(path.join(__dirname, "templates")));
+app.use("/templates", express.static(path.join(__dirname, "static", "ui", "templates")));
 
 // Routes for modules
 app.use("/", dashboardRoutes);

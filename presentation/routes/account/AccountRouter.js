@@ -6,7 +6,7 @@ module.exports = function(express) {
 
 	// Middleware
 	router.get('/create', function(req, res) {
-		res.render("modules/monitors/account/createaccount.ninja");
+		res.render("modules/monitors/account/server/createaccount.ninja");
 	});
 
 	router.get('/test/test1', function(req, res) {

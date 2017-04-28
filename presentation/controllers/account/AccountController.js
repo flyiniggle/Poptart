@@ -11,7 +11,7 @@ const AccountController = function() {
 	const self = this;
 
 	self.getAccount = function(req, res) {
-		res.render("modules/account/account.ninja");
+		res.render("modules/account/server/account.ninja");
 	};
 
 	self.getAccountData = function(req, res) {

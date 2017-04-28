@@ -253,7 +253,7 @@ Poptart.Account = function() {
 	}
 
 	function displayAccountAlerts(data) {
-		var alertsHtml = nunjucks.render("/components/alerts/alerts.ninja", {alerts: data});
+		var alertsHtml = Poptart.nunjucks.render("presentation/templates/components/alerts/shared/alerts.ninja", {alerts: data});
 
 		jQuery("#alertsContent").html(alertsHtml);
 	}
