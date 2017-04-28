@@ -79,58 +79,34 @@ describe("Poptart", function() {
 			});
 
 			describe("#model", function() {
+				describe("#getColumn", function() {
+					it("should return a column model", function() {
+						var columnKey = "bool",
+							columnModel;
 
-				describe("#getCell", function() {
-					it("should return a cell", function() {
-						var column = "bool",
-							cell;
+						columnModel = addingWidget.model.getColumn(columnKey);
 
-						cell = addingWidget.model.getCell(column);
-
-						assert.property(cell, "key", "Cell model did not have a 'key' property.");
-						assert.property(cell, "cell", "Cell model did not have a 'cell' property.");
-						cell.cell.should.have.prop("tagName", "TD");
-						assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
+						assert.property(columnModel, "key", "Cell model did not have a 'key' property.");
+						assert.property(columnModel, "value", "Cell model did not have a 'value' property.");
+						assert.property(columnModel, "settings", "Cell model did not have a 'settings' property.");
+						assert.isFalse(columnModel.value, "Expected columnModel value to be false at start.");
+						assert.equal(columnKey, columnModel.key, "Expected columnModel to have key of " + columnKey + " but found " + columnModel.key + ".");
 					});
 				});
 
-				describe("#getColumnData", function() {
-					it("should return column data", function() {
-						var column = "bool",
-							cell;
-
-						cell = addingWidget.model.getColumnData(column);
-
-						assert.property(cell, "key", "Cell model did not have a 'key' property.");
-						assert.property(cell, "value", "Cell model did not have a 'value' property.");
-						assert.isFalse(cell.value, "Expected cell value to be false at start.");
-						assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
-					});
-				});
-
-				describe("#addNewRow", function() {
-					it("should add a new row model", function() {
-					});
-				});
-
-				describe("#removeRow", function() {
-					it("should remove a row model", function() {
-					});
-				});
-
-				describe("#updateColumnData", function() {
+				describe("#setColumnValue", function() {
 					it("should update boolean column data", function() {
 						var column = "bool",
 							cell;
 
-						cell = addingWidget.model.updateColumnData(column, true);
+						cell = addingWidget.model.setColumnValue(column, true);
 
 						assert.property(cell, "key", "Cell model did not have a 'key' property.");
 						assert.property(cell, "value", "Cell model did not have a 'value' property.");
 						assert.isTrue(cell.value, "Expected cell value to be true.");
-						assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
+						assert.equal(column, cell.key, "Expected cell to have key of " + column + " but found " + cell.key + ".");
 
-						cell = addingWidget.model.updateColumnData(column, false);
+						cell = addingWidget.model.setColumnValue(column, false);
 						assert.isFalse(cell.value, "Expected cell value to be false.");
 					});
 
@@ -138,24 +114,24 @@ describe("Poptart", function() {
 						var column = "bool",
 							cell;
 
-						cell = addingWidget.model.updateColumnData(column, "lala");
+						cell = addingWidget.model.setColumnValue(column, "lala");
 
 						assert.property(cell, "key", "Cell model did not have a 'key' property.");
 						assert.property(cell, "value", "Cell model did not have a 'value' property.");
 						assert.equal('lala', cell.value, "Expected cell value to be 'lala'.");
-						assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
+						assert.equal(column, cell.key, "Expected cell to have key of " + column + " but found " + cell.key + ".");
 					});
 
 					it("should update numeric column data", function() {
 						var column = "bool",
 							cell;
 
-						cell = addingWidget.model.updateColumnData(column, 2);
+						cell = addingWidget.model.setColumnValue(column, 2);
 
 						assert.property(cell, "key", "Cell model did not have a 'key' property.");
 						assert.property(cell, "value", "Cell model did not have a 'value' property.");
 						assert.equal(2, cell.value, "Expected cell value to be 2.");
-						assert.equal(column, cell.key, "Expected cell to have column key of " + column + " but found " + cell.key + ".");
+						assert.equal(column, cell.key, "Expected cell to have key of " + column + " but found " + cell.key + ".");
 					});
 				});
 			});
@@ -244,9 +220,9 @@ describe("Poptart", function() {
 							boolVal = true,
 							row;
 
-						addingWidget.model.updateColumnData("text", textVal);
-						addingWidget.model.updateColumnData("number", numberVal);
-						addingWidget.model.updateColumnData("bool", boolVal);
+						addingWidget.model.setColumnValue("text", textVal);
+						addingWidget.model.setColumnValue("number", numberVal);
+						addingWidget.model.setColumnValue("bool", boolVal);
 
 						row = addingWidget._getRowForRendering();
 
@@ -308,7 +284,7 @@ describe("Poptart", function() {
 						var columnKey = "template",
 							cell, columnSettings;
 
-						addingWidget.model.updateColumnData(columnKey, "A working");
+						addingWidget.model.setColumnValue(columnKey, "A working");
 
 						cell = addingWidget.model.getCell(columnKey).cell;
 						columnSettings = addingWidget._getColumnSettings(columnKey);
@@ -322,7 +298,7 @@ describe("Poptart", function() {
 							helperValue = "test!",
 							cell, columnSettings;
 
-						addingWidget.model.updateColumnData("formulaHelper", helperValue);
+						addingWidget.model.setColumnValue("formulaHelper", helperValue);
 
 						cell = addingWidget.model.getCell(columnKey).cell;
 						columnSettings = addingWidget._getColumnSettings(columnKey);
@@ -351,8 +327,8 @@ describe("Poptart", function() {
 							objValue = {testKey: "Object test!"},
 							formulaCell, objCell;
 
-						addingWidget.model.updateColumnData("formulaHelper", formulaHelperValue);
-						addingWidget.model.updateColumnData("object", objValue);
+						addingWidget.model.setColumnValue("formulaHelper", formulaHelperValue);
+						addingWidget.model.setColumnValue("object", objValue);
 
 						addingWidget._updateUiRow();
 
