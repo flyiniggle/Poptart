@@ -18,7 +18,7 @@
 
 				serverErrorContainer.appendChild(serverErrorInterior);
 				serverErrorInterior.appendChild(serverErrorClose);
-				serverErrorInterior.innerHTML += nunjucks.render('support/error/error.ninja', JSON.parse(error.responseText));
+				serverErrorInterior.innerHTML += Poptart.nunjucks.render('support/error/shared/error.ninja', JSON.parse(error.responseText));
 
 				jQuery("body").prepend(serverErrorContainer);
 				jQuery("#serverErrorClose").on("click", this.closeServerErrorNotification);

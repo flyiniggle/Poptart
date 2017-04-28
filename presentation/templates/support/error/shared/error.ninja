@@ -11,5 +11,5 @@
 	<span>Method:  </span><span>{{ method }}</span>
 </div>
 <div class="serverErrorInfo">
-	<span>Request Path:  </span><span>{{ path }}</span>
+	<span>Request Path: </span><span>{{ path }}</span>
 </div>

@@ -8,8 +8,7 @@ const ServerError = function(res, error) {
 		var templateContext;
 
 		res.status(status);
-		switch(acceptsType) {
-		case "application/json":
+		if(acceptsType.includes("application/json")) {
 			res.setHeader('contentType', 'application/json');
 
 			res.write(JSON.stringify({
@@ -20,8 +19,7 @@ const ServerError = function(res, error) {
 				path: error.path
 			}));
 			res.end();
-			break;
-		case "text/html":
+		} else if(acceptsType.includes("text/html")) {
 			templateContext = {
 				message: error.message,
 				summary: error.summary,
@@ -31,9 +29,8 @@ const ServerError = function(res, error) {
 			};
 
 			res.setHeader('contentType', 'text/html');
-			res.render("templates/support/error/SynchronousErrorResponse.ninja", templateContext);
-			break;
-		default:
+			res.render("support/error/server/SynchronousErrorResponse.ninja", templateContext);
+		} else {
 			res.setHeader('contentType', 'application/json');
 
 			res.write(JSON.stringify({
@@ -44,7 +41,6 @@ const ServerError = function(res, error) {
 				path: error.path
 			}));
 			res.end();
-			break;
 		}
 	};
 };

@@ -90,7 +90,7 @@ var AccountMonitorController = function() {
 		templateData.accountList = JSON.stringify(accountList);
 		templateData.summaryData = JSONSummaryData;
 		templateData.alerts = alerts;
-		res.render("modules/monitors/account/accountmonitor.ninja", templateData);
+		res.render("modules/monitors/account/server/accountmonitor.ninja", templateData);
 	}
 
 	function processAccountData(res, data) {
