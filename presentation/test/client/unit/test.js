@@ -53,6 +53,7 @@ describe("Poptart", function() {
 								{columnKey: "number", editorType: "numeric", readOnly: false},
 								{columnKey: "text", editorType: "text", readOnly: false},
 								{columnKey: "bool", editorType: "checkbox", readOnly: false},
+								{columnKey: "object", editorType: "combo", readOnly: false},
 								{columnKey: "template", readOnly: true},
 								{columnKey: "pk", readOnly: true}
 							]
@@ -137,6 +138,43 @@ describe("Poptart", function() {
 			});
 
 			describe("#Adding", function() {
+				it("should create a text editor for the text column.", function() {
+					var column = "text",
+						columModel = addingWidget.model.getColumn(column);
+
+					addingWidget._startEdit(columModel);
+					assert.equal(addingWidget.activeEditor.cell.cell, columModel.cell, "Active editor was not in the correct cell.");
+					columModel.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
+				});
+
+				it("should create a numeric editor for the number column.", function() {
+					var column = "number",
+						columModel = addingWidget.model.getColumn(column);
+
+					addingWidget._startEdit(columModel);
+					assert.equal(addingWidget.activeEditor.cell.cell, columModel.cell, "Active editor was not in the correct cell.");
+					columModel.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
+				});
+
+				it("should create a checkbox editor for the boolean column.", function() {
+					var column = "bool",
+						columModel = addingWidget.model.getColumn(column);
+
+					addingWidget._startEdit(columModel);
+					assert.equal(addingWidget.activeEditor.cell.cell, columModel.cell, "Active editor was not in the correct cell.");
+					columModel.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
+				});
+
+				it("should create a combo editor for the object column.", function() {
+					var column = "object",
+						columModel = addingWidget.model.getColumn(column);
+
+					addingWidget._startEdit(columModel);
+					assert.equal(addingWidget.activeEditor.cell.cell, columModel.cell, "Active editor was not in the correct cell.");
+					columModel.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
+				});
+
+
 				describe("#_getColumnSettings", function() {
 					it("should return column settings for text", function() {
 						var columnSettings;
@@ -340,16 +378,6 @@ describe("Poptart", function() {
 					});
 				});
 
-				describe("#_removeAddingRow", function() {
-					it("should remove the only adding row.", function() {
-					});
-				});
-
-				describe("#_addAddingRow", function() {
-					it("should add a new adding row.", function() {
-					});
-				});
-
 				describe("#_createAddingRowHtml", function() {
 					it("should return a row with a cell for each visible column.", function() {
 						var columns = [{key: "test1"}, {key: "test2"}, {key: "test3"}, {key: "test4"}],
@@ -485,26 +513,6 @@ describe("Poptart", function() {
 						assert.equal(Object.getPrototypeOf(editorInfo.provider), jQuery.ig.EditorProviderText.prototype, "Editor did not have the correct provider.");
 						editorInfo.providerWrapper.should.have.class(addingWidget.css.editor);
 						assert.equal(editorInfo.cell, cell, "Cells did not match.");
-					});
-				});
-
-				describe("#_startEdit", function() {
-					it("should create an editor for the text column.", function() {
-						var column = "text",
-							cell = addingWidget.model.getCell(column);
-
-						addingWidget._startEdit(column);
-						assert.equal(addingWidget.activeEditor.cell, cell, "Active editor was not in the correct cell.");
-						cell.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
-					});
-
-					it("should create an editor for the text column.", function() {
-						var column = "number",
-							cell = addingWidget.model.getCell(column);
-
-						addingWidget._startEdit(column);
-						assert.equal(addingWidget.activeEditor.cell, cell, "Active editor was not in the first editable cell.");
-						cell.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
 					});
 				});
 
