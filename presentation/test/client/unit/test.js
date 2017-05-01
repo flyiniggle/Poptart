@@ -235,74 +235,87 @@ describe("Poptart", function() {
 					column.cell.should.have.html("test!");
 				});
 
+				describe("keyboard navigation", function() {
+					describe("with tab", function() {
+						it("should open an editor in the next (right) column.", function() {
+							var startingColumn = addingWidget.model.getColumn("number"),
+								nextColumn = "text",
+								nextCell;
 
-				describe("#_getColumnSettings", function() {
-					it("should return column settings for text", function() {
-						var columnSettings;
+							sinon.spy(addingWidget, "_saveEdit");
+							sinon.spy(addingWidget, "_startEdit");
 
-						columnSettings = addingWidget._getColumnSettings("text");
+							addingWidget._startEdit(startingColumn);
+							addingWidget._navigateRight();
 
-						assert.propertyVal(columnSettings,
-							"columnKey",
-							"text",
-							"Expected column settings columnKey to be 'text' but got " + columnSettings.columnKey + ".");
+							nextCell = addingWidget.model.getColumn(nextColumn).cell;
 
-						assert.propertyVal(columnSettings,
-							"readOnly",
-							false,
-							"The Read Only setting was not false.");
+							assert.equal(addingWidget.activeEditor.cell.cell, nextCell, "Active editor was not in the correct cell.");
 
-						assert.propertyVal(columnSettings,
-							"editorType",
-							"text",
-							"Expected an editor type of 'text' but got " + columnSettings.editorType + ".");
+							assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
+							assert.isTrue(addingWidget._startEdit.calledTwice, "_startEdit was not called.");
+						});
 
-						assert.propertyVal(columnSettings,
-							"dataType",
-							"string",
-							"Expected a data type of 'string' but got " + columnSettings.dataType + ".");
+						it("should navigate to the submit button if on the last editable cell.", function() {
+							var startingColumn = addingWidget.model.getColumn("object");
+
+							addingWidget._startEdit(startingColumn);
+							addingWidget._navigateRight();
+
+							assert.isUndefined(addingWidget.activeEditor, "There should be no active editor.");
+							assert.equal(jQuery("#ui-iggrid-adding-add-row-button:focus").length, 1, "Add button was not focused.");
+						});
+
+						it("should do nothing when the submit button is focused.", function() {
+							addingWidget._addAddingButton();
+							jQuery("#ui-iggrid-adding-add-row-button").focus();
+							addingWidget._navigateRight();
+							assert.equal(jQuery("#ui-iggrid-adding-add-row-button:focus").length, 1, "Add button was not focused.");
+
+							assert.isUndefined(addingWidget.activeEditor, "There should be no active editor.");
+
+						});
 					});
 
-					it("should return column settings for number", function() {
-						var columnSettings;
+					describe("with shift + tab", function() {
+						it("should open an editor in the previous (left) column.", function() {
+							var column = "text",
+								previousCell;
 
-						columnSettings = addingWidget._getColumnSettings("number");
+							sinon.spy(addingWidget, "_saveEdit");
+							sinon.spy(addingWidget, "_startEdit");
 
-						assert.propertyVal(columnSettings,
-							"columnKey",
-							"number",
-							"Expected column settings columnKey to be 'number' but got " + columnSettings.columnKey + ".");
+							addingWidget._startEdit(addingWidget.model.getColumn(column));
+							addingWidget._navigateLeft();
 
-						assert.propertyVal(columnSettings,
-							"readOnly",
-							false,
-							"The Read Only setting was not false.");
+							previousCell = addingWidget.model.getColumn("number").cell;
 
-						assert.propertyVal(columnSettings,
-							"editorType",
-							"numeric",
-							"Expected an editor type of 'numeric' but got " + columnSettings.editorType + ".");
+							assert.equal(addingWidget.activeEditor.cell.cell, previousCell, "Active editor was not in the correct cell.");
 
-						assert.propertyVal(columnSettings,
-							"dataType",
-							"number",
-							"Expected a data type of 'number' but got " + columnSettings.dataType + ".");
-					});
+							assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
+							assert.isTrue(addingWidget._startEdit.calledTwice, "_startEdit was not called.");
+						});
 
-					it("should return column settings for bool", function() {
-						var columnSettings;
+						it("should close the active editor if on the first editable cell.", function() {
+							var startingColumn = addingWidget.model.getColumn("number");
 
-						columnSettings = addingWidget._getColumnSettings("bool");
+							sinon.spy(addingWidget, "_saveEdit");
+							sinon.spy(addingWidget, "_startEdit");
 
-						assert.propertyVal(columnSettings,
-							"columnKey",
-							"bool",
-							"Expected column settings columnKey to be 'bool' but got " + columnSettings.columnKey + ".");
-						assert.propertyVal(columnSettings, "readOnly", false, "The Read Only setting was not false.");
-						assert.propertyVal(columnSettings, "editorType", "checkbox", "Expected an editor type of 'checkbox' but got " + columnSettings.editorType + ".");
-						assert.propertyVal(columnSettings, "dataType", "bool", "Expected a data type of 'bool' but got " + columnSettings.dataType + ".");
+							addingWidget._startEdit(startingColumn);
+							addingWidget._navigateLeft();
+
+							assert.isUndefined(addingWidget.activeEditor, "There should be no active editor.");
+
+							assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
+							assert.isTrue(addingWidget._startEdit.calledOnce, "_startEdit was not called only once.");
+						});
+
+						it("should do nothing when on the submit button.", function() {
+						});
 					});
 				});
+
 
 				describe("#_getRowForRendering", function() {
 					it("should return keys for each column", function() {
@@ -328,52 +341,6 @@ describe("Poptart", function() {
 						assert.propertyVal(row, "text", textVal, "Expected " + textVal + " for text column value but got " + row.text + ".");
 						assert.propertyVal(row, "number", numberVal, "Expected " + numberVal + " for number column value but got " + row.number + ".");
 						assert.propertyVal(row, "bool", boolVal, "Expected " + boolVal + " for bool column value but got " + row.bool + ".");
-					});
-				});
-
-				describe("#_isLastScrollableCell", function() {
-					it("should return true for the last column", function() {
-						var column = "pk",
-							cell;
-
-						cell = addingWidget.model.getCell(column);
-						assert.isTrue(addingWidget._isLastScrollableCell(cell.cell), "Should have returned true but returned false.");
-					});
-
-					it("should return true for other columns", function() {
-						var cell;
-
-						cell = addingWidget.model.getCell("text");
-						assert.isFalse(addingWidget._isLastScrollableCell(cell.cell), "Should have returned false but returned true.");
-
-						cell = addingWidget.model.getCell("number");
-						assert.isFalse(addingWidget._isLastScrollableCell(cell.cell), "Should have returned false but returned true.");
-
-						cell = addingWidget.model.getCell("bool");
-						assert.isFalse(addingWidget._isLastScrollableCell(cell.cell), "Should have returned false but returned true.");
-					});
-				});
-
-				describe("#_updateUiCell", function() {
-
-				});
-
-				describe("#_updateUiRow", function() {
-					it("updated calculated columns when a row is edited.", function() {
-						var formulaHelperValue = "Formula test!",
-							objValue = {testKey: "Object test!"},
-							formulaCell, objCell;
-
-						addingWidget.model.setColumnValue("formulaHelper", formulaHelperValue);
-						addingWidget.model.setColumnValue("object", objValue);
-
-						addingWidget._updateUiRow();
-
-						formulaCell = addingWidget.model.getCell("formula").cell;
-						objCell = addingWidget.model.getCell("object").cell;
-
-						objCell.should.have.html(objValue.testKey);
-						formulaCell.should.have.html(formulaHelperValue);
 					});
 				});
 
@@ -406,174 +373,6 @@ describe("Poptart", function() {
 						cell.should.have.data("columnKey", columns[3].key);
 						cell.should.have.attr("id", rowId + "_" + columns[3].key);
 						cell.should.have.class("ui-iggrid-adding-row-cell");
-					});
-				});
-
-				describe("#_getProviderForKey", function() {
-					it("should return a text editor provider.", function() {
-						var provider = addingWidget._getProviderForKey({}, {editorType: "text"});
-
-						assert.equal(provider.editorType, "text", "The property editorType did not match expected.");
-						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderText.prototype, "The provider was not the expected type.");
-					});
-
-					it("should return a checkbox provider.", function() {
-						var provider = addingWidget._getProviderForKey({}, {editorType: "checkbox"});
-
-						assert.equal(provider.editorType, "checkbox", "The property editorType did not match expected.");
-						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderBoolean.prototype, "The provider was not the expected type.");
-					});
-
-					it("should return a checkbox provider.", function() {
-						var provider = addingWidget._getProviderForKey({}, {dataType: "bool"});
-
-						assert.equal(provider.editorType, "checkbox", "The property editorType did not match expected.");
-						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderBoolean.prototype, "The provider was not the expected type.");
-					});
-
-					it("should return a currency provider.", function() {
-						var provider = addingWidget._getProviderForKey({format: "currency"}, {});
-
-						assert.equal(provider.editorType, "currency", "The property editorType did not match expected.");
-						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderCurrency.prototype, "The provider was not the expected type.");
-					});
-
-					it("should return a currency provider.", function() {
-						var provider = addingWidget._getProviderForKey({}, {editorType: "currency"});
-
-						assert.equal(provider.editorType, "currency", "The property editorType did not match expected.");
-						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderCurrency.prototype, "The provider was not the expected type.");
-					});
-
-					it("should return a object combo provider.", function() {
-						var provider = addingWidget._getProviderForKey({}, {dataType: "object", editorType: "combo"});
-
-						assert.equal(provider.editorType, "combo", "The property editorType did not match expected.");
-						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderObjectCombo.prototype, "The provider was not the expected type.");
-					});
-
-					it("should return a combo provider.", function() {
-						var provider = addingWidget._getProviderForKey({}, {dataType: "string", editorType: "combo"});
-
-						assert.equal(provider.editorType, "combo", "The property editorType did not match expected.");
-						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderCombo.prototype, "The provider was not the expected type.");
-					});
-
-					it("should return a rating provider.", function() {
-						var provider = addingWidget._getProviderForKey({}, {editorType: "rating"});
-
-						assert.equal(provider.editorType, "rating", "The property editorType did not match expected.");
-						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderRating.prototype, "The provider was not the expected type.");
-					});
-
-					it("should return a mask provider.", function() {
-						var provider = addingWidget._getProviderForKey({}, {editorType: "mask"});
-
-						assert.equal(provider.editorType, "mask", "The property editorType did not match expected.");
-						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderMask.prototype, "The provider was not the expected type.");
-					});
-
-					it("should return a percent provider.", function() {
-						var provider = addingWidget._getProviderForKey({}, {editorType: "percent"});
-
-						assert.equal(provider.editorType, "percent", "The property editorType did not match expected.");
-						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderPercent.prototype, "The provider was not the expected type.");
-					});
-
-					it("should return a date provider.", function() {
-						var provider = addingWidget._getProviderForKey({}, {editorType: "date"});
-
-						assert.equal(provider.editorType, "date", "The property editorType did not match expected.");
-						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderDate.prototype, "The provider was not the expected type.");
-					});
-
-					it("should return a date picker provider.", function() {
-						var provider = addingWidget._getProviderForKey({}, {editorType: "datePicker"});
-
-						assert.equal(provider.editorType, "datePicker", "The property editorType did not match expected.");
-						assert.equal(Object.getPrototypeOf(provider.provider), jQuery.ig.EditorProviderDatePicker.prototype, "The provider was not the expected type.");
-					});
-
-					it("should throw an error.", function() {
-						assert.throws(function() {
-							addingWidget._getProviderForKey({}, {});
-						},
-						TypeError,
-						"Please provide an editor type."
-						);
-					});
-				});
-
-				describe("#_getEditorForCell", function() {
-					it("should return information for the text column.", function() {
-						var cell = addingWidget.model.getCell("text"),
-							editorInfo = addingWidget._getEditorForCell("text", cell);
-
-						assert.equal(Object.getPrototypeOf(editorInfo.provider), jQuery.ig.EditorProviderText.prototype, "Editor did not have the correct provider.");
-						editorInfo.providerWrapper.should.have.class(addingWidget.css.editor);
-						assert.equal(editorInfo.cell, cell, "Cells did not match.");
-					});
-				});
-
-				describe("#_navigateLeft", function() {
-					it("should open an editor in the previous column.", function() {
-						var column = "text",
-							previousCell;
-
-						sinon.spy(addingWidget, "_saveEdit");
-						sinon.spy(addingWidget, "_startEdit");
-
-						addingWidget._startEdit(column);
-						addingWidget._navigateLeft();
-
-						previousCell = addingWidget.model.getCell("number");
-
-						assert.equal(addingWidget.activeEditor.cell, previousCell, "Active editor was not in the correct cell.");
-
-						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-						assert.isTrue(addingWidget._startEdit.calledTwice, "_startEdit was not called.");
-					});
-
-					it("should close the active editor if on the first editable cell.", function() {
-						var startingColumn = "number";
-
-						sinon.spy(addingWidget, "_saveEdit");
-						sinon.spy(addingWidget, "_startEdit");
-
-						addingWidget._startEdit(startingColumn);
-						addingWidget._navigateLeft();
-
-						assert.isUndefined(addingWidget.activeEditor, "There should be no active editor.");
-
-						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-						assert.isTrue(addingWidget._startEdit.calledOnce, "_startEdit was not called only once.");
-					});
-				});
-
-				describe("#_navigateRight", function() {
-					it("should open an editor in the next column.", function() {
-						var startingColumn = "number",
-							nextColumn = "text",
-							nextCell;
-
-						sinon.spy(addingWidget, "_saveEdit");
-						sinon.spy(addingWidget, "_startEdit");
-
-						addingWidget._startEdit(startingColumn);
-						addingWidget._navigateRight();
-
-						nextCell = addingWidget.model.getCell(nextColumn);
-
-						assert.equal(addingWidget.activeEditor.cell, nextCell, "Active editor was not in the correct cell.");
-
-						assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-						assert.isTrue(addingWidget._startEdit.calledTwice, "_startEdit was not called.");
-					});
-
-					it("should do nothing when on the submit button.", function() {
-					});
-
-					it("should navigate to the submit button.", function() {
 					});
 				});
 			});

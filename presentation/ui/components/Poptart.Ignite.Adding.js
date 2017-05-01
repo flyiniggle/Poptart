@@ -337,7 +337,7 @@
 
 			row.children("td").addClass("ui-state-hover");
 			if(!this.activeEditor) {
-				this._addAddingButton(row.data("rowId"));
+				this._addAddingButton();
 			}
 		},
 		_mouseLeave: function() {
@@ -350,6 +350,10 @@
 		_navigateRight: function() {
 			var rowModel, field,
 				cells, currentCellIndex, nextEditableCell;
+
+			if(!this.activeEditor) {
+				return;
+			}
 
 			field = this.activeEditor.providerWrapper;
 			field.off("blur", "input, div.ui-checkbox-container", this._addingRowHandlers.blur);
@@ -483,6 +487,7 @@
 			addButton.addClass("ion-android-checkmark-circle btn btn-success ")
 				.addClass(this.css.addRowButton)
 				.attr("type", "button")
+				.attr("id", "ui-iggrid-adding-add-row-button")
 				.appendTo(container);
 
 			container.addClass("ui-iggrid-adding-add-row-button-container");
