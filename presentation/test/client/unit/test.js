@@ -174,6 +174,67 @@ describe("Poptart", function() {
 					columModel.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
 				});
 
+				it("should display a new text value.", function() {
+					var columnKey = "text",
+						textVal = "test!",
+						column;
+
+					column = addingWidget.model.getColumn(columnKey);
+					addingWidget.model.setColumnValue(columnKey, textVal);
+					addingWidget._updateUiCell(column);
+
+					column.cell.should.have.html(textVal);
+				});
+
+				it("should display a new number value.", function() {
+					var columnKey = "number",
+						numVal = 5,
+						column;
+
+					column = addingWidget.model.getColumn(columnKey);
+					addingWidget.model.setColumnValue(columnKey, numVal);
+					addingWidget._updateUiCell(column);
+
+					column.cell.should.have.html(numVal.toString());
+				});
+
+				it("should display a new template value.", function() {
+					var columnKey = "template",
+						column;
+
+					addingWidget.model.setColumnValue(columnKey, "A working");
+
+					column = addingWidget.model.getColumn(columnKey);
+					addingWidget._updateUiCell(column);
+
+					column.cell.should.have.html("A working template!");
+				});
+
+				it("should display a new formula value.", function() {
+					var columnKey = "formula",
+						helperValue = "test!",
+						column;
+
+					addingWidget.model.setColumnValue("formulaHelper", helperValue);
+
+					column = addingWidget.model.getColumn(columnKey);
+					addingWidget._updateUiCell(column);
+
+					column.cell.should.have.html(helperValue);
+				});
+
+				it("should display a new mapped value.", function() {
+					var columnKey = "object",
+						objValue = {testKey: "test!"},
+						column;
+
+					column = addingWidget.model.getColumn(columnKey);
+					addingWidget.model.setColumnValue(columnKey, objValue);
+					addingWidget._updateUiCell(column);
+
+					column.cell.should.have.html("test!");
+				});
+
 
 				describe("#_getColumnSettings", function() {
 					it("should return column settings for text", function() {
@@ -294,69 +355,7 @@ describe("Poptart", function() {
 				});
 
 				describe("#_updateUiCell", function() {
-					it("should display a new text value.", function() {
-						var columnKey = "text",
-							textVal = "test!",
-							cell, columnSettings;
 
-						cell = addingWidget.model.getCell(columnKey).cell;
-						columnSettings = addingWidget._getColumnSettings(columnKey);
-						addingWidget._updateUiCell(cell, columnSettings, textVal);
-
-						cell.should.have.html(textVal);
-					});
-
-					it("should display a new number value.", function() {
-						var columnKey = "number",
-							numVal = 5,
-							cell, columnSettings;
-
-						cell = addingWidget.model.getCell(columnKey).cell;
-						columnSettings = addingWidget._getColumnSettings(columnKey);
-						addingWidget._updateUiCell(cell, columnSettings, numVal);
-
-						cell.should.have.html(numVal.toString());
-					});
-
-					it("should display a new template value.", function() {
-						var columnKey = "template",
-							cell, columnSettings;
-
-						addingWidget.model.setColumnValue(columnKey, "A working");
-
-						cell = addingWidget.model.getCell(columnKey).cell;
-						columnSettings = addingWidget._getColumnSettings(columnKey);
-						addingWidget._updateUiCell(cell, columnSettings);
-
-						cell.should.have.html("A working template!");
-					});
-
-					it("should display a new formula value.", function() {
-						var columnKey = "formula",
-							helperValue = "test!",
-							cell, columnSettings;
-
-						addingWidget.model.setColumnValue("formulaHelper", helperValue);
-
-						cell = addingWidget.model.getCell(columnKey).cell;
-						columnSettings = addingWidget._getColumnSettings(columnKey);
-						addingWidget._updateUiCell(cell, columnSettings, helperValue);
-
-						cell.should.have.html(helperValue);
-					});
-
-					it("should display a new mapped value.", function() {
-						var columnKey = "object",
-							objValue = {testKey: "test!"},
-							cell, columnSettings;
-
-						cell = addingWidget.model.getCell(columnKey).cell;
-						columnSettings = addingWidget._getColumnSettings(columnKey);
-
-						addingWidget._updateUiCell(cell, columnSettings, objValue);
-
-						cell.should.have.html("test!");
-					});
 				});
 
 				describe("#_updateUiRow", function() {
