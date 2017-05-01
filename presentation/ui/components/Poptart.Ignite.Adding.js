@@ -431,7 +431,7 @@
 			}, this);
 			lastEditableCell = Array.from(cells).reverse()[0];
 			this._endRowEdit();
-			this._startEditCell(lastEditableCell);
+			this._startEdit(lastEditableCell);
 		},
 		_generateDummyLayout: function(cols) {
 			var i, layout = [[]];
