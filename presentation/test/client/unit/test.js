@@ -316,6 +316,31 @@ describe("Poptart", function() {
 							assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn("object").cell, "Active editor was not in the correct cell.");
 						});
 					});
+
+					describe("with enter", function() {
+						it("should add the adding row to the main table and clear the adding row.", function() {
+							var column = "text",
+								event;
+
+							sinon.spy(addingWidget, "_saveEdit");
+							sinon.spy(addingWidget, "_startEdit");
+							sinon.spy(addingWidget, "_commitRow");
+
+							addingWidget._startEdit(addingWidget.model.getColumn(column));
+							event = new jQuery.Event("keypress",
+								{
+									keyCode: jQuery.ui.keyCode.ENTER,
+									target: addingWidget.activeEditor.providerWrapper.find("input")[0]
+								});
+							addingWidget.activeEditor.providerWrapper.trigger(event);
+
+							assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn(column).cell, "Active editor was not in the correct cell.");
+							assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
+							assert.isTrue(addingWidget._commitRow.calledOnce, "_commitRow was not called.");
+							assert.isTrue(addingWidget._startEdit.calledTwice, "_startEdit was not called.");
+							assert.equal(tableEle.igGrid("allRows").length, 1, "A new row was not added to the table.")
+						});
+					});
 				});
 
 
