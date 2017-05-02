@@ -310,20 +310,25 @@
 				} else {
 					this._navigateRight();
 				}
+			} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
+				this._commitFromKeyboard(evt);
 			}
 		},
 		_keyDown: function(evt) {
+			if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
+				this._commitFromKeyboard(evt);
+			}
+		},
+		_commitFromKeyboard: function(evt) {
 			var targetColumn;
 
-			if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
-				evt.preventDefault();
-				evt.stopPropagation();
-				targetColumn = this.activeEditor.cell.key;
-				this.activeEditor.providerWrapper.find("input, div.ui-checkbox-container").blur();
-				this._removeAddingButton();
-				this._commitRow();
-				this._startEdit(targetColumn);
-			}
+			evt.preventDefault();
+			evt.stopPropagation();
+			targetColumn = this.model.getColumn(this.activeEditor.cell.key);
+			this.activeEditor.providerWrapper.find("input, div.ui-checkbox-container").blur();
+			this._removeAddingButton();
+			this._commitRow();
+			this._startEdit(targetColumn);
 		},
 		_blur: function(evt) {
 			var field;
