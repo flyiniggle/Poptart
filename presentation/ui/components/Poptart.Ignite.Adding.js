@@ -22,8 +22,10 @@
 
 			return newRowModel;
 		},
-		removeRow: function() {
-			delete this.addingRow;
+		clearRow: function() {
+			this.addingRow.cells.forEach(function(cell) {
+				cell.value = this.getDefaultValue(cell.settings);
+			}, this);
 		},
 		getRow: function() {
 			return this.addingRow;
@@ -311,14 +313,16 @@
 			}
 		},
 		_keyDown: function(evt) {
+			var targetColumn;
+
 			if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
 				evt.preventDefault();
 				evt.stopPropagation();
+				targetColumn = this.activeEditor.cell.key;
 				this.activeEditor.providerWrapper.find("input, div.ui-checkbox-container").blur();
 				this._removeAddingButton();
 				this._commitRow();
-				this._addAddingRow();
-				this._startEdit();
+				this._startEdit(targetColumn);
 			}
 		},
 		_blur: function(evt) {
@@ -503,7 +507,6 @@
 				.on("mousedown", "button", function() {
 					this._removeAddingButton();
 					this._commitRow(rowModel);
-					this._addAddingRow();
 				}.bind(this))
 				.on("keypress", "button", this._addingRowHandlers.keypress);
 
@@ -535,9 +538,9 @@
 					throw new TypeError("There are no visible editable columns.");
 				}
 				return this._startEdit(firstEditableColumn);
-			} else {
-				columnKey = columnModel.key;
 			}
+
+			columnKey = columnModel.key;
 
 			if(!this._trigger(this.events.editAddingCellStarting)) {
 				return false;
@@ -745,10 +748,6 @@
 			jQuery("#addingRowBar").before(newAddingRow);
 			this._trigger(this.events.rowAddingAdded);
 		},
-		_removeAddingRow: function() {
-			this.model.addingRow.row.remove();
-			this.model.removeRow();
-		},
 		_updateUiRow: function() {
 			this.model.addingRow.cells.filter(function(column) {
 				var settings = column.settings;
@@ -766,15 +765,27 @@
 		_updateUiCell: function(column) {
 			var rowData = this._getRowForRendering(),
 				settings = column.settings,
-				cell = column.cell;
+				cell = column.cell,
+				value;
 
 			if(settings.formula) {
-				cell.html(settings.formula(rowData));
+				value = settings.formula(rowData);
+
+				if (value === undefined || value === null) {
+					cell.html("");
+				} else {
+					cell.html(value);
+				}
 			} else if(settings.template) {
 				cell.html(jQuery.ig.tmpl(settings.template, rowData));
 			} else if(settings.mapper) {
+				value = settings.mapper(column.value);
 
-				cell.html(settings.mapper(column.value));
+				if(value === undefined || value === null) {
+					cell.html("");
+				} else {
+					cell.html(value);
+				}
 			} else {
 				cell.html(column.value);
 			}
@@ -788,7 +799,13 @@
 
 			newRowData = renderer ? renderer(renderableRow) : renderableRow;
 			this.element.igGridUpdating("addRow", newRowData);
-			this._removeAddingRow();
+			this.model.clearRow();
+			this.model.addingRow.cells.filter(function(column) {
+				return column.cell && !column.hidden;
+
+			}, this).forEach(function(column) {
+				return this._updateUiCell(column);
+			}, this);
 		},
 		_isLastScrollableCell: function(cell) {
 			return cell && cell.is(":last-child");
