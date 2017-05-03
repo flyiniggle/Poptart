@@ -335,7 +335,7 @@ describe("Poptart", function() {
 									keyCode: jQuery.ui.keyCode.ENTER,
 									target: addingWidget.activeEditor.providerWrapper.find("input")[0]
 								});
-							addingWidget._keyPress(event);
+							addingWidget._addingRowHandlers.keypress(event);
 
 							assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn(column).cell, "Active editor was not in the correct cell.");
 							assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
@@ -359,7 +359,7 @@ describe("Poptart", function() {
 									keyCode: jQuery.ui.keyCode.ENTER,
 									target: document.getElementById("ui-iggrid-adding-add-row-button")
 								});
-							addingWidget._keyPress(event);
+							addingWidget._addingRowHandlers.keypress(event);
 
 							assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn(column).cell, "Active editor was not in the correct cell.");
 							assert.isTrue(addingWidget._commitRow.calledOnce, "_commitRow was not called.");
@@ -373,7 +373,7 @@ describe("Poptart", function() {
 					it("should show the adding button when mousing over the adding row.", function() {
 						sinon.spy(addingWidget, "_addAddingButton");
 
-						addingWidget._mouseEnter();
+						addingWidget._addingRowHandlers.mouseenter();
 
 						jQuery("#ui-iggrid-adding-add-row-button").should.exist;
 						addingWidget.model.addingRow.row.children("td").should.have.class("ui-state-hover");
@@ -383,7 +383,7 @@ describe("Poptart", function() {
 					it("should hide the adding button when mousing off the adding row.", function() {
 						sinon.spy(addingWidget, "_removeAddingButton");
 
-						addingWidget._mouseLeave();
+						addingWidget._addingRowHandlers.mouseleave();
 
 						jQuery("#ui-iggrid-adding-add-row-button").should.not.be.visible;
 						addingWidget.model.addingRow.row.children("td").should.not.have.class("ui-state-hover");
@@ -397,7 +397,7 @@ describe("Poptart", function() {
 							target: addingWidget.model.getColumn("readonly").cell[0]
 						});
 
-						addingWidget._addingRowClick(event);
+						addingWidget._addingRowHandlers.click(event);
 
 						assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn("number").cell, "Active editor was not in the correct cell.");
 					});
@@ -409,7 +409,7 @@ describe("Poptart", function() {
 							target: addingWidget.model.getColumn("text").cell[0]
 						});
 
-						addingWidget._addingRowClick(event);
+						addingWidget._addingRowHandlers.click(event);
 
 						assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn("text").cell, "Active editor was not in the correct cell.");
 					});
@@ -426,7 +426,7 @@ describe("Poptart", function() {
 							target: addingWidget.model.getColumn("text").cell[0]
 						});
 
-						addingWidget._addingRowClick(event);
+						addingWidget._addingRowHandlers.click(event);
 
 						addingWidget.activeEditor.cell.cell.find("input").val(testText);
 
@@ -434,7 +434,7 @@ describe("Poptart", function() {
 							target: addingWidget.model.getColumn("number").cell[0]
 						});
 
-						addingWidget._addingRowClick(event);
+						addingWidget._addingRowHandlers.click(event);
 
 						assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn("number").cell, "Active editor was not in the correct cell.");
 						assert.equal(addingWidget.model.getColumn("text").value, testText, "Text cell did not have the correct value.");
@@ -444,7 +444,7 @@ describe("Poptart", function() {
 						addingWidget._addAddingButton();
 						sinon.spy(addingWidget, "_commitRow");
 
-						addingWidget._addingButtonClick();
+						addingWidget._addingButtonHandlers.mousedown();
 
 						assert.isUndefined(addingWidget.activeEditor, "There should not have been an active editor.");
 						assert.isTrue(addingWidget._commitRow.calledOnce, "_commitRow was not called.");

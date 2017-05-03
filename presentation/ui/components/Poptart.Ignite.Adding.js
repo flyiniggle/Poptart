@@ -156,16 +156,88 @@
 				};
 			this._addingRowHandlers = this._addingRowHandlers ||
 				{
-					"mouseenter": this._mouseEnter.bind(this),
-					"mouseleave": this._mouseLeave.bind(this),
-					"blur": this._blur.bind(this),
-					"keydown": this._keyDown.bind(this),
-					"keypress": this._keyPress.bind(this),
-					"click": this._addingRowClick.bind(this)
+					"mouseenter": function() {
+						var row = this.model.addingRow.row;
+
+						row.children("td").addClass("ui-state-hover");
+						if(!this.activeEditor) {
+							this._addAddingButton();
+						}
+					}.bind(this),
+					"mouseleave": function() {
+						this.model.addingRow.row.children("td").removeClass("ui-state-hover");
+
+						if(!this.activeEditor) {
+							this._removeAddingButton();
+						}
+					}.bind(this),
+					"blur": function(evt) {
+						var field;
+
+						field = this.activeEditor.providerWrapper;
+						field.off("blur", "input, div.ui-checkbox-container", this._addingRowHandlers.blur);
+						field.find("input").blur();
+						this._saveEdit(evt.data.columnKey, this.activeEditor.provider.getValue());
+						this._endRowEdit();
+
+						return false;
+					}.bind(this),
+					"keydown": function(evt) {
+						if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
+							this._commitFromKeyboard(evt);
+						}
+					}.bind(this),
+					"keypress": function(evt) {
+						if(jQuery(evt.currentTarget).hasClass(this.css.addRowButton)) {
+							if(evt.keyCode === jQuery.ui.keyCode.TAB) {
+								if(evt.shiftKey) {
+									this._navigateFromAddButton();
+								} else {
+									evt.preventDefault();
+									evt.stopPropagation();
+									return false;
+								}
+							} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
+								jQuery(evt.currentTarget).trigger("mousedown");
+								this._startEdit();
+							}
+						} else if(evt.keyCode === jQuery.ui.keyCode.TAB) {
+							evt.preventDefault();
+							evt.stopPropagation();
+							if(evt.shiftKey) {
+								this._navigateLeft();
+							} else {
+								this._navigateRight();
+							}
+						} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
+							this._commitFromKeyboard(evt);
+						}
+					}.bind(this),
+					"click": function(evt) {
+						var target = evt.target,
+							targetType = target.nodeName.toLowerCase(),
+							columnKey = targetType === "td" ? jQuery(target).data("columnKey") : null,
+							columnModel;
+
+						if(this.activeEditor && this.activeEditor.cell.cell[0] === evt.currentTarget) {
+							return false;
+						}
+
+						columnModel = this.model.getColumn(columnKey);
+
+						if(targetType === "td" && !columnModel.settings.readOnly) {
+							this._startEdit(columnModel);
+						} else {
+							this._startEdit();
+						}
+					}.bind(this)
 				};
 			this._addingButtonHandlers = this._addingButtonHandlers ||
 				{
-					"click": this._addingButtonClick.bind(this)
+					"mousedown": function() {
+						this._removeAddingButton();
+						this._commitRow();
+					}.bind(this)
 				};
 			this._validationHandlers = this._validationHandlers ||
 				{
@@ -274,55 +346,6 @@
 			//this.model.columnSettings = this.options.columnSettings = gridColumnSettings;
 			this._addAddingRow(gridColumnSettings);
 		},
-		_addingRowClick: function(evt) {
-			var target = evt.target,
-				targetType = target.nodeName.toLowerCase(),
-				columnKey = targetType === "td" ? jQuery(target).data("columnKey") : null,
-				columnModel;
-
-			if (this.activeEditor && this.activeEditor.cell.cell[0] === evt.currentTarget) {
-				return false;
-			}
-
-			columnModel = this.model.getColumn(columnKey);
-
-			if(targetType === "td" && !columnModel.settings.readOnly) {
-				this._startEdit(columnModel);
-			} else {
-				this._startEdit();
-			}
-		},
-		_keyPress: function(evt) {
-			if(jQuery(evt.currentTarget).hasClass(this.css.addRowButton)) {
-				if(evt.keyCode === jQuery.ui.keyCode.TAB) {
-					if(evt.shiftKey) {
-						this._navigateFromAddButton();
-					} else {
-						evt.preventDefault();
-						evt.stopPropagation();
-						return false;
-					}
-				} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
-					jQuery(evt.currentTarget).trigger("mousedown");
-					this._startEdit();
-				}
-			} else if(evt.keyCode === jQuery.ui.keyCode.TAB) {
-				evt.preventDefault();
-				evt.stopPropagation();
-				if(evt.shiftKey) {
-					this._navigateLeft();
-				} else {
-					this._navigateRight();
-				}
-			} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
-				this._commitFromKeyboard(evt);
-			}
-		},
-		_keyDown: function(evt) {
-			if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
-				this._commitFromKeyboard(evt);
-			}
-		},
 		_commitFromKeyboard: function(evt) {
 			var targetColumn;
 
@@ -333,36 +356,6 @@
 			this._removeAddingButton();
 			this._commitRow();
 			this._startEdit(targetColumn);
-		},
-		_blur: function(evt) {
-			var field;
-
-			field = this.activeEditor.providerWrapper;
-			field.off("blur", "input, div.ui-checkbox-container", this._addingRowHandlers.blur);
-			field.find("input").blur();
-			this._saveEdit(evt.data.columnKey, this.activeEditor.provider.getValue());
-			this._endRowEdit();
-
-			return false;
-		},
-		_mouseEnter: function() {
-			var row = this.model.addingRow.row;
-
-			row.children("td").addClass("ui-state-hover");
-			if(!this.activeEditor) {
-				this._addAddingButton();
-			}
-		},
-		_mouseLeave: function() {
-			this.model.addingRow.row.children("td").removeClass("ui-state-hover");
-
-			if(!this.activeEditor) {
-				this._removeAddingButton();
-			}
-		},
-		_addingButtonClick: function() {
-			this._removeAddingButton();
-			this._commitRow();
 		},
 		_navigateRight: function() {
 			var rowModel, field,
@@ -517,7 +510,7 @@
 				rowLocation;
 
 			addingButton.appendTo(rowModel.row)
-				.on("mousedown", "button", this._addingButtonHandlers.click)
+				.on("mousedown", "button", this._addingButtonHandlers.mousedown)
 				.on("keypress", "button", this._addingRowHandlers.keypress);
 
 			rowLocation = rowModel.row.offset();
