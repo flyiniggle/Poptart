@@ -2,7 +2,7 @@
 	"use strict";
 
 	var addingRowIdPrefix = "addingRow",
-		dataModel, defaultValues;
+		dataModel, validationService, defaultValues;
 
 	dataModel = {
 		addNewRow: function(rowId, row, columnSettings) {
@@ -12,7 +12,7 @@
 					return {
 						key: column.columnKey,
 						cell: column.hidden ? null : jQuery(row).find("#" + rowId + "_" + column.columnKey),
-						value: column.default || this.getDefaultValue(column),
+						value: column.hasOwnProperty("default") ? column.default : this.getDefaultValue(column),
 						settings: column
 					};
 				}, this)
@@ -56,6 +56,12 @@
 		}
 	};
 
+	validationService = {
+		validate: function() {
+			return [];
+		}
+	};
+
 	defaultValues = {
 		"object": {},
 		"combo": "",
@@ -88,7 +94,10 @@
 			editor: "ui-iggrid-editor"
 		},
 		_create: function() {
+			var validator = {};
+
 			this.model = Object.create(dataModel);
+			this.validationService = Object.create(validationService, validator);
 			this.addingRowCounter = 0;
 		},
 		endEditCell: function(row, columnKey, update) {
@@ -118,7 +127,9 @@
 					rowsRendered: jQuery.proxy(this._rowsRendered, this),
 					headerRendering: jQuery.proxy(this._processReadOnly, this),
 					headerRendered: jQuery.proxy(this._headerRendered, this),
-					rendered: jQuery.proxy(this._headerRendered, this),
+					rendered: function(evt, ui) {
+						this._setup(ui);
+					}.bind(this),
 					virtualFrameChanging: jQuery.proxy(this._virtPreRender, this),
 					virtualFrameChanged: jQuery.proxy(this._virtPostRender, this),
 					columnsCollectionModified: jQuery.proxy(this._columnsModified, this)
@@ -279,13 +290,15 @@
 				}
 			}
 		},
-		_headerRendered: function(evt, ui) {
+		_setup: function(ui) {
 			var gridColumnSettings, fixed, thead;
 
 			if(ui.owner.id() !== this.grid.id()) {
 				return;
 			}
 
+			//A whole lot of column setting merging...
+			////////////////////////////////////////////
 			gridColumnSettings = this.grid.options.columns.map(function(settings) {
 				var copiedSettings = {};
 
@@ -332,6 +345,21 @@
 				jQuery.extend(true, gridSettings, settings);
 			});
 
+
+			//Setup validation rules
+			////////////////////////////////////////////
+			this.validationService.validationRules = gridColumnSettings.filter(function(setting) {
+				return setting.required && !setting.hidden;
+			}).map(function(setting) {
+				return {
+					key: setting.columnKey,
+					validation: setting.validation
+				};
+			});
+
+
+			//Some DOMy stuff
+			////////////////////////////////////////////
 			fixed = this.grid.hasFixedColumns();
 			if(fixed) {
 				thead = this.grid.fixedHeadersTable().children("thead");
@@ -800,10 +828,24 @@
 				renderer = this.options.newRowFormatter,
 				newRowData;
 
+			if(!this._validate()) {
+				return false;
+			}
 			newRowData = renderer ? renderer(renderableRow) : renderableRow;
 			this.element.igGridUpdating("addRow", newRowData);
 			this.model.clearRow();
 			this._updateUiRow(true);
+		},
+		_validate: function() {
+			var validationFailures = this.validationService.validate();
+
+			if(validationFailures.length === 0) {
+				return true;
+			}
+
+			//show validation problems
+
+			return false;
 		},
 		_isLastScrollableCell: function(cell) {
 			return cell && cell.is(":last-child");

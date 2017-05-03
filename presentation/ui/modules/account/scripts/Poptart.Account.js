@@ -96,6 +96,8 @@ Poptart.Account = function() {
 						{
 							columnKey: "ticker",
 							readOnly: false,
+							default: undefined,
+							required: true,
 							editorType: "combo",
 							editorOptions: {
 								textKey: "ticker",
