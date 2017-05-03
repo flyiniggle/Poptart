@@ -45,6 +45,7 @@ describe("Poptart", function() {
 							}
 						},
 						{headerText: "readonly", key: "readonly", dataType: "text"},
+						{headerText: "default", key: "default", dataType: "text"},
 						{headerText: "pk", key: "pk", dataType: "number"},
 						{headerText: "formulaHelper", key: "formulaHelper", dataType: "string", hidden: true}
 					],
@@ -57,6 +58,7 @@ describe("Poptart", function() {
 								{columnKey: "bool", editorType: "checkbox", readOnly: false},
 								{columnKey: "object", editorType: "combo", readOnly: false},
 								{columnKey: "readonly", readOnly: true},
+								{columnKey: "default", readOnly: true, default: "default text!"},
 								{columnKey: "template", readOnly: true},
 								{columnKey: "pk", readOnly: true}
 							]
@@ -236,6 +238,15 @@ describe("Poptart", function() {
 					addingWidget._updateUiCell(column);
 
 					column.cell.should.have.html("test!");
+				});
+
+				it("should display a default value.", function() {
+					var columnKey = "default",
+						column;
+
+					column = addingWidget.model.getColumn(columnKey);
+
+					column.cell.should.have.html("default text!");
 				});
 
 				describe("keyboard navigation", function() {

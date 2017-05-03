@@ -465,14 +465,12 @@
 		},
 		_createAddingRowHtml: function(rowId, visibleColumns, fixed) {
 			var newRow = document.createElement("tr"),
-				layout, i, j, settings;
+				layout, i, j;
 
 			layout = this.grid._isMultiRowGrid() ? this.grid._multiRowLayoutRenderingHelper(fixed) : this._generateDummyLayout(visibleColumns);
 			for(i = 0; i < layout.length; i++) {
 				for(j = 0; j < layout[i].length; j++) {
-					settings = this._getColumnSettings(layout[i][j].col.key);
 					jQuery("<td></td>")
-						.html(this.model.getDefaultValue(settings))
 						.data("columnKey", layout[i][j].col.key)
 						.attr("id", rowId + "_" + layout[i][j].col.key)
 						.attr("aria-describedby", this.grid.id() + "_" + layout[i][j].col.key)
@@ -716,7 +714,7 @@
 		},
 		_endCellEdit: function() {
 			this.activeEditor.providerWrapper.remove();
-			this._updateUiRow();
+			this._updateUiRow(false);
 			this.activeEditor.cell.cell.removeClass(this.css.editingCell);
 			delete this.activeEditor;
 		},
@@ -747,20 +745,22 @@
 			//numOfCols = this.grid._isMultiRowGrid() ? this.grid._recordHorizontalSize() : visibleColumns.length;
 			newAddingRow = this._createAddingRowHtml(rowId, visibleColumns, fixed);
 			this.model.addNewRow(rowId, newAddingRow, columnSettings);
-			this._updateUiRow();
+			this._updateUiRow(true);
 			jQuery("#addingRowBar").before(newAddingRow);
 			this._trigger(this.events.rowAddingAdded);
 		},
-		_updateUiRow: function() {
+		_updateUiRow: function(updateAllVisisble) {
 			this.model.addingRow.cells.filter(function(column) {
 				var settings = column.settings;
 
-				return (column.cell &&
-					!column.hidden &&
-					(settings.hasOwnProperty("mapper")) ||
-					settings.hasOwnProperty("formula") ||
-					settings.hasOwnProperty("template"));
+				if(updateAllVisisble) {
+					return column.cell && !column.hidden;
+				}
 
+				return (column.cell && !column.hidden &&
+				(settings.hasOwnProperty("mapper")) ||
+				settings.hasOwnProperty("formula") ||
+				settings.hasOwnProperty("template"));
 			}, this).forEach(function(column) {
 				return this._updateUiCell(column);
 			}, this);
@@ -803,12 +803,7 @@
 			newRowData = renderer ? renderer(renderableRow) : renderableRow;
 			this.element.igGridUpdating("addRow", newRowData);
 			this.model.clearRow();
-			this.model.addingRow.cells.filter(function(column) {
-				return column.cell && !column.hidden;
-
-			}, this).forEach(function(column) {
-				return this._updateUiCell(column);
-			}, this);
+			this._updateUiRow(true);
 		},
 		_isLastScrollableCell: function(cell) {
 			return cell && cell.is(":last-child");
