@@ -163,6 +163,10 @@
 					"keypress": this._keyPress.bind(this),
 					"click": this._addingRowClick.bind(this)
 				};
+			this._addingButtonHandlers = this._addingButtonHandlers ||
+				{
+					"click": this._addingButtonClick.bind(this)
+				};
 			this._validationHandlers = this._validationHandlers ||
 				{
 					errorShowing: jQuery.proxy(this._editorErrorShowing, this),
@@ -356,6 +360,10 @@
 				this._removeAddingButton();
 			}
 		},
+		_addingButtonClick: function() {
+			this._removeAddingButton();
+			this._commitRow();
+		},
 		_navigateRight: function() {
 			var rowModel, field,
 				cells, currentCellIndex, nextEditableCell;
@@ -509,10 +517,7 @@
 				rowLocation;
 
 			addingButton.appendTo(rowModel.row)
-				.on("mousedown", "button", function() {
-					this._removeAddingButton();
-					this._commitRow(rowModel);
-				}.bind(this))
+				.on("mousedown", "button", this._addingButtonHandlers.click)
 				.on("keypress", "button", this._addingRowHandlers.keypress);
 
 			rowLocation = rowModel.row.offset();

@@ -17,6 +17,7 @@ describe("Poptart", function() {
 			});
 
 			beforeEach(function() {
+
 				tableEle.igGrid({
 					dataSource: [],
 					dataSourceType: "json",
@@ -43,6 +44,7 @@ describe("Poptart", function() {
 								return obj ? obj.testKey : "";
 							}
 						},
+						{headerText: "readonly", key: "readonly", dataType: "text"},
 						{headerText: "pk", key: "pk", dataType: "number"},
 						{headerText: "formulaHelper", key: "formulaHelper", dataType: "string", hidden: true}
 					],
@@ -54,6 +56,7 @@ describe("Poptart", function() {
 								{columnKey: "text", editorType: "text", readOnly: false},
 								{columnKey: "bool", editorType: "checkbox", readOnly: false},
 								{columnKey: "object", editorType: "combo", readOnly: false},
+								{columnKey: "readonly", readOnly: true},
 								{columnKey: "template", readOnly: true},
 								{columnKey: "pk", readOnly: true}
 							]
@@ -355,7 +358,6 @@ describe("Poptart", function() {
 								{
 									keyCode: jQuery.ui.keyCode.ENTER,
 									target: document.getElementById("ui-iggrid-adding-add-row-button")
-									//currentTarget: jQuery("#ui-iggrid-adding-add-row-button")[0]
 								});
 							addingWidget._keyPress(event);
 
@@ -367,6 +369,88 @@ describe("Poptart", function() {
 					});
 				});
 
+				describe("mouse navigation", function() {
+					it("should show the adding button when mousing over the adding row.", function() {
+						sinon.spy(addingWidget, "_addAddingButton");
+
+						addingWidget._mouseEnter();
+
+						jQuery("#ui-iggrid-adding-add-row-button").should.exist;
+						addingWidget.model.addingRow.row.children("td").should.have.class("ui-state-hover");
+						assert.isTrue(addingWidget._addAddingButton.calledOnce, "_addAddingButton was not called.");
+					});
+
+					it("should hide the adding button when mousing off the adding row.", function() {
+						sinon.spy(addingWidget, "_removeAddingButton");
+
+						addingWidget._mouseLeave();
+
+						jQuery("#ui-iggrid-adding-add-row-button").should.not.be.visible;
+						addingWidget.model.addingRow.row.children("td").should.not.have.class("ui-state-hover");
+						assert.isTrue(addingWidget._removeAddingButton.calledOnce, "_removeAddingButton was not called.");
+					});
+
+					it("should open an editor in the first editable cell when clicking on a non-editable cell.", function() {
+						var event;
+
+						event = new jQuery.Event("click", {
+							target: addingWidget.model.getColumn("readonly").cell[0]
+						});
+
+						addingWidget._addingRowClick(event);
+
+						assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn("number").cell, "Active editor was not in the correct cell.");
+					});
+
+					it("should open an editor in the corresponding cell when clicking on an editable cell.", function() {
+						var event;
+
+						event = new jQuery.Event("click", {
+							target: addingWidget.model.getColumn("text").cell[0]
+						});
+
+						addingWidget._addingRowClick(event);
+
+						assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn("text").cell, "Active editor was not in the correct cell.");
+					});
+
+					/*
+					unreliable - for some reason, clikcing the second time doesn't always trigger the blur event that actually handles updating the edited cell.
+					it("should save the content of and close a previously opened editor when a different editable column is clicked on.", function() {
+						var testText = "Heeeey",
+							event;
+
+						sinon.spy(addingWidget.model, "setColumnValue");
+
+						event = new jQuery.Event("click", {
+							target: addingWidget.model.getColumn("text").cell[0]
+						});
+
+						addingWidget._addingRowClick(event);
+
+						addingWidget.activeEditor.cell.cell.find("input").val(testText);
+
+						event = new jQuery.Event("click", {
+							target: addingWidget.model.getColumn("number").cell[0]
+						});
+
+						addingWidget._addingRowClick(event);
+
+						assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn("number").cell, "Active editor was not in the correct cell.");
+						assert.equal(addingWidget.model.getColumn("text").value, testText, "Text cell did not have the correct value.");
+					});*/
+
+					it("should add a new row to the main table and clear the contents of the row adding interface when the user clicks an add button.", function() {
+						addingWidget._addAddingButton();
+						sinon.spy(addingWidget, "_commitRow");
+
+						addingWidget._addingButtonClick();
+
+						assert.isUndefined(addingWidget.activeEditor, "There should not have been an active editor.");
+						assert.isTrue(addingWidget._commitRow.calledOnce, "_commitRow was not called.");
+						assert.equal(tableEle.igGrid("allRows").length, 1, "A new row was not added to the table.");
+					});
+				});
 
 				describe("#_getRowForRendering", function() {
 					it("should return keys for each column", function() {
