@@ -22,7 +22,7 @@
 	//Data Modeling
 	////////////////////////////////
 	dataModel = {
-		addNewRow: function(rowId, row, columnSettings) {
+		_addNewRow: function(rowId, row, columnSettings) {
 			var newRowModel = {
 				row: row,
 				cells: columnSettings.map(function(column) {
@@ -39,20 +39,20 @@
 
 			return newRowModel;
 		},
-		clearRow: function() {
+		_clearRow: function() {
 			this.addingRow.cells.forEach(function(cell) {
 				cell.value = this.getDefaultValue(cell.settings);
 			}, this);
 		},
-		getRow: function() {
+		_getRow: function() {
 			return this.addingRow;
 		},
-		getColumn: function(columnKey) {
+		_getColumn: function(columnKey) {
 			return this.addingRow.cells.find(function(column) {
 				return column.key === columnKey;
 			});
 		},
-		setColumnValue: function(columnKey, value) {
+		_setColumnValue: function(columnKey, value) {
 			var cell;
 
 			cell = this.addingRow.cells.find(function(column) {
@@ -94,7 +94,7 @@
 
 	validationService._validate = function() {
 		return this.validationRules.map(function(rule) {
-			var failure = rule.validation(this.getColumn(rule.key).value);
+			var failure = rule.validation(this._getColumn(rule.key).value);
 
 			return failure ? new Failure(rule.key, failure) : undefined;
 		}, this).filter(function(failure) {
@@ -242,7 +242,7 @@
 	addingWidget.startEdit = function(columnKey) {
 		var columnModel;
 
-		columnModel = this.getColumn(columnKey);
+		columnModel = this._getColumn(columnKey);
 
 		if(columnModel.settings.readOnly) {
 			throw new TypeError("The column " + columnKey + " is read only.");
@@ -367,7 +367,7 @@
 						return false;
 					}
 
-					columnModel = this.getColumn(columnKey);
+					columnModel = this._getColumn(columnKey);
 
 					if(targetType === "td" && !columnModel.settings.readOnly) {
 						this._startEdit(columnModel);
@@ -427,15 +427,17 @@
 	};
 
 	addingWidget._commitFromKeyboard = function(evt) {
-		var targetColumn;
+		var targetColumn, allowCommit;
 
 		evt.preventDefault();
 		evt.stopPropagation();
-		targetColumn = this.getColumn(this.activeEditor.cell.key);
+		targetColumn = this._getColumn(this.activeEditor.cell.key);
 		this.activeEditor.providerWrapper.find("input, div.ui-checkbox-container").blur();
-		this._removeAddingButton();
-		this._commitRow();
-		this._startEdit(targetColumn);
+		allowCommit = this._commitRow();
+		if(allowCommit !== false) {
+			this._removeAddingButton();
+			this._startEdit(targetColumn);
+		}
 	};
 
 	addingWidget._navigateRight = function() {
@@ -792,7 +794,7 @@
 	};
 
 	addingWidget._saveEdit = function(column, value) {
-		var columnModel = this.getColumn(column),
+		var columnModel = this._getColumn(column),
 			columnSettings;
 
 		columnSettings = columnModel.settings;
@@ -803,7 +805,7 @@
 			}
 		}
 
-		this.setColumnValue(column, value);
+		this._setColumnValue(column, value);
 		this._updateUiCell(columnModel);
 		this._endCellEdit();
 	};
@@ -842,7 +844,7 @@
 		}
 		//numOfCols = this.grid._isMultiRowGrid() ? this.grid._recordHorizontalSize() : visibleColumns.length;
 		newAddingRow = this._createAddingRowHtml(rowId, visibleColumns, fixed);
-		this.addNewRow(rowId, newAddingRow, columnSettings);
+		this._addNewRow(rowId, newAddingRow, columnSettings);
 		this._updateUiRow(true);
 		jQuery("#addingRowBar").before(newAddingRow);
 		this._trigger(this.events.rowAddingAdded);
@@ -908,13 +910,13 @@
 		}
 		newRowData = renderer ? renderer(renderableRow) : renderableRow;
 		this.element.igGridUpdating("addRow", newRowData);
-		this.clearRow();
+		this._clearRow();
 		this._updateUiRow(true);
 	};
 
 	addingWidget._showFailures = function(failures) {
 		failures.forEach(function(failure) {
-			this.getColumn(failure.key).cell.addClass(this.css.invalidCell);
+			this._getColumn(failure.key).cell.addClass(this.css.invalidCell);
 		}, this);
 	};
 

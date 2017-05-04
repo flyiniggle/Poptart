@@ -35,5 +35,6 @@
 }
 
 .ui-iggrid-cell-invalid {
-	background-color: darkred;
+	background-color: darkred !important;
+	color: #ddd
 }
