@@ -137,6 +137,8 @@
 
 	addingWidget.css = {
 		addingRow: "ui-iggrid-adding-row",
+		addingRowCell: "ui-iggrid-adding-row-cell",
+		addingRowCellDefault: "ui-iggrid-adding-row-cell-default",
 		addRowBarCell: "ui-iggrid-addingBarCell",
 		addRowButton: "ui-iggrid-adding-add-row-button",
 		editingCell: "ui-iggrid-editingcell",
@@ -564,7 +566,7 @@
 					.attr("aria-describedby", this.grid.id() + "_" + layout[i][j].col.key)
 					.attr("colspan", layout[i][j].cs || 1)
 					.attr("rowspan", layout[i][j].rs || 1)
-					.addClass("ui-iggrid-adding-row-cell")
+					.addClass(this.css.addingRowCell)
 					.appendTo(newRow);
 			}
 		}
@@ -640,7 +642,7 @@
 		}
 
 		storedValue = columnModel.value;
-		columnModel.cell.removeClass(this.css.invalidCell).addClass(this.css.editingCell);
+		columnModel.cell.removeClass([this.css.invalidCell, this.css.addingRowCellDefault].join(" ")).addClass(this.css.editingCell);
 
 		newEditor = this._getEditorForCell(columnModel);
 		newEditor.providerWrapper
@@ -846,7 +848,8 @@
 		newAddingRow = this._createAddingRowHtml(rowId, visibleColumns, fixed);
 		this._addNewRow(rowId, newAddingRow, columnSettings);
 		this._updateUiRow(true);
-		jQuery("#addingRowBar").before(newAddingRow);
+		newAddingRow.find("td").addClass(this.css.addingRowCellDefault);
+		jQuery("#addingRowBar").before(newAddingRow)
 		this._trigger(this.events.rowAddingAdded);
 	};
 
@@ -872,6 +875,8 @@
 			settings = column.settings,
 			cell = column.cell,
 			value;
+
+		column.cell.removeClass([this.css.invalidCell, this.css.addingRowCellDefault].join(" "));
 
 		if(settings.formula) {
 			value = settings.formula(rowData);
@@ -912,11 +917,13 @@
 		this.element.igGridUpdating("addRow", newRowData);
 		this._clearRow();
 		this._updateUiRow(true);
+		this.addingRow.row.find("td").addClass(this.css.addingRowCellDefault);
 	};
 
 	addingWidget._showFailures = function(failures) {
 		failures.forEach(function(failure) {
 			this._getColumn(failure.key).cell.addClass(this.css.invalidCell);
+			jQuery("." + this.css.addRowBarCell).append(jQuery("<span>" + failure + "</span>"));
 		}, this);
 	};
 

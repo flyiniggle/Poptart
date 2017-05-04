@@ -2,6 +2,10 @@
   padding: 4px;
   border-bottom: 1px solid #ddd;
 }
+.ui-iggrid-adding-row-cell.ui-iggrid-adding-row-cell-default {
+  color: #999999;
+  font-style: italic;
+}
 .ui-iggrid thead .ui-iggrid-adding-row-cell:first-child {
   border-left: 1px solid #ddd;
 }
@@ -33,8 +37,8 @@
 .ui-iggrid-adding-add-row-button:hover {
   color: #5cb85c;
 }
-
 .ui-iggrid-cell-invalid {
-	background-color: darkred !important;
-	color: #ddd
+  background-color: #f2dede !important;
+  color: #a94442 !important;
+  border-color: #ebccd1 !important;
 }

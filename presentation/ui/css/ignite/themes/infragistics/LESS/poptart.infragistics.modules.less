@@ -5,6 +5,11 @@
   border-bottom: 1px solid @table-border-color;
 }
 
+.ui-iggrid-adding-row-cell.ui-iggrid-adding-row-cell-default {
+  color: @gray-light;
+  font-style: italic;
+}
+
 .ui-iggrid thead .ui-iggrid-adding-row-cell:first-child {
   border-left: 1px solid @table-border-color;
 }
@@ -40,4 +45,10 @@
 
 .ui-iggrid-adding-add-row-button:focus, .ui-iggrid-adding-add-row-button:hover {
   color: @brand-success;
+}
+
+.ui-iggrid-cell-invalid {
+  background-color: @state-danger-bg !important;
+  color: @state-danger-text !important;
+  border-color: @state-danger-border !important;
 }
