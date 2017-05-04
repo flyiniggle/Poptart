@@ -33,3 +33,7 @@
 .ui-iggrid-adding-add-row-button:hover {
   color: #5cb85c;
 }
+
+.ui-iggrid-cell-invalid {
+	background-color: darkred;
+}

@@ -90,7 +90,7 @@ describe("Poptart", function() {
 						var columnKey = "bool",
 							columnModel;
 
-						columnModel = addingWidget.model.getColumn(columnKey);
+						columnModel = addingWidget.getColumn(columnKey);
 
 						assert.property(columnModel, "key", "Cell model did not have a 'key' property.");
 						assert.property(columnModel, "value", "Cell model did not have a 'value' property.");
@@ -105,14 +105,14 @@ describe("Poptart", function() {
 						var column = "bool",
 							cell;
 
-						cell = addingWidget.model.setColumnValue(column, true);
+						cell = addingWidget.setColumnValue(column, true);
 
 						assert.property(cell, "key", "Cell model did not have a 'key' property.");
 						assert.property(cell, "value", "Cell model did not have a 'value' property.");
 						assert.isTrue(cell.value, "Expected cell value to be true.");
 						assert.equal(column, cell.key, "Expected cell to have key of " + column + " but found " + cell.key + ".");
 
-						cell = addingWidget.model.setColumnValue(column, false);
+						cell = addingWidget.setColumnValue(column, false);
 						assert.isFalse(cell.value, "Expected cell value to be false.");
 					});
 
@@ -120,7 +120,7 @@ describe("Poptart", function() {
 						var column = "bool",
 							cell;
 
-						cell = addingWidget.model.setColumnValue(column, "lala");
+						cell = addingWidget.setColumnValue(column, "lala");
 
 						assert.property(cell, "key", "Cell model did not have a 'key' property.");
 						assert.property(cell, "value", "Cell model did not have a 'value' property.");
@@ -132,7 +132,7 @@ describe("Poptart", function() {
 						var column = "bool",
 							cell;
 
-						cell = addingWidget.model.setColumnValue(column, 2);
+						cell = addingWidget.setColumnValue(column, 2);
 
 						assert.property(cell, "key", "Cell model did not have a 'key' property.");
 						assert.property(cell, "value", "Cell model did not have a 'value' property.");
@@ -145,7 +145,7 @@ describe("Poptart", function() {
 			describe("#Adding", function() {
 				it("should create a text editor for the text column.", function() {
 					var column = "text",
-						columModel = addingWidget.model.getColumn(column);
+						columModel = addingWidget.getColumn(column);
 
 					addingWidget._startEdit(columModel);
 					assert.equal(addingWidget.activeEditor.cell.cell, columModel.cell, "Active editor was not in the correct cell.");
@@ -154,7 +154,7 @@ describe("Poptart", function() {
 
 				it("should create a numeric editor for the number column.", function() {
 					var column = "number",
-						columModel = addingWidget.model.getColumn(column);
+						columModel = addingWidget.getColumn(column);
 
 					addingWidget._startEdit(columModel);
 					assert.equal(addingWidget.activeEditor.cell.cell, columModel.cell, "Active editor was not in the correct cell.");
@@ -163,7 +163,7 @@ describe("Poptart", function() {
 
 				it("should create a checkbox editor for the boolean column.", function() {
 					var column = "bool",
-						columModel = addingWidget.model.getColumn(column);
+						columModel = addingWidget.getColumn(column);
 
 					addingWidget._startEdit(columModel);
 					assert.equal(addingWidget.activeEditor.cell.cell, columModel.cell, "Active editor was not in the correct cell.");
@@ -172,7 +172,7 @@ describe("Poptart", function() {
 
 				it("should create a combo editor for the object column.", function() {
 					var column = "object",
-						columModel = addingWidget.model.getColumn(column);
+						columModel = addingWidget.getColumn(column);
 
 					addingWidget._startEdit(columModel);
 					assert.equal(addingWidget.activeEditor.cell.cell, columModel.cell, "Active editor was not in the correct cell.");
@@ -184,8 +184,8 @@ describe("Poptart", function() {
 						textVal = "test!",
 						column;
 
-					column = addingWidget.model.getColumn(columnKey);
-					addingWidget.model.setColumnValue(columnKey, textVal);
+					column = addingWidget.getColumn(columnKey);
+					addingWidget.setColumnValue(columnKey, textVal);
 					addingWidget._updateUiCell(column);
 
 					column.cell.should.have.html(textVal);
@@ -196,8 +196,8 @@ describe("Poptart", function() {
 						numVal = 5,
 						column;
 
-					column = addingWidget.model.getColumn(columnKey);
-					addingWidget.model.setColumnValue(columnKey, numVal);
+					column = addingWidget.getColumn(columnKey);
+					addingWidget.setColumnValue(columnKey, numVal);
 					addingWidget._updateUiCell(column);
 
 					column.cell.should.have.html(numVal.toString());
@@ -207,9 +207,9 @@ describe("Poptart", function() {
 					var columnKey = "template",
 						column;
 
-					addingWidget.model.setColumnValue(columnKey, "A working");
+					addingWidget.setColumnValue(columnKey, "A working");
 
-					column = addingWidget.model.getColumn(columnKey);
+					column = addingWidget.getColumn(columnKey);
 					addingWidget._updateUiCell(column);
 
 					column.cell.should.have.html("A working template!");
@@ -220,9 +220,9 @@ describe("Poptart", function() {
 						helperValue = "test!",
 						column;
 
-					addingWidget.model.setColumnValue("formulaHelper", helperValue);
+					addingWidget.setColumnValue("formulaHelper", helperValue);
 
-					column = addingWidget.model.getColumn(columnKey);
+					column = addingWidget.getColumn(columnKey);
 					addingWidget._updateUiCell(column);
 
 					column.cell.should.have.html(helperValue);
@@ -233,8 +233,8 @@ describe("Poptart", function() {
 						objValue = {testKey: "test!"},
 						column;
 
-					column = addingWidget.model.getColumn(columnKey);
-					addingWidget.model.setColumnValue(columnKey, objValue);
+					column = addingWidget.getColumn(columnKey);
+					addingWidget.setColumnValue(columnKey, objValue);
 					addingWidget._updateUiCell(column);
 
 					column.cell.should.have.html("test!");
@@ -244,7 +244,7 @@ describe("Poptart", function() {
 					var columnKey = "default",
 						column;
 
-					column = addingWidget.model.getColumn(columnKey);
+					column = addingWidget.getColumn(columnKey);
 
 					column.cell.should.have.html("default text!");
 				});
@@ -252,7 +252,7 @@ describe("Poptart", function() {
 				describe("keyboard navigation", function() {
 					describe("with tab", function() {
 						it("should open an editor in the next (right) column.", function() {
-							var startingColumn = addingWidget.model.getColumn("number"),
+							var startingColumn = addingWidget.getColumn("number"),
 								nextColumn = "text",
 								nextCell;
 
@@ -262,7 +262,7 @@ describe("Poptart", function() {
 							addingWidget._startEdit(startingColumn);
 							addingWidget._navigateRight();
 
-							nextCell = addingWidget.model.getColumn(nextColumn).cell;
+							nextCell = addingWidget.getColumn(nextColumn).cell;
 
 							assert.equal(addingWidget.activeEditor.cell.cell, nextCell, "Active editor was not in the correct cell.");
 							assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
@@ -270,7 +270,7 @@ describe("Poptart", function() {
 						});
 
 						it("should navigate to the submit button if on the last editable cell.", function() {
-							var startingColumn = addingWidget.model.getColumn("object");
+							var startingColumn = addingWidget.getColumn("object");
 
 							addingWidget._startEdit(startingColumn);
 							addingWidget._navigateRight();
@@ -297,10 +297,10 @@ describe("Poptart", function() {
 							sinon.spy(addingWidget, "_saveEdit");
 							sinon.spy(addingWidget, "_startEdit");
 
-							addingWidget._startEdit(addingWidget.model.getColumn(column));
+							addingWidget._startEdit(addingWidget.getColumn(column));
 							addingWidget._navigateLeft();
 
-							previousCell = addingWidget.model.getColumn("number").cell;
+							previousCell = addingWidget.getColumn("number").cell;
 
 							assert.equal(addingWidget.activeEditor.cell.cell, previousCell, "Active editor was not in the correct cell.");
 							assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
@@ -308,7 +308,7 @@ describe("Poptart", function() {
 						});
 
 						it("should close the active editor if on the first editable cell.", function() {
-							var startingColumn = addingWidget.model.getColumn("number");
+							var startingColumn = addingWidget.getColumn("number");
 
 							sinon.spy(addingWidget, "_saveEdit");
 							sinon.spy(addingWidget, "_startEdit");
@@ -327,7 +327,7 @@ describe("Poptart", function() {
 							addingWidget._navigateFromAddButton();
 
 							assert.equal(jQuery("#ui-iggrid-adding-add-row-button:focus").length, 0, "Add button was still focused.");
-							assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn("object").cell, "Active editor was not in the correct cell.");
+							assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.getColumn("object").cell, "Active editor was not in the correct cell.");
 						});
 					});
 
@@ -340,7 +340,7 @@ describe("Poptart", function() {
 							sinon.spy(addingWidget, "_startEdit");
 							sinon.spy(addingWidget, "_commitRow");
 
-							addingWidget._startEdit(addingWidget.model.getColumn(column));
+							addingWidget._startEdit(addingWidget.getColumn(column));
 							event = new jQuery.Event("keypress",
 								{
 									keyCode: jQuery.ui.keyCode.ENTER,
@@ -348,7 +348,7 @@ describe("Poptart", function() {
 								});
 							addingWidget._addingRowHandlers.keypress(event);
 
-							assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn(column).cell, "Active editor was not in the correct cell.");
+							assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.getColumn(column).cell, "Active editor was not in the correct cell.");
 							assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
 							assert.isTrue(addingWidget._commitRow.calledOnce, "_commitRow was not called.");
 							assert.isTrue(addingWidget._startEdit.calledTwice, "_startEdit was not called.");
@@ -364,7 +364,7 @@ describe("Poptart", function() {
 							sinon.spy(addingWidget, "_startEdit");
 							sinon.spy(addingWidget, "_commitRow");
 
-							addingWidget._startEdit(addingWidget.model.getColumn(column));
+							addingWidget._startEdit(addingWidget.getColumn(column));
 							event = new jQuery.Event("keypress",
 								{
 									keyCode: jQuery.ui.keyCode.ENTER,
@@ -372,7 +372,7 @@ describe("Poptart", function() {
 								});
 							addingWidget._addingRowHandlers.keypress(event);
 
-							assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn(column).cell, "Active editor was not in the correct cell.");
+							assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.getColumn(column).cell, "Active editor was not in the correct cell.");
 							assert.isTrue(addingWidget._commitRow.calledOnce, "_commitRow was not called.");
 							assert.isTrue(addingWidget._startEdit.calledTwice, "_startEdit was not called.");
 							assert.equal(tableEle.igGrid("allRows").length, 1, "A new row was not added to the table.");
@@ -387,7 +387,7 @@ describe("Poptart", function() {
 						addingWidget._addingRowHandlers.mouseenter();
 
 						jQuery("#ui-iggrid-adding-add-row-button").should.exist;
-						addingWidget.model.addingRow.row.children("td").should.have.class("ui-state-hover");
+						addingWidget.addingRow.row.children("td").should.have.class("ui-state-hover");
 						assert.isTrue(addingWidget._addAddingButton.calledOnce, "_addAddingButton was not called.");
 					});
 
@@ -397,7 +397,7 @@ describe("Poptart", function() {
 						addingWidget._addingRowHandlers.mouseleave();
 
 						jQuery("#ui-iggrid-adding-add-row-button").should.not.be.visible;
-						addingWidget.model.addingRow.row.children("td").should.not.have.class("ui-state-hover");
+						addingWidget.addingRow.row.children("td").should.not.have.class("ui-state-hover");
 						assert.isTrue(addingWidget._removeAddingButton.calledOnce, "_removeAddingButton was not called.");
 					});
 
@@ -405,24 +405,24 @@ describe("Poptart", function() {
 						var event;
 
 						event = new jQuery.Event("click", {
-							target: addingWidget.model.getColumn("readonly").cell[0]
+							target: addingWidget.getColumn("readonly").cell[0]
 						});
 
 						addingWidget._addingRowHandlers.click(event);
 
-						assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn("number").cell, "Active editor was not in the correct cell.");
+						assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.getColumn("number").cell, "Active editor was not in the correct cell.");
 					});
 
 					it("should open an editor in the corresponding cell when clicking on an editable cell.", function() {
 						var event;
 
 						event = new jQuery.Event("click", {
-							target: addingWidget.model.getColumn("text").cell[0]
+							target: addingWidget.getColumn("text").cell[0]
 						});
 
 						addingWidget._addingRowHandlers.click(event);
 
-						assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn("text").cell, "Active editor was not in the correct cell.");
+						assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.getColumn("text").cell, "Active editor was not in the correct cell.");
 					});
 
 					/*
@@ -431,10 +431,10 @@ describe("Poptart", function() {
 						var testText = "Heeeey",
 							event;
 
-						sinon.spy(addingWidget.model, "setColumnValue");
+						sinon.spy(addingWidget, "setColumnValue");
 
 						event = new jQuery.Event("click", {
-							target: addingWidget.model.getColumn("text").cell[0]
+							target: addingWidget.getColumn("text").cell[0]
 						});
 
 						addingWidget._addingRowHandlers.click(event);
@@ -442,13 +442,13 @@ describe("Poptart", function() {
 						addingWidget.activeEditor.cell.cell.find("input").val(testText);
 
 						event = new jQuery.Event("click", {
-							target: addingWidget.model.getColumn("number").cell[0]
+							target: addingWidget.getColumn("number").cell[0]
 						});
 
 						addingWidget._addingRowHandlers.click(event);
 
-						assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.model.getColumn("number").cell, "Active editor was not in the correct cell.");
-						assert.equal(addingWidget.model.getColumn("text").value, testText, "Text cell did not have the correct value.");
+						assert.equal(addingWidget.activeEditor.cell.cell, addingWidget.getColumn("number").cell, "Active editor was not in the correct cell.");
+						assert.equal(addingWidget.getColumn("text").value, testText, "Text cell did not have the correct value.");
 					});*/
 
 					it("should add a new row to the main table and clear the contents of the row adding interface when the user clicks an add button.", function() {
@@ -478,9 +478,9 @@ describe("Poptart", function() {
 							boolVal = true,
 							row;
 
-						addingWidget.model.setColumnValue("text", textVal);
-						addingWidget.model.setColumnValue("number", numberVal);
-						addingWidget.model.setColumnValue("bool", boolVal);
+						addingWidget.setColumnValue("text", textVal);
+						addingWidget.setColumnValue("number", numberVal);
+						addingWidget.setColumnValue("bool", boolVal);
 
 						row = addingWidget._getRowForRendering();
 
