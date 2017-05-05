@@ -1,3 +1,4 @@
+@import "variables";
 @import "variables-igniteui";
 
 .ui-iggrid thead .ui-iggrid-adding-row-cell {
@@ -19,28 +20,36 @@
 }
 
 .ui-iggrid-addingBarCell {
-  height: 40px;
-  background-color: @table-border-color;
-  border-bottom: 1px solid @table-border-color;
-  border-left: 1px solid @table-border-color;
-  border-right: 1px solid @table-border-color;
+  height: 4px;
+  background-color: @brand-success;
+  border-bottom: 1px solid @state-success-border;
+  border-left: 1px solid @state-success-border;
+  border-right: 1px solid @state-success-border;
+}
+
+.ui-iggrid-adding-bar-cell-failures {
+  height: auto;
+  padding: 10px;
+  background-color: @state-danger-bg !important;
+  color: @state-danger-text !important;
+  border-color: @state-danger-border !important;
+}
+
+.ui-iggrid-failure {
+  color: inherit !important;
 }
 
 .ui-iggrid-adding-add-row-button-container {
   height: 22px;
   width: 70px;
   position: absolute;
-  z-index: 1000;
 }
 
 .ui-iggrid-adding-add-row-button {
   font-size: 22px !important;
   width: inherit;
-}
-
-.ui-iggrid-adding-add-row-button {
-  font-size: 22px !important;
-  width: inherit;
+  z-index: 1;
+  position: absolute;
 }
 
 .ui-iggrid-adding-add-row-button:focus, .ui-iggrid-adding-add-row-button:hover {

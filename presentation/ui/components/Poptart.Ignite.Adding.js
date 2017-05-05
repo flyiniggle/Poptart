@@ -4,9 +4,16 @@
 	var addingRowIdPrefix = "addingRow",
 		addingWidget, dataModel, validationService, defaultValues;
 
-	var Failure = function(key, reason) {
+	var Failure = function(key, displayName, reason) {
 		this.key = key;
+		this.displayName = displayName;
 		this.reason = reason;
+		this.failureDisplay = function() {
+			return "<div data-failure='" + this.key + "'>" +
+					"<span class='ui-iggrid-failure ion-alert-circled' style='margin-right: 5px;'></span>" +
+					"<span class='ui-iggrid-failure'>" + this.displayName + ": " + this.reason + "</span>" +
+					"</div>";
+		}.bind(this);
 	};
 
 	defaultValues = {
@@ -87,16 +94,15 @@
 			return validationFailures;
 		}
 
-		//show validation problems
-
 		return undefined;
 	};
 
 	validationService._validate = function() {
 		return this.validationRules.map(function(rule) {
-			var failure = rule.validation(this._getColumn(rule.key).value);
+			var column = this._getColumn(rule.key),
+				failure = rule.validation(column.value);
 
-			return failure ? new Failure(rule.key, failure) : undefined;
+			return failure ? new Failure(column.key, column.settings.headerText, failure) : undefined;
 		}, this).filter(function(failure) {
 			return !!failure;
 		});
@@ -108,7 +114,7 @@
 			(val === "") ||
 			(Object.keys(val).length === 0 && val.constructor === Object)
 		) {
-			return "no value entered";
+			return "This field is required";
 		}
 
 		return undefined;
@@ -140,6 +146,7 @@
 		addingRowCell: "ui-iggrid-adding-row-cell",
 		addingRowCellDefault: "ui-iggrid-adding-row-cell-default",
 		addRowBarCell: "ui-iggrid-addingBarCell",
+		addRowBarCellFailures: "ui-iggrid-adding-bar-cell-failures",
 		addRowButton: "ui-iggrid-adding-add-row-button",
 		editingCell: "ui-iggrid-editingcell",
 		editor: "ui-iggrid-editor",
@@ -163,6 +170,7 @@
 			var copiedSettings = {};
 
 			copiedSettings.columnKey = settings.key;
+			copiedSettings.headerText = settings.headerText;
 			copiedSettings.dataType = settings.dataType;
 
 			if(settings.formula) {
@@ -229,7 +237,6 @@
 			.on("mouseenter", "." + this.css.addingRow, this._addingRowHandlers.mouseenter)
 			.on("mouseleave", "." + this.css.addingRow, this._addingRowHandlers.mouseleave);
 
-		//this.columnSettings = this.options.columnSettings = gridColumnSettings;
 		this._addAddingRow(gridColumnSettings);
 	};
 
@@ -606,7 +613,7 @@
 		rowLocation = rowModel.row.offset();
 
 		rowLocation.left += this.grid.element.width();
-		rowLocation.left -= (addingButton.width() + 10);
+		rowLocation.left -= (addingButton.width() + 30);
 		rowLocation.top += (rowModel.row.height() - 1);
 
 		addingButton.offset(rowLocation);
@@ -849,7 +856,7 @@
 		this._addNewRow(rowId, newAddingRow, columnSettings);
 		this._updateUiRow(true);
 		newAddingRow.find("td").addClass(this.css.addingRowCellDefault);
-		jQuery("#addingRowBar").before(newAddingRow)
+		jQuery("#addingRowBar").before(newAddingRow);
 		this._trigger(this.events.rowAddingAdded);
 	};
 
@@ -921,9 +928,13 @@
 	};
 
 	addingWidget._showFailures = function(failures) {
+		var msgDisplayCell = jQuery("." + this.css.addRowBarCell);
+
+		msgDisplayCell.removeClass(this.css.addRowBarCell);
+		msgDisplayCell.addClass(this.css.addRowBarCellFailures);
 		failures.forEach(function(failure) {
 			this._getColumn(failure.key).cell.addClass(this.css.invalidCell);
-			jQuery("." + this.css.addRowBarCell).append(jQuery("<span>" + failure + "</span>"));
+			msgDisplayCell.append(failure.failureDisplay());
 		}, this);
 	};
 

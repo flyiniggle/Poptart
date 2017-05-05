@@ -13,25 +13,32 @@
   border-right: 1px solid #ddd;
 }
 .ui-iggrid-addingBarCell {
-  height: 40px;
-  background-color: #ddd;
-  border-bottom: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
+  height: 4px;
+  background-color: #5cb85c;
+  border-bottom: 1px solid #d6e9c6;
+  border-left: 1px solid #d6e9c6;
+  border-right: 1px solid #d6e9c6;
+}
+.ui-iggrid-adding-bar-cell-failures {
+  height: auto;
+  padding: 10px;
+  background-color: #f2dede !important;
+  color: #a94442 !important;
+  border-color: #ebccd1 !important;
+}
+.ui-iggrid-failure {
+  color: inherit !important;
 }
 .ui-iggrid-adding-add-row-button-container {
   height: 22px;
   width: 70px;
   position: absolute;
-  z-index: 1000;
 }
 .ui-iggrid-adding-add-row-button {
   font-size: 22px !important;
   width: inherit;
-}
-.ui-iggrid-adding-add-row-button {
-  font-size: 22px !important;
-  width: inherit;
+  z-index: 1;
+  position: absolute;
 }
 .ui-iggrid-adding-add-row-button:focus,
 .ui-iggrid-adding-add-row-button:hover {
