@@ -34,8 +34,8 @@ module.exports = function(grunt) {
 				tasks: ['sync', 'newer:cssmin']
 			},
 			less: {
-				files: ['presentation/ui/css/ignite/themes/infragistics/LESS/*.less'],
-				tasks: ['less', 'newer:cssmin']
+				files: ['presentation/ui/css/**/*.less'],
+				tasks: ['less']
 			}
 		},
 		uglify: {
