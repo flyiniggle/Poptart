@@ -452,10 +452,16 @@ describe("Poptart", function() {
 					});*/
 
 					it("should add a new row to the main table and clear the contents of the row adding interface when the user clicks an add button.", function() {
+						var event;
+
+						event = new jQuery.Event("click", {
+							target: jQuery("." + addingWidget.css.addRowButton)[0]
+						});
+
 						addingWidget._addAddingButton();
 						sinon.spy(addingWidget, "_commitRow");
 
-						addingWidget._addingButtonHandlers.mousedown();
+						addingWidget._addingButtonHandlers.mousedown(event);
 
 						assert.isUndefined(addingWidget.activeEditor, "There should not have been an active editor.");
 						assert.isTrue(addingWidget._commitRow.calledOnce, "_commitRow was not called.");

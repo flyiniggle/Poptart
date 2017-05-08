@@ -9,7 +9,7 @@
 		this.displayName = displayName;
 		this.reason = reason;
 		this.failureDisplay = function() {
-			return "<div data-failure='" + this.key + "'>" +
+			return "<div class='ui-grid-adding-failure-container' data-failure='" + this.key + "'>" +
 					"<span class='ui-iggrid-failure ion-alert-circled' style='margin-right: 5px;'></span>" +
 					"<span class='ui-iggrid-failure'>" + this.displayName + ": " + this.reason + "</span>" +
 					"</div>";
@@ -48,7 +48,7 @@
 		},
 		_clearRow: function() {
 			this.addingRow.cells.forEach(function(cell) {
-				cell.value = this.getDefaultValue(cell.settings);
+				cell.value = cell.settings.hasOwnProperty("default") ? cell.settings.default : this.getDefaultValue(cell.settings);
 			}, this);
 		},
 		_getRow: function() {
@@ -110,9 +110,9 @@
 
 	validationService._defaultValidation = function(val) {
 		if(
-			(val === undefined) ||
-			(val === "") ||
-			(Object.keys(val).length === 0 && val.constructor === Object)
+			(typeof val === "undefined") ||
+			(val === null) ||
+			(val === "")
 		) {
 			return "This field is required";
 		}
@@ -387,7 +387,12 @@
 			};
 		this._addingButtonHandlers = this._addingButtonHandlers ||
 			{
-				"mousedown": function() {
+				"mousedown": function(evt) {
+					evt.preventDefault();
+					evt.stopPropagation();
+					if(this.activeEditor) {
+						this.activeEditor.providerWrapper.find("input, div.ui-checkbox-container").blur();
+					}
 					this._removeAddingButton();
 					this._commitRow();
 				}.bind(this)
@@ -649,7 +654,7 @@
 		}
 
 		storedValue = columnModel.value;
-		columnModel.cell.removeClass([this.css.invalidCell, this.css.addingRowCellDefault].join(" ")).addClass(this.css.editingCell);
+		this._hideFailure(columnModel);
 
 		newEditor = this._getEditorForCell(columnModel);
 		newEditor.providerWrapper
@@ -928,14 +933,28 @@
 	};
 
 	addingWidget._showFailures = function(failures) {
-		var msgDisplayCell = jQuery("." + this.css.addRowBarCell);
+		var msgDisplayCell = jQuery("." + this.css.addRowBarCell + ", ." + this.css.addRowBarCellFailures);
 
 		msgDisplayCell.removeClass(this.css.addRowBarCell);
 		msgDisplayCell.addClass(this.css.addRowBarCellFailures);
 		failures.forEach(function(failure) {
-			this._getColumn(failure.key).cell.addClass(this.css.invalidCell);
-			msgDisplayCell.append(failure.failureDisplay());
+			var columnModel = this._getColumn(failure.key);
+
+			columnModel.cell.addClass(this.css.invalidCell);
+			if(jQuery(".ui-grid-adding-failure-container[data-failure=" + columnModel.key + "]").length === 0) {
+				msgDisplayCell.append(failure.failureDisplay());
+			}
 		}, this);
+	};
+
+	addingWidget._hideFailure = function(columnModel) {
+		columnModel.cell.removeClass([this.css.invalidCell, this.css.addingRowCellDefault].join(" ")).addClass(this.css.editingCell);
+		jQuery(".ui-grid-adding-failure-container[data-failure=" + columnModel.key + "]").remove();
+		if(jQuery(".ui-grid-adding-failure-container").length === 0) {
+			jQuery("." + this.css.addRowBarCellFailures)
+				.removeClass(this.css.addRowBarCellFailures)
+				.addClass(this.css.addRowBarCell);
+		}
 	};
 
 	addingWidget._isLastScrollableCell = function(cell) {
