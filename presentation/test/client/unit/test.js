@@ -46,6 +46,7 @@ describe("Poptart", function() {
 						},
 						{headerText: "readonly", key: "readonly", dataType: "text"},
 						{headerText: "default", key: "default", dataType: "text"},
+						{headerText: "required", key: "required", dataType: "text"},
 						{headerText: "pk", key: "pk", dataType: "number"},
 						{headerText: "formulaHelper", key: "formulaHelper", dataType: "string", hidden: true}
 					],
@@ -59,6 +60,7 @@ describe("Poptart", function() {
 								{columnKey: "object", editorType: "combo", readOnly: false},
 								{columnKey: "readonly", readOnly: true},
 								{columnKey: "default", readOnly: true, default: "default text!"},
+								{columnKey: "required", editorType: "text", readOnly: false, required: true, default: "placeholder to keep older tests from breaking"},
 								{columnKey: "template", readOnly: true},
 								{columnKey: "pk", readOnly: true}
 							]
@@ -249,6 +251,21 @@ describe("Poptart", function() {
 					column.cell.should.have.html("default text!");
 				});
 
+				it("display validation failures.", function() {
+					var columnKey = "required",
+						column;
+
+					addingWidget._setColumnValue(columnKey, null);
+					addingWidget._commitRow();
+					column = addingWidget._getColumn(columnKey);
+
+					column.cell.should.have.class(addingWidget.css.invalidCell);
+					jQuery(".ui-grid-adding-failure-container[data-failure=" + columnKey + "]").should.be.visisble;
+
+					assert.equal(jQuery("." + addingWidget.css.addRowBarCellFailures).length, 1, "Adding row divider bar did not show failures");
+					assert.equal(tableEle.igGrid("allRows").length, 0, "A new row was added to the table but should not have been.");
+				});
+
 				describe("keyboard navigation", function() {
 					describe("with tab", function() {
 						it("should open an editor in the next (right) column.", function() {
@@ -270,7 +287,7 @@ describe("Poptart", function() {
 						});
 
 						it("should navigate to the submit button if on the last editable cell.", function() {
-							var startingColumn = addingWidget._getColumn("object");
+							var startingColumn = addingWidget._getColumn("required");
 
 							addingWidget._startEdit(startingColumn);
 							addingWidget._navigateRight();
@@ -302,7 +319,9 @@ describe("Poptart", function() {
 
 							previousCell = addingWidget._getColumn("number").cell;
 
-							assert.equal(addingWidget.activeEditor.cell.cell, previousCell, "Active editor was not in the correct cell.");
+							assert.equal(addingWidget.activeEditor.cell.cell, previousCell, "Active editor was in '" +
+								addingWidget.activeEditor.cell.key +
+								"' but should have been in 'number'.");
 							assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
 							assert.isTrue(addingWidget._startEdit.calledTwice, "_startEdit was not called.");
 						});
@@ -327,7 +346,9 @@ describe("Poptart", function() {
 							addingWidget._navigateFromAddButton();
 
 							assert.equal(jQuery("#ui-iggrid-adding-add-row-button:focus").length, 0, "Add button was still focused.");
-							assert.equal(addingWidget.activeEditor.cell.cell, addingWidget._getColumn("object").cell, "Active editor was not in the correct cell.");
+							assert.equal(addingWidget.activeEditor.cell.cell, addingWidget._getColumn("required").cell, "Active editor was in '" +
+								addingWidget.activeEditor.cell.key +
+								"' but should have been in 'required'.");;
 						});
 					});
 
