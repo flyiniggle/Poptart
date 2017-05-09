@@ -263,21 +263,21 @@
 	addingWidget._createHandlers = function() {
 		this._stopEditingHandler = this._stopEditingHandler || jQuery.proxy(this._cancelEdit, this);
 		this._gridHandlers = this._gridHandlers ||
-			{
+			{/*
 				stopEditing: this._stopEditingHandler,
 				gridDataRendering: jQuery.proxy(this._gridDataRendering, this),
 				rowsRendered: jQuery.proxy(this._rowsRendered, this),
 				headerRendering: jQuery.proxy(this._processReadOnly, this),
-				headerRendered: jQuery.proxy(this._headerRendered, this),
+				headerRendered: jQuery.proxy(this._headerRendered, this),*/
 				rendered: function(evt, ui) {
 					this._setup(ui);
-				}.bind(this),
+				}.bind(this)/*,
 				virtualFrameChanging: jQuery.proxy(this._virtPreRender, this),
 				virtualFrameChanged: jQuery.proxy(this._virtPostRender, this),
-				columnsCollectionModified: jQuery.proxy(this._columnsModified, this)
+				columnsCollectionModified: jQuery.proxy(this._columnsModified, this)*/
 			};
 		this._handlers = this._handlers ||
-			{
+			{/*
 				mouseDown: jQuery.proxy(this._mouseDown, this),
 				clickTrigger: jQuery.proxy(this._clickTrigger, this),
 				keyDown: jQuery.proxy(this._keyDown, this),
@@ -291,10 +291,10 @@
 				pointerEnter: jQuery.proxy(this._rowPointerEnter, this),
 				mouseLeave: jQuery.proxy(this._containerMouseLeave, this),
 				pointerLeave: jQuery.proxy(this._containerPointerLeave, this),
-				scroll: jQuery.proxy(this._scroll, this)
+				scroll: jQuery.proxy(this._scroll, this)*/
 			};
 		this._buttonHandlers = this._buttonHandlers ||
-			{
+			{/*
 				mouseEnter: jQuery.proxy(this._buttonMouseEnter, this),
 				mouseLeave: jQuery.proxy(this._buttonMouseLeave, this),
 				focus: jQuery.proxy(this._buttonFocus, this),
@@ -305,7 +305,7 @@
 				cancelKeyUp: jQuery.proxy(this._cancelButtonKeyUp, this),
 				deleteClick: jQuery.proxy(this._deleteButtonClick, this),
 				touchDeleteClick: jQuery.proxy(this._touchDeleteButtonClick, this),
-				touchDeleteKeyUp: jQuery.proxy(this._touchDeleteButtonKeyUp, this)
+				touchDeleteKeyUp: jQuery.proxy(this._touchDeleteButtonKeyUp, this)*/
 			};
 		this._addingRowHandlers = this._addingRowHandlers ||
 			{
@@ -404,9 +404,9 @@
 				errorHidden: jQuery.proxy(this._editorErrorHidden, this)
 			};
 		this._editorCallbacks = this._editorCallbacks ||
-			{
+			{/*
 				keyDown: jQuery.proxy(this._editorKeyDown, this),
-				textChanged: jQuery.proxy(this._editorTextChanged, this)
+				textChanged: jQuery.proxy(this._editorTextChanged, this)*/
 			};
 	};
 
