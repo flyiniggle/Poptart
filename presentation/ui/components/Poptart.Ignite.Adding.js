@@ -131,14 +131,13 @@
 	};
 
 	addingWidget.events = {
+		rendered: "rendered",
 		editAddingRowStarting: "editAddingRowStarting",
 		editAddingRowStarted: "editAddingRowStarted",
 		editAddingCellStarting: "editAddingCellStarting",
 		editAddingCellStarted: "editAddingCellStarted",
 		editAddingCellEnding: "editAddingCellEnding",
-		editAddingCellEnded: "editAddingCellEnded",
-		rowAddingAdding: "rowAdding",
-		rowAddingAdded: "rowAdded"
+		editAddingCellEnded: "editAddingCellEnded"
 	};
 
 	addingWidget.css = {
@@ -238,11 +237,17 @@
 			.on("mouseleave", "." + this.css.addingRow, this._addingRowHandlers.mouseleave);
 
 		this._addAddingRow(gridColumnSettings);
+
+		this._trigger(this.events.rendered);
 	};
 
-	addingWidget.endEditCell = function(row, columnKey, update) {
-		if (update) {
-			this._saveEdit();
+	addingWidget.endEdit = function(update) {
+		if(!this.activeEditor) {
+			return false;
+		}
+
+		if(update) {
+			this._saveEdit(this.activeEditor.cell.key, this.activeEditor.provider.getValue());
 		} else {
 			this._cancelEdit();
 		}
@@ -250,6 +255,10 @@
 
 	addingWidget.startEdit = function(columnKey) {
 		var columnModel;
+
+		if(!columnKey) {
+			return this._startEdit();
+		}
 
 		columnModel = this._getColumn(columnKey);
 
@@ -263,15 +272,15 @@
 	addingWidget._createHandlers = function() {
 		this._stopEditingHandler = this._stopEditingHandler || jQuery.proxy(this._cancelEdit, this);
 		this._gridHandlers = this._gridHandlers ||
-			{/*
+			{
+				rendered: function(evt, ui) {
+					this._setup(ui);
+				}.bind(this)/*
 				stopEditing: this._stopEditingHandler,
 				gridDataRendering: jQuery.proxy(this._gridDataRendering, this),
 				rowsRendered: jQuery.proxy(this._rowsRendered, this),
 				headerRendering: jQuery.proxy(this._processReadOnly, this),
-				headerRendered: jQuery.proxy(this._headerRendered, this),*/
-				rendered: function(evt, ui) {
-					this._setup(ui);
-				}.bind(this)/*,
+				headerRendered: jQuery.proxy(this._headerRendered, this),
 				virtualFrameChanging: jQuery.proxy(this._virtPreRender, this),
 				virtualFrameChanged: jQuery.proxy(this._virtPostRender, this),
 				columnsCollectionModified: jQuery.proxy(this._columnsModified, this)*/
@@ -680,6 +689,8 @@
 		newEditor.provider.setValue(startingValue);
 		this._addAddingButton();
 		this._trigger(this.events.editAddingCellStarted);
+
+		return columnModel;
 		/*
 
 		args = {owner: this, rowID: rowId, columnIndex: this.grid.getVisibleIndexByKey(columnKey), columnKey: columnKey, editor: editor, value: value, rowAdding: isAdding};
@@ -803,8 +814,8 @@
 		this.activeEditor = editor;
 	};
 
-	addingWidget._cancelEdit = function(evt) {
-		this._endCellEdit(evt);
+	addingWidget._cancelEdit = function() {
+		this._endCellEdit();
 	};
 
 	addingWidget._saveEdit = function(column, value) {
@@ -829,6 +840,8 @@
 		this._updateUiRow(false);
 		this.activeEditor.cell.cell.removeClass(this.css.editingCell);
 		delete this.activeEditor;
+
+		this._trigger(this.events.editAddingCellEnded);
 	};
 
 	addingWidget._endRowEdit = function() {
@@ -839,10 +852,6 @@
 		var rowId = addingRowIdPrefix + this.addingRowCounter++,
 			fixed, visibleColumns,
 			initialHiddenColumns, newAddingRow, i, j;
-
-		if(!this._trigger(this.events.rowAddingAdding)) {
-			return false;
-		}
 
 		visibleColumns = jQuery.extend([], this.grid._visibleColumns(fixed));
 		initialHiddenColumns = this.grid._initialHiddenColumns;
@@ -862,7 +871,6 @@
 		this._updateUiRow(true);
 		newAddingRow.find("td").addClass(this.css.addingRowCellDefault);
 		jQuery("#addingRowBar").before(newAddingRow);
-		this._trigger(this.events.rowAddingAdded);
 	};
 
 	addingWidget._updateUiRow = function(updateAllVisisble) {
