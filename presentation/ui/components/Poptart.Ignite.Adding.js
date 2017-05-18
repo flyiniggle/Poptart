@@ -131,13 +131,14 @@
 	};
 
 	addingWidget.events = {
+		rendering: "rendering",
 		rendered: "rendered",
-		editAddingRowStarting: "editAddingRowStarting",
-		editAddingRowStarted: "editAddingRowStarted",
-		editAddingCellStarting: "editAddingCellStarting",
-		editAddingCellStarted: "editAddingCellStarted",
-		editAddingCellEnding: "editAddingCellEnding",
-		editAddingCellEnded: "editAddingCellEnded"
+		editStarting: "editStarting",
+		editStarted: "editStarted",
+		editEnding: "editEnding",
+		editEnded: "editEnded",
+		rowAdding: "rowAdding",
+		rowAdded: "rowAdded"
 	};
 
 	addingWidget.css = {
@@ -225,6 +226,10 @@
 
 		//Some DOMy stuff
 		////////////////////////////////////////////
+		if(!this._trigger(this.events.rendering)) {
+			return false;
+		}
+
 		fixed = this.grid.hasFixedColumns();
 		if(fixed) {
 			thead = this.grid.fixedHeadersTable().children("thead");
@@ -400,6 +405,9 @@
 		this._addingButtonHandlers = this._addingButtonHandlers ||
 			{
 				"mousedown": function(evt) {
+					if(!this._trigger(this.events.rowAdding)) {
+						return false;
+					}
 					evt.preventDefault();
 					evt.stopPropagation();
 					if(this.activeEditor) {
@@ -454,6 +462,10 @@
 
 	addingWidget._commitFromKeyboard = function(evt) {
 		var targetColumn, allowCommit;
+
+		if(!this._trigger(this.events.rowAdding)) {
+			return false;
+		}
 
 		evt.preventDefault();
 		evt.stopPropagation();
@@ -661,7 +673,7 @@
 
 		columnKey = columnModel.key;
 
-		if(!this._trigger(this.events.editAddingCellStarting)) {
+		if(!this._trigger(this.events.editStarting)) {
 			return false;
 		}
 
@@ -691,7 +703,7 @@
 		startingValue = (storedValue === undefined) ? defaultValues[newEditor.editorType] : storedValue;
 		newEditor.provider.setValue(startingValue);
 		this._addAddingButton();
-		this._trigger(this.events.editAddingCellStarted);
+		this._trigger(this.events.editStarted);
 
 		return columnModel;
 		/*
@@ -839,12 +851,16 @@
 	};
 
 	addingWidget._endCellEdit = function() {
+		if(!this._trigger(this.events.editEnding)) {
+			return false;
+		}
+
 		this.activeEditor.providerWrapper.remove();
 		this._updateUiRow(false);
 		this.activeEditor.cell.cell.removeClass(this.css.editingCell);
 		delete this.activeEditor;
 
-		this._trigger(this.events.editAddingCellEnded);
+		this._trigger(this.events.editEnded);
 	};
 
 	addingWidget._endRowEdit = function() {
@@ -941,6 +957,8 @@
 		this._clearRow();
 		this._updateUiRow(true);
 		this.addingRow.row.find("td").addClass(this.css.addingRowCellDefault);
+
+		this._trigger(this.events.rowAdded);
 	};
 
 	addingWidget._showFailures = function(failures) {
