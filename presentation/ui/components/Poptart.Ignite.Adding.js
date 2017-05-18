@@ -373,6 +373,8 @@
 						}
 					} else if(evt.keyCode === jQuery.ui.keyCode.ENTER) {
 						this._commitFromKeyboard(evt);
+					} else if(evt.keyCode === jQuery.ui.keyCode.ESCAPE) {
+						this._cancelEdit();
 					}
 				}.bind(this),
 				"click": function(evt) {
