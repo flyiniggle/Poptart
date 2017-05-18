@@ -246,6 +246,7 @@
 			return false;
 		}
 
+		this.activeEditor.providerWrapper.off("blur", "input, div.ui-checkbox-container", this._addingRowHandlers.blur);
 		if(update) {
 			this._saveEdit(this.activeEditor.cell.key, this.activeEditor.provider.getValue());
 		} else {

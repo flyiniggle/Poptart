@@ -4,8 +4,7 @@ describe("Poptart", function() {
 	describe("#infragistics", function() {
 		describe("#Adding", function() {
 			var tableEle = jQuery("<table></table>"),
-				baseTableConfiguration,
-				addingWidget;
+				baseTableConfiguration;
 
 			beforeEach(function() {
 				tableEle.appendTo(jQuery("body"));
@@ -47,6 +46,7 @@ describe("Poptart", function() {
 
 			afterEach(function() {
 				tableEle.igGrid("destroy");
+				delete baseTableConfiguration;
 			});
 
 			describe("API", function() {
@@ -98,7 +98,6 @@ describe("Poptart", function() {
 								newVal = "new text!",
 								addingWidget;
 
-
 							addingConfig.rendered = function() {
 								addingWidget = tableEle.data("Poptart-igGridAdding");
 								tableEle.igGridAdding("startEdit", column);
@@ -116,10 +115,30 @@ describe("Poptart", function() {
 
 						});
 
-						it("should close the editor and discard changes.", function() {
-							tableEle.igGrid(baseTableConfiguration);
+						it("should close the editor and discard changes.", function(done) {
+							var config = jQuery.extend(true, {}, baseTableConfiguration),
+								addingConfig = config.features.find(function(feature) {
+									return feature.name === "Adding";
+								}),
+								column = "text",
+								newVal = "new text!",
+								addingWidget;
+
+							addingConfig.rendered = function() {
+								addingWidget = tableEle.data("Poptart-igGridAdding");
+								tableEle.igGridAdding("startEdit", column);
+
+								addingWidget.activeEditor.provider.setValue(newVal);
+								tableEle.igGridAdding("endEdit", false);
+							};
+							addingConfig.editAddingCellEnded = function() {
+								assert.equal(addingWidget._getColumn(column).value, '', "Cell did not discard changes.");
+								assert.isUndefined(addingWidget.activeEditor, "Editor did not close.");
+								done();
+							};
+
+							tableEle.igGrid(config);
 							addingWidget = tableEle.data("Poptart-igGridAdding");
-							//tableEle.igGridAdding(false);
 						});
 					});
 				});
