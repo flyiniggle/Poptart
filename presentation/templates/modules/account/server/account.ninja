@@ -42,7 +42,6 @@
 				<h3>Holdings:</h3>
 			</div>
 			<div id="accountHoldingsChart"></div>
-			<div id="accountHoldingsChartLegend"></div>
 		</div>
 		<div id="accountDriftChartContainer">
 			<div class="panelHeader">

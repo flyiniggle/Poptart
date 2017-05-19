@@ -30,7 +30,7 @@ Poptart.Account = function() {
 					dataType: "object",
 					width: "115px",
 					mapper: function(security) {
-						return security.ticker || "";
+						return security ? security.ticker : "";
 					}
 				},
 				{headerText: 'CUSIP', key: "CUSIP", dataType: "number", width: "85px"},
@@ -96,6 +96,8 @@ Poptart.Account = function() {
 						{
 							columnKey: "ticker",
 							readOnly: false,
+							default: null,
+							required: true,
 							editorType: "combo",
 							editorOptions: {
 								textKey: "ticker",
@@ -237,18 +239,15 @@ Poptart.Account = function() {
 				valueMemberPath: "quantity"
 			}]
 		});
-		jQuery("#accountHoldingsChart").igPieChart({
-			dataSource: data,
-			width: "49%",
+		jQuery("#accountHoldingsChart").igDoughnutChart({
+			width: '100%',
 			height: "300px",
-			dataValue: "quantity",
-			dataLabel: "ticker",
-			legend: {
-				element: "accountHoldingsChartLegend",
-				type: "item",
-				height: "300px",
-				width: "49%"
-			}
+			series: [{
+				name: "Holdings",
+				labelMemberPath: "ticker",
+				valueMemberPath: "quantity",
+				dataSource: data
+			}]
 		});
 	}
 
@@ -267,7 +266,7 @@ Poptart.Account = function() {
 	ReturnObj.init = function() {
 		var loaderConfig = Object.create(Poptart.Ignite.loaderConfig, {});
 
-		loaderConfig.resources = "igGrid.Updating.Adding,igDataChart.Category,igPieChart,igCombo";
+		loaderConfig.resources = "igGrid.Updating.Adding,igDataChart.Category,igDoughnutChart,igCombo";
 		loaderConfig.ready = function() {
 			Poptart.Account.Service.SummaryService.get(accountId).then(displayAccountSummary);
 			Promise.all([Poptart.Account.Service.HoldingsService.get(accountId), Poptart.Account.Service.SecuritiesService.get()]).then(displayAccountHoldings);

@@ -2,13 +2,14 @@ var assert = chai.assert;
 
 describe("Poptart", function() {
 	describe("#infragistics", function() {
-		describe("#tableAdding", function() {
-			var tableEle = jQuery("<table></table>");
+		describe("#Adding", function() {
+			var tableEle = jQuery("<table></table>"),
+				baseTableConfiguration;
 
 			beforeEach(function() {
 				tableEle.appendTo(jQuery("body"));
 
-				tableEle.igGrid({
+				baseTableConfiguration = {
 					dataSource: [],
 					dataSourceType: "json",
 					primaryKey: "pk",
@@ -40,100 +41,274 @@ describe("Poptart", function() {
 							]
 						}
 					]
-				});
+				};
 			});
 
 			afterEach(function() {
 				tableEle.igGrid("destroy");
+				tableEle.remove();
+				delete baseTableConfiguration;
 			});
 
-			it("should add a new adding row", function() {
-				var addingRowSelector = ".ui-iggrid-adding-row",
-					addingRowsLength;
+			describe("API", function() {
+				describe("methods", function() {
+					describe("startEdit", function() {
+						it("should start editing the text column and return a cell object.", function(done) {
+							var config = jQuery.extend(true, {}, baseTableConfiguration),
+								cell, foundCell;
 
-				tableEle.igGridAdding("addAddingRow");
-				addingRowsLength = jQuery(addingRowSelector).length;
-				assert.equal(addingRowsLength, 2, "Expected 2 adding rows but found " + addingRowsLength);
+							config.rendered = function() {
+								cell = tableEle.igGridAdding("startEdit", "text");
+								foundCell = tableEle.find("#addingRow0_text");
 
-				tableEle.igGridAdding("addAddingRow");
-				addingRowsLength = jQuery(addingRowSelector).length;
-				assert.equal(addingRowsLength, 3, "Expected 2 adding rows but found " + addingRowsLength);
+								foundCell.should.have.class("ui-iggrid-editingcell");
+								assert.equal(cell.key, "text", "Editor did not open in the correct column.");
+								assert.equal(foundCell[0], cell.cell[0], "Editor did not open in the correct column.");
+								done();
+							};
 
-			});
+							tableEle.igGrid(config);
+						});
 
-			it("should start editing the first adding row", function() {
-				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId");
+						it("should start editing the first column of the adding row", function(done) {
+							var config = jQuery.extend(true, {}, baseTableConfiguration),
+								cell, foundCell;
 
-				tableEle.igGridAdding("startEditRow", firstAddingRowId);
-				tableEle.find(".ui-iggrid-adding-row-cell:first").should.have.class("ui-iggrid-editingcell");
-			});
+							config.features.find(function(feature) {
+								return feature.name === "Adding";
+							}).rendered = function() {
+								cell = tableEle.igGridAdding("startEdit");
+								foundCell = tableEle.find("#addingRow0_number");
+								foundCell.should.have.class("ui-iggrid-editingcell");
+								assert.equal(cell.key, "number", "Editor did not open in the correct column.");
+								assert.equal(foundCell[0], cell.cell[0], "Editor did not open in the correct column.");
+								done();
+							};
 
-			it("should start editing the text column of the first adding row", function() {
-				var firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId");
-
-				tableEle.igGridAdding("startEditCell", firstAddingRowId, "text");
-				jQuery("#" + firstAddingRowId + "_text").should.have.class("ui-iggrid-editingcell");
-			});
-
-			it("should save and trigger right navigation when pressing tab.", function() {
-				var addingWidget = tableEle.data("Poptart-igGridAdding"),
-					firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-					column = "number",
-					event;
-
-				sinon.spy(addingWidget, "_navigateRight");
-				sinon.spy(addingWidget, "_saveEdit");
-				addingWidget._startEditCell(firstAddingRowId, column);
-				event = new jQuery.Event("keypress",
-					{
-						keyCode: jQuery.ui.keyCode.TAB,
-						target: addingWidget.activeEditor.providerWrapper.find("input")[0]
+							tableEle.igGrid(config);
+						});
 					});
-				addingWidget.activeEditor.providerWrapper.trigger(event);
 
-				assert.isTrue(addingWidget._navigateRight.calledOnce, "_navigateRight was not called exactly once.");
-				assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-			});
+					describe("endEdit", function() {
+						it("should close the editor and save the value.", function(done) {
+							var config = jQuery.extend(true, {}, baseTableConfiguration),
+								addingConfig = config.features.find(function(feature) {
+									return feature.name === "Adding";
+								}),
+								column = "text",
+								newVal = "new text!",
+								addingWidget;
 
-			it("should save and trigger left navigation when pressing shift + tab.", function() {
-				var addingWidget = tableEle.data("Poptart-igGridAdding"),
-					firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-					column = "text",
-					event;
+							addingConfig.rendered = function() {
+								addingWidget = tableEle.data("Poptart-igGridAdding");
+								tableEle.igGridAdding("startEdit", column);
 
-				sinon.spy(addingWidget, "_navigateLeft");
-				sinon.spy(addingWidget, "_saveEdit");
-				addingWidget._startEditCell(firstAddingRowId, column);
-				event = new jQuery.Event("keypress",
-					{
-						keyCode: jQuery.ui.keyCode.TAB,
-						target: addingWidget.activeEditor.providerWrapper.find("input")[0],
-						shiftKey: true
+								addingWidget.activeEditor.provider.setValue(newVal);
+								tableEle.igGridAdding("endEdit", true);
+							};
+							addingConfig.editEnded = function() {
+								assert.equal(addingWidget._getColumn(column).value, newVal, "Cell did not save properly.");
+								assert.isUndefined(addingWidget.activeEditor, "Editor did not close.");
+								done();
+							};
+
+							tableEle.igGrid(config);
+
+						});
+
+						it("should close the editor and discard changes.", function(done) {
+							var config = jQuery.extend(true, {}, baseTableConfiguration),
+								addingConfig = config.features.find(function(feature) {
+									return feature.name === "Adding";
+								}),
+								column = "text",
+								newVal = "new text!",
+								addingWidget;
+
+							addingConfig.rendered = function() {
+								addingWidget = tableEle.data("Poptart-igGridAdding");
+								tableEle.igGridAdding("startEdit", column);
+
+								addingWidget.activeEditor.provider.setValue(newVal);
+								tableEle.igGridAdding("endEdit", false);
+							};
+							addingConfig.editEnded = function() {
+								assert.equal(addingWidget._getColumn(column).value, '', "Cell did not discard changes.");
+								assert.isUndefined(addingWidget.activeEditor, "Editor did not close.");
+								done();
+							};
+
+							tableEle.igGrid(config);
+							addingWidget = tableEle.data("Poptart-igGridAdding");
+						});
 					});
-				addingWidget.activeEditor.providerWrapper.trigger(event);
+				});
 
-				assert.isTrue(addingWidget._navigateLeft.calledOnce, "_navigateLeft was not called exactly once.");
-				assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
-			});
+				describe("events", function() {
+					it("should trigger the 'rendering' handler before rendering.", function(done) {
+						var config = jQuery.extend(true, {}, baseTableConfiguration),
+							addingConfig = config.features.find(function(feature) {
+								return feature.name === "Adding";
+							}),
+							timer;
 
-			it("should save and trigger down navigation when pressing enter.", function() {
-				var addingWidget = tableEle.data("Poptart-igGridAdding"),
-					firstAddingRowId = jQuery(".ui-iggrid-adding-row:first").data("rowId"),
-					column = "text",
-					event;
+						function spy() {
+							clearTimeout(timer);
+							done();
+						}
 
-				sinon.spy(addingWidget, "_navigateDown");
-				sinon.spy(addingWidget, "_saveEdit");
-				addingWidget._startEditCell(firstAddingRowId, column);
-				event = new jQuery.Event("keypress",
-					{
-						keyCode: jQuery.ui.keyCode.ENTER,
-						target: addingWidget.activeEditor.providerWrapper.find("input")[0]
+						sinon.spy(spy);
+
+						timer = setTimeout(function() {
+							assert(spy.called, 'Event did not fire in 1000ms.');
+							done();
+						}, 1000);
+
+						addingConfig.rendering = spy;
+
+						tableEle.igGrid(config);
 					});
-				addingWidget.activeEditor.providerWrapper.trigger(event);
 
-				assert.isTrue(addingWidget._navigateDown.calledOnce, "_navigateDown was not called exactly once.");
-				assert.isTrue(addingWidget._saveEdit.calledOnce, "_saveEdit was not called.");
+					it("should trigger the 'rendered' handler after rendering.", function(done) {
+						var config = jQuery.extend(true, {}, baseTableConfiguration),
+							addingConfig = config.features.find(function(feature) {
+								return feature.name === "Adding";
+							}),
+							timer;
+
+						function spy() {
+							clearTimeout(timer);
+							done();
+						}
+
+						sinon.spy(spy);
+
+						timer = setTimeout(function() {
+							assert(spy.called, 'Event did not fire in 1000ms.');
+							done();
+						}, 1000);
+
+						addingConfig.rendered = spy;
+
+						tableEle.igGrid(config);
+					});
+
+					it("should trigger the 'editStarting' handler before cell editing starts.", function(done) {
+						var config = jQuery.extend(true, {}, baseTableConfiguration),
+							addingConfig = config.features.find(function(feature) {
+								return feature.name === "Adding";
+							}),
+							timer;
+
+						function spy() {
+							clearTimeout(timer);
+							done();
+						}
+
+						sinon.spy(spy);
+
+						timer = setTimeout(function() {
+							assert(spy.called, 'Event did not fire in 1000ms.');
+							done();
+						}, 1000);
+
+						addingConfig.editStarting = spy;
+
+						addingConfig.rendered = function() {
+							tableEle.igGridAdding("startEdit");
+						};
+
+						tableEle.igGrid(config);
+					});
+
+					it("should trigger the 'editStarted' handler after cell editing starts.", function(done) {
+						var config = jQuery.extend(true, {}, baseTableConfiguration),
+							addingConfig = config.features.find(function(feature) {
+								return feature.name === "Adding";
+							}),
+							timer;
+
+						function spy() {
+							clearTimeout(timer);
+							done();
+						}
+
+						sinon.spy(spy);
+
+						timer = setTimeout(function() {
+							assert(spy.called, 'Event did not fire in 1000ms.');
+							done();
+						}, 1000);
+
+						addingConfig.editStarted = spy;
+
+						addingConfig.rendered = function() {
+							tableEle.igGridAdding("startEdit");
+						};
+
+						tableEle.igGrid(config);
+					});
+
+					it("should trigger the 'rowAdding' handler before commiting a row.", function(done) {
+						var config = jQuery.extend(true, {}, baseTableConfiguration),
+							addingConfig = config.features.find(function(feature) {
+								return feature.name === "Adding";
+							}),
+							timer, addingWidget;
+
+						function spy() {
+							clearTimeout(timer);
+							done();
+						}
+
+						sinon.spy(spy);
+
+						timer = setTimeout(function() {
+							assert(spy.called, 'Event did not fire in 1000ms.');
+							done();
+						}, 1000);
+
+						addingConfig.rowAdding = spy;
+
+						addingConfig.rendered = function() {
+							addingWidget = tableEle.data("Poptart-igGridAdding");
+							addingWidget._startEdit();
+							addingWidget._commitFromKeyboard(new jQuery.Event("keypress"));
+						};
+
+						tableEle.igGrid(config);
+					});
+
+					it("should trigger the 'rowAdded' handler before commiting a row.", function(done) {
+						var config = jQuery.extend(true, {}, baseTableConfiguration),
+							addingConfig = config.features.find(function(feature) {
+								return feature.name === "Adding";
+							}),
+							timer, addingWidget;
+
+						function spy() {
+							clearTimeout(timer);
+							done();
+						}
+
+						sinon.spy(spy);
+
+						timer = setTimeout(function() {
+							assert(spy.called, 'Event did not fire in 1000ms.');
+							done();
+						}, 1000);
+
+						addingConfig.rowAdded = spy;
+
+						addingConfig.rendered = function() {
+							addingWidget = tableEle.data("Poptart-igGridAdding");
+							addingWidget._startEdit();
+							addingWidget._commitFromKeyboard(new jQuery.Event("keypress"));
+						};
+
+						tableEle.igGrid(config);
+					});
+				});
 			});
 		});
 	});
