@@ -1,6 +1,22 @@
-#createAccountMain, #createAccountCash, #createAccountHoldings {
+#createAccountMain, #createAccountCash, #createAccountHoldings, #createAccountDriftSettings, #createAccountHoldingsChart {
 	display: inline-block;
 	float: left;
 	padding-left: 10px;
-	width: 45%;
+	padding-bottom: 40px;
+}
+
+#createAccountMain, #createAccountCash, #createAccountDriftSettings {
+	width: 33%;
+}
+
+#createAccountHoldings, #createAccountHoldingsChart {
+	min-height: 150px;
+}
+
+#createAccountHoldings {
+	width: 65%;
+}
+
+#createAccountHoldingsChart {
+	width: 35%;
 }

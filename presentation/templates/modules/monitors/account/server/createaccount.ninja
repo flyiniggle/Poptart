@@ -70,9 +70,7 @@
 				<br/>
 			</form>
 		</div>
-	</div>
-	<div class="row">
-		<div id="createAccountHoldings">
+		<div id="createAccountDriftSettings">
 			<form class="mainForm">
 				<div class="panelHeader">
 					<h3>Drift Settings:</h3>
@@ -90,17 +88,26 @@
 				<br/>
 			</form>
 		</div>
+	</div>
+	<div class="row">
 		<div id="createAccountHoldings">
 			<form class="mainForm">
 				<div class="panelHeader">
 					<h3>Proposed Holdings:</h3>
 				</div>
-				<input id="addHolding" type="button" value="add holding" data-bind="click: addHolding"/>
-				<br/>
-				<table id="accountAddHoldings" data-bind="igGrid: holdingsGridOptions"></table>
+				<table id="accountAddHoldings"></table>
+			</form>
+		</div>
+		<div id="createAccountHoldingsChart">
+			<form class="mainForm">
+				<div class="panelHeader">
+					<h3>Holdings Allocation:</h3>
+				</div>
+				<div id="accountHoldingsChart"></div>
 			</form>
 		</div>
 	</div>
+
 {% endblock %}
 
 {% block js %}
