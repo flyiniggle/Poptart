@@ -307,7 +307,7 @@ Poptart.Monitor.Account.CreateAccount = function() {
 	};
 
 	ReturnObj.submit = function() {
-		this.Service.saveAccount(ko.toJS(viewModel)).then(checkCreateResponse);
+		Poptart.Monitor.Account.CreateAccount.Service.saveAccount(ko.toJS(viewModel), jQuery("#createAccountHoldings").igGrid("dataSourceObject")).then(checkCreateResponse);
 	};
 
 	//Private Functions

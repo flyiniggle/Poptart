@@ -46,7 +46,7 @@ class AccountMonitor(View):
         return HttpResponse(json.dumps(response, cls=DateTimeWebAPIEncoder), status="200 OK", content_type="application/json")
 
     def post(self, request):
-        n = request.POST
+        n = json.loads(request.body)
         if not n:
             return HttpResponse(ValidationError("No account creation data received."), status=400, content_type="application/json")
 
@@ -57,6 +57,15 @@ class AccountMonitor(View):
 
         account.full_clean()
         account.save()
+
+        for holding in n.get("holdings"):
+            security = Security.objects.get(id=holding.get('id'))
+            new_holding = Holding(account=account, security=security, quantity=holding.get('quantity'),
+                                  expected_quantity=holding.get('expectedQuantity'), expected_value=holding.get('expectedValue'))
+
+            new_holding.full_clean()
+            new_holding.save()
+
         return HttpResponse(json.dumps(ExtPythonSerializer().serialize(Account.objects.get(name=account.name)), cls=DateTimeWebAPIEncoder), status=201, content_type="application/json")
 
 

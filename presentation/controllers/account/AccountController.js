@@ -1,5 +1,3 @@
-const querystring = require('querystring');
-
 const accountService = imports('services/account/AccountService');
 const securityMonitorService = imports('services/monitors/security/SecurityMonitorService');
 const ServiceMarshaller = imports('services/BaseService').ServiceMarshaller;
@@ -40,7 +38,7 @@ const AccountController = function() {
 	};
 
 	self.createAccount = function(req, res) {
-		const data = querystring.stringify(req.body),
+		const data = JSON.stringify(req.body),
 			service = accountService.createAccount(res, data);
 
 		service.on("end", processAccountCreation);

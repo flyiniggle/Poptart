@@ -1,4 +1,4 @@
-var qs = require('querystring');
+var qs = require('qs');
 var Service = imports('services/BaseService.js');
 
 var AccountsMonitorService = function() {
