@@ -35,8 +35,14 @@ Poptart.Monitor.Account.CreateAccount = function() {
 			owner: self
 		});
 
+		self.totalHoldingsValue = ko.computed(function() {
+			return parseFloat(self.holdings().reduce(function(total, holding) {
+				return total + holding.value();
+			}, 0));
+		});
+
 		self.totalValue = ko.computed(function() {
-			return this.startingCash();
+			return parseFloat(this.startingCash() + this.totalHoldingsValue());
 		}, self).extend({CurrencyDisplay: null});
 
 		self.cashDrift = ko.computed(function() {
@@ -44,6 +50,46 @@ Poptart.Monitor.Account.CreateAccount = function() {
 		}, self).extend({CurrencyDisplay: null});
 	};
 
+	var HoldingModel = function() {
+		return function(holding) {
+			var self = this;
+
+			self.pk = ko.observable(holding.pk);
+			self.securityName = ko.observable(holding.security.ticker);
+			self.securityLastPrice = ko.observable(holding.securityLastPrice);
+			self.quantity = ko.observable(holding.quantity);
+			self.expectedQuantity = ko.observable(holding.expectedQuantity);
+			self.expectedValue = ko.observable(holding.expectedValue);
+
+			self.quantityDrift = ko.pureComputed({
+				read: function() {
+					return Math.abs(this.expectedQuantity() - this.quantity());
+				},
+				write: function() {
+					return undefined;
+				},
+				owner: self
+			}, self);
+			self.valueDrift = ko.pureComputed({
+				read: function() {
+					return Math.abs(this.expectedValue() - this.value());
+				},
+				write: function() {
+					return undefined;
+				},
+				owner: self
+			}, self);
+			self.value = ko.pureComputed({
+				read: function() {
+					return this.quantity() * this.securityLastPrice();
+				},
+				write: function() {
+					return undefined;
+				},
+				owner: self
+			});
+		};
+	}();
 
 	// Ig Component/Knockout Configuration
 	/////////////////////////////////////////
@@ -194,7 +240,16 @@ Poptart.Monitor.Account.CreateAccount = function() {
 							return securityObject.segment || "";
 						}
 					}
-				]
+				],
+				rowAdded: function() {
+					var rows = jQuery("#createAccountHoldings")
+						.igGrid("dataSourceObject")
+						.map(function(holding) {
+							return new HoldingModel(holding);
+						});
+
+					this.viewModel.holdings(rows);
+				}.bind(this)
 			},
 			{
 				name: "Updating",
@@ -224,7 +279,25 @@ Poptart.Monitor.Account.CreateAccount = function() {
 					{columnKey: "expectedValue", editorType: "currency", readOnly: false},
 					{columnKey: "segment", readOnly: true},
 					{columnKey: "pk", readOnly: true}
-				]
+				],
+				rowDeleted: function() {
+					var rows = jQuery("#createAccountHoldings")
+						.igGrid("dataSourceObject")
+						.map(function(holding) {
+							return new HoldingModel(holding);
+						});
+
+					this.viewModel.holdings(rows);
+				}.bind(this),
+				editCellEnded: function() {
+					var rows = jQuery("#createAccountHoldings")
+						.igGrid("dataSourceObject")
+						.map(function(holding) {
+							return new HoldingModel(holding);
+						});
+
+					this.viewModel.holdings(rows);
+				}.bind(this)
 			}
 		];
 
@@ -298,7 +371,8 @@ Poptart.Monitor.Account.CreateAccount = function() {
 			jQuery("#createAccountHoldings").igGrid(setGridOptions.call({
 				primaryKey: "pk",
 				dataSource: [],
-				dataSourceType: "json"
+				dataSourceType: "json",
+				viewModel: viewModel
 			}));
 
 			jQuery("#submitCreateAccount").on("click", Poptart.Monitor.Account.CreateAccount.submit.bind(this));
