@@ -1,7 +1,9 @@
 import simplejson
+import json
 from django.test import TestCase, Client
 
 from account.models import Account
+from securitymanager.models import Security
 from poptart.lib.serializers import ExtPythonSerializer, ExtJsonSerializer
 from poptart.lib.encoders import DateTimeWebAPIEncoder
 
@@ -79,8 +81,14 @@ class AccountMonitorTest(TestCase):
             "maxPositionDrift": 1000,
             "maxCashDrift": 50,
             "maxTotalDrift": 1000,
+            "holdings": [{
+                "id": Security.objects.get(ticker="BUD").pk,
+                "quantity": 500,
+                "expectedQuantity": 500,
+                "expectedValue": 20000
+            }]
         }
-        response = c.post('/account/', data=post_data)
+        response = c.post('/account/', data=json.dumps(post_data), content_type='application/json')
 
         self.assertEqual(response.status_code, 201, "Expected 201 status code but got %s." % response.status_code)
         try:
@@ -100,8 +108,14 @@ class AccountMonitorTest(TestCase):
             "maxPositionDrift": 1000,
             "maxCashDrift": 50,
             "maxTotalDrift": 1000,
+            "holdings": [{
+                "id": Security.objects.get(ticker="BUD").pk,
+                "quantity": 500,
+                "expectedQuantity": 500,
+                "expectedValue": 20000
+            }]
         }
-        response = c.post('/account/', data=post_data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = c.post('/account/', data=json.dumps(post_data), content_type='application/json', HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
         self.assertEqual(response.status_code, 201, "Expected 201 status code but got %s." % response.status_code)
         try:
