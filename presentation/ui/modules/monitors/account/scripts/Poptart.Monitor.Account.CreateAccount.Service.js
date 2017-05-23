@@ -32,7 +32,9 @@ Poptart.Monitor.Account.CreateAccount.Service = function() {
 			data: JSON.stringify(payload)
 		})).catch(function(e) {
 			this.handleServerError(e);
-		}.bind(this));
+		}.bind(this)).then(function(data) {
+			return data.pk;
+		});
 	};
 
 	return ReturnObj;

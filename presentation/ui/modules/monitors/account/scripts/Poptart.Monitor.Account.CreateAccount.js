@@ -307,14 +307,14 @@ Poptart.Monitor.Account.CreateAccount = function() {
 	};
 
 	ReturnObj.submit = function() {
-		Poptart.Monitor.Account.CreateAccount.Service.saveAccount(ko.toJS(viewModel), jQuery("#createAccountHoldings").igGrid("dataSourceObject")).then(checkCreateResponse);
+		Poptart.Monitor.Account.CreateAccount.Service.saveAccount(ko.toJS(viewModel), jQuery("#createAccountHoldings").igGrid("dataSourceObject")).then(launchNewAccount);
 	};
 
 	//Private Functions
 	//////////////////
 
-	function checkCreateResponse(data) {
-		data;
+	function launchNewAccount(account) {
+		window.location.href = "/account/" + account;
 	}
 
 	return ReturnObj;

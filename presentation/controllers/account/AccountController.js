@@ -134,7 +134,7 @@ const AccountController = function() {
 
 			serverError.send(500);
 		} else {
-			res.end();
+			res.send(JSONData[0]);
 		}
 	}
 
