@@ -241,15 +241,7 @@ Poptart.Monitor.Account.CreateAccount = function() {
 						}
 					}
 				],
-				rowAdded: function() {
-					var rows = jQuery("#createAccountHoldings")
-						.igGrid("dataSourceObject")
-						.map(function(holding) {
-							return new HoldingModel(holding);
-						});
-
-					this.viewModel.holdings(rows);
-				}.bind(this)
+				rowAdded: calculateHoldingsModel.bind(this)
 			},
 			{
 				name: "Updating",
@@ -257,15 +249,6 @@ Poptart.Monitor.Account.CreateAccount = function() {
 				enableAddRow: false,
 				enableDeleteRow: true,
 				autoCommit: false,
-				editCellEnded: function(event, ui) {
-					var val;
-
-					if(ui.columnKey === "securityName") {
-						val = ui.editor.igCombo("dataForValue", ui.editor.igCombo('value'));
-						ui.owner.grid.findRecordByKey(ui.rowID).update(val);
-						ui.owner.grid.commit();
-					}
-				},
 				columnSettings: [
 					{columnKey: "security", readOnly: true},
 					{columnKey: "CUSIP", readOnly: true},
@@ -280,24 +263,8 @@ Poptart.Monitor.Account.CreateAccount = function() {
 					{columnKey: "segment", readOnly: true},
 					{columnKey: "pk", readOnly: true}
 				],
-				rowDeleted: function() {
-					var rows = jQuery("#createAccountHoldings")
-						.igGrid("dataSourceObject")
-						.map(function(holding) {
-							return new HoldingModel(holding);
-						});
-
-					this.viewModel.holdings(rows);
-				}.bind(this),
-				editCellEnded: function() {
-					var rows = jQuery("#createAccountHoldings")
-						.igGrid("dataSourceObject")
-						.map(function(holding) {
-							return new HoldingModel(holding);
-						});
-
-					this.viewModel.holdings(rows);
-				}.bind(this)
+				rowDeleted: calculateHoldingsModel.bind(this),
+				editCellEnded: calculateHoldingsModel.bind(this)
 			}
 		];
 
@@ -389,6 +356,16 @@ Poptart.Monitor.Account.CreateAccount = function() {
 
 	function launchNewAccount(account) {
 		window.location.href = "/account/" + account;
+	}
+
+	function calculateHoldingsModel() {
+		var rows = jQuery("#createAccountHoldings")
+			.igGrid("dataSourceObject")
+			.map(function(holding) {
+				return new HoldingModel(holding);
+			});
+
+		this.viewModel.holdings(rows);
 	}
 
 	return ReturnObj;
