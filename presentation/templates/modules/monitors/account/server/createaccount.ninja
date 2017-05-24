@@ -27,19 +27,19 @@
 {% block summary %}
 	<div>
 		<span>Total holdings value: </span>
-		<span></span>
-	</div>
-	<div>
-		<span>Holdings Drift: </span>
-		<span></span>
-	</div>
-	<div>
-		<span>Cash drift: </span>
-		<span data-bind="text: cashDrift.formattedValue"></span>
+		<span data-bind="text: totalHoldingsValue.formattedValue"></span>
 	</div>
 	<div>
 		<span>Total value: </span>
 		<span data-bind="text: totalValue.formattedValue"></span>
+	</div>
+	<div>
+		<span>Holdings Drift: </span>
+		<span data-bind="text: holdingsDrift.formattedValue"></span>
+	</div>
+	<div>
+		<span>Cash drift: </span>
+		<span data-bind="text: cashDrift.formattedValue"></span>
 	</div>
 {% endblock %}
 

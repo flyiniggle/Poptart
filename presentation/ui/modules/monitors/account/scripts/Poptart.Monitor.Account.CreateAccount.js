@@ -39,7 +39,7 @@ Poptart.Monitor.Account.CreateAccount = function() {
 			return parseFloat(self.holdings().reduce(function(total, holding) {
 				return total + holding.value();
 			}, 0));
-		});
+		}).extend({CurrencyDisplay: null});
 
 		self.totalValue = ko.computed(function() {
 			return parseFloat(this.startingCash() + this.totalHoldingsValue());
@@ -48,6 +48,12 @@ Poptart.Monitor.Account.CreateAccount = function() {
 		self.cashDrift = ko.computed(function() {
 			return Math.abs(self.expectedCash() - self.startingCash());
 		}, self).extend({CurrencyDisplay: null});
+
+		self.holdingsDrift = ko.computed(function() {
+			return parseFloat(self.holdings().reduce(function(total, holding) {
+				return total + holding.valueDrift();
+			}, 0));
+		}).extend({CurrencyDisplay: null});
 	};
 
 	var HoldingModel = function() {

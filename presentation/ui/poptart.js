@@ -136,6 +136,7 @@ var Poptart = function() {
 			formattedValue.unshift("$");
 
 			target.formattedValue(formattedValue.concat(parts).join(""));
+			target.value = floatValue;
 		});
 
 		return target;
