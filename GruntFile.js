@@ -40,7 +40,7 @@ module.exports = function(grunt) {
 		},
 		uglify: {
 			build: {
-				cwd: path.join('presentation', 'static', 'ui'),
+				cwd: 'presentation/static/ui/',
 				extDot: 'last',
 				expand: true
 			},
