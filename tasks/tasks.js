@@ -65,7 +65,7 @@ module.exports = function(grunt) {
 		files.push({
 			src: grunt.file.expand({
 				filter: 'isFile',
-				cwd: baseUIPath
+				cwd: baseDestUIPath
 			}, ['*.js', ...ignoredSourceScriptPatterns]).map(function(path) {
 				return `${baseDestUIPath}/${path}`;
 			}),

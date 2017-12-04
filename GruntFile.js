@@ -175,7 +175,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['build-static', 'lint', 'test']);
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit', 'karma:integration']);
 	grunt.registerTask('lint', ['eslint:all']);
-	grunt.registerTask('build-static', ['uglify-build-all-javascript-file-mapping', 'nunjucks-precompile-mapping', 'nunjucks', 'sync', 'uglify', 'cssmin']);
+	grunt.registerTask('build-static', ['sync', 'uglify-build-all-javascript-file-mapping', 'nunjucks-precompile-mapping', 'nunjucks', 'uglify', 'cssmin']);
 
 	/*grunt.event.on('watch', function(action, filepath, target) {
 
