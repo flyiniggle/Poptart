@@ -115,8 +115,7 @@ module.exports = function(grunt) {
 				options: {
 					files: [
 						{pattern: './static/ui/scripts/*.js', noCache: true},
-						{pattern: './static/ui/scripts/ignite/*.js', noCache: true},
-						{pattern: './static/ui/scripts/ignite/modules/*.js', noCache: true},
+						{pattern: './static/ui/scripts/ignite/**/*.js', noCache: true},
 						{pattern: './static/ui/poptart.min.js', noCache: true},
 						{pattern: './static/ui/**/*.min.js', noCache: true},
 						{pattern: './static/ui/components/**/*.min.js', noCache: true},
