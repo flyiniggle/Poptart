@@ -123,7 +123,7 @@ module.exports = function(grunt) {
 						'static/ui/modules/**/*.min.js',
 						'test/client/unit/**/*.js'
 					],
-					browsers: ['Chrome', 'PhantomJS', 'Firefox', 'Edge'],
+					browsers: ['PhantomJS'],
 					singleRun: true
 				}
 			},
@@ -139,7 +139,7 @@ module.exports = function(grunt) {
 						{pattern: 'static/ui/modules/**/*.min.js', noCache: true},
 						{pattern: 'test/client/integration/*.js', noCache: true}
 					],
-					browsers: ['Chrome', 'PhantomJS', 'Firefox', 'Edge'],
+					browsers: ['PhantomJS'],
 					singleRun: true
 				}
 			},
