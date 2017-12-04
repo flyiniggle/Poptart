@@ -13,3 +13,5 @@ presentation/ui/*.min.js
 presentation/ui/*.min.js.map
 presentation/ui/components/**/*.min.js
 presentation/ui/components/**/*.min.js.map
+**/*.pyc
+**/*.log
