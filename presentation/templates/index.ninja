@@ -25,7 +25,7 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/ui/modules/dashboard/scripts/Poptart.Dashboard.min.js"></script>
+	<script type="text/javascript" src="/ui/modules/dashboard/scripts/main.js"></script>
 	<script type="text/javascript">
 		Poptart.Dashboard.init();
 	</script>

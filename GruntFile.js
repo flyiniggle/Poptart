@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 		sync: {
 			build: {
 				cwd: baseUIPath,
-				src: '**',
+				src: ['**', '!**/*.js'],
 				dest: path.join('presentation', 'static', 'ui'),
 				expand: true
 			}
@@ -20,10 +20,6 @@ module.exports = function(grunt) {
 		watch: {
 			options: {
 				spawn: false
-			},
-			js: {
-				files: ['presentation/ui/**/*.js'],
-				tasks: ['sync', 'uglify-build-all-javascript-file-mapping', 'newer:uglify']
 			},
 			nunjucks: {
 				files: ['presentation/templates/**/client/*.*', 'presentation/templates/**/shared/*.*'],
@@ -36,17 +32,6 @@ module.exports = function(grunt) {
 			less: {
 				files: ['presentation/ui/css/**/*.less'],
 				tasks: ['less']
-			}
-		},
-		uglify: {
-			build: {
-				cwd: 'presentation/static/ui/',
-				extDot: 'last',
-				expand: true
-			},
-			options: {
-				sourceMap: true,
-				compress: false
 			}
 		},
 		nunjucks: {
@@ -85,15 +70,15 @@ module.exports = function(grunt) {
 		eslint: {
 			all: {
 				options: {
-					configFile: 'presentation/build/eslint.json',
-					ignorePath: 'presentation/build/.eslintignore'
+					configFile: '.eslintrc',
+					ignorePath: '.eslintignore'
 				},
 				target: ['presentation/**/*.js', '!presentation/ui/scripts/**', '!presentation/static/**']
 			},
 			changed: {
 				options: {
-					configFile: 'presentation/build/eslint.json',
-					ignorePath: 'presentation/build/.eslintignore',
+					configFile: '.eslintrc',
+					ignorePath: '.eslintignore',
 					fix: true
 				}
 			}
@@ -175,7 +160,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['build-static', 'lint', 'test']);
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit', 'karma:integration']);
 	grunt.registerTask('lint', ['eslint:all']);
-	grunt.registerTask('build-static', ['sync', 'uglify-build-all-javascript-file-mapping', 'nunjucks-precompile-mapping', 'nunjucks', 'uglify', 'cssmin']);
+	grunt.registerTask('build-static', ['sync', 'nunjucks-precompile-mapping', 'nunjucks', 'cssmin']);
 
 	/*grunt.event.on('watch', function(action, filepath, target) {
 
