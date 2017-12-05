@@ -8,6 +8,7 @@ A play application for trying out new patterns and tools
 
 ### Installing
 
+Install Python 2.7, NodeJS > 6.11, MySQL
 
 Installing dependencies
 
@@ -19,8 +20,14 @@ npm install
 
 ### Building
 ```
+manage.py syncdb
 grunt //build, lint, and test
 grunt build-static //build all static files - js, css, pre-compile templates, etc
 grunt watch //run build-static tasks for static file changes
 ```
 
+### Running
+```
+manage.py runserver
+node presentation/app.js
+```
