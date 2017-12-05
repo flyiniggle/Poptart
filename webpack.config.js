@@ -5,7 +5,7 @@ module.exports = {
 	context: __dirname + "/presentation/ui/",
 	devtool: 'source-map',
 	entry: {
-		Poptart: ["./poptart.js", "./polyfills.js", "jquery", "jquery-ui", "knockout"],
+		Core: ["./poptart.js", "./polyfills.js", "jquery", "jquery-ui", "knockout"],
 		Account: "./modules/account/scripts/Poptart.Account.js",
 		Dashboard: "./modules/dashboard/scripts/Poptart.Dashboard.js",
 		"monitors/account": "./modules/monitors/account/scripts/Poptart.Monitor.Account.js",
@@ -14,7 +14,7 @@ module.exports = {
 	output: {
 		path: __dirname,
 		filename: './presentation/static/ui/modules/[name]/scripts/main.js',
-		library: 'Poptart'
+		library: ['Poptart', '[name]']
 	},
 	resolve: {
 		alias: {

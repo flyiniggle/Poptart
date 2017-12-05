@@ -88,7 +88,7 @@
 		<script type="text/javascript" src="/ui/templates/support/Poptart.Templates.Support.js"></script>
 		<script type="text/javascript">
             window.onload = function() {
-				Poptart.init();
+				Poptart.Core.init();
 			}
 		</script>
 	{% endblock %}

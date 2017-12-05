@@ -1,14 +1,15 @@
 // Poptart.Dashboard
 ////////////////////////////////
-import Poptart from "Poptart/poptart";
+import jQuery from "jquery";
 
+import * as Poptart from "Poptart/poptart";
 
 const init = function() {
-
 	Promise.resolve(jQuery.ajax({
 		url: "/summary/account",
 		accepts: "application/json"
-	})).then(showAccountSummary)
+	}))
+		.then(showAccountSummary)
 		.catch(function(e) {
 			alert(e);
 		});
@@ -16,14 +17,15 @@ const init = function() {
 	Promise.resolve(jQuery.ajax({
 		url: "/summary/security",
 		accepts: "application/json"
-	})).then(showSecuritySummary)
+	}))
+		.then(showSecuritySummary)
 		.catch(function(e) {
 			alert(e);
 		});
 };
 
 function showAccountSummary(data) {
-
+	Poptart.init()
 	jQuery("#accountCount").html(data.totalCount);
 	jQuery("#accountUpdated").html(data.recentAccounts);
 	jQuery("#alertsContent").append(Poptart.nunjucksEnvironment.render("presentation/templates/components/alerts/shared/alerts.ninja", data));

@@ -4,7 +4,7 @@ import jQuery from "jquery";
 import ko from "knockout";
 import nunjucks from "nunjucks";
 
-import RibbonMenu from "Poptart/components/Poptart.RibbonMenu";
+import * as RibbonMenu from "Poptart/components/Poptart.RibbonMenu";
 
 window.jQuery = jQuery;
 window.ko = ko;
