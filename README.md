@@ -26,6 +26,9 @@ grunt build-static //build all static files - js, css, pre-compile templates, et
 grunt watch //run build-static tasks for static file changes
 ```
 
+## Demo Data
+Run any of the three batch files in ROOT/data: demodata.bat, demodatascale.bat, or demodatabigmclargehuge.bat.
+
 ### Running
 ```
 manage.py runserver
