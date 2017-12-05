@@ -27,6 +27,9 @@
 	{{ super() }}
 	<script type="text/javascript" src="/ui/modules/dashboard/scripts/main.js"></script>
 	<script type="text/javascript">
-		Poptart.Dashboard.init();
+
+		window.onload = function() {
+			Poptart.Dashboard.init();
+		};
 	</script>
 {% endblock %}

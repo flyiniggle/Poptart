@@ -1,7 +1,5 @@
 // Poptart.Dashboard
 ////////////////////////////////
-import jQuery from "jquery";
-
 import Poptart from "Poptart/poptart";
 
 

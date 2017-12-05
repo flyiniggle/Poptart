@@ -19,7 +19,8 @@ module.exports = {
 	resolve: {
 		alias: {
 			"Poptart": path.join(__dirname, "presentation", "ui"),
-			"Templates": path.join(__dirname, "presentation", "templates")
+			"Templates": path.join(__dirname, "presentation", "templates"),
+			"lib": path.join(__dirname, "presentation", "ui", "scripts")
 		}
 	},
 	module: {

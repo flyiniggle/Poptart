@@ -77,21 +77,19 @@
 
 	<!-- JS -->
 	{% block js_libraries %}
-		<script type="text/javascript" src="/ui/scripts/jquery-1.10.2.js"></script>
-		<script type="text/javascript" src="/ui/scripts/jquery-ui-1.10.4.custom.js"></script>
-		<script type="text/javascript" src="/ui/scripts/knockout-3.4.0.debug.js"></script>
 		<script type="text/javascript" src="/ui/scripts/bluebird.js"></script>
-		<script type="text/javascript" src="/ui/scripts/ignite/infragistics.loader.js"></script>
-		<script type="text/javascript" src="/ui/scripts/nunjucks.js"></script>
 	{% endblock %}
 
 	{%  block js %}
 		<script type="text/javascript" src="/ui/Poptart.js"></script>
+		<script type="text/javascript" src="/ui/scripts/ignite/infragistics.loader.js"></script>
 		<script type="text/javascript" src="/ui/components/Poptart.Alerts.min.js"></script>
 		<script type="text/javascript" src="/ui/templates/components/alerts/shared/alerts.js"></script>
 		<script type="text/javascript" src="/ui/templates/support/Poptart.Templates.Support.js"></script>
 		<script type="text/javascript">
-			Poptart.init()
+            window.onload = function() {
+				Poptart.init();
+			}
 		</script>
 	{% endblock %}
 </body>
