@@ -1,26 +1,14 @@
 const path = require('path');
 const webpack = require('webpack');
 
-module.exports = {
+const sharedConfig = {
 	context: __dirname + "/presentation/ui/",
 	devtool: 'source-map',
-	entry: {
-		Core: ["./poptart.js", "./polyfills.js", "jquery", "jquery-ui", "knockout"],
-		Account: "./modules/account/scripts/Poptart.Account.js",
-		Dashboard: "./modules/dashboard/scripts/Poptart.Dashboard.js",
-		"monitors/account": "./modules/monitors/account/scripts/Poptart.Monitor.Account.js",
-		"monitors/security": "./modules/monitors/security/scripts/Poptart.Monitor.Security.js"
-	},
-	output: {
-		path: __dirname,
-		filename: './presentation/static/ui/modules/[name]/scripts/main.js',
-		library: ['Poptart', '[name]']
-	},
 	resolve: {
 		alias: {
-			"Poptart": path.join(__dirname, "presentation", "ui"),
-			"Templates": path.join(__dirname, "presentation", "templates"),
-			"lib": path.join(__dirname, "presentation", "ui", "scripts")
+			"Poptart": __dirname + "/presentation/ui/",
+			"Templates": "../presentation/templates",
+			"lib": "./scripts"
 		}
 	},
 	module: {
@@ -38,12 +26,47 @@ module.exports = {
 				loader: "style-loader!css-loader"
 			}
 		]
-	},
-	plugins: [
+	}
+	/*plugins: [
 		new webpack.optimize.CommonsChunkPlugin({
 			name: "Poptart",
 			filename: "./presentation/static/ui/Poptart.js",
 			minChunks: 2
 		})
-	]
-};
+	]*/
+}
+
+const topLevelPackagesConfig = Object.assign({
+		entry: {
+			Account: "./modules/account/scripts/Poptart.Account.js",
+			Dashboard: "./modules/dashboard/scripts/Poptart.Dashboard.js"
+		},
+		output: {
+			path: __dirname,
+			filename: './presentation/static/ui/modules/[name]/scripts/main.js',
+			libraryTarget: 'umd',
+			library: ['Poptart', '[name]']
+		}
+	},
+	sharedConfig
+);
+
+const monitorPackagesConfig = Object.assign({
+		entry: {
+			Account: "./modules/monitors/account/scripts/Poptart.Monitor.Account.js",
+			Security: "./modules/monitors/security/scripts/Poptart.Monitor.Security.js"
+		},
+		output: {
+			path: __dirname,
+			filename: './presentation/static/ui/modules/monitors/[name]/scripts/main.js',
+			libraryTarget: 'umd',
+			library: ['Poptart', 'Monitor', '[name]']
+		}
+	},
+	sharedConfig
+);
+
+module.exports = [
+	topLevelPackagesConfig,
+	monitorPackagesConfig
+]
