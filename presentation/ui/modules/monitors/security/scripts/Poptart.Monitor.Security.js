@@ -6,7 +6,7 @@ import "jqueryui";
 import * as Poptart from "Poptart/poptart";
 import { loaderConfig, loader } from "Lib/Poptart.Ignite";
 
-console.log(jQuery)
+
 var securities = [];
 
 function init() {
