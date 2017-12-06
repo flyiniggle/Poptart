@@ -82,15 +82,8 @@
 
 	{%  block js %}
 		<script type="text/javascript" src="/ui/Poptart.js"></script>
-		<script type="text/javascript" src="/ui/scripts/ignite/infragistics.loader.js"></script>
-		<script type="text/javascript" src="/ui/components/Poptart.Alerts.min.js"></script>
 		<script type="text/javascript" src="/ui/templates/components/alerts/shared/alerts.js"></script>
 		<script type="text/javascript" src="/ui/templates/support/Poptart.Templates.Support.js"></script>
-		<script type="text/javascript">
-            window.onload = function() {
-				Poptart.Core.init();
-			}
-		</script>
 	{% endblock %}
 </body>
 </html>

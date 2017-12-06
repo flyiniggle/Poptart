@@ -1,4 +1,8 @@
-Poptart.Alerts = function(params) {
+// Poptart.Alerts
+////////////////////////////////
+import ko from "knockout";
+
+Alerts = function(params) {
 	var alertParams = params.alerts,
 		alertList = [],
 		alertParam, i;
@@ -26,3 +30,5 @@ Poptart.Alerts = function(params) {
 
 	return new Alerts(alertList);
 };
+
+export { Alerts };

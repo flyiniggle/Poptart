@@ -5,6 +5,8 @@ import jQuery from "jquery";
 import * as Poptart from "Poptart/poptart";
 
 const init = function() {
+	Poptart.init()
+
 	Promise.resolve(jQuery.ajax({
 		url: "/summary/account",
 		accepts: "application/json"
@@ -25,7 +27,6 @@ const init = function() {
 };
 
 function showAccountSummary(data) {
-	Poptart.init()
 	jQuery("#accountCount").html(data.totalCount);
 	jQuery("#accountUpdated").html(data.recentAccounts);
 	jQuery("#alertsContent").append(Poptart.nunjucksEnvironment.render("presentation/templates/components/alerts/shared/alerts.ninja", data));

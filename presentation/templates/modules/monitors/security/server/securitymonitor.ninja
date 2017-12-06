@@ -13,11 +13,12 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/ui/modules/monitors/security/scripts/Poptart.Monitors.Security.min.js"></script>
+	<script type="text/javascript" src="/ui/modules/monitors/security/scripts/main.js"></script>
 	<script type="text/javascript">
 		(function() {
-			Poptart.Monitor.Security.securities = {{ securities | safe }};
+			Poptart.Monitor.Security.setSecurities({{ securities | safe }});
 			jQuery(Poptart.Monitor.Security.init);
 		})();
 	</script>
+	<script type="text/javascript" src="/ui/scripts/ignite/infragistics.loader.js"></script>
 {% endblock %}

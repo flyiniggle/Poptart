@@ -25,11 +25,11 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/ui/modules/dashboard/scripts/main.js"></script>
+	<script type="text/javascript" src="/ui/modules/Dashboard/scripts/main.js"></script>
 	<script type="text/javascript">
-
 		window.onload = function() {
 			Poptart.Dashboard.init();
 		};
 	</script>
+	<script type="text/javascript" src="/ui/scripts/ignite/infragistics.loader.js"></script>
 {% endblock %}

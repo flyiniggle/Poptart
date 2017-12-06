@@ -1,12 +1,14 @@
 // Poptart
 ////////////////////////////////
 import jQuery from "jquery";
+import jQueryUI from "jqueryui";
 import ko from "knockout";
 import nunjucks from "nunjucks";
 
 import * as RibbonMenu from "Poptart/components/Poptart.RibbonMenu";
 
 window.jQuery = jQuery;
+window.jQuery.ui = jQueryUI;
 window.ko = ko;
 window.nunjucks = nunjucks;
 
@@ -199,7 +201,7 @@ function hideNavMenu(event) {
 
 	if((relatedTarget.attr("id") !== "mainNavMenuTarget")
 			&& (relatedTarget.attr("id") !== "mainNavMenu")
-			&& (relatedTarget.parents("#mainNavMenu").size() === 0)) {
+			&& (relatedTarget.parents("#mainNavMenu").length === 0)) {
 		jQuery("#mainNavMenu").hide();
 	}
 };
