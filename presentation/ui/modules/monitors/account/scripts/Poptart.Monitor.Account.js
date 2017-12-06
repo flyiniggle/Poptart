@@ -5,6 +5,7 @@ import "jqueryui";
 
 import * as Poptart from "Poptart/poptart";
 import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
+import * as CreateAccountModule from "Poptart/modules/monitors/account/scripts/Poptart.Monitor.Account.CreateAccount";
 
 var accountList
 
@@ -153,3 +154,4 @@ function launchAccount() {
 }
 
 export { init, launchAccount, setAccountList };
+export let CreateAccount = CreateAccountModule;

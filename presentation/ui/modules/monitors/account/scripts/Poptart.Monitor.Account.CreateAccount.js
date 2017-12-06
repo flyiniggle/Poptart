@@ -1,10 +1,11 @@
 // Poptart.Monitor.Account.CreateAccount
 ////////////////////////////////
-import jQuery from "jquery";
-import ko from "knockout";
+import jQuery from "Lib/Poptart.jQuery";
+import ko from "Lib/Poptart.Knockout";
+import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
 
 import * as Poptart from "Poptart/poptart";
-import { loaderConfig, constants } from "Poptart/components/Poptart.Ignite.Adding";
+import * as CreateAccountService from "Poptart/modules/monitors/account/scripts/Poptart.Monitor.Account.CreateAccount.Service";
 
 var viewModel;
 
@@ -288,7 +289,7 @@ const setCurrencyEditorOptions = function() {
 	this.currencySymbol = "$";
 	this.minValue = 0;
 	this.maxDecimals = 2;
-	this.height = Poptart.Ignite.constants.INPUT_HEIGHT;
+	this.height = constants.INPUT_HEIGHT;
 	this.width = "90%";
 
 	return this;
@@ -297,7 +298,7 @@ const setCurrencyEditorOptions = function() {
 const setPercentEditorOptions = function() {
 	this.minValue = 0;
 	this.maxDecimals = 12;
-	this.height = Poptart.Ignite.constants.INPUT_HEIGHT;
+	this.height = constants.INPUT_HEIGHT;
 	this.width = "90%";
 
 	return this;
@@ -332,10 +333,11 @@ function setComboEditorOptions() {
 //////////////////
 
 const init = function() {
-	var loaderConfig = Object.create(Poptart.Ignite.loaderConfig, {});
+	var configInstance = Object.create(loaderConfig, {});
 
-	loaderConfig.resources = "igCombo,igEditors,igGrid.Updating.Adding,extensions/infragistics.datasource.knockoutjs.js,extensions/infragistics.ui.grid.knockout-extensions.js,extensions/infragistics.ui.combo.knockout-extensions.js,extensions/infragistics.ui.editors.knockout-extensions.js";
-	loaderConfig.ready = function() {
+	Poptart.init();
+	configInstance.resources = "igCombo,igEditors,igGrid.Updating.Adding,extensions/infragistics.datasource.knockoutjs.js,extensions/infragistics.ui.grid.knockout-extensions.js,extensions/infragistics.ui.combo.knockout-extensions.js,extensions/infragistics.ui.editors.knockout-extensions.js";
+	configInstance.ready = function() {
 		viewModel = new AccountCreationViewModel();
 
 		//append ig component options
@@ -357,11 +359,11 @@ const init = function() {
 
 		jQuery("#submitCreateAccount").on("click", submit.bind(this));
 	};
-	jQuery.ig.loader(loaderConfig);
+	loader(configInstance);
 };
 
 const submit = function() {
-	Poptart.Monitor.Account.CreateAccount.Service.saveAccount(ko.toJS(viewModel), jQuery("#createAccountHoldings").igGrid("dataSourceObject")).then(launchNewAccount);
+	CreateAccountService.saveAccount(ko.toJS(viewModel), jQuery("#createAccountHoldings").igGrid("dataSourceObject")).then(launchNewAccount);
 };
 
 //Private Functions

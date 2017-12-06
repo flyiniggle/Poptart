@@ -3,9 +3,9 @@
 import jQuery from "Lib/Poptart.jQuery";
 import ko from "Lib/Poptart.Knockout";
 import { nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
+import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
 
 import * as Poptart from "Poptart/poptart";
-import { loaderConfig, constants } from "Lib/Poptart.Ignite";
 import { SummaryService, SecuritiesService, HoldingsService, AlertsService} from "Poptart/modules/account/scripts/Poptart.Account.Service";
 
 
@@ -270,7 +270,7 @@ const init = function() {
 		HoldingsService.get(accountId).then(displayAccountHoldingsCharts);
 		AlertsService.get(accountId).then(displayAccountAlerts);
 	};
-	jQuery.ig.loader(configInstance);
+	loader(configInstance);
 
 	jQuery("#saveAccount").on("click", saveAccount);
 };
