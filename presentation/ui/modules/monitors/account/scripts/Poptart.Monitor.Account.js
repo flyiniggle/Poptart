@@ -1,9 +1,10 @@
 // Poptart.Monitor.Account
 ////////////////////////////////
-import jQuery from "jquery";
+import jQuery from "Lib/Poptart.jQuery";
+import "jqueryui";
 
 import * as Poptart from "Poptart/poptart";
-import { loaderConfig, constants } from "Poptart/components/Poptart.Ignite";
+import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
 
 var accountList
 
@@ -14,7 +15,6 @@ function init() {
 
 	let configInstance = Object.create(loaderConfig, {});
 
-	console.log(accountList)
 	configInstance.resources = "igGrid.GroupBy.Sorting.Paging, igCombo";
 	configInstance.ready = function() {
 		var testTable = jQuery("#am_testTable"),
@@ -139,7 +139,7 @@ function init() {
 		jQuery("#am_accountLauncher").on("click", launchAccount.bind(accountLauncher));
 	};
 
-	jQuery.ig.loader(configInstance);
+	loader(configInstance);
 };
 
 function launchAccount() {

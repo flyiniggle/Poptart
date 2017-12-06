@@ -1,11 +1,12 @@
 // Poptart.Monitor.Security
 ////////////////////////////////
-import jQuery from "jquery";
+import jQuery from "Lib/Poptart.jQuery";
+import "jqueryui";
 
 import * as Poptart from "Poptart/poptart";
-import { loaderConfig } from "Poptart/components/Poptart.Ignite";
+import { loaderConfig, loader } from "Lib/Poptart.Ignite";
 
-
+console.log(jQuery)
 var securities = [];
 
 function init() {
@@ -30,7 +31,7 @@ function init() {
 			]
 		});
 	};
-	jQuery.ig.loader(configInstance);
+	loader(configInstance);
 };
 
 function setSecurities(securitiesList = []) {

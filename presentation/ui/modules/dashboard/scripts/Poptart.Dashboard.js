@@ -1,6 +1,7 @@
 // Poptart.Dashboard
 ////////////////////////////////
-import jQuery from "jquery";
+import jQuery from "Lib/Poptart.jQuery";
+import { nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
 
 import * as Poptart from "Poptart/poptart";
 
@@ -29,7 +30,7 @@ const init = function() {
 function showAccountSummary(data) {
 	jQuery("#accountCount").html(data.totalCount);
 	jQuery("#accountUpdated").html(data.recentAccounts);
-	jQuery("#alertsContent").append(Poptart.nunjucksEnvironment.render("presentation/templates/components/alerts/shared/alerts.ninja", data));
+	jQuery("#alertsContent").append(nunjucksEnvironment.render("presentation/templates/components/alerts/shared/alerts.ninja", data));
 }
 
 function showSecuritySummary(data) {

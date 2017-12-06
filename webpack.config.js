@@ -8,7 +8,7 @@ const sharedConfig = {
 		alias: {
 			"Poptart": __dirname + "/presentation/ui/",
 			"Templates": "../presentation/templates",
-			"lib": "./scripts"
+			"Lib": __dirname + "/presentation/ui/lib"
 		}
 	},
 	module: {
