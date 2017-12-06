@@ -1,11 +1,12 @@
 // Poptart.Account
 ////////////////////////////////
-import jQuery from "jquery";
-import ko from "knockout";
+import jQuery from "Lib/Poptart.jQuery";
+import ko from "Lib/Poptart.Knockout";
+import { nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
 
 import * as Poptart from "Poptart/poptart";
-import { loaderConfig, constants } from "Poptart/components/Poptart.Ignite.Adding";
-import { AccountService, HoldingsService, AlertsService} from "Poptart/modules/account/scripts/Poptart.Account.Service";
+import { loaderConfig, constants } from "Lib/Poptart.Ignite";
+import { SummaryService, SecuritiesService, HoldingsService, AlertsService} from "Poptart/modules/account/scripts/Poptart.Account.Service";
 
 
 const accountId = window.location.href.split("/").pop();
@@ -247,7 +248,7 @@ function displayAccountHoldingsCharts(data) {
 }
 
 function displayAccountAlerts(data) {
-	const alertsHtml = Poptart.nunjucksEnvironment.render("presentation/templates/components/alerts/shared/alerts.ninja", {alerts: data});
+	const alertsHtml = nunjucksEnvironment.render("presentation/templates/components/alerts/shared/alerts.ninja", {alerts: data});
 
 	jQuery("#alertsContent").html(alertsHtml);
 }
@@ -259,16 +260,17 @@ function saveAccount() {
 }
 
 const init = function() {
-	const loaderConfig = Object.create(Poptart.Ignite.loaderConfig, {});
+	const configInstance = Object.create(loaderConfig, {});
 
-	loaderConfig.resources = "igGrid.Updating.Adding,igDataChart.Category,igDoughnutChart,igCombo";
-	loaderConfig.ready = function() {
+	Poptart.init();
+	configInstance.resources = "igGrid.Updating.Adding,igDataChart.Category,igDoughnutChart,igCombo";
+	configInstance.ready = function() {
 		SummaryService.get(accountId).then(displayAccountSummary);
 		Promise.all([HoldingsService.get(accountId), SecuritiesService.get()]).then(displayAccountHoldings);
 		HoldingsService.get(accountId).then(displayAccountHoldingsCharts);
 		AlertsService.get(accountId).then(displayAccountAlerts);
 	};
-	jQuery.ig.loader(loaderConfig);
+	jQuery.ig.loader(configInstance);
 
 	jQuery("#saveAccount").on("click", saveAccount);
 };

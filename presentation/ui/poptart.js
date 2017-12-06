@@ -17,7 +17,6 @@ var nunjucksEnvironment;
 // Public methods
 ///////////////////
 const init = function() {
-	configure();
 	jQuery("#mainNavMenuTarget").on("mouseover", showNavMenu);
 	jQuery("#mainNavMenuTarget, #mainNavMenu").on("mouseleave", hideNavMenu);
 	RibbonMenu.init();
@@ -25,17 +24,6 @@ const init = function() {
 
 // Private functions
 //////////////////////
-function configure() {
-
-	// Nunucks
-
-
-
-
-// Ignites
-
-}
-
 function showNavMenu() {
 	jQuery("#mainNavMenu").show();
 }

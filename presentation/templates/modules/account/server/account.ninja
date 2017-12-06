@@ -63,7 +63,7 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/ui/modules/account/scripts/Poptart.Account.min.js"></script>
+	<script type="text/javascript" src="/ui/modules/account/scripts/main.js"></script>
 	<script type="text/javascript">
 		(function() {
 			jQuery(Poptart.Account.init);

@@ -7,10 +7,8 @@ import { loaderConfig, constants } from "Poptart/components/Poptart.Ignite.Addin
 import { Service, AsyncService } from "Poptart/components/Poptart.Services";
 
 
-const AccountService = Object.create(Service, {});
-
-AccountService.SummaryService = Object.create(AsyncService, {});
-AccountService.SummaryService.get = function(accountId) {
+const SummaryService = Object.create(AsyncService, {});
+SummaryService.get = function(accountId) {
 	return this.promiseMe({
 		url: "/account/" + accountId + "/data"
 	}).then(function(data) {
@@ -24,7 +22,7 @@ AccountService.SummaryService.get = function(accountId) {
 	}).catch(function(error) {
 		return alert(error);
 	});
-}.bind(AccountService);
+}.bind(SummaryService);
 
 
 const HoldingsService = Object.create(AsyncService, {});
@@ -90,7 +88,7 @@ SecuritiesService.get = function() {
 }.bind(SecuritiesService);
 
 
-const AlertsService = Object.create(Poptart.Services.AsyncService, {});
+const AlertsService = Object.create(AsyncService, {});
 
 AlertsService.get = function(accountId) {
 
@@ -104,7 +102,8 @@ AlertsService.get = function(accountId) {
 }.bind(AlertsService);
 
 export {
-	AccountService,
+	SummaryService,
 	HoldingsService,
-	AlertsService
+	AlertsService,
+	SecuritiesService
 }
