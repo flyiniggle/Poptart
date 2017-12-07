@@ -8,7 +8,7 @@ const sharedConfig = {
 		alias: {
 			"Poptart": __dirname + "/presentation/ui/",
 			"Templates": "../presentation/templates",
-			"Lib": __dirname + "/presentation/ui/lib",
+			"Lib": __dirname + "/presentation/ui/lib"
 		}
 	},
 	module: {
@@ -27,13 +27,6 @@ const sharedConfig = {
 			}
 		]
 	}
-	/*plugins: [
-		new webpack.optimize.CommonsChunkPlugin({
-			name: "Poptart",
-			filename: "./presentation/static/ui/Poptart.js",
-			minChunks: 2
-		})
-	]*/
 };
 
 const topLevelPackagesConfig = Object.assign(
@@ -68,7 +61,29 @@ const monitorPackagesConfig = Object.assign(
 	sharedConfig
 );
 
+const igniteExtensionsPackageConfig = Object.assign(
+	{
+		entry: {
+			Adding: "./components/Poptart.Ignite.Adding.js"
+		},
+		output: {
+			path: __dirname,
+			filename: "./presentation/static/ui/components/Poptart.Ignite.Adding.js"
+		},
+
+		plugins: [
+			new webpack.optimize.CommonsChunkPlugin({
+				name: "Adding",
+				filename: "./presentation/static/ui/components/Poptart.Ignite.Adding.min.js",
+				minChunks: 0
+			})
+		 ]
+	},
+	sharedConfig
+);
+
 module.exports = [
 	topLevelPackagesConfig,
-	monitorPackagesConfig
+	monitorPackagesConfig,
+	igniteExtensionsPackageConfig
 ];
