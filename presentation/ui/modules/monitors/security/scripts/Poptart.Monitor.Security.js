@@ -1,7 +1,6 @@
 // Poptart.Monitor.Security
 ////////////////////////////////
 import jQuery from "Lib/Poptart.jQuery";
-import "jqueryui";
 
 import * as Poptart from "Poptart/poptart";
 import { loaderConfig, loader } from "Lib/Poptart.Ignite";

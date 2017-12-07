@@ -64,5 +64,4 @@
 			jQuery(Poptart.Monitor.Account.init);
 		})();
 	</script>
-	<script type="text/javascript" src="/ui/scripts/ignite/infragistics.loader.js"></script>
 {% endblock %}

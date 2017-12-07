@@ -20,5 +20,4 @@
 			jQuery(Poptart.Monitor.Security.init);
 		})();
 	</script>
-	<script type="text/javascript" src="/ui/scripts/ignite/infragistics.loader.js"></script>
 {% endblock %}

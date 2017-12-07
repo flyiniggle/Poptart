@@ -1,9 +1,10 @@
 // Poptart.Ignite
 ////////////////////////////////
 import jQuery from "Lib/Poptart.jQuery";
-import "jqueryui"
+import "jqueryui";
 import { nunjucks, nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
 import "Poptart/scripts/Ignite/infragistics.loader";
+
 
 //hack to "fix" some weird ass thing where the combo throws an error complaining that ig.encode doesn't exist.
 window.jQuery.ig.encode = (val) => val;
@@ -17,7 +18,7 @@ const loaderConfig = {
 	cssPath: '/ui/css/ignite'
 };
 
-const loader = jQuery.ig.loader
+const loader = jQuery.ig.loader;
 
 Object.defineProperty(jQuery.ig,
 	"tmpl",

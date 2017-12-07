@@ -1,14 +1,9 @@
 // Poptart
 ////////////////////////////////
-import jQuery from "jquery";
-import ko from "knockout";
-import nunjucks from "nunjucks";
+import jQuery from "Lib/Poptart.jQuery";
 
 import * as RibbonMenu from "Poptart/components/Poptart.RibbonMenu";
 
-window.jQuery = jQuery;
-window.ko = ko;
-window.nunjucks = nunjucks;
 
 // Public properties
 //////////////////////

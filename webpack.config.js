@@ -34,9 +34,10 @@ const sharedConfig = {
 			minChunks: 2
 		})
 	]*/
-}
+};
 
-const topLevelPackagesConfig = Object.assign({
+const topLevelPackagesConfig = Object.assign(
+	{
 		entry: {
 			Account: "./modules/account/scripts/Poptart.Account.js",
 			Dashboard: "./modules/dashboard/scripts/Poptart.Dashboard.js"
@@ -51,7 +52,8 @@ const topLevelPackagesConfig = Object.assign({
 	sharedConfig
 );
 
-const monitorPackagesConfig = Object.assign({
+const monitorPackagesConfig = Object.assign(
+	{
 		entry: {
 			Account: "./modules/monitors/account/scripts/Poptart.Monitor.Account.js",
 			Security: "./modules/monitors/security/scripts/Poptart.Monitor.Security.js"
@@ -69,4 +71,4 @@ const monitorPackagesConfig = Object.assign({
 module.exports = [
 	topLevelPackagesConfig,
 	monitorPackagesConfig
-]
+];

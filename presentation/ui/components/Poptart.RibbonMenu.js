@@ -1,7 +1,7 @@
 // Poptart.RibbonMenu
 ////////////////////////////////
 
-import jQuery from "jquery";
+import jQuery from "Lib/Poptart.jQuery";
 
 
 var ribbonMenus = {},
