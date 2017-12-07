@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 		sync: {
 			build: {
 				cwd: baseUIPath,
-				src: ['**', '!**/*.js'],
+				src: ['**'],
 				dest: path.join('presentation', 'static', 'ui'),
 				expand: true
 			}
