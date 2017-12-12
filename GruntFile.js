@@ -34,6 +34,9 @@ module.exports = function(grunt) {
 				tasks: ['less']
 			}
 		},
+		webpack: {
+			build: require("./webpack.config.js")
+		},
 		nunjucks: {
 			precompile: {
 			}
@@ -156,11 +159,12 @@ module.exports = function(grunt) {
 	});
 
 	grunt.loadTasks('tasks');
+	grunt.loadNpmTasks('grunt-webpack');
 
 	grunt.registerTask('default', ['build-static', 'lint', 'test']);
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit', 'karma:integration']);
 	grunt.registerTask('lint', ['eslint:all']);
-	grunt.registerTask('build-static', ['sync', 'nunjucks-precompile-mapping', 'nunjucks', 'cssmin']);
+	grunt.registerTask('build-static', ['sync', 'webpack:build', 'nunjucks-precompile-mapping', 'nunjucks', 'cssmin']);
 
 	/*grunt.event.on('watch', function(action, filepath, target) {
 
