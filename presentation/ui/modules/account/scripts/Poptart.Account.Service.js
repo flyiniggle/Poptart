@@ -1,23 +1,20 @@
 // Poptart.Account.Service
 ////////////////////////////////
-import jQuery from "jquery";
-
-import * as Poptart from "Poptart/poptart"
-import { loaderConfig, constants } from "Poptart/components/Poptart.Ignite.Adding";
-import { Service, AsyncService } from "Poptart/components/Poptart.Services";
+import { AsyncService } from "Poptart/components/Poptart.Services";
 
 
 const SummaryService = Object.create(AsyncService, {});
+
 SummaryService.get = function(accountId) {
 	return this.promiseMe({
-		url: "/account/" + accountId + "/data"
-	}).then(function(data) {
-		data = data.account;
+		url: `/account/${accountId}/data`
+	}).then(function(data = {}) {
+		data = data.account || {};
 		return {
-			account: data.name,
-			description: data.description,
-			manager: data.manager,
-			client: data.client_1_id
+			account: data.name || "not available",
+			description: data.description || "",
+			manager: data.manager || "not available",
+			client: data.client_1_id || "not available"
 		};
 	}).catch(function(error) {
 		return alert(error);
@@ -29,8 +26,8 @@ const HoldingsService = Object.create(AsyncService, {});
 
 HoldingsService.get = function(accountId) {
 	return this.promiseMeACache({
-		url: "/account/" + accountId + "/holdings"
-	}).then(function(data) {
+		url: `/account/${accountId}/holdings`
+	}).then(function(data = []) {
 		return data.map(function(record) {
 			var sec = record.security;
 
@@ -54,7 +51,7 @@ HoldingsService.get = function(accountId) {
 HoldingsService.set = function(accountId, data) {
 
 	return this.promiseMe({
-		url: "/account/" + accountId,
+		url: `/account/${accountId}`,
 		type: "POST",
 		data: JSON.stringify(data)
 	}).then(function(data) {
@@ -70,7 +67,7 @@ const SecuritiesService = Object.create(AsyncService, {});
 SecuritiesService.get = function() {
 	return this.promiseMeACache({
 		url: "/account/securities"
-	}).then(function(data) {
+	}).then(function(data = []) {
 		return data.map(function(sec) {
 
 			return {
@@ -93,12 +90,11 @@ const AlertsService = Object.create(AsyncService, {});
 AlertsService.get = function(accountId) {
 
 	return this.promiseMe({
-		url: "/account/" + accountId + "/data"
-	}).then(function(data) {
-		return data.alerts;
-	}).catch(function(error) {
-		return alert(error);
-	});
+		url: `/account/${accountId}/data`
+	})
+	.then(data => data.alerts)
+	.catch(error => alert(error));
+
 }.bind(AlertsService);
 
 export {
@@ -106,4 +102,4 @@ export {
 	HoldingsService,
 	AlertsService,
 	SecuritiesService
-}
+};

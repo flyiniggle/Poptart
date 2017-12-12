@@ -32,16 +32,16 @@ const Service = {
 const AsyncService = Object.create(Service);
 
 AsyncService.promiseMeACache = function(options) {
-	var promise, cache;
+	var promise, cache, config;
 
-	jQuery.extend({
+	config = Object.assign({
 		type: "GET",
 		accept: "application/json",
 		contentType: "application/json"
 	}, options);
 
 	if(!promise) {
-		promise = Promise.resolve(jQuery.ajax(options)).catch(function(e) {
+		promise = Promise.resolve(jQuery.ajax(config)).catch(function(e) {
 			this.handleServerError(e);
 			return;
 		}.bind(this)).then(function(data) {
@@ -50,7 +50,7 @@ AsyncService.promiseMeACache = function(options) {
 		});
 
 		return promise;
-	} else if (!promise.isFulfilled()) {
+	} else if(!promise.isFulfilled()) {
 		return promise;
 	}
 
@@ -58,18 +58,17 @@ AsyncService.promiseMeACache = function(options) {
 };
 
 AsyncService.promiseMe = function(options) {
-	jQuery.extend({
+	var config = Object.assign({
 		type: "GET",
 		accept: "application/json",
 		contentType: "application/json"
 	}, options);
 
-	return Promise.resolve(jQuery.ajax(options)).catch(function(e) {
+	return Promise.resolve(jQuery.ajax(config))
+	.catch(function(e) {
 		this.handleServerError(e);
 		return;
-	}.bind(this)).then(function(data) {
-		return data;
-	});
+	}.bind(this));
 };
 
 export { Service, AsyncService };

@@ -8,7 +8,11 @@ import * as Poptart from "Poptart/poptart";
 import { SummaryService, SecuritiesService, HoldingsService, AlertsService} from "Poptart/modules/account/scripts/Poptart.Account.Service";
 
 
-const accountId = window.location.href.split("/").pop();
+var accountId;
+
+function setAccountId(acctId) {
+	accountId = parseInt(acctId);
+}
 
 function displayAccountSummary(data) {
 	jQuery("#accountName").html(data.account);
@@ -282,4 +286,9 @@ const update = function() {
 
 };
 
-export { init, updateHoldings, update };
+export {
+	init,
+	updateHoldings,
+	update,
+	setAccountId
+};

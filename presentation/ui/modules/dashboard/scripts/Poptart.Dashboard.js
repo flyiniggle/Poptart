@@ -6,7 +6,7 @@ import { nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
 import * as Poptart from "Poptart/poptart";
 
 const init = function() {
-	Poptart.init()
+	Poptart.init();
 
 	Promise.resolve(jQuery.ajax({
 		url: "/summary/account",
