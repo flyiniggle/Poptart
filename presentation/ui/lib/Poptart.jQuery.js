@@ -2,6 +2,7 @@
 ////////////////////////////////
 import jQuery from "jquery";
 
-window.jQuery = window.$ = jQuery;
+window.jQuery = jQuery;
+window.$ = jQuery;
 
 export default jQuery;

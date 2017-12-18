@@ -1,3 +1,9 @@
+import jQuery from "Lib/Poptart.jQuery.js";
+
+import * as Poptart from "Poptart/poptart";
+import { loader, loaderConfig } from "Lib/Poptart.Ignite";
+
+
 var assert = chai.assert;
 
 describe("Poptart", function() {
@@ -16,70 +22,78 @@ describe("Poptart", function() {
 				tableEle.appendTo(jQuery("body"));
 			});
 
-			beforeEach(function() {
+			beforeEach(function(done) {
+				const configInstance = Object.create(loaderConfig, {});
 
-				tableEle.igGrid({
-					dataSource: [],
-					dataSourceType: "json",
-					primaryKey: "pk",
-					columns: [
-						{headerText: "number", key: "number", dataType: "number"},
-						{headerText: "text", key: "text", dataType: "string"},
-						{headerText: "bool", key: "bool", dataType: "bool"},
-						{headerText: "template", key: "template", dataType: "string", template: "{{template}} template!"},
-						{
-							headerText: "formula",
-							key: "formula",
-							dataType: "number",
-							unbound: true,
-							formula: function(row) {
-								return row ? row.formulaHelper : "";
-							}
-						},
-						{
-							headerText: "object",
-							key: "object",
-							dataType: "object",
-							mapper: function(obj) {
-								return obj ? obj.testKey : "";
-							}
-						},
-						{headerText: "readonly", key: "readonly", dataType: "text"},
-						{headerText: "default", key: "default", dataType: "text"},
-						{headerText: "required", key: "required", dataType: "text"},
-						{headerText: "pk", key: "pk", dataType: "number"},
-						{headerText: "formulaHelper", key: "formulaHelper", dataType: "string", hidden: true}
-					],
-					features: [
-						{
-							name: "Adding",
-							columnSettings: [
-								{columnKey: "number", editorType: "numeric", readOnly: false},
-								{columnKey: "text", editorType: "text", readOnly: false},
-								{columnKey: "bool", editorType: "checkbox", readOnly: false},
-								{columnKey: "object", editorType: "combo", readOnly: false},
-								{columnKey: "readonly", readOnly: true},
-								{columnKey: "default", readOnly: true, default: "default text!"},
-								{columnKey: "required", editorType: "text", readOnly: false, required: true, default: "placeholder to keep older tests from breaking"},
-								{columnKey: "template", readOnly: true},
-								{columnKey: "pk", readOnly: true}
-							]
-						},
-						{
-							name: "Updating",
-							enableAddRow: "false",
-							editMode: "cell",
-							columnSettings: [
-								{columnKey: "number", readOnly: false},
-								{columnKey: "text", readOnly: false},
-								{columnKey: "bool", readOnly: false},
-								{columnKey: "pk", readOnly: true}
-							]
-						}
-					]
-				});
+				configInstance.resources = "igGrid.Updating.Adding";
+				configInstance.ready = function() {
 
-				addingWidget = tableEle.data("Poptart-igGridAdding");
+					tableEle.igGrid({
+						dataSource: [],
+						dataSourceType: "json",
+						primaryKey: "pk",
+						columns: [
+							{headerText: "number", key: "number", dataType: "number"},
+							{headerText: "text", key: "text", dataType: "string"},
+							{headerText: "bool", key: "bool", dataType: "bool"},
+							{headerText: "template", key: "template", dataType: "string", template: "{{template}} template!"},
+							{
+								headerText: "formula",
+								key: "formula",
+								dataType: "number",
+								unbound: true,
+								formula: function(row) {
+									return row ? row.formulaHelper : "";
+								}
+							},
+							{
+								headerText: "object",
+								key: "object",
+								dataType: "object",
+								mapper: function(obj) {
+									return obj ? obj.testKey : "";
+								}
+							},
+							{headerText: "readonly", key: "readonly", dataType: "text"},
+							{headerText: "default", key: "default", dataType: "text"},
+							{headerText: "required", key: "required", dataType: "text"},
+							{headerText: "pk", key: "pk", dataType: "number"},
+							{headerText: "formulaHelper", key: "formulaHelper", dataType: "string", hidden: true}
+						],
+						features: [
+							{
+								name: "Adding",
+								columnSettings: [
+									{columnKey: "number", editorType: "numeric", readOnly: false},
+									{columnKey: "text", editorType: "text", readOnly: false},
+									{columnKey: "bool", editorType: "checkbox", readOnly: false},
+									{columnKey: "object", editorType: "combo", readOnly: false},
+									{columnKey: "readonly", readOnly: true},
+									{columnKey: "default", readOnly: true, default: "default text!"},
+									{columnKey: "required", editorType: "text", readOnly: false, required: true, default: "placeholder to keep older tests from breaking"},
+									{columnKey: "template", readOnly: true},
+									{columnKey: "pk", readOnly: true}
+								]
+							},
+							{
+								name: "Updating",
+								enableAddRow: "false",
+								editMode: "cell",
+								columnSettings: [
+									{columnKey: "number", readOnly: false},
+									{columnKey: "text", readOnly: false},
+									{columnKey: "bool", readOnly: false},
+									{columnKey: "pk", readOnly: true}
+								]
+							}
+						]
+					});
+
+					addingWidget = tableEle.data("Poptart-igGridAdding");
+					done();
+				};
+				loader(configInstance);
+
 			});
 
 			afterEach(function() {

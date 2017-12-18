@@ -14,25 +14,30 @@ const constants = {
 };
 
 const loaderConfig = {
-	scriptPath: '/ui/scripts/ignite',
+	scriptPath: '/ui/scripts/Ignite',
 	cssPath: '/ui/css/ignite'
 };
 
-const loader = jQuery.ig.loader;
+var loaderFunction = jQuery.ig.loader;
 
-Object.defineProperty(jQuery.ig,
-	"tmpl",
-	{
-		value: function(template, data) {
+const loader = function(config) {
+	var callback = config.ready;
+
+	config.ready = function() {
+		jQuery.ig.tmpl = function(template, data) {
 			try {
+				//Throws an error if a named template is not found
 				return nunjucksEnvironment.render(template, data);
 			} catch(e) {
 				return nunjucks.renderString(template, data);
 			}
-		},
-		configurable: false
-	}
-);
+		};
+
+		callback();
+	};
+
+	loaderFunction(config);
+};
 
 jQuery.ig.dependencies.push({
 	widget: "Adding",

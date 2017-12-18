@@ -102,14 +102,28 @@ module.exports = function(grunt) {
 			unit: {
 				options: {
 					files: [
-						{pattern: './static/ui/scripts/*.js', noCache: true},
-						{pattern: './static/ui/scripts/Ignite/*.js', noCache: true},
-						{pattern: './static/ui/scripts/Ignite/modules/*.js', noCache: true},
-						{pattern: './static/ui/poptart.min.js', noCache: true},
-						{pattern: './static/ui/**/*.min.js', noCache: true},
-						{pattern: './static/ui/components/**/*.min.js', noCache: true},
-						{pattern: './static/ui/modules/**/*.min.js', noCache: true},
-						{pattern: './test/client/unit/**/*.js', noCache: true}
+						{pattern: './static/ui/polyfills.js', noCache: true},
+						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
+						{
+							pattern: './static/ui/scripts/Ignite/**/*.js',
+							noCache: true,
+							served: true,
+							included: false
+						},
+						{
+							pattern: './static/ui/css/ignite/**/*.*',
+							noCache: true,
+							served: true,
+							included: false
+						},
+						{
+							pattern: './static/ui/components/Poptart.Ignite.Adding.min.js',
+							noCache: true,
+							served: true,
+							included: false
+						},
+						{pattern: 'test/client/unit/**/*.js', noCache: true},
+						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
 					],
 					browsers: ['PhantomJS'],
 					singleRun: true
@@ -118,14 +132,10 @@ module.exports = function(grunt) {
 			integration: {
 				options: {
 					files: [
-						{pattern: './static/ui/scripts/*.js', noCache: true},
-						{pattern: './static/ui/scripts/Ignite/*.js', noCache: true},
-						{pattern: './static/ui/scripts/Ignite/modules/*.js', noCache: true},
-						{pattern: './static/ui/poptart.min.js', noCache: true},
-						{pattern: './static/ui/**/*.min.js', noCache: true},
-						{pattern: './static/ui/components/**/*.min.js', noCache: true},
-						{pattern: './static/ui/modules/**/*.min.js', noCache: true},
-						{pattern: './test/client/integration/*.js', noCache: true}
+						{pattern: './static/ui/polyfills.js', noCache: true},
+						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
+						{pattern: './test/client/integration/*.min.js', noCache: true},
+						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
 					],
 					browsers: ['PhantomJS'],
 					singleRun: true
@@ -134,14 +144,11 @@ module.exports = function(grunt) {
 			dev: {
 				options: {
 					files: [
-						{pattern: 'static/ui/scripts/*.js', noCache: true},
-						{pattern: 'static/ui/scripts/Ignite/*.js', noCache: true},
-						{pattern: 'static/ui/scripts/Ignite/modules/*.js', noCache: true},
-						{pattern: 'static/ui/poptart.min.js', noCache: true},
-						{pattern: 'static/ui/**/*.min.js', noCache: true},
-						{pattern: 'static/ui/components/**/*.min.js', noCache: true},
-						{pattern: 'static/ui/modules/**/*.min.js', noCache: true},
-						{pattern: 'test/client/**/*.js', noCache: true}
+						{pattern: './static/ui/polyfills.js', noCache: true},
+						{pattern: './static/ui/scripts/Ignite/*.js', noCache: true},
+						{pattern: './static/ui/scripts/Ignite/modules/*.js', noCache: true},
+						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
+						{pattern: 'test/client/**/*.min.js', noCache: true}
 					],
 					browsers: ['PhantomJS'],
 					singleRun: false
