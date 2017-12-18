@@ -117,7 +117,7 @@ module.exports = function(grunt) {
 							included: false
 						},
 						{
-							pattern: './static/ui/components/Poptart.Ignite.Adding.min.js',
+							pattern: './static/ui/components/Poptart.Ignite.Adding.*',
 							noCache: true,
 							served: true,
 							included: false

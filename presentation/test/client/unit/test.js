@@ -18,14 +18,13 @@ describe("Poptart", function() {
 			var tableEle, addingWidget;
 
 			before(function() {
-				tableEle = jQuery("<table></table>");
+				tableEle = jQuery("<table id='test'></table>");
 				tableEle.appendTo(jQuery("body"));
 			});
-
 			beforeEach(function(done) {
 				const configInstance = Object.create(loaderConfig, {});
 
-				configInstance.resources = "igGrid.Updating.Adding";
+				configInstance.resources = "igGrid.Updating.Adding, igCombo";
 				configInstance.ready = function() {
 
 					tableEle.igGrid({
@@ -98,6 +97,8 @@ describe("Poptart", function() {
 
 			afterEach(function() {
 				tableEle.igGrid("destroy");
+				tableEle.remove();
+				jQuery(".ui-iggrid-adding-add-row-button-container").remove();
 			});
 
 			describe("#model", function() {

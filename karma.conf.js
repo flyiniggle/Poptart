@@ -51,7 +51,10 @@ module.exports = function(config) {
 			'karma-chai',
 			'karma-sinon',
 			'karma-jquery-chai',
-			'karma-phantomjs-launcher'
+			'karma-phantomjs-launcher',
+			'karma-chrome-launcher',
+			'karma-firefox-launcher',
+			'karma-edge-launcher'
 		],
 
 		// test results reporter to use
