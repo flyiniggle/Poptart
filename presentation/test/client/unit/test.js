@@ -24,7 +24,7 @@ describe("Poptart", function() {
 			beforeEach(function(done) {
 				const configInstance = Object.create(loaderConfig, {});
 
-				configInstance.resources = "igGrid.Updating.Adding, igCombo";
+				configInstance.resources = "igGrid.Updating.Adding,igCombo";
 				configInstance.ready = function() {
 
 					tableEle.igGrid({
@@ -97,7 +97,6 @@ describe("Poptart", function() {
 
 			afterEach(function() {
 				tableEle.igGrid("destroy");
-				tableEle.remove();
 				jQuery(".ui-iggrid-adding-add-row-button-container").remove();
 			});
 
