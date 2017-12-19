@@ -1,4 +1,5 @@
 const path = require("path");
+const webpackConfig = require("./webpack.config.js");
 
 module.exports = function(grunt) {
 	require('jit-grunt')(grunt);
@@ -9,6 +10,12 @@ module.exports = function(grunt) {
 	// Project configuration.
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
+		concurrent: {
+			options: {
+				logConcurrentOutput: true
+			},
+			dev: ['webpack:watch', 'watch']
+		},
 		sync: {
 			build: {
 				cwd: baseUIPath,
@@ -35,7 +42,8 @@ module.exports = function(grunt) {
 			}
 		},
 		webpack: {
-			build: require("./webpack.config.js")
+			watch: webpackConfig.map(config => Object.assign({ watch: true, progress: true }, config)),
+			build: webpackConfig.map(config => Object.assign({ progress: false }, config))
 		},
 		nunjucks: {
 			precompile: {
@@ -180,6 +188,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['build-static', 'eslint', 'test']);
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit', 'karma:integration']);
 	grunt.registerTask('build-static', ['sync', 'webpack:build', 'nunjucks-precompile-mapping', 'nunjucks', 'cssmin']);
+	grunt.registerTask('dev', 'concurrent');
 
 	/*grunt.event.on('watch', function(action, filepath, target) {
 
