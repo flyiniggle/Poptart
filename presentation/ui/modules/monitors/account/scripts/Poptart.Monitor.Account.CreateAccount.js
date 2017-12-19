@@ -386,4 +386,4 @@ function calculateHoldingsModel() {
 export {
 	init,
 	submit
-}
+};

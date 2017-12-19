@@ -7,7 +7,7 @@ import * as Poptart from "Poptart/poptart";
 import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
 import * as CreateAccountModule from "Poptart/modules/monitors/account/scripts/Poptart.Monitor.Account.CreateAccount";
 
-var accountList
+var accountList;
 
 //Public Methods
 //////////////////
@@ -149,7 +149,7 @@ function launchAccount() {
 	jQuery("#am_accountLauncher").attr("action", "/account/" + pk).submit();
 };
 
- function setAccountList(al = []) {
+function setAccountList(al = []) {
 	accountList = al;
 }
 

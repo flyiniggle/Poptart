@@ -12,15 +12,15 @@ var render = function(options) {
 		if(options.hasOwnProperty(key)) {
 			val = options[key];
 			switch(typeof val) {
-				case 'string':
-					rendered.push(key + ':' + val);
-					break;
-				case 'object':
-					rendered.push(key + ':{' + render(val) + '}');
-					break;
-				case 'function':
-					rendered.push(key + ':' + val.toString());
-					break;
+			case 'string':
+				rendered.push(key + ':' + val);
+				break;
+			case 'object':
+				rendered.push(key + ':{' + render(val) + '}');
+				break;
+			case 'function':
+				rendered.push(key + ':' + val.toString());
+				break;
 			}
 		}
 	}
@@ -136,4 +136,4 @@ ko.extenders.PercentDisplay = function(target) {
 
 window.ko = ko;
 
-export default ko
+export default ko;

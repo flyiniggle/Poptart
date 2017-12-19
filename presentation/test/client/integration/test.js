@@ -1,6 +1,5 @@
 import jQuery from "Lib/Poptart.jQuery.js";
 
-import * as Poptart from "Poptart/poptart";
 import {loader, loaderConfig} from "Lib/Poptart.Ignite";
 
 var assert = chai.assert;

@@ -71,20 +71,11 @@ module.exports = function(grunt) {
 			}
 		},
 		eslint: {
-			all: {
-				options: {
-					configFile: '.eslintrc',
-					ignorePath: '.eslintignore'
-				},
-				target: ['presentation/**/*.js', '!presentation/ui/scripts/**', '!presentation/static/**']
+			options: {
+				configFile: '.eslintrc',
+				ignorePath: '.eslintignore'
 			},
-			changed: {
-				options: {
-					configFile: '.eslintrc',
-					ignorePath: '.eslintignore',
-					fix: true
-				}
-			}
+			target: ['presentation/**/*.js', '!presentation/ui/scripts/**', '!presentation/static/**']
 		},
 		shell: {
 			test: {
@@ -186,9 +177,8 @@ module.exports = function(grunt) {
 	grunt.loadTasks('tasks');
 	grunt.loadNpmTasks('grunt-webpack');
 
-	grunt.registerTask('default', ['build-static', 'lint', 'test']);
+	grunt.registerTask('default', ['build-static', 'eslint', 'test']);
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit', 'karma:integration']);
-	grunt.registerTask('lint', ['eslint:all']);
 	grunt.registerTask('build-static', ['sync', 'webpack:build', 'nunjucks-precompile-mapping', 'nunjucks', 'cssmin']);
 
 	/*grunt.event.on('watch', function(action, filepath, target) {

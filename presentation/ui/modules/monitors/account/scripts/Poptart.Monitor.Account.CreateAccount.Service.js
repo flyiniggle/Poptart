@@ -1,9 +1,5 @@
 // Poptart.Monitor.Account.CreateAccount.Service
 ////////////////////////////////
-import jQuery from "jquery";
-import ko from "knockout";
-
-import * as Poptart from "Poptart/poptart";
 import {AsyncService} from "Poptart/components/Poptart.Services";
 
 var CreateAccountService = Object.create(AsyncService, {});
@@ -40,4 +36,4 @@ const saveAccount = function(data, holdingsData) {
 	});
 };
 
-export { saveAccount }
+export { saveAccount };

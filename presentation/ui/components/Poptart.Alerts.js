@@ -2,7 +2,7 @@
 ////////////////////////////////
 import ko from "knockout";
 
-Alerts = function(params) {
+const Alerts = function(params) {
 	var alertParams = params.alerts,
 		alertList = [],
 		alertParam, i;

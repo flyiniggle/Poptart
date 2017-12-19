@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = [{
 	resolve: {
 		modules: [
-			"node_modules",
+			"node_modules"
 		],
 		alias: {
 			Poptart: path.resolve(__dirname, "../ui"),
