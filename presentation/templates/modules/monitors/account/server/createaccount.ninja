@@ -2,7 +2,7 @@
 
 {% block css %}
 	{{ super() }}
-	<link href="/ui/modules/monitors/account/css/styles.css" rel="stylesheet" type="text/css"/>
+	<link href="/ui/modules/monitors/account/css/main.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block main_nav %}

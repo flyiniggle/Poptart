@@ -1,5 +1,10 @@
 {% extends "BaseLayout.ninja" %}
 
+{% block css %}
+	{{ super() }}
+	<link href="/ui/modules/dashboard/css/main.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
 {%  block main_nav %}
 	<a class="navigationLink" href="/monitors/account">Account Monitor</a>
 	<a class="navigationLink" href="/monitors/security">Security Monitor</a>
@@ -27,9 +32,6 @@
 	{{ super() }}
 	<script type="text/javascript" src="/ui/modules/Dashboard/scripts/main.js"></script>
 	<script type="text/javascript">
-		window.onload = function() {
-			Poptart.Dashboard.init();
-		};
+		window.onload = Poptart.Dashboard.init;
 	</script>
-	<script type="text/javascript" src="/ui/scripts/ignite/infragistics.loader.js"></script>
 {% endblock %}

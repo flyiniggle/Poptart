@@ -5,6 +5,9 @@ import { nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
 
 import * as Poptart from "Poptart/poptart";
 
+import "Poptart/css/main";
+
+
 const init = function() {
 	Poptart.init();
 

@@ -16,10 +16,6 @@
 	<link href="/ui/css/jquery-ui/custom/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css"/>
 
 	{% block css %}
-		<link href="/ui/css/styles.min.css" rel="stylesheet" type="text/css"/>
-		<link href="/ui/css/text.min.css" rel="stylesheet" type="text/css"/>
-		<link href="/ui/css/forms.min.css" rel="stylesheet" type="text/css"/>
-		<link href="/ui/css/override.min.css" rel="stylesheet" type="text/css"/>
 	{% endblock %}
 </head>
 <body>

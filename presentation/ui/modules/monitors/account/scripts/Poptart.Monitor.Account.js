@@ -7,6 +7,10 @@ import * as Poptart from "Poptart/poptart";
 import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
 import * as CreateAccountModule from "Poptart/modules/monitors/account/scripts/Poptart.Monitor.Account.CreateAccount";
 
+import "Poptart/css/main";
+import "Poptart/modules/account/css/styles.css";
+
+
 var accountList;
 
 //Public Methods

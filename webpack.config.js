@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const sharedConfig = {
 	context: __dirname + "/presentation/ui/",
@@ -12,6 +13,15 @@ const sharedConfig = {
 		}
 	},
 	module: {
+		rules: [
+			{
+				test: /\.css$/,
+				use: ExtractTextPlugin.extract({
+					fallback: 'style-loader',
+					use: 'css-loader'
+				})
+			}
+		],
 		loaders: [
 			{
 				test: /.js$/,
@@ -40,7 +50,10 @@ const topLevelPackagesConfig = Object.assign(
 			filename: './presentation/static/ui/modules/[name]/scripts/main.js',
 			libraryTarget: 'umd',
 			library: ['Poptart', '[name]']
-		}
+		},
+		plugins: [
+			new ExtractTextPlugin('./presentation/static/ui/modules/[name]/css/main.css')
+		]
 	},
 	sharedConfig
 );
@@ -56,7 +69,10 @@ const monitorPackagesConfig = Object.assign(
 			filename: './presentation/static/ui/modules/monitors/[name]/scripts/main.js',
 			libraryTarget: 'umd',
 			library: ['Poptart', 'Monitor', '[name]']
-		}
+		},
+		plugins: [
+			new ExtractTextPlugin('./presentation/static/ui/modules/monitors/[name]/css/main.css')
+		]
 	},
 	sharedConfig
 );

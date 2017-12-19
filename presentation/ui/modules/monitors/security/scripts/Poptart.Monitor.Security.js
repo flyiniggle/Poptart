@@ -5,6 +5,8 @@ import jQuery from "Lib/Poptart.jQuery";
 import * as Poptart from "Poptart/poptart";
 import { loaderConfig, loader } from "Lib/Poptart.Ignite";
 
+import "Poptart/css/main";
+
 
 var securities = [];
 

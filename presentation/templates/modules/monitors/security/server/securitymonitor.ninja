@@ -1,5 +1,10 @@
 {%  extends "BaseLayout.ninja" %}
 
+{% block css %}
+	{{ super() }}
+	<link href="/ui/modules/monitors/security/css/main.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
 {% block summary %}
 	<div>
 		<span>Total securities: </span>

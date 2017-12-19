@@ -7,6 +7,8 @@ import { loaderConfig, loader } from "Lib/Poptart.Ignite";
 import * as Poptart from "Poptart/poptart";
 import { SummaryService, SecuritiesService, HoldingsService, AlertsService} from "Poptart/modules/account/scripts/Poptart.Account.Service";
 
+import "Poptart/css/main";
+
 
 var accountId;
 

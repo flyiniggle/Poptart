@@ -7,6 +7,9 @@ import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
 import * as Poptart from "Poptart/poptart";
 import * as CreateAccountService from "Poptart/modules/monitors/account/scripts/Poptart.Monitor.Account.CreateAccount.Service";
 
+import "Poptart/modules/monitors/account/css/styles.css";
+
+
 var viewModel;
 
 //View Models
