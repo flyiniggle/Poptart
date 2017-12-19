@@ -45,7 +45,7 @@ const AccountController = function() {
 		service.post(data);
 	};
 
-	self.saveAccount = function(req, ) {
+	self.saveAccount = function(req) {
 		const data = JSON.stringify(req.body),
 			service = accountService;
 
