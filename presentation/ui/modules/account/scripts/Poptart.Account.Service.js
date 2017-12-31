@@ -27,29 +27,14 @@ const HoldingsService = Object.create(AsyncService, {});
 HoldingsService.get = function(accountId) {
 	return this.promiseMeACache({
 		url: `/account/${accountId}/holdings`
-	}).then(function(data = []) {
-		return data.map(function(record) {
-			var sec = record.security;
-
-			return {
-				pk: record.pk,
-				CUSIP: sec.CUSIP,
-				ticker: sec.ticker,
-				security: sec.description,
-				segment: sec.segment,
-				quantity: record.quantity,
-				expectedValue: record.expected_value,
-				expectedQuantity: record.expected_quantity,
-				lastPrice: sec.last_price
-			};
-		});
-	}).catch(function(error) {
+	})
+	.then(HoldingsService.formatResponse)
+	.catch(function(error) {
 		return alert(error);
 	});
 }.bind(HoldingsService);
 
 HoldingsService.set = function(accountId, data) {
-
 	return this.promiseMe({
 		url: `/account/${accountId}`,
 		type: "POST",
@@ -60,6 +45,24 @@ HoldingsService.set = function(accountId, data) {
 		return alert(error);
 	});
 }.bind(HoldingsService);
+
+HoldingsService.formatResponse = function(data = []) {
+	return data.map(function(record) {
+		var sec = record.security;
+
+		return {
+			pk: record.pk,
+			CUSIP: sec.CUSIP,
+			ticker: sec.ticker,
+			security: sec.description,
+			segment: sec.segment,
+			quantity: record.quantity,
+			expectedValue: record.expected_value,
+			expectedQuantity: record.expected_quantity,
+			lastPrice: sec.last_price
+		};
+	});
+}
 
 
 const SecuritiesService = Object.create(AsyncService, {});
