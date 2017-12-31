@@ -1,10 +1,11 @@
-(function() {
-	"use strict";
+import jQuery from "Lib/Poptart.jQuery.js";
 
+
+(function() {
 	var addingRowIdPrefix = "addingRow",
 		addingWidget, dataModel, validationService, defaultValues;
 
-	var Failure = function(key, displayName, reason) {
+	const Failure = function(key, displayName, reason) {
 		this.key = key;
 		this.displayName = displayName;
 		this.reason = reason;

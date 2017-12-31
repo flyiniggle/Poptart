@@ -3,7 +3,7 @@ import jQuery from "Lib/Poptart.jQuery.js";
 import * as Poptart from "Poptart/poptart";
 import { loader, loaderConfig } from "Lib/Poptart.Ignite";
 
-import { HoldingsService } from "Poptart/modules/account/scripts/Poptart.Account.Service";
+import { HoldingsService, SecuritiesService } from "Poptart/modules/account/scripts/Poptart.Account.Service";
 
 
 var assert = chai.assert;
@@ -61,6 +61,28 @@ describe("Poptart", function() {
 				`Expected a lastPrice of ${testData.security.last_price} but got ${formattedData.lastPrice}.`);
 		})
 	})
+
+	describe("SecuritiesService", function() {
+		it("Should return a formatted object.", function() {
+			let testData = {
+				pk: 1,
+				CUSIP: 1234,
+				ticker: "IBM",
+				decription: "This, too, is a great description.",
+				segment: "Equity",
+				last_price: 50.12
+			};
+			let formattedReponse = SecuritiesService.formatResponse([testData])[0];
+
+			assert.equal(formattedReponse.pk, testData.pk);
+			assert.equal(formattedReponse.CUSIP, testData.CUSIP);
+			assert.equal(formattedReponse.ticker, testData.ticker);
+			assert.equal(formattedReponse.security, testData.description);
+			assert.equal(formattedReponse.segment, testData.segment);
+			assert.equal(formattedReponse.lastPrice, testData.last_price);
+
+		})
+	});
 
 	describe("#infragistics", function() {
 		describe("#tableAdding", function() {
