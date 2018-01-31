@@ -1,11 +1,8 @@
-import jQuery from "Lib/Poptart.jQuery.js";
-
-
 (function() {
 	var addingRowIdPrefix = "addingRow",
 		addingWidget, dataModel, validationService, defaultValues;
 
-	const Failure = function(key, displayName, reason) {
+	var Failure = function(key, displayName, reason) {
 		this.key = key;
 		this.displayName = displayName;
 		this.reason = reason;

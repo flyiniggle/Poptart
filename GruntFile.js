@@ -43,7 +43,8 @@ module.exports = function(grunt) {
 		},
 		webpack: {
 			watch: webpackConfig.map(config => Object.assign({ watch: true, progress: true }, config)),
-			build: webpackConfig.map(config => Object.assign({ progress: false }, config))
+			build: webpackConfig.map(config => Object.assign({ progress: false }, config)),
+			ignite: webpackConfig[2]
 		},
 		nunjucks: {
 			precompile: {
@@ -102,6 +103,7 @@ module.exports = function(grunt) {
 				options: {
 					files: [
 						{pattern: './static/ui/polyfills.js', noCache: true},
+						{pattern: './static/ui/scripts/jquery-ui-1.10.4.custom.min.js', noCache: true},
 						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
 						{
 							pattern: './static/ui/scripts/Ignite/**/*.js',
@@ -116,15 +118,15 @@ module.exports = function(grunt) {
 							included: false
 						},
 						{
-							pattern: './static/ui/components/Poptart.Ignite.Adding.*',
+							pattern: './static/ui/components/Poptart.Ignite.Adding.min.*',
 							noCache: true,
 							served: true,
 							included: false
 						},
-						{pattern: 'test/client/unit/**/*.js', noCache: true},
+						{pattern: 'test/client/unit/**/test.js', noCache: true},
 						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
 					],
-					browsers: ['PhantomJS'],
+					browsers: ['ChromeHeadless'],
 					singleRun: true
 				}
 			},
@@ -146,12 +148,12 @@ module.exports = function(grunt) {
 							included: false
 						},
 						{
-							pattern: './static/ui/components/Poptart.Ignite.Adding.*',
+							pattern: './static/ui/components/Poptart.Ignite.Adding.min.*',
 							noCache: true,
 							served: true,
 							included: false
 						},
-						{pattern: './test/client/integration/**/*.js', noCache: true},
+						{pattern: './test/client/integration/**/*min.js', noCache: true},
 						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
 					],
 					browsers: ['PhantomJS'],
@@ -170,6 +172,42 @@ module.exports = function(grunt) {
 					browsers: ['PhantomJS'],
 					singleRun: false
 				}
+			},
+			igUnit: {
+					options: {
+						files: [
+							{pattern: './static/ui/polyfills.js', noCache: true},
+							{pattern: './static/ui/scripts/bluebird.js', noCache: true},
+							{pattern: '../node_modules/jquery/dist/jquery.min.js', noCache: true},
+							{pattern: '../node_modules/jqueryui/jquery-ui.min.js', noCache: true},
+							{pattern: '../node_modules/nunjucks/browser/nunjucks.js', noCache: true},
+							{pattern: './ui/scripts/Ignite/*.js', noCache: true},
+							{pattern: './ui/scripts/Ignite/modules/*.js', noCache: true},
+							{pattern: './ui/components/Poptart.Ignite.Adding.js', noCache: true},
+							{pattern: './ui/components/**/*.test.js', noCache: true},
+							{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
+						],
+						browsers: ['PhantomJS'],
+						singleRun: true
+				}
+			},
+			igIntegration: {
+				options: {
+					files: [
+						{pattern: './static/ui/polyfills.js', noCache: true},
+						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
+						{pattern: '../node_modules/jquery/dist/jquery.min.js', noCache: true},
+						{pattern: '../node_modules/jqueryui/jquery-ui.min.js', noCache: true},
+						{pattern: '../node_modules/nunjucks/browser/nunjucks.js', noCache: true},
+						{pattern: './ui/scripts/Ignite/*.js', noCache: true},
+						{pattern: './ui/scripts/Ignite/modules/*.js', noCache: true},
+						{pattern: './ui/components/Poptart.Ignite.Adding.js', noCache: true},
+						{pattern: './ui/components/**/*.spec.js', noCache: true},
+						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
+					],
+					browsers: ['PhantomJS'],
+					singleRun: true
+				}
 			}
 		},
 		mochaTest: {
@@ -186,8 +224,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-webpack');
 
 	grunt.registerTask('default', ['build-static', 'eslint', 'test']);
-	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit', 'karma:integration']);
-	grunt.registerTask('build-static', ['sync', 'webpack:build', 'nunjucks-precompile-mapping', 'nunjucks', 'cssmin']);
+	grunt.registerTask('test-infragistics', ['karma:igUnit', 'karma:igIntegration'])
+	grunt.registerTask('test', ['shell:test', 'webpack:ignite', 'mochaTest:unit', 'karma:unit', 'karma:integration', 'test-infragistics']);
+	grunt.registerTask('build-static', ['sync', 'webpack:ignite', 'webpack:build', 'nunjucks-precompile-mapping', 'nunjucks', 'cssmin']);
 	grunt.registerTask('dev', 'concurrent');
 
 	/*grunt.event.on('watch', function(action, filepath, target) {

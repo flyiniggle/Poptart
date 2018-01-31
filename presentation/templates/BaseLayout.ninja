@@ -73,6 +73,7 @@
 
 	<!-- JS -->
 	{% block js_libraries %}
+		<script type="text/javascript" src="/ui/scripts/jquery-ui-1.10.4.custom.min.js"></script>
 		<script type="text/javascript" src="/ui/scripts/bluebird.js"></script>
 	{% endblock %}
 

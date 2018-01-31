@@ -24,11 +24,11 @@ const sharedConfig = {
 		],
 		loaders: [
 			{
-				test: /.js$/,
+				test: /\.js$/,
 				loader: 'babel-loader',
 				exclude: /node_modules/,
 				query: {
-					presets: ['es2015']
+					presets: ['env']
 				}
 			},
 			{
@@ -77,29 +77,7 @@ const monitorPackagesConfig = Object.assign(
 	sharedConfig
 );
 
-const igniteExtensionsPackageConfig = Object.assign(
-	{
-		entry: {
-			Adding: "./components/Poptart.Ignite.Adding.js"
-		},
-		output: {
-			path: __dirname,
-			filename: "./presentation/static/ui/components/Poptart.Ignite.Adding.js"
-		},
-
-		plugins: [
-			new webpack.optimize.CommonsChunkPlugin({
-				name: "Adding",
-				filename: "./presentation/static/ui/components/Poptart.Ignite.Adding.min.js",
-				minChunks: 0
-			})
-		 ]
-	},
-	sharedConfig
-);
-
 module.exports = [
 	topLevelPackagesConfig,
-	monitorPackagesConfig,
-	igniteExtensionsPackageConfig
+	monitorPackagesConfig
 ];

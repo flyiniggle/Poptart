@@ -25,9 +25,7 @@ module.exports = function(config) {
 
 		// preprocess matching files before serving them to the browser
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-		preprocessors: {
-			'./**/test.js': ['webpack']
-		},
+		/*
 
 		webpack: {
 			module: webpackTestConfig[0].module,
@@ -41,12 +39,12 @@ module.exports = function(config) {
 			// and use stats to turn off verbose output
 			stats: {
 				// options i.e.
-				chunks: false
+				chunks: true
 			}
-		},
+		},*/
 
 		plugins: [
-			require("karma-webpack"),
+			//require("karma-webpack"),
 			'karma-mocha',
 			'karma-chai',
 			'karma-sinon',

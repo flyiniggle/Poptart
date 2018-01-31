@@ -62,7 +62,7 @@ HoldingsService.formatResponse = function(data = []) {
 			lastPrice: sec.last_price
 		};
 	});
-}
+};
 
 
 const SecuritiesService = Object.create(AsyncService, {});
@@ -70,23 +70,25 @@ const SecuritiesService = Object.create(AsyncService, {});
 SecuritiesService.get = function() {
 	return this.promiseMeACache({
 		url: "/account/securities"
-	}).then(function(data = []) {
-		return data.map(function(sec) {
-
-			return {
-				pk: sec.pk,
-				CUSIP: sec.CUSIP,
-				ticker: sec.ticker,
-				security: sec.description,
-				segment: sec.segment,
-				lastPrice: sec.last_price
-			};
-		});
-	}).catch(function(error) {
+	})
+	.then(SecuritiesService.formatResponse)
+	.catch(function(error) {
 		return alert(error);
 	});
 }.bind(SecuritiesService);
 
+SecuritiesService.formatResponse = function(data = []) {
+	return data.map(function(sec) {
+		return {
+			pk: sec.pk,
+			CUSIP: sec.CUSIP,
+			ticker: sec.ticker,
+			security: sec.description,
+			segment: sec.segment,
+			lastPrice: sec.last_price
+		};
+	});
+};
 
 const AlertsService = Object.create(AsyncService, {});
 

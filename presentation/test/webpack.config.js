@@ -1,6 +1,10 @@
 const path = require('path');
 
 module.exports = [{
+	entry: {
+		integration: path.resolve(__dirname, "client", "integration", "test.js"),
+		unit: path.resolve(__dirname, "client", "unit", "test.js")
+	},
 	resolve: {
 		modules: [
 			"node_modules"
@@ -11,17 +15,14 @@ module.exports = [{
 			Lib: path.resolve(__dirname, "../ui/lib")
 		}
 	},
-	output: {
-		filename: 'test.min.js'
-	},
 	module: {
 		loaders: [
 			{
-				test: /.js$/,
+				test: /\.js$/,
 				loader: 'babel-loader',
 				exclude: /node_modules/,
 				query: {
-					presets: ['es2015']
+					presets: ['env']
 				}
 			},
 			{
