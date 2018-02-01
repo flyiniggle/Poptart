@@ -1,35 +1,44 @@
-Poptart.Dashboard = function() {
-	var ReturnObj = {};
+// Poptart.Dashboard
+////////////////////////////////
+import jQuery from "Lib/Poptart.jQuery";
+import { nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
 
-	ReturnObj.init = function() {
+import * as Poptart from "Poptart/poptart";
 
-		Promise.resolve(jQuery.ajax({
-			url: "/summary/account",
-			accepts: "application/json"
-		})).then(showAccountSummary)
-			.catch(function(e) {
-				alert(e);
-			});
+import "Poptart/css/main";
 
-		Promise.resolve(jQuery.ajax({
-			url: "/summary/security",
-			accepts: "application/json"
-		})).then(showSecuritySummary)
-			.catch(function(e) {
-				alert(e);
-			});
-	};
 
-	function showAccountSummary(data) {
+const init = function() {
+	Poptart.init();
 
-		jQuery("#accountCount").html(data.totalCount);
-		jQuery("#accountUpdated").html(data.recentAccounts);
-		jQuery("#alertsContent").append(Poptart.nunjucks.render("presentation/templates/components/alerts/shared/alerts.ninja", data));
-	}
+	Promise.resolve(jQuery.ajax({
+		url: "/summary/account",
+		accepts: "application/json"
+	}))
+		.then(showAccountSummary)
+		.catch(function(e) {
+			alert(e);
+		});
 
-	function showSecuritySummary(data) {
-		jQuery("#securityCount").html(data.totalCount);
-	}
+	Promise.resolve(jQuery.ajax({
+		url: "/summary/security",
+		accepts: "application/json"
+	}))
+		.then(showSecuritySummary)
+		.catch(function(e) {
+			alert(e);
+		});
+};
 
-	return ReturnObj;
-}();
+function showAccountSummary(data) {
+	jQuery("#accountCount").html(data.totalCount);
+	jQuery("#accountUpdated").html(data.recentAccounts);
+	jQuery("#alertsContent").append(nunjucksEnvironment.render("presentation/templates/components/alerts/shared/alerts.ninja", data));
+}
+
+function showSecuritySummary(data) {
+	jQuery("#securityCount").html(data.totalCount);
+}
+
+export { init };
+

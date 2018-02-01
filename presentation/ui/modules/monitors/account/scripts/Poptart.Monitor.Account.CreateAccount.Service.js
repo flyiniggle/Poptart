@@ -1,42 +1,40 @@
-Poptart.Monitor.Account.CreateAccount.Service = function() {
-	var ReturnObj = Object.create(Poptart.Services.Service, {});
+// Poptart.Monitor.Account.CreateAccount.Service
+////////////////////////////////
+import {AsyncService} from "Poptart/components/Poptart.Services";
 
-	ReturnObj.saveAccount = function(data, holdingsData) {
-		var payload, mappedHoldingsData;
 
-		mappedHoldingsData = holdingsData.map(function(holding) {
-			return {
-				id: holding.security.pk,
-				quantity: holding.quantity,
-				expectedQuantity: holding.expectedQuantity,
-				expectedValue: holding.expectedValue
-			};
-		});
+var CreateAccountService = Object.create(AsyncService, {});
 
-		payload = {
-			"accountName": data.accountName,
-			"accountDescription": data.accountDescription,
-			"startingCash": data.startingCash,
-			"expectedCash": data.expectedCash,
-			"maxPositionDrift": data.maxPositionDrift,
-			"maxCashDrift": data.maxCashDrift,
-			"maxTotalDrift": data.maxTotalDrift,
-			"holdings": mappedHoldingsData
+const saveAccount = function(data, holdingsData) {
+	var payload, mappedHoldingsData;
+
+	mappedHoldingsData = holdingsData.map(function(holding) {
+		return {
+			id: holding.security.pk,
+			quantity: holding.quantity,
+			expectedQuantity: holding.expectedQuantity,
+			expectedValue: holding.expectedValue
 		};
+	});
 
-		return Promise.resolve(jQuery.ajax({
-			type: "POST",
-			url: "/account/create",
-			accept: "application/json",
-			contentType: "application/json",
-			data: JSON.stringify(payload)
-		})).catch(function(e) {
-			this.handleServerError(e);
-		}.bind(this)).then(function(data) {
-			return data.pk;
-		});
+	payload = {
+		"accountName": data.accountName,
+		"accountDescription": data.accountDescription,
+		"startingCash": data.startingCash,
+		"expectedCash": data.expectedCash,
+		"maxPositionDrift": data.maxPositionDrift,
+		"maxCashDrift": data.maxCashDrift,
+		"maxTotalDrift": data.maxTotalDrift,
+		"holdings": mappedHoldingsData
 	};
 
-	return ReturnObj;
+	return CreateAccountService.promiseMe({
+		type: "POST",
+		url: "/account/create",
+		data: JSON.stringify(payload)
+	}).then(function(data) {
+		return data.pk;
+	});
+};
 
-}();
+export { saveAccount };

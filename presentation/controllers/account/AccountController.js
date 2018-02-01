@@ -9,7 +9,7 @@ const AccountController = function() {
 	const self = this;
 
 	self.getAccount = function(req, res) {
-		res.render("modules/account/server/account.ninja");
+		res.render("modules/account/server/account.ninja", { id: req.params.acct_id});
 	};
 
 	self.getAccountData = function(req, res) {
@@ -45,11 +45,12 @@ const AccountController = function() {
 		service.post(data);
 	};
 
-	self.saveAccount = function(req, res) {
+	self.saveAccount = function(req) {
 		const data = JSON.stringify(req.body),
 			service = accountService;
 
 		logging.log(data);
+		logging.log(service);
 	};
 
 	// Request Callbacks

@@ -1,6 +1,12 @@
 {
   // http://eslint.org/docs/rules/
-
+  "root": true,
+  "parser": "babel-eslint",
+  "parserOptions": {
+	"sourceType": "module",
+	"allowImportExportEverywhere": false
+  },
+  "ecmaVersion": 6,
   "ecmaFeatures": {
 	"arrowFunctions": true,
 	// enable arrow functions
@@ -74,7 +80,6 @@
 	"jQuery": true,
 	"ko": true,
 	"nunjucks": true,
-	"Poptart": true,
 	"imports": true,
 	"loadPath": true,
 	"logging": true,

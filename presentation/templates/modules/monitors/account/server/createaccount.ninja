@@ -2,7 +2,7 @@
 
 {% block css %}
 	{{ super() }}
-	<link href="/ui/modules/monitors/account/css/styles.css" rel="stylesheet" type="text/css"/>
+	<link href="/ui/modules/monitors/account/css/main.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block main_nav %}
@@ -112,7 +112,7 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/ui/modules/monitors/account/scripts/Poptart.Monitors.Account.min.js"></script>
+	<script type="text/javascript" src="/ui/modules/monitors/account/scripts/main.js"></script>
 	<script type="text/javascript">
 		(function() {
 			Poptart.Monitor.Account.CreateAccount.init();

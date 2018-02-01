@@ -12,3 +12,10 @@ install:
 # command to run tests
 script:
   - grunt
+
+dist: trusty
+sudo: required
+addons:
+  chrome: stable
+before_install:
+  - google-chrome-stable --headless --disable-gpu

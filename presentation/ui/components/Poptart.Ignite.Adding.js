@@ -1,6 +1,4 @@
 (function() {
-	"use strict";
-
 	var addingRowIdPrefix = "addingRow",
 		addingWidget, dataModel, validationService, defaultValues;
 

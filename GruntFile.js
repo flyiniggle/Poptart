@@ -1,4 +1,5 @@
 const path = require("path");
+const webpackConfig = require("./webpack.config.js");
 
 module.exports = function(grunt) {
 	require('jit-grunt')(grunt);
@@ -9,10 +10,16 @@ module.exports = function(grunt) {
 	// Project configuration.
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
+		concurrent: {
+			options: {
+				logConcurrentOutput: true
+			},
+			dev: ['webpack:watch', 'watch']
+		},
 		sync: {
 			build: {
 				cwd: baseUIPath,
-				src: '**',
+				src: ['**'],
 				dest: path.join('presentation', 'static', 'ui'),
 				expand: true
 			}
@@ -20,10 +27,6 @@ module.exports = function(grunt) {
 		watch: {
 			options: {
 				spawn: false
-			},
-			js: {
-				files: ['presentation/ui/**/*.js'],
-				tasks: ['sync', 'uglify-build-all-javascript-file-mapping', 'newer:uglify']
 			},
 			nunjucks: {
 				files: ['presentation/templates/**/client/*.*', 'presentation/templates/**/shared/*.*'],
@@ -38,16 +41,10 @@ module.exports = function(grunt) {
 				tasks: ['less']
 			}
 		},
-		uglify: {
-			build: {
-				cwd: 'presentation/static/ui/',
-				extDot: 'last',
-				expand: true
-			},
-			options: {
-				sourceMap: true,
-				compress: false
-			}
+		webpack: {
+			watch: webpackConfig.map(config => Object.assign({ watch: true, progress: true }, config)),
+			build: webpackConfig.map(config => Object.assign({ progress: false }, config)),
+			ignite: webpackConfig[2]
 		},
 		nunjucks: {
 			precompile: {
@@ -83,20 +80,11 @@ module.exports = function(grunt) {
 			}
 		},
 		eslint: {
-			all: {
-				options: {
-					configFile: 'presentation/build/eslint.json',
-					ignorePath: 'presentation/build/.eslintignore'
-				},
-				target: ['presentation/**/*.js', '!presentation/ui/scripts/**', '!presentation/static/**']
+			options: {
+				configFile: '.eslintrc',
+				ignorePath: '.eslintignore'
 			},
-			changed: {
-				options: {
-					configFile: 'presentation/build/eslint.json',
-					ignorePath: 'presentation/build/.eslintignore',
-					fix: true
-				}
-			}
+			target: ['presentation/**/*.js', '!presentation/ui/scripts/**', '!presentation/static/**']
 		},
 		shell: {
 			test: {
@@ -114,49 +102,74 @@ module.exports = function(grunt) {
 			unit: {
 				options: {
 					files: [
-						{pattern: './static/ui/scripts/*.js', noCache: true},
-						{pattern: './static/ui/scripts/Ignite/*.js', noCache: true},
-						{pattern: './static/ui/scripts/Ignite/modules/*.js', noCache: true},
-						{pattern: './static/ui/poptart.min.js', noCache: true},
-						{pattern: './static/ui/**/*.min.js', noCache: true},
-						{pattern: './static/ui/components/**/*.min.js', noCache: true},
-						{pattern: './static/ui/modules/**/*.min.js', noCache: true},
-						{pattern: './test/client/unit/**/*.js', noCache: true}
+						{pattern: './static/ui/polyfills.js', noCache: true},
+						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
+						{pattern: 'test/client/unit/**/test.js', noCache: true},
+						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
 					],
-					browsers: ['PhantomJS'],
+					browsers: ['ChromeHeadless'],
 					singleRun: true
 				}
 			},
 			integration: {
 				options: {
 					files: [
-						{pattern: './static/ui/scripts/*.js', noCache: true},
-						{pattern: './static/ui/scripts/Ignite/*.js', noCache: true},
-						{pattern: './static/ui/scripts/Ignite/modules/*.js', noCache: true},
-						{pattern: './static/ui/poptart.min.js', noCache: true},
-						{pattern: './static/ui/**/*.min.js', noCache: true},
-						{pattern: './static/ui/components/**/*.min.js', noCache: true},
-						{pattern: './static/ui/modules/**/*.min.js', noCache: true},
-						{pattern: './test/client/integration/*.js', noCache: true}
+						{pattern: './static/ui/polyfills.js', noCache: true},
+						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
+						{pattern: './test/client/integration/**/*test.js', noCache: true},
+						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
 					],
-					browsers: ['PhantomJS'],
+					browsers: ['ChromeHeadless'],
 					singleRun: true
 				}
 			},
 			dev: {
 				options: {
 					files: [
-						{pattern: 'static/ui/scripts/*.js', noCache: true},
-						{pattern: 'static/ui/scripts/Ignite/*.js', noCache: true},
-						{pattern: 'static/ui/scripts/Ignite/modules/*.js', noCache: true},
-						{pattern: 'static/ui/poptart.min.js', noCache: true},
-						{pattern: 'static/ui/**/*.min.js', noCache: true},
-						{pattern: 'static/ui/components/**/*.min.js', noCache: true},
-						{pattern: 'static/ui/modules/**/*.min.js', noCache: true},
-						{pattern: 'test/client/**/*.js', noCache: true}
+						{pattern: './static/ui/polyfills.js', noCache: true},
+						{pattern: './static/ui/scripts/Ignite/*.js', noCache: true},
+						{pattern: './static/ui/scripts/Ignite/modules/*.js', noCache: true},
+						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
+						{pattern: 'test/client/**/*.min.js', noCache: true}
 					],
-					browsers: ['PhantomJS'],
+					browsers: ['ChromeHeadless'],
 					singleRun: false
+				}
+			},
+			igUnit: {
+					options: {
+						files: [
+							{pattern: './static/ui/polyfills.js', noCache: true},
+							{pattern: './static/ui/scripts/bluebird.js', noCache: true},
+							{pattern: '../node_modules/jquery/dist/jquery.min.js', noCache: true},
+							{pattern: '../node_modules/jqueryui/jquery-ui.min.js', noCache: true},
+							{pattern: '../node_modules/nunjucks/browser/nunjucks.js', noCache: true},
+							{pattern: './ui/scripts/Ignite/*.js', noCache: true},
+							{pattern: './ui/scripts/Ignite/modules/*.js', noCache: true},
+							{pattern: './ui/components/Poptart.Ignite.Adding.js', noCache: true},
+							{pattern: './ui/components/**/*.test.js', noCache: true},
+							{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
+						],
+						browsers: ['ChromeHeadless'],
+						singleRun: true
+				}
+			},
+			igIntegration: {
+				options: {
+					files: [
+						{pattern: './static/ui/polyfills.js', noCache: true},
+						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
+						{pattern: '../node_modules/jquery/dist/jquery.min.js', noCache: true},
+						{pattern: '../node_modules/jqueryui/jquery-ui.min.js', noCache: true},
+						{pattern: '../node_modules/nunjucks/browser/nunjucks.js', noCache: true},
+						{pattern: './ui/scripts/Ignite/*.js', noCache: true},
+						{pattern: './ui/scripts/Ignite/modules/*.js', noCache: true},
+						{pattern: './ui/components/Poptart.Ignite.Adding.js', noCache: true},
+						{pattern: './ui/components/**/*.spec.js', noCache: true},
+						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
+					],
+					browsers: ['ChromeHeadless'],
+					singleRun: true
 				}
 			}
 		},
@@ -171,11 +184,13 @@ module.exports = function(grunt) {
 	});
 
 	grunt.loadTasks('tasks');
+	grunt.loadNpmTasks('grunt-webpack');
 
-	grunt.registerTask('default', ['build-static', 'lint', 'test']);
-	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit', 'karma:integration']);
-	grunt.registerTask('lint', ['eslint:all']);
-	grunt.registerTask('build-static', ['sync', 'uglify-build-all-javascript-file-mapping', 'nunjucks-precompile-mapping', 'nunjucks', 'uglify', 'cssmin']);
+	grunt.registerTask('default', ['build-static', 'test']);
+	grunt.registerTask('test-infragistics', ['karma:igUnit', 'karma:igIntegration'])
+	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit', 'karma:integration', 'test-infragistics']);
+	grunt.registerTask('build-static', ['sync', 'webpack:build', 'nunjucks-precompile-mapping', 'nunjucks', 'cssmin']);
+	grunt.registerTask('dev', 'concurrent');
 
 	/*grunt.event.on('watch', function(action, filepath, target) {
 
