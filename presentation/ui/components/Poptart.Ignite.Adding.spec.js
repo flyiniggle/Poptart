@@ -51,323 +51,252 @@ describe("#infragistics", function() {
 			describe("methods", function() {
 				describe("startEdit", function() {
 					it("should start editing the text column and return a cell object.", function(done) {
-						const configInstance = Object.create(loaderConfig, {});
+						var config = jQuery.extend(true, {}, baseTableConfiguration),
+							cell, foundCell;
 
-						configInstance.resources = "igGrid.Updating.Adding,igCombo";
-						configInstance.ready = function() {
-							var config = jQuery.extend(true, {}, baseTableConfiguration),
-								cell, foundCell;
+						config.rendered = function() {
+							cell = tableEle.igGridAdding("startEdit", "text");
+							foundCell = tableEle.find("#addingRow0_text");
 
-							config.rendered = function() {
-								cell = tableEle.igGridAdding("startEdit", "text");
-								foundCell = tableEle.find("#addingRow0_text");
-
-								foundCell.should.have.class("ui-iggrid-editingcell");
-								assert.equal(cell.key, "text", "Editor did not open in the correct column.");
-								assert.equal(foundCell[0], cell.cell[0], "Editor did not open in the correct column.");
-								done();
-							};
-
-							tableEle.igGrid(config);
+							foundCell.should.have.class("ui-iggrid-editingcell");
+							assert.equal(cell.key, "text", "Editor did not open in the correct column.");
+							assert.equal(foundCell[0], cell.cell[0], "Editor did not open in the correct column.");
+							done();
 						};
-
-						loader(configInstance);
+						tableEle.igGrid(config);
 					});
 
 					it("should start editing the first column of the adding row", function(done) {
-						const configInstance = Object.create(loaderConfig, {});
+						var config = jQuery.extend(true, {}, baseTableConfiguration),
+							cell, foundCell;
 
-						configInstance.resources = "igGrid.Updating.Adding,igCombo";
-						configInstance.ready = function() {
-							var config = jQuery.extend(true, {}, baseTableConfiguration),
-								cell, foundCell;
-
-							config.features.find(function(feature) { return feature.name === "Adding" }).rendered = function() {
-								cell = tableEle.igGridAdding("startEdit");
-								foundCell = tableEle.find("#addingRow0_number");
-								foundCell.should.have.class("ui-iggrid-editingcell");
-								assert.equal(cell.key, "number", "Editor did not open in the correct column.");
-								assert.equal(foundCell[0], cell.cell[0], "Editor did not open in the correct column.");
-								done();
-							};
-
-							tableEle.igGrid(config);
+						config.features.find(function(feature) { return feature.name === "Adding" }).rendered = function() {
+							cell = tableEle.igGridAdding("startEdit");
+							foundCell = tableEle.find("#addingRow0_number");
+							foundCell.should.have.class("ui-iggrid-editingcell");
+							assert.equal(cell.key, "number", "Editor did not open in the correct column.");
+							assert.equal(foundCell[0], cell.cell[0], "Editor did not open in the correct column.");
+							done();
 						};
 
-						loader(configInstance);
+						tableEle.igGrid(config);
 					});
 				});
 
 				describe("endEdit", function() {
 					it("should close the editor and save the value.", function(done) {
-						const configInstance = Object.create(loaderConfig, {});
+						var config = jQuery.extend(true, {}, baseTableConfiguration),
+							addingConfig = config.features.find(function(feature) {
+								return feature.name === "Adding";
+							}),
+							column = "text",
+							newVal = "new text!",
+							addingWidget;
 
-						configInstance.resources = "igGrid.Updating.Adding,igCombo";
-						configInstance.ready = function() {
-							var config = jQuery.extend(true, {}, baseTableConfiguration),
-								addingConfig = config.features.find(function(feature) {
-									return feature.name === "Adding";
-								}),
-								column = "text",
-								newVal = "new text!",
-								addingWidget;
+						addingConfig.rendered = function() {
+							addingWidget = tableEle.data("Poptart-igGridAdding");
+							tableEle.igGridAdding("startEdit", column);
 
-							addingConfig.rendered = function() {
-								addingWidget = tableEle.data("Poptart-igGridAdding");
-								tableEle.igGridAdding("startEdit", column);
-
-								addingWidget.activeEditor.provider.setValue(newVal);
-								tableEle.igGridAdding("endEdit", true);
-							};
-							addingConfig.editEnded = function() {
-								assert.equal(addingWidget._getColumn(column).value, newVal, "Cell did not save properly.");
-								assert.isUndefined(addingWidget.activeEditor, "Editor did not close.");
-								done();
-							};
-
-							tableEle.igGrid(config);
+							addingWidget.activeEditor.provider.setValue(newVal);
+							tableEle.igGridAdding("endEdit", true);
+						};
+						addingConfig.editEnded = function() {
+							assert.equal(addingWidget._getColumn(column).value, newVal, "Cell did not save properly.");
+							assert.isUndefined(addingWidget.activeEditor, "Editor did not close.");
+							done();
 						};
 
-						loader(configInstance);
-
+						tableEle.igGrid(config);
 					});
 
 					it("should close the editor and discard changes.", function(done) {
-						const configInstance = Object.create(loaderConfig, {});
+						var config = jQuery.extend(true, {}, baseTableConfiguration),
+							addingConfig = config.features.find((feature) => feature.name === "Adding"),
+							column = "text",
+							newVal = "new text!",
+							addingWidget;
 
-						configInstance.resources = "igGrid.Updating.Adding,igCombo";
-						configInstance.ready = function() {
-							var config = jQuery.extend(true, {}, baseTableConfiguration),
-								addingConfig = config.features.find((feature) => feature.name === "Adding"),
-								column = "text",
-								newVal = "new text!",
-								addingWidget;
+						addingConfig.rendered = function() {
+							addingWidget = tableEle.data("Poptart-igGridAdding");
+							tableEle.igGridAdding("startEdit", column);
 
-							addingConfig.rendered = function() {
-								addingWidget = tableEle.data("Poptart-igGridAdding");
-								tableEle.igGridAdding("startEdit", column);
-
-								addingWidget.activeEditor.provider.setValue(newVal);
-								tableEle.igGridAdding("endEdit", false);
-							};
-							addingConfig.editEnded = function() {
-								assert.equal(addingWidget._getColumn(column).value, '', "Cell did not discard changes.");
-								assert.isUndefined(addingWidget.activeEditor, "Editor did not close.");
-								done();
-							};
-
-							tableEle.igGrid(config);
+							addingWidget.activeEditor.provider.setValue(newVal);
+							tableEle.igGridAdding("endEdit", false);
 						};
-						loader(configInstance);
+						addingConfig.editEnded = function() {
+							assert.equal(addingWidget._getColumn(column).value, '', "Cell did not discard changes.");
+							assert.isUndefined(addingWidget.activeEditor, "Editor did not close.");
+							done();
+						};
+
+						tableEle.igGrid(config);
 					});
 				});
 			});
 
 			describe("events", function() {
 				it("should trigger the 'rendering' handler before rendering.", function(done) {
-					const configInstance = Object.create(loaderConfig, {});
+					var config = jQuery.extend(true, {}, baseTableConfiguration),
+						addingConfig = config.features.find(function(feature) {
+							return feature.name === "Adding";
+						}),
+						timer;
 
-					configInstance.resources = "igGrid.Updating.Adding,igCombo";
-					configInstance.ready = function() {
-						var config = jQuery.extend(true, {}, baseTableConfiguration),
-							addingConfig = config.features.find(function(feature) {
-								return feature.name === "Adding";
-							}),
-							timer;
+					function spy() {
+						clearTimeout(timer);
+						done();
+					}
 
-						function spy() {
-							clearTimeout(timer);
-							done();
-						}
+					sinon.spy(spy);
 
-						sinon.spy(spy);
+					timer = setTimeout(function() {
+						assert(spy.called, 'Event did not fire in 1000ms.');
+						done();
+					}, 1000);
 
-						timer = setTimeout(function() {
-							assert(spy.called, 'Event did not fire in 1000ms.');
-							done();
-						}, 1000);
+					addingConfig.rendering = spy;
 
-						addingConfig.rendering = spy;
-
-						tableEle.igGrid(config);
-					};
-
-					loader(configInstance);
+					tableEle.igGrid(config);
 				});
 
 				it("should trigger the 'rendered' handler after rendering.", function(done) {
-					const configInstance = Object.create(loaderConfig, {});
+					var config = jQuery.extend(true, {}, baseTableConfiguration),
+						addingConfig = config.features.find(function(feature) {
+							return feature.name === "Adding";
+						}),
+						timer;
 
-					configInstance.resources = "igGrid.Updating.Adding,igCombo";
-					configInstance.ready = function() {
-						var config = jQuery.extend(true, {}, baseTableConfiguration),
-							addingConfig = config.features.find(function(feature) {
-								return feature.name === "Adding";
-							}),
-							timer;
+					function spy() {
+						clearTimeout(timer);
+						done();
+					}
 
-						function spy() {
-							clearTimeout(timer);
-							done();
-						}
+					sinon.spy(spy);
 
-						sinon.spy(spy);
+					timer = setTimeout(function() {
+						assert(spy.called, 'Event did not fire in 1000ms.');
+						done();
+					}, 1000);
 
-						timer = setTimeout(function() {
-							assert(spy.called, 'Event did not fire in 1000ms.');
-							done();
-						}, 1000);
+					addingConfig.rendered = spy;
 
-						addingConfig.rendered = spy;
-
-						tableEle.igGrid(config);
-					};
-
-					loader(configInstance);
+					tableEle.igGrid(config);
 				});
 
 				it("should trigger the 'editStarting' handler before cell editing starts.", function(done) {
-					const configInstance = Object.create(loaderConfig, {});
+					var config = jQuery.extend(true, {}, baseTableConfiguration),
+						addingConfig = config.features.find(function(feature) {
+							return feature.name === "Adding";
+						}),
+						timer;
 
-					configInstance.resources = "igGrid.Updating.Adding,igCombo";
-					configInstance.ready = function() {
-						var config = jQuery.extend(true, {}, baseTableConfiguration),
-							addingConfig = config.features.find(function(feature) {
-								return feature.name === "Adding";
-							}),
-							timer;
+					function spy() {
+						clearTimeout(timer);
+						done();
+					}
 
-						function spy() {
-							clearTimeout(timer);
-							done();
-						}
+					sinon.spy(spy);
 
-						sinon.spy(spy);
+					timer = setTimeout(function() {
+						assert(spy.called, 'Event did not fire in 1000ms.');
+						done();
+					}, 1000);
 
-						timer = setTimeout(function() {
-							assert(spy.called, 'Event did not fire in 1000ms.');
-							done();
-						}, 1000);
+					addingConfig.editStarting = spy;
 
-						addingConfig.editStarting = spy;
-
-						addingConfig.rendered = function() {
-							tableEle.igGridAdding("startEdit");
-						};
-
-						tableEle.igGrid(config);
+					addingConfig.rendered = function() {
+						tableEle.igGridAdding("startEdit");
 					};
 
-					loader(configInstance);
+					tableEle.igGrid(config);
 				});
 
 				it("should trigger the 'editStarted' handler after cell editing starts.", function(done) {
-					const configInstance = Object.create(loaderConfig, {});
+					var config = jQuery.extend(true, {}, baseTableConfiguration),
+						addingConfig = config.features.find(function(feature) {
+							return feature.name === "Adding";
+						}),
+						timer;
 
-					configInstance.resources = "igGrid.Updating.Adding,igCombo";
-					configInstance.ready = function() {
-						var config = jQuery.extend(true, {}, baseTableConfiguration),
-							addingConfig = config.features.find(function(feature) {
-								return feature.name === "Adding";
-							}),
-							timer;
+					function spy() {
+						clearTimeout(timer);
+						done();
+					}
 
-						function spy() {
-							clearTimeout(timer);
-							done();
-						}
+					sinon.spy(spy);
 
-						sinon.spy(spy);
+					timer = setTimeout(function() {
+						assert(spy.called, 'Event did not fire in 1000ms.');
+						done();
+					}, 1000);
 
-						timer = setTimeout(function() {
-							assert(spy.called, 'Event did not fire in 1000ms.');
-							done();
-						}, 1000);
+					addingConfig.editStarted = spy;
 
-						addingConfig.editStarted = spy;
-
-						addingConfig.rendered = function() {
-							tableEle.igGridAdding("startEdit");
-						};
-
-						tableEle.igGrid(config);
+					addingConfig.rendered = function() {
+						tableEle.igGridAdding("startEdit");
 					};
 
-					loader(configInstance);
+					tableEle.igGrid(config);
 				});
 
 				it("should trigger the 'rowAdding' handler before commiting a row.", function(done) {
-					const configInstance = Object.create(loaderConfig, {});
+					var config = jQuery.extend(true, {}, baseTableConfiguration),
+						addingConfig = config.features.find(function(feature) {
+							return feature.name === "Adding";
+						}),
+						timer, addingWidget;
 
-					configInstance.resources = "igGrid.Updating.Adding,igCombo";
-					configInstance.ready = function() {
-						var config = jQuery.extend(true, {}, baseTableConfiguration),
-							addingConfig = config.features.find(function(feature) {
-								return feature.name === "Adding";
-							}),
-							timer, addingWidget;
+					function spy() {
+						clearTimeout(timer);
+						done();
+					}
 
-						function spy() {
-							clearTimeout(timer);
-							done();
-						}
+					sinon.spy(spy);
 
-						sinon.spy(spy);
+					timer = setTimeout(function() {
+						assert(spy.called, 'Event did not fire in 1000ms.');
+						done();
+					}, 1000);
 
-						timer = setTimeout(function() {
-							assert(spy.called, 'Event did not fire in 1000ms.');
-							done();
-						}, 1000);
+					addingConfig.rowAdding = spy;
 
-						addingConfig.rowAdding = spy;
-
-						addingConfig.rendered = function() {
-							addingWidget = tableEle.data("Poptart-igGridAdding");
-							addingWidget._startEdit();
-							addingWidget._commitFromKeyboard(new jQuery.Event("keypress"));
-						};
-
-						tableEle.igGrid(config);
+					addingConfig.rendered = function() {
+						addingWidget = tableEle.data("Poptart-igGridAdding");
+						addingWidget._startEdit();
+						addingWidget._commitFromKeyboard(new jQuery.Event("keypress"));
 					};
 
-					loader(configInstance);
+					tableEle.igGrid(config);
 				});
 
 				it("should trigger the 'rowAdded' handler before commiting a row.", function(done) {
-					const configInstance = Object.create(loaderConfig, {});
+					var config = jQuery.extend(true, {}, baseTableConfiguration),
+						addingConfig = config.features.find(function(feature) {
+							return feature.name === "Adding";
+						}),
+						timer, addingWidget;
 
-					configInstance.resources = "igGrid.Updating.Adding,igCombo";
-					configInstance.ready = function() {
-						var config = jQuery.extend(true, {}, baseTableConfiguration),
-							addingConfig = config.features.find(function(feature) {
-								return feature.name === "Adding";
-							}),
-							timer, addingWidget;
+					function spy() {
+						clearTimeout(timer);
+						done();
+					}
 
-						function spy() {
-							clearTimeout(timer);
-							done();
-						}
+					sinon.spy(spy);
 
-						sinon.spy(spy);
+					timer = setTimeout(function() {
+						assert(spy.called, 'Event did not fire in 1000ms.');
+						done();
+					}, 1000);
 
-						timer = setTimeout(function() {
-							assert(spy.called, 'Event did not fire in 1000ms.');
-							done();
-						}, 1000);
+					addingConfig.rowAdded = spy;
 
-						addingConfig.rowAdded = spy;
-
-						addingConfig.rendered = function() {
-							addingWidget = tableEle.data("Poptart-igGridAdding");
-							addingWidget._startEdit();
-							addingWidget._commitFromKeyboard(new jQuery.Event("keypress"));
-						};
-
-						tableEle.igGrid(config);
+					addingConfig.rendered = function() {
+						addingWidget = tableEle.data("Poptart-igGridAdding");
+						addingWidget._startEdit();
+						addingWidget._commitFromKeyboard(new jQuery.Event("keypress"));
 					};
 
-					loader(configInstance);
+					tableEle.igGrid(config);
 				});
 			});
 		});

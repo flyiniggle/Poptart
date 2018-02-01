@@ -187,7 +187,7 @@ module.exports = function(grunt) {
 							{pattern: './ui/components/**/*.test.js', noCache: true},
 							{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
 						],
-						browsers: ['PhantomJS'],
+						browsers: ['ChromeHeadless'],
 						singleRun: true
 				}
 			},
@@ -205,7 +205,7 @@ module.exports = function(grunt) {
 						{pattern: './ui/components/**/*.spec.js', noCache: true},
 						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
 					],
-					browsers: ['PhantomJS'],
+					browsers: ['ChromeHeadless'],
 					singleRun: true
 				}
 			}
