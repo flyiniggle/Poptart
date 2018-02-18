@@ -104,8 +104,12 @@ module.exports = function(grunt) {
 					files: [
 						{pattern: './static/ui/polyfills.js', noCache: true},
 						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
-						{pattern: 'test/client/unit/**/test.js', noCache: true},
-						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
+						{pattern: './ui/**/*.test.js', noCache: true},
+						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true},
+					],
+					exclude: [
+						'./ui/components/**/*.test.js',
+						'./ui/components/**/*.spec.js'
 					],
 					browsers: ['ChromeHeadless'],
 					singleRun: true
@@ -116,26 +120,30 @@ module.exports = function(grunt) {
 					files: [
 						{pattern: './static/ui/polyfills.js', noCache: true},
 						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
-						{pattern: './test/client/integration/**/*test.js', noCache: true},
+						{pattern: './ui/**/*.spec.js', noCache: true},
 						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
+					],
+					exclude: [
+						'./ui/components/**/*.test.js',
+						'./ui/components/**/*.spec.js'
 					],
 					browsers: ['ChromeHeadless'],
 					singleRun: true
 				}
 			},
-			dev: {
+			/*dev: {
 				options: {
 					files: [
 						{pattern: './static/ui/polyfills.js', noCache: true},
-						{pattern: './static/ui/scripts/Ignite/*.js', noCache: true},
-						{pattern: './static/ui/scripts/Ignite/modules/*.js', noCache: true},
+						{pattern: './static/ui/scripts/Ignite/!*.js', noCache: true},
+						{pattern: './static/ui/scripts/Ignite/modules/!*.js', noCache: true},
 						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
-						{pattern: 'test/client/**/*.min.js', noCache: true}
+						{pattern: 'test/client/!**!/!*.min.js', noCache: true}
 					],
 					browsers: ['ChromeHeadless'],
 					singleRun: false
 				}
-			},
+			},*/
 			igUnit: {
 					options: {
 						files: [
@@ -176,7 +184,8 @@ module.exports = function(grunt) {
 		mochaTest: {
 			unit: {
 				options: {
-					reporter: 'spec'
+					reporter: 'spec',
+					require: 'babel-register'
 				},
 				src: ['presentation/test/server/*.js']
 			}
