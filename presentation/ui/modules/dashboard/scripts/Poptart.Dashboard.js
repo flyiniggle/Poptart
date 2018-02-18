@@ -5,6 +5,7 @@ import jQuery from "Lib/Poptart.jQuery";
 import { nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
 
 import * as Poptart from "Poptart/poptart";
+import AlertsList from "Poptart/common/views/AlertsList";
 import Summary from "Poptart/modules/dashboard/views/Summary";
 import { AccountsSummaryService, SecuritiesSummaryService } from "Poptart/common/services/Summary";
 
@@ -21,7 +22,7 @@ const init = function() {
 
 function showSummary(summaries) {
 	const [accountsSummary, securitiesSummary] = summaries;
-console.log(summaries)
+
 	new Vue({
 		el: "#summaryContent",
 		components: { Summary },
@@ -34,8 +35,16 @@ console.log(summaries)
 				/>
 			);
 		}
-	})
-	jQuery("#alertsContent").append(nunjucksEnvironment.render("presentation/templates/components/alerts/shared/alerts.ninja", accountsSummary));
+	});
+console.log(accountsSummary)
+	new Vue({
+		el: "#alertsContent",
+		components: { AlertsList },
+		render: function(h) {
+			return <AlertsList alerts={ accountsSummary.alerts }/>
+		}
+	});
+	//jQuery("#alertsContent").append(nunjucksEnvironment.render("presentation/templates/components/alerts/shared/alerts.ninja", accountsSummary));
 }
 
 

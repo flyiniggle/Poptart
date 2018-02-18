@@ -1,6 +1,6 @@
 import { mount } from 'vue-test-utils';
 import { expect } from "chai";
-import Summary from './Summary'
+import Summary from './Summary';
 
 
 describe('Summary.vue', function() {
