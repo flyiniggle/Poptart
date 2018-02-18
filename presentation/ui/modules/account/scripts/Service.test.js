@@ -1,4 +1,3 @@
-//Poptart.Account.Sevice test
 import { assert } from "chai";
 import { HoldingsService, SecuritiesService } from "Poptart/modules/account/scripts/Poptart.Account.Service";
 

@@ -99,51 +99,6 @@ module.exports = function(grunt) {
 			options: {
 				configFile: 'karma.conf.js'
 			},
-			unit: {
-				options: {
-					files: [
-						{pattern: './static/ui/polyfills.js', noCache: true},
-						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
-						{pattern: './ui/**/*.test.js', noCache: true},
-						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true},
-					],
-					exclude: [
-						'./ui/components/**/*.test.js',
-						'./ui/components/**/*.spec.js'
-					],
-					browsers: ['ChromeHeadless'],
-					singleRun: true
-				}
-			},
-			integration: {
-				options: {
-					files: [
-						{pattern: './static/ui/polyfills.js', noCache: true},
-						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
-						{pattern: './ui/**/*.spec.js', noCache: true},
-						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
-					],
-					exclude: [
-						'./ui/components/**/*.test.js',
-						'./ui/components/**/*.spec.js'
-					],
-					browsers: ['ChromeHeadless'],
-					singleRun: true
-				}
-			},
-			/*dev: {
-				options: {
-					files: [
-						{pattern: './static/ui/polyfills.js', noCache: true},
-						{pattern: './static/ui/scripts/Ignite/!*.js', noCache: true},
-						{pattern: './static/ui/scripts/Ignite/modules/!*.js', noCache: true},
-						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
-						{pattern: 'test/client/!**!/!*.min.js', noCache: true}
-					],
-					browsers: ['ChromeHeadless'],
-					singleRun: false
-				}
-			},*/
 			igUnit: {
 					options: {
 						files: [
@@ -155,7 +110,7 @@ module.exports = function(grunt) {
 							{pattern: './ui/scripts/Ignite/*.js', noCache: true},
 							{pattern: './ui/scripts/Ignite/modules/*.js', noCache: true},
 							{pattern: './ui/components/Poptart.Ignite.Adding.js', noCache: true},
-							{pattern: './ui/components/**/*.test.js', noCache: true},
+							{pattern: './ui/**/*.ignitetest.js', noCache: true},
 							{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
 						],
 						browsers: ['ChromeHeadless'],
@@ -173,7 +128,7 @@ module.exports = function(grunt) {
 						{pattern: './ui/scripts/Ignite/*.js', noCache: true},
 						{pattern: './ui/scripts/Ignite/modules/*.js', noCache: true},
 						{pattern: './ui/components/Poptart.Ignite.Adding.js', noCache: true},
-						{pattern: './ui/components/**/*.spec.js', noCache: true},
+						{pattern: './ui/**/*.ignitespec.js', noCache: true},
 						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
 					],
 					browsers: ['ChromeHeadless'],
@@ -185,7 +140,7 @@ module.exports = function(grunt) {
 			unit: {
 				options: {
 					reporter: 'spec',
-					require: 'babel-register'
+					require: ['babel-register', './presentation/test/client/setup.js']
 				},
 				src: ['presentation/test/server/*.js']
 			}
@@ -197,7 +152,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('default', ['build-static', 'test']);
 	grunt.registerTask('test-infragistics', ['karma:igUnit', 'karma:igIntegration'])
-	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'karma:unit', 'karma:integration', 'test-infragistics']);
+	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'test-infragistics']);
 	grunt.registerTask('build-static', ['sync', 'webpack:build', 'nunjucks-precompile-mapping', 'nunjucks', 'cssmin']);
 	grunt.registerTask('dev', 'concurrent');
 
