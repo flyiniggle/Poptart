@@ -1,16 +1,25 @@
 // Poptart.Dashboard
 ////////////////////////////////
+import Vue from "vue";
 import jQuery from "Lib/Poptart.jQuery";
 import { nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
 
 import * as Poptart from "Poptart/poptart";
-import test from "Poptart/common/views/test"
+import Test from "Poptart/common/views/test"
 
 import "Poptart/css/main";
 
 
 const init = function() {
 	Poptart.init();
+
+	new Vue({
+		el: "#test",
+		components: { Test },
+		render: function(h) {
+			return <Test/>;
+		}
+	})
 
 	Promise.resolve(jQuery.ajax({
 		url: "/summary/account",

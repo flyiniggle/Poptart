@@ -16,6 +16,14 @@ const sharedConfig = {
 	module: {
 		rules: [
 			{
+				test: /\.js$/,
+				exclude: [/node_modules/],
+				use: [{
+					loader: 'babel-loader',
+					options: { presets: ['env'], plugins: ['transform-vue-jsx'] }
+				}]
+			},
+			{
 				test: /\.vue$/,
 				loader: 'vue-loader',
 				options: {
@@ -33,14 +41,6 @@ const sharedConfig = {
 			}
 		],
 		loaders: [
-			{
-				test: /\.js$/,
-				loader: 'babel-loader',
-				exclude: /node_modules/,
-				query: {
-					presets: ['env']
-				}
-			},
 			{
 				test: /\.css$/,
 				loader: "style-loader!css-loader"
