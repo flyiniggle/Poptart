@@ -6,6 +6,7 @@ const sharedConfig = {
 	context: __dirname + "/presentation/ui/",
 	devtool: 'source-map',
 	resolve: {
+		extensions: ['.js', '.vue', '.json'],
 		alias: {
 			"Poptart": __dirname + "/presentation/ui/",
 			"Templates": "../presentation/templates",
@@ -14,6 +15,15 @@ const sharedConfig = {
 	},
 	module: {
 		rules: [
+			{
+				test: /\.vue$/,
+				loader: 'vue-loader',
+				options: {
+					loaders: {
+						scss: 'vue-style-loader!css-loader!sass-loader', // <style lang="scss">
+					}
+				}
+			},
 			{
 				test: /\.css$/,
 				use: ExtractTextPlugin.extract({

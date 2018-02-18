@@ -2,7 +2,7 @@
 ////////////////////////////////
 import jQuery from "jquery";
 
-import nunjucksEnvironment from "Poptart/poptart";
+import { nunjucksEnvironment } from "Poptart/poptart";
 
 const Service = {
 	handleServerError: function(error) {

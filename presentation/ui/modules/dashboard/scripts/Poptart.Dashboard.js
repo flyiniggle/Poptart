@@ -4,6 +4,7 @@ import jQuery from "Lib/Poptart.jQuery";
 import { nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
 
 import * as Poptart from "Poptart/poptart";
+import test from "Poptart/common/views/test"
 
 import "Poptart/css/main";
 
