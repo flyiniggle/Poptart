@@ -10,17 +10,6 @@
 	<a class="navigationLink" href="/monitors/security">Security Monitor</a>
 {% endblock %}
 
-{% block summary %}
-	<div>
-		<h4>Total accounts: </h4><span id="accountCount"></span>
-	</div>
-	<div>
-		<h4>Recently used: </h4><span id="accountUpdated"></span>
-	</div>
-	<div>
-		<h4>Total securities: </h4><span id="securityCount"></span>
-	</div>
-{% endblock %}
 
 {% block alerts %}
 {% endblock %}
