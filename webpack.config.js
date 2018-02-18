@@ -19,8 +19,7 @@ const sharedConfig = {
 				test: /\.js$/,
 				exclude: [/node_modules/],
 				use: [{
-					loader: 'babel-loader',
-					options: { presets: ['env'], plugins: ['transform-vue-jsx'] }
+					loader: 'babel-loader'
 				}]
 			},
 			{
