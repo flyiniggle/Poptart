@@ -1,8 +1,10 @@
 // Poptart.Monitor.Security
 ////////////////////////////////
 import jQuery from "Lib/Poptart.jQuery";
+import Vue from "vue";
 
 import { loaderConfig, loader } from "Lib/Poptart.Ignite";
+import TopMenu from "Poptart/common/views/TopMenu/TopMenu"
 
 import "Poptart/css/main";
 
@@ -30,6 +32,20 @@ function init() {
 		});
 	};
 	loader(configInstance);
+
+	new Vue({
+		el: "#controlsContainer",
+		components: { TopMenu },
+		render: function(h) {
+			return (
+				<TopMenu>
+					<div slot="navigatorControls">
+						<a href="/">Dashboard</a>
+					</div>
+				</TopMenu>
+			)
+		}
+	});
 };
 
 function setSecurities(securitiesList = []) {
