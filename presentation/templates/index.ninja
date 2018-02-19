@@ -5,11 +5,6 @@
 	<link href="/ui/modules/dashboard/css/main.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
-{%  block main_nav %}
-	<a class="navigationLink" href="/monitors/account">Account Monitor</a>
-	<a class="navigationLink" href="/monitors/security">Security Monitor</a>
-{% endblock %}
-
 {% block main %}
 	<div id="test"></div>
 {% endblock %}

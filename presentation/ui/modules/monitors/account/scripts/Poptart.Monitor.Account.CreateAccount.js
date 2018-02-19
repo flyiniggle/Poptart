@@ -4,7 +4,6 @@ import jQuery from "Lib/Poptart.jQuery";
 import ko from "Lib/Poptart.Knockout";
 import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
 
-import * as Poptart from "Poptart/poptart";
 import * as CreateAccountService from "Poptart/modules/monitors/account/scripts/Poptart.Monitor.Account.CreateAccount.Service";
 
 import "Poptart/modules/monitors/account/css/styles.css";
@@ -338,7 +337,6 @@ function setComboEditorOptions() {
 const init = function() {
 	var configInstance = Object.create(loaderConfig, {});
 
-	Poptart.init();
 	configInstance.resources = "igCombo,igEditors,igGrid.Updating.Adding,extensions/infragistics.datasource.knockoutjs.js,extensions/infragistics.ui.grid.knockout-extensions.js,extensions/infragistics.ui.combo.knockout-extensions.js,extensions/infragistics.ui.editors.knockout-extensions.js";
 	configInstance.ready = function() {
 		viewModel = new AccountCreationViewModel();

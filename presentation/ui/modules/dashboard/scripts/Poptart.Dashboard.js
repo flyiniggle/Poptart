@@ -4,16 +4,29 @@ import Vue from "vue";
 import jQuery from "Lib/Poptart.jQuery";
 import { nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
 
-import * as Poptart from "Poptart/poptart";
 import AlertsList from "Poptart/common/views/AlertsList";
 import Summary from "Poptart/modules/dashboard/views/Summary";
+import TopMenu from "Poptart/common/views/TopMenu/TopMenu";
 import { AccountsSummaryService, SecuritiesSummaryService } from "Poptart/common/services/Summary";
 
 import "Poptart/css/main";
 
 
 const init = function() {
-	Poptart.init();
+	new Vue({
+		el: "#controlsContainer",
+		components: { TopMenu },
+		render: function(h) {
+			return (
+				<TopMenu>
+					<div slot="navigatorControls">
+						<a href="/monitors/account">Account Monitor</a>
+						<a href="/monitors/security">Security Monitor</a>
+					</div>
+				</TopMenu>
+			)
+		}
+	});
 
 	Promise.all([AccountsSummaryService.get(), SecuritiesSummaryService.get()])
 		.then(showSummary)
@@ -48,4 +61,3 @@ function showSummary(summaries) {
 
 
 export { init };
-

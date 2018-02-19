@@ -42,9 +42,3 @@ a {
 a:hover, input[type='button']:hover, input[type='submit']:hover {
 	text-decoration: underline;
 }
-
-a.navigationLink {
-	font-size: 13px;
-	font-weight: normal;
-	color: rgb(61, 61, 61);
-}

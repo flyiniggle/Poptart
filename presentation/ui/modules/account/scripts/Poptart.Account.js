@@ -5,7 +5,6 @@ import jQuery from "Lib/Poptart.jQuery";
 import "jqueryui";
 
 import { loaderConfig, loader } from "Lib/Poptart.Ignite";
-import * as Poptart from "Poptart/poptart";
 import { SummaryService, SecuritiesService, HoldingsService, AlertsService } from "Poptart/modules/account/scripts/Poptart.Account.Service";
 import AlertsList from "Poptart/common/views/AlertsList";
 
@@ -273,7 +272,6 @@ function saveAccount() {
 const init = function() {
 	const configInstance = Object.create(loaderConfig, {});
 
-	Poptart.init();
 	configInstance.resources = "igGrid.Updating.Adding,igDataChart.Category,igDoughnutChart,igCombo";
 	configInstance.ready = function() {
 		Promise.all([HoldingsService.get(accountId), SecuritiesService.get()]).then(displayAccountHoldings);

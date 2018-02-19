@@ -4,7 +4,6 @@ import Vue from "vue";
 import jQuery from "Lib/Poptart.jQuery";
 import "jqueryui";
 
-import * as Poptart from "Poptart/poptart";
 import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
 import * as CreateAccountModule from "Poptart/modules/monitors/account/scripts/Poptart.Monitor.Account.CreateAccount";
 import { AccountsSummaryService } from "Poptart/common/services/Summary";
@@ -19,8 +18,6 @@ var accountList;
 //Public Methods
 //////////////////
 function init() {
-	Poptart.init();
-
 	let configInstance = Object.create(loaderConfig, {});
 
 	configInstance.resources = "igGrid.GroupBy.Sorting.Paging, igCombo";
