@@ -11,7 +11,7 @@ install:
   - npm install
 # command to run tests
 script:
-  - grunt
+  - npm test
 
 dist: trusty
 sudo: required
