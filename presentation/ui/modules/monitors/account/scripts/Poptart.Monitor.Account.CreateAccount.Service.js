@@ -1,6 +1,6 @@
 // Poptart.Monitor.Account.CreateAccount.Service
 ////////////////////////////////
-import {AsyncService} from "Poptart/components/Poptart.Services";
+import { AsyncService } from "Poptart/Poptart.Services";
 
 
 var CreateAccountService = Object.create(AsyncService, {});

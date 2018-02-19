@@ -1,6 +1,6 @@
 // Poptart.Account.Service
 ////////////////////////////////
-import { AsyncService } from "Poptart/components/Poptart.Services";
+import { AsyncService } from "Poptart/Poptart.Services";
 
 
 const SummaryService = Object.create(AsyncService, {});
