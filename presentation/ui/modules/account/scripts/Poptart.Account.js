@@ -1,11 +1,13 @@
 // Poptart.Account
 ////////////////////////////////
+import Vue from "vue";
 import jQuery from "Lib/Poptart.jQuery";
-import { nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
-import { loaderConfig, loader } from "Lib/Poptart.Ignite";
+import "jqueryui";
 
+import { loaderConfig, loader } from "Lib/Poptart.Ignite";
 import * as Poptart from "Poptart/poptart";
-import { SummaryService, SecuritiesService, HoldingsService, AlertsService} from "Poptart/modules/account/scripts/Poptart.Account.Service";
+import { SummaryService, SecuritiesService, HoldingsService, AlertsService } from "Poptart/modules/account/scripts/Poptart.Account.Service";
+import AlertsList from "Poptart/common/views/AlertsList";
 
 import "Poptart/css/main";
 
@@ -252,10 +254,15 @@ function displayAccountHoldingsCharts(data) {
 	});
 }
 
-function displayAccountAlerts(data) {
-	const alertsHtml = nunjucksEnvironment.render("presentation/templates/components/alerts/shared/alerts.ninja", {alerts: data});
-
-	jQuery("#alertsContent").html(alertsHtml);
+function displayAccountAlerts(alerts) {
+	const v = new Vue({
+		el: "#alertsContent",
+		components: { AlertsList },
+		render: function(h) {
+			return <AlertsList alerts={ alerts }/>
+		}
+	});
+	console.log(data)
 }
 
 function saveAccount() {
@@ -270,12 +277,12 @@ const init = function() {
 	Poptart.init();
 	configInstance.resources = "igGrid.Updating.Adding,igDataChart.Category,igDoughnutChart,igCombo";
 	configInstance.ready = function() {
-		SummaryService.get(accountId).then(displayAccountSummary);
 		Promise.all([HoldingsService.get(accountId), SecuritiesService.get()]).then(displayAccountHoldings);
 		HoldingsService.get(accountId).then(displayAccountHoldingsCharts);
-		AlertsService.get(accountId).then(displayAccountAlerts);
 	};
 	loader(configInstance);
+	SummaryService.get(accountId).then(displayAccountSummary);
+	AlertsService.get(accountId).then(displayAccountAlerts);
 
 	jQuery("#saveAccount").on("click", saveAccount);
 };
