@@ -1,7 +1,7 @@
 <script>
 	import { map } from "ramda";
 	import Alert from "./Alert";
-console.log(Alert)
+
 	export default {
 		name: "AlertsList",
 		components: { Alert },
