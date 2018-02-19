@@ -9,7 +9,6 @@
 	<div class="ribbonMenuTab ribbonMenuTabUnselected" data-name="Management">Management</div>
 {% endblock %}
 
-
 {% block ribbonMenus %}
 	<div id="ribbonMenu_Management" class="ribbonMenu" data-name="Management">
 		<div class="ribbonMenuGroup">
@@ -46,6 +45,9 @@
 			<span>{{account}}</span>
 		{% endfor %}
 	</div>
+{% endblock %}
+
+{% block alerts %}
 {% endblock %}
 
 {% block main %}

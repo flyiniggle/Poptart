@@ -1,11 +1,14 @@
 // Poptart.Monitor.Account
 ////////////////////////////////
+import Vue from "vue";
 import jQuery from "Lib/Poptart.jQuery";
 import "jqueryui";
 
 import * as Poptart from "Poptart/poptart";
 import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
 import * as CreateAccountModule from "Poptart/modules/monitors/account/scripts/Poptart.Monitor.Account.CreateAccount";
+import { AccountsSummaryService } from "Poptart/common/services/Summary";
+import AlertsList from "Poptart/common/views/AlertsList";
 
 import "Poptart/css/main";
 import "Poptart/modules/account/css/styles.css";
@@ -145,13 +148,26 @@ function init() {
 	};
 
 	loader(configInstance);
+
+	AccountsSummaryService.get().then(showAlerts);
+
 };
+
+function showAlerts(data) {
+	new Vue({
+		el: "#alertsContent",
+		components: { AlertsList },
+		render: function(h) {
+			return <AlertsList alerts={ data.alerts }/>
+		}
+	});
+}
 
 function launchAccount() {
 	var pk = this.igCombo("selectedItems")[0].data.id;
 
 	jQuery("#am_accountLauncher").attr("action", "/account/" + pk).submit();
-};
+}
 
 function setAccountList(al = []) {
 	accountList = al;
