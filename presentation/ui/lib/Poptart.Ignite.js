@@ -43,7 +43,7 @@ jQuery.ig.dependencies.push({
 	widget: "Adding",
 	parentWidget: "igGrid,igHierarchicalGrid",
 	dependency: [{name: "igGrid"}, {name: "igEditors"}, {name: "igValidator"}, {name: "GridShared"}],
-	scripts: ["/ui/components/Poptart.Ignite.Adding.min.js"]
+	scripts: ["/ui/components/Poptart.Ignite.Adding.js"]
 });
 
 /*jQuery.ig.dependencies.find(function(item) {
