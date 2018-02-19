@@ -46,3 +46,36 @@
 		}
 	}
 </script>
+
+<style scoped>
+	.alert {
+		padding: 5px;
+		width: 100%;
+		height: 50px;
+		border-bottom: 1px solid rgb(117, 169, 203);
+	}
+
+	.alert_summary {
+		font-weight: bold;
+	}
+
+	.alert_summary, .alert_message {
+		text-overflow: ellipsis;
+	}
+
+	.alert_message {
+		display: block;
+	}
+
+	.info {
+		color: rgb(102, 140, 255);
+	}
+
+	.warning {
+		color: rgb(255, 153, 0);
+	}
+
+	.error {
+		color: rgb(128, 0, 0);
+	}
+</style>
