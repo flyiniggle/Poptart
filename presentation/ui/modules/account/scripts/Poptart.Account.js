@@ -255,14 +255,13 @@ function displayAccountHoldingsCharts(data) {
 }
 
 function displayAccountAlerts(alerts) {
-	const v = new Vue({
+	new Vue({
 		el: "#alertsContent",
 		components: { AlertsList },
 		render: function(h) {
 			return <AlertsList alerts={ alerts }/>
 		}
 	});
-	console.log(data)
 }
 
 function saveAccount() {

@@ -10,10 +10,6 @@
 	<a class="navigationLink" href="/monitors/security">Security Monitor</a>
 {% endblock %}
 
-
-{% block alerts %}
-{% endblock %}
-
 {% block main %}
 	<div id="test"></div>
 {% endblock %}

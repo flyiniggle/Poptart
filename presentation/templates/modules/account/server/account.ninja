@@ -58,9 +58,6 @@
 	</div>
 {% endblock %}
 
-{% block alerts %}
-{% endblock %}
-
 {% block js %}
 	{{ super() }}
 	<script type="text/javascript" src="/ui/modules/account/scripts/main.js"></script>
