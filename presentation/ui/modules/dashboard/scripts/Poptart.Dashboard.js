@@ -11,28 +11,6 @@ import { AccountsSummaryService, SecuritiesSummaryService } from "Poptart/common
 
 import "Poptart/css/main";
 
-
-const init = function() {
-	new Vue({
-		el: "#controlsContainer",
-		components: { TopMenu },
-		render: function(h) {
-			return (
-				<TopMenu>
-					<div slot="navigatorControls">
-						<a href="/monitors/account">Account Monitor</a>
-						<a href="/monitors/security">Security Monitor</a>
-					</div>
-				</TopMenu>
-			)
-		}
-	});
-
-	Promise.all([AccountsSummaryService.get(), SecuritiesSummaryService.get()])
-		.then(showSummary)
-		.catch(alert);
-};
-
 function showSummary(summaries) {
 	const [accountsSummary, securitiesSummary] = summaries;
 
@@ -59,5 +37,26 @@ function showSummary(summaries) {
 	});
 }
 
+//Main
+(function() {
+	new Vue({
+		el: "#controlsContainer",
+		components: { TopMenu },
+		render: function(h) {
+			return (
+				<TopMenu>
+					<div slot="navigatorControls">
+						<a href="/monitors/account">Account Monitor</a>
+						<a href="/monitors/security">Security Monitor</a>
+					</div>
+				</TopMenu>
+			)
+		}
+	});
+
+	Promise.all([AccountsSummaryService.get(), SecuritiesSummaryService.get()])
+		.then(showSummary)
+		.catch(alert);
+})();
 
 export { init };

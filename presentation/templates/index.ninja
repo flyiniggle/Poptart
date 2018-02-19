@@ -12,7 +12,4 @@
 {% block js %}
 	{{ super() }}
 	<script type="text/javascript" src="/ui/modules/Dashboard/scripts/main.js"></script>
-	<script type="text/javascript">
-		window.onload = Poptart.Dashboard.init;
-	</script>
 {% endblock %}

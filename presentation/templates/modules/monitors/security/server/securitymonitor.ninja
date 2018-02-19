@@ -22,7 +22,6 @@
 	<script type="text/javascript">
 		(function() {
 			Poptart.Monitor.Security.setSecurities({{ securities | safe }});
-			jQuery(Poptart.Monitor.Security.init);
 		})();
 	</script>
 {% endblock %}

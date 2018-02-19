@@ -32,7 +32,14 @@ function init() {
 		});
 	};
 	loader(configInstance);
+};
 
+function setSecurities(securitiesList = []) {
+	securities = securitiesList;
+}
+
+//Main
+(function() {
 	new Vue({
 		el: "#controlsContainer",
 		components: { TopMenu },
@@ -46,10 +53,8 @@ function init() {
 			)
 		}
 	});
-};
 
-function setSecurities(securitiesList = []) {
-	securities = securitiesList;
-}
+	jQuery(init);
+})();
 
-export { init, setSecurities };
+export { setSecurities };

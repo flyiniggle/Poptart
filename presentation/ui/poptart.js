@@ -7,7 +7,6 @@ import jQuery from "Lib/Poptart.jQuery";
 //////////////////////
 var nunjucksEnvironment;
 
-
 export {
 	nunjucksEnvironment
 };
