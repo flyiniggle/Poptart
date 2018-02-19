@@ -9,6 +9,5 @@ describe("#AlertsList", function() {
 		const alerts = wrapper.findAll(".alert");
 
 		expect(alerts).to.have.lengthOf(3);
-
 	});
 });
