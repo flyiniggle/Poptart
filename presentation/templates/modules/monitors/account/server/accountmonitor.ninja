@@ -60,7 +60,6 @@
 	<script type="text/javascript">
 		(function(){
 			Poptart.Monitor.Account.setAccountList({{accountList | safe}});
-			jQuery(Poptart.Monitor.Account.init);
 		})();
 	</script>
 {% endblock %}

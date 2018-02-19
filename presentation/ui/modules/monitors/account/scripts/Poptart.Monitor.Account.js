@@ -8,6 +8,7 @@ import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
 import * as CreateAccountModule from "Poptart/modules/monitors/account/scripts/Poptart.Monitor.Account.CreateAccount";
 import { AccountsSummaryService } from "Poptart/common/services/Summary";
 import AlertsList from "Poptart/common/views/AlertsList";
+import TopMenu from "Poptart/common/views/TopMenu/TopMenu";
 
 import "Poptart/css/main";
 import "Poptart/modules/account/css/styles.css";
@@ -145,9 +146,6 @@ function init() {
 	};
 
 	loader(configInstance);
-
-	AccountsSummaryService.get().then(showAlerts);
-
 };
 
 function showAlerts(data) {
@@ -170,5 +168,25 @@ function setAccountList(al = []) {
 	accountList = al;
 }
 
-export { init, launchAccount, setAccountList };
+//Main
+(function() {
+	new Vue({
+		el: "#controlsContainer",
+		components: {TopMenu},
+		render: function (h) {
+			return (
+				<TopMenu>
+					<div slot="navigatorControls">
+						<a href="/">Dashboard</a>
+					</div>
+				</TopMenu>
+			)
+		}
+	});
+
+	AccountsSummaryService.get().then(showAlerts);
+	jQuery(init);
+})();
+
+export { launchAccount, setAccountList };
 export let CreateAccount = CreateAccountModule;
