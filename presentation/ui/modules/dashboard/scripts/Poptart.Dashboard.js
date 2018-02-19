@@ -36,7 +36,7 @@ function showSummary(summaries) {
 			);
 		}
 	});
-console.log(accountsSummary)
+
 	new Vue({
 		el: "#alertsContent",
 		components: { AlertsList },
@@ -44,7 +44,6 @@ console.log(accountsSummary)
 			return <AlertsList alerts={ accountsSummary.alerts }/>
 		}
 	});
-	//jQuery("#alertsContent").append(nunjucksEnvironment.render("presentation/templates/components/alerts/shared/alerts.ninja", accountsSummary));
 }
 
 
