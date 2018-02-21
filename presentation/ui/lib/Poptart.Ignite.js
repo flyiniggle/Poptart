@@ -39,6 +39,19 @@ const loader = function(config) {
 	loaderFunction(config);
 };
 
+const Service = function(dependencies) {
+	if(typeof dependencies !== "string" || dependencies === "") {
+		throw new Error("Ignite service requires a dependency list.");
+	}
+	return new Promise(function(reject, resolve) {
+		let configInstance = Object.create(loaderConfig, {});
+
+		configInstance.resources = dependencies;
+		configInstance.ready = resolve;
+		loader(configInstance);
+	})
+}
+
 jQuery.ig.dependencies.push({
 	widget: "Adding",
 	parentWidget: "igGrid,igHierarchicalGrid",
@@ -50,4 +63,4 @@ jQuery.ig.dependencies.push({
 	return item.widget === "igGrid";
 }).dependency.push({name: "igGridAdding"});*/
 
-export { constants, loaderConfig, loader };
+export { constants, loaderConfig, loader, Service };
