@@ -24,6 +24,7 @@
 		name: "Menu",
 		components: {
 			AccountDeleter,
+			AccountLauncher,
 			Ribbon,
 			RibbonGroup,
 			AccountControls
