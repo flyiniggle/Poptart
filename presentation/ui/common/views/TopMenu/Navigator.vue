@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<div @mouseover="hovered = true" @mouseout="hovered = false" class="mainNavMenuTarget">
+	<div class="mainNavMenuTarget">
+		<div @mouseover="hovered = true" @mouseout="hovered = false">
 			<h2 id="mainNavMenuTargetText" class="ion-android-exit">
 				Go To
 			</h2>

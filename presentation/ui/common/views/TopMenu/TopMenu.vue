@@ -1,12 +1,14 @@
 <template functional>
 	<div class="controlsContainer">
 		<div id="controls">
-			<Navigator>
+			<navigator>
 				<slot name="navigatorControls"></slot>
-			</Navigator>
+			</navigator>
 			<div id="ribbonMenuTabs">
+				<slot name="ribbonLinks"></slot>
 			</div>
 			<div id="ribbonMenuStack">
+				<slot name="ribbons"></slot>
 			</div>
 		</div>
 	</div>
@@ -40,5 +42,16 @@
 		-moz-box-shadow: 0 2px 2px 0 rgba(100, 100, 100, 0.5);
 		box-shadow: 0 2px 2px 0 rgba(100, 100, 100, 0.5);
 		z-index: 100;
+	}
+
+	#ribbonMenuTabs {
+		position: absolute;
+		top: 0;
+		display: inline-block;
+		height: inherit;
+	}
+
+	#ribbonMenuStack {
+		height: 70px;
 	}
 </style>

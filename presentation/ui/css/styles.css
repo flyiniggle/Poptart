@@ -78,39 +78,6 @@ body {
 	vertical-align: middle;
 }
 
-#ribbonMenuTabs {
-	position: absolute;
-	top: 0;
-	display: inline-block;
-	height: inherit;
-}
-
-.ribbonMenuTab {
-	min-width: 70px;
-	height: 100%;
-	line-height: 50px;
-	padding-left: 10px;
-	padding-right: 10px;
-}
-
-.ribbonMenuTabUnselected {
-	color: rgb(61, 61, 61);
-}
-
-.ribbonMenuTabUnselected:hover {
-	background: rgb(117, 169, 203);
-	color: rgb(222, 222, 222);
-}
-
-.ribbonMenuTabSelected {
-	background: rgb(117, 169, 203);
-	color: rgb(222, 222, 222);
-}
-
-#ribbonMenuStack {
-	height: 70px;
-}
-
 .ribbonMenu {
 	display: none;
 	background-color: rgb(117, 169, 203);

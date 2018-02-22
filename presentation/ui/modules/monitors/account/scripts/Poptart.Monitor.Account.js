@@ -5,10 +5,12 @@ import jQuery from "Lib/Poptart.jQuery";
 import "jqueryui";
 
 import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
+
 import * as CreateAccountModule from "Poptart/modules/monitors/account/scripts/Poptart.Monitor.Account.CreateAccount";
+import TopMenu from "Poptart/modules/monitors/account/views/TopMenu";
+
 import { AccountsSummaryService } from "Poptart/common/services/Summary";
 import AlertsList from "Poptart/common/views/AlertsList";
-import TopMenu from "Poptart/common/views/TopMenu/TopMenu";
 
 import "Poptart/css/main";
 import "Poptart/modules/account/css/styles.css";
@@ -172,14 +174,10 @@ function setAccountList(al = []) {
 (function() {
 	new Vue({
 		el: "#controlsContainer",
-		components: {TopMenu},
+		components: { TopMenu },
 		render: function (h) {
 			return (
-				<TopMenu>
-					<div slot="navigatorControls">
-						<a href="/">Dashboard</a>
-					</div>
-				</TopMenu>
+				<TopMenu/>
 			)
 		}
 	});
