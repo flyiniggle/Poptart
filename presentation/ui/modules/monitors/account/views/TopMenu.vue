@@ -4,7 +4,12 @@
 			<a href="/">Dashboard</a>
 		</div>
 		<div slot="ribbonLinks">
-			<ribbon-link menuComponent="ManagementMenu" @selected="setSelectedRibbonMenu">Management</ribbon-link>
+			<ribbon-link
+				menuComponent="managementMenu"
+				:isSelected="selectedRibbon === 'managementMenu'"
+				@selected="setSelectedRibbonMenu">
+				Management
+			</ribbon-link>
 		</div>
 		<div slot="ribbons">
 			<component :is="selectedRibbon">

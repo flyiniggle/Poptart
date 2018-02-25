@@ -1,5 +1,5 @@
 <template>
-	<div id="ribbonMenu_Management" class="ribbonMenu">
+	<div class="ribbonMenu">
 		<slot></slot>
 	</div>
 </template>
@@ -15,3 +15,12 @@
 		}
 	}
 </script>
+
+<style>
+	.ribbonMenu {
+		background-color: rgb(117, 169, 203);
+		height: 70px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+</style>
