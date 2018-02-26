@@ -3,7 +3,7 @@ import { expect } from "chai";
 import Summary from './Summary';
 
 
-describe('Summary.vue', function() {
+describe('#Summary', function() {
 	const summaryTestData = {
 		accountsCount: 140,
 		recentlyUsed: "account1, account2, account3",
