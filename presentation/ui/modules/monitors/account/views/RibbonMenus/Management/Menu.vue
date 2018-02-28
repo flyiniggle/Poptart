@@ -31,7 +31,8 @@
 		},
 		data: function() {
 			return {
-				name: "managementMenu"
+				name: "managementMenu",
+				displayName: "Management"
 			}
 		}
 	}

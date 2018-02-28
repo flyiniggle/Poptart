@@ -1,15 +1,58 @@
 <script>
-	import { filter } from "ramda";
+	import { curry, find, map, pipe, pluck } from "ramda";
 
 	import Navigator from "./Navigator";
+	import RibbonLink from "./RibbonLink";
+
+	const getVNodeData = (VNode) => VNode.componentOptions.Ctor.options.data();
+	const getRibbonMenuName = pluck("name");
+	const getRibbonMenuLinkName = pluck("displayName");
+	const getNameFromVNode = pipe(getVNodeData, getRibbonMenuName);
+	const getLinkNameFromVNode = pipe(getVNodeData, getRibbonMenuLinkName);
+	const isSelectedMenu = curry((selectedRibbon, componentName) => componentName === selectedRibbon);
+	const getIsSelected = curry(function(selectedRibbon, VNode) {
+		return isSelectedMenu(selectedRibbon, getNameFromVNode(VNode))
+	});
 
 	const getSelectedRibbonMenu = function(selectedRibbon, list) {
-		return list.filter(component => component.componentOptions.Ctor.options.data().name === selectedRibbon);
+		return pipe(
+			map(getVNodeData),
+			map(getRibbonMenuName),
+			find(isSelectedMenu(selectedRibbon))
+		)(list);
+	};
+
+	const getRibbonLinkData = function(selectedRibbon, ribbons) {
+		return map(ribbon => {
+				return {
+					name: getRibbonMenuName(ribbon),
+					displayName: getRibbonMenuLinkName(ribbon),
+					isSelected: getIsSelected(selectedRibbon, ribbon)
+				};
+			}
+		);
+	};
+
+	const renderRibbonLink = curry(function(h, ribbon) {
+		return (
+			<ribbon-link
+				menuComponent={ ribbon.name }
+				isSelected={ ribbon.isSelected }>
+				{ ribbon.displayName }
+			</ribbon-link>
+		);
+	});
+
+	const renderRibbonLinks = function(h, selectedRibbon, ribbons) {
+		return pipe(
+			getRibbonLinkData(selectedRibbon),
+			map(renderRibbonLink(h))
+		)(ribbons);
 	}
 
 	export default {
 		name: "TopMenu",
-		components: { Navigator },
+		components: { Navigator, RibbonLink },
 		props: {
 			selectedRibbon: {
 				type: String,
@@ -24,7 +67,7 @@
 							{ this.$slots.navigatorControls }
 						</navigator>
 						<div id="ribbonMenuTabs">
-							{ this.$slots.ribbonLinks }
+							{ renderRibbonLinks(h, this.selectedRibbon, this.$slots.ribbons[0].children) }
 						</div>
 						<div id="ribbonMenuStack">
 							{ getSelectedRibbonMenu(this.selectedRibbon, this.$slots.ribbons[0].children) }

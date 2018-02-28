@@ -35,14 +35,6 @@
 					<div slot="navigatorControls">
 						<a href="/">Dashboard</a>
 					</div>
-					<div slot="ribbonLinks">
-						<ribbon-link
-							menuComponent="managementMenu"
-							isSelected={ this.selectedRibbon === 'managementMenu' }
-							onSelected={ this.setSelectedRibbonMenu }>
-							Management
-						</ribbon-link>
-					</div>
 					<div slot="ribbons">
 						<management-menu />
 					</div>
