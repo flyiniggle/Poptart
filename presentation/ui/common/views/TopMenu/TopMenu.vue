@@ -1,14 +1,12 @@
 <script>
-	import { assoc, curry, findIndex, map, pick, pipe, pluck } from "ramda";
+	import { curry, findIndex, map, pick, pipe, pluck } from "ramda";
 
 	import Navigator from "./Navigator";
 	import RibbonLink from "./RibbonLink";
 
-	const getVNodeData = (VNode) => VNode.componentOptions.Ctor.options.data();
+	const getVNodeProps = (VNode) => VNode.componentOptions.propsData;
 	const getRibbonMenuName = pluck("name");
-	const getRibbonMenuLinkName = pluck("displayName");
-	const getNameFromVNode = pipe(getVNodeData, getRibbonMenuName);
-	const getLinkNameFromVNode = pipe(getVNodeData, getRibbonMenuLinkName);
+	const getNameFromVNode = pipe(getVNodeProps, getRibbonMenuName);
 	const isSelectedMenu = curry((selectedRibbon, componentName) => componentName === selectedRibbon);
 	const getIsSelected = curry(function(selectedRibbon, VNode) {
 		return isSelectedMenu(selectedRibbon, getNameFromVNode(VNode))
@@ -16,7 +14,7 @@
 
 	const getSelectedRibbonMenu = function(selectedRibbon, list) {
 		const ribbonMenuIndex = pipe(
-			map(getVNodeData),
+			map(getVNodeProps),
 			getRibbonMenuName,
 			findIndex(isSelectedMenu(selectedRibbon))
 		)(list);
@@ -26,7 +24,7 @@
 
 	const getRibbonLinkData = curry(function(selectedRibbon, ribbons) {
 		return pipe(
-			map(getVNodeData),
+			map(getVNodeProps),
 			map(pick(["name", "displayName"])),
 			map((ribbon) => {
 				return {
@@ -91,7 +89,17 @@
 				</div>
 			)
 		}
-	}
+	};
+
+	export {
+		getNameFromVNode,
+		isSelectedMenu,
+		getIsSelected,
+		getSelectedRibbonMenu,
+		getRibbonLinkData,
+		renderRibbonLink,
+		renderRibbonLinks
+	};
 </script>
 
 <style scoped>
