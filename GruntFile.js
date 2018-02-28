@@ -42,6 +42,9 @@ module.exports = function(grunt) {
 			}
 		},
 		webpack: {
+			options: {
+				failOnError: false
+			},
 			watch: webpackConfig.map(config => Object.assign({ watch: true, progress: true }, config)),
 			build: webpackConfig.map(config => Object.assign({ progress: false }, config)),
 			ignite: webpackConfig[2]
