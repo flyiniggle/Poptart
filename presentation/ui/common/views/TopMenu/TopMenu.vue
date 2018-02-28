@@ -1,5 +1,5 @@
 <script>
-	import { curry, find, map, pipe, pluck } from "ramda";
+	import { assoc, curry, find, map, pick, pipe, pluck } from "ramda";
 
 	import Navigator from "./Navigator";
 	import RibbonLink from "./RibbonLink";
@@ -23,14 +23,16 @@
 	};
 
 	const getRibbonLinkData = function(selectedRibbon, ribbons) {
-		return map(ribbon => {
+		return pipe(
+			map(getVNodeData),
+			map(pick(["name", "displayName"])),
+			map((ribbon) => {
 				return {
-					name: getRibbonMenuName(ribbon),
-					displayName: getRibbonMenuLinkName(ribbon),
-					isSelected: getIsSelected(selectedRibbon, ribbon)
+					"isSelected": (ribbon.name === selectedRibbon),
+					...ribbon
 				};
-			}
-		);
+			})
+		)(ribbons);
 	};
 
 	const renderRibbonLink = curry(function(h, ribbon) {
