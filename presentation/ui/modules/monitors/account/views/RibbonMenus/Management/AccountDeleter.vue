@@ -6,7 +6,9 @@
 </template>
 
 <script>
-	import jQuery from "jquery";
+	import jQuery from "Lib/Poptart.jQuery";
+	import "jqueryui";
+
 	import { Service as igService } from "Lib/Poptart.Ignite";
 
 	export default {

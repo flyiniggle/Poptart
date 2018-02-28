@@ -19,19 +19,9 @@
 			AccountDeleter,
 			AccountControls
 		},
-		data: function() {
-			return {
-				selectedRibbon: ""
-			}
-		},
-		methods: {
-			setSelectedRibbonMenu: function(selected) {
-				this.selectedRibbon = selected;
-			}
-		},
 		render: function(h) {
 			return (
-				<top-menu selectedRibbon={ this.selectedRibbon }>
+				<top-menu startingSelectedRibbon="managementMenu">
 					<div slot="navigatorControls">
 						<a href="/">Dashboard</a>
 					</div>
