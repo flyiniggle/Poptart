@@ -8,7 +8,6 @@
 	import AccountLauncher from "./RibbonMenus/Management/AccountLauncher";
 	import AccountControls from "./RibbonMenus/Management/AccountControls";
 	import AccountDeleter from "./RibbonMenus/Management/AccountDeleter";
-	import ManagementMenu from "./RibbonMenus/Management/Menu";
 
 
 	export default {
