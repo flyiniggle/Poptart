@@ -22,7 +22,8 @@
 		)(list);
 	};
 
-	const getRibbonLinkData = function(selectedRibbon, ribbons) {
+	const getRibbonLinkData = curry(function(selectedRibbon, ribbons) {
+		console.log(ribbons)
 		return pipe(
 			map(getVNodeData),
 			map(pick(["name", "displayName"])),
@@ -33,7 +34,7 @@
 				};
 			})
 		)(ribbons);
-	};
+	});
 
 	const renderRibbonLink = curry(function(h, ribbon) {
 		return (
