@@ -4,7 +4,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const sharedConfig = {
 	context: __dirname + "/../ui/",
-	devtool: 'source-map',
+	devtool: 'eval-source-map',
 	resolve: {
 		extensions: ['.js', '.vue', '.json'],
 		alias: {
