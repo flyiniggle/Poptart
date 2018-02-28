@@ -1,25 +1,38 @@
-<template functional>
-	<div class="controlsContainer">
-		<div id="controls">
-			<navigator>
-				<slot name="navigatorControls"></slot>
-			</navigator>
-			<div id="ribbonMenuTabs">
-				<slot name="ribbonLinks"></slot>
-			</div>
-			<div id="ribbonMenuStack">
-				<slot name="ribbons"></slot>
-			</div>
-		</div>
-	</div>
-</template>
-
 <script>
+	import { filter } from "ramda";
+
 	import Navigator from "./Navigator";
+
+	const getSelectedRibbonMenu = function(selectedRibbon, list) {
+		return list.filter(component => component.componentOptions.Ctor.options.data().name === selectedRibbon);
+	}
 
 	export default {
 		name: "TopMenu",
-		components: { Navigator }
+		components: { Navigator },
+		props: {
+			selectedRibbon: {
+				type: String,
+				default: ""
+			}
+		},
+		render: function(h) {
+			return (
+				<div class="controlsContainer">
+					<div id="controls">
+						<navigator>
+							{ this.$slots.navigatorControls }
+						</navigator>
+						<div id="ribbonMenuTabs">
+							{ this.$slots.ribbonLinks }
+						</div>
+						<div id="ribbonMenuStack">
+							{ getSelectedRibbonMenu(this.selectedRibbon, this.$slots.ribbons[0].children) }
+						</div>
+					</div>
+				</div>
+			)
+		}
 	}
 </script>
 

@@ -28,6 +28,11 @@
 			Ribbon,
 			RibbonGroup,
 			AccountControls
+		},
+		data: function() {
+			return {
+				name: "managementMenu"
+			}
 		}
 	}
 </script>

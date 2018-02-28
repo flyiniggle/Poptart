@@ -1,24 +1,3 @@
-<template>
-	<top-menu >
-		<div slot="navigatorControls">
-			<a href="/">Dashboard</a>
-		</div>
-		<div slot="ribbonLinks">
-			<ribbon-link
-				menuComponent="managementMenu"
-				:isSelected="selectedRibbon === 'managementMenu'"
-				@selected="setSelectedRibbonMenu">
-				Management
-			</ribbon-link>
-		</div>
-		<div slot="ribbons">
-			<component :is="selectedRibbon">
-				<management-menu />
-			</component>
-		</div>
-	</top-menu>
-</template>
-
 <script>
 	import Navigator from "Poptart/common/views/TopMenu/Navigator";
 	import RibbonLink from "Poptart/common/views/TopMenu/RibbonLink";
@@ -42,13 +21,33 @@
 		},
 		data: function() {
 			return {
-				selectedRibbon: "managementMenu"
+				selectedRibbon: ""
 			}
 		},
 		methods: {
 			setSelectedRibbonMenu: function(selected) {
 				this.selectedRibbon = selected;
 			}
+		},
+		render: function(h) {
+			return (
+				<top-menu selectedRibbon={ this.selectedRibbon }>
+					<div slot="navigatorControls">
+						<a href="/">Dashboard</a>
+					</div>
+					<div slot="ribbonLinks">
+						<ribbon-link
+							menuComponent="managementMenu"
+							isSelected={ this.selectedRibbon === 'managementMenu' }
+							onSelected={ this.setSelectedRibbonMenu }>
+							Management
+						</ribbon-link>
+					</div>
+					<div slot="ribbons">
+						<management-menu />
+					</div>
+				</top-menu>
+			)
 		}
 	}
 </script>

@@ -11,7 +11,6 @@ var Alert = function(level, summary, message) {
 	self.summary = summary ? summary.toString() : "";
 	self.message = message ? message.toString() : "";
 
-
 	// Methods
 	self.stringify = function() {
 		return JSON.stringify({
