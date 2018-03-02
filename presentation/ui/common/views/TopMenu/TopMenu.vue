@@ -17,7 +17,7 @@
 			map(getVNodeProps),
 			getRibbonMenuName,
 			findIndex(isSelectedMenu(selectedRibbon))
-		)(list);
+		)(list || []);
 
 		return list[ribbonMenuIndex];
 	};
@@ -32,7 +32,7 @@
 					...ribbon
 				};
 			})
-		)(ribbons);
+		)(ribbons || []);
 	});
 
 	const renderRibbonLink = curry(function(h, selectHandler, ribbon) {
@@ -50,7 +50,7 @@
 		return pipe(
 			getRibbonLinkData(selectedRibbon),
 			map(renderRibbonLink(h, selectHandler))
-		)(ribbons);
+		)(ribbons || []);
 	}
 
 	export default {
@@ -73,6 +73,8 @@
 			}
 		},
 		render: function(h) {
+			const ribbons = (this.$slots.ribbons && this.$slots.ribbons.length) ? this.$slots.ribbons[0].children : [];
+
 			return (
 				<div class="controlsContainer">
 					<div id="controls">
@@ -80,10 +82,10 @@
 							{ this.$slots.navigatorControls }
 						</navigator>
 						<div id="ribbonMenuTabs">
-							{ renderRibbonLinks(h, this.selectRibbon, this.selectedRibbon, this.$slots.ribbons[0].children) }
+							{ renderRibbonLinks(h, this.selectRibbon, this.selectedRibbon, ribbons) }
 						</div>
 						<div id="ribbonMenuStack">
-							{ getSelectedRibbonMenu(this.selectedRibbon, this.$slots.ribbons[0].children) }
+							{ getSelectedRibbonMenu(this.selectedRibbon, ribbons) }
 						</div>
 					</div>
 				</div>
