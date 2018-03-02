@@ -24,7 +24,7 @@
 		},
 		render: function(h) {
 			return (
-				<top-menu startingSelectedRibbon="managementMenu">
+				<top-menu startingSelectedRibbon="">
 					<div slot="navigatorControls">
 						<a href="/">Dashboard</a>
 					</div>
