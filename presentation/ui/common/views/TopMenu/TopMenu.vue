@@ -94,6 +94,7 @@
 	};
 
 	export {
+		getVNodeProps,
 		getNameFromVNode,
 		isSelectedMenu,
 		getIsSelected,

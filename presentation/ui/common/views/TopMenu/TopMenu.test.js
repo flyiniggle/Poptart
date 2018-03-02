@@ -8,28 +8,34 @@ import TopMenu from "./TopMenu";
 import * as TopMenuUtils from "./TopMenu";
 
 describe("#Common #Views #TopMenu", function() {
+	const ribbonMockFactory = function(name) {
+		return {
+			render(h) {
+				return h(Ribbon,  { props: { name: name, displayName: name}});
+			}
+		}
+	}
 	let ribbonMocks
 
-	/*before(function() {
-		ribbonMocks = ["a", "b", "c", "d"].reduce(function(template, name) {
-				return `${template}<ribbon name="${name}" displayName="${name}"/>`;
-			}, "");
-
+	before(function() {
+		ribbonMocks = ["a", "b", "c", "d"].map(ribbonMockFactory);
+		/*ribbonMocks = ["a", "b", "c", "d"].reduce(function(template, name) {
+				return `${template}<Ribbon name="${name}" displayName="${name}"/>`;
+			}, "");*/
 		console.log(ribbonMocks)
-	});*/
+	});
 
 	describe("#getNameFromVNode", function() {
 		it("should return the name data property from a VNode.", function() {
-			console.log(TopMenu)
-			const wrapper = mount(TopMenu, {
+			const wrapper = mount(Ribbon, {
 				propsData: {
-					startingSelectedRibbon: "whatever"
-				},
-				slots: {
-					//ribbons: Ribbon,
-					navigatorControls: "<div></div>"
+					name: "whatever",
+					displayName: "whatever"
 				}
 			});
+
+			console.log(wrapper.vm)
+			console.log(TopMenuUtils.getVNodeProps(wrapper.vm.$slots.ribbons[0].children))
 		});
 	});
 });
