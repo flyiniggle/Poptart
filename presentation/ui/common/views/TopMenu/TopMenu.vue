@@ -12,12 +12,12 @@
 		return isSelectedMenu(selectedRibbon, getNameFromVNode(VNode))
 	});
 
-	const getSelectedRibbonMenu = function(selectedRibbon, list) {
+	const getSelectedRibbonMenu = function(selectedRibbon, list = []) {
 		const ribbonMenuIndex = pipe(
 			map(getVNodeProps),
 			getRibbonMenuName,
 			findIndex(isSelectedMenu(selectedRibbon))
-		)(list || []);
+		)(list);
 
 		return list[ribbonMenuIndex];
 	};
