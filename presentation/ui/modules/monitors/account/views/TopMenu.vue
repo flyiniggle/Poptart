@@ -24,12 +24,12 @@
 		},
 		render: function(h) {
 			return (
-				<top-menu startingSelectedRibbon="">
+				<top-menu menus={["Management"]} startingSelectedRibbon="">
 					<div slot="navigatorControls">
 						<a href="/">Dashboard</a>
 					</div>
 					<div slot="ribbons">
-						<ribbon name="managementMenu" displayName="Management">
+						<ribbon name="Management">
 							<ribbon-group label="Launch Account">
 								<account-launcher/>
 							</ribbon-group>

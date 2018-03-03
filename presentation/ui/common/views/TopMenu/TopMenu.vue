@@ -23,33 +23,29 @@
 	};
 
 	const getRibbonLinkData = curry(function(selectedRibbon, ribbons) {
-		return pipe(
-			map(getVNodeProps),
-			map(pick(["name", "displayName"])),
-			map((ribbon) => {
-				return {
-					"isSelected": (ribbon.name === selectedRibbon),
-					...ribbon
-				};
-			})
-		)(ribbons || []);
+		return map(ribbonName => (
+				{
+					isSelected: (ribbonName === selectedRibbon),
+					name: ribbonName
+				}
+			), (ribbons || []));
 	});
 
-	const renderRibbonLink = curry(function(h, selectHandler, ribbon) {
-		return (
+	const renderRibbonLink = curry(function(h, selectHandler, ribbons) {
+		return map(ribbon => (
 			<ribbon-link
 				menuComponent={ ribbon.name }
 				isSelected={ ribbon.isSelected }
 				onSelected={ selectHandler }>
-				{ ribbon.displayName }
+				{ ribbon.name }
 			</ribbon-link>
-		);
+		), (ribbons || []));
 	});
 
 	const renderRibbonLinks = function(h, selectHandler, selectedRibbon, ribbons) {
 		return pipe(
 			getRibbonLinkData(selectedRibbon),
-			map(renderRibbonLink(h, selectHandler))
+			renderRibbonLink(h, selectHandler)
 		)(ribbons || []);
 	}
 
@@ -62,6 +58,10 @@
 			}
 		},
 		props: {
+			menus: {
+				type: Array,
+				default: () => []
+			},
 			startingSelectedRibbon: {
 				type: String,
 				default: ""
@@ -82,7 +82,7 @@
 							{ this.$slots.navigatorControls }
 						</navigator>
 						<div id="ribbonMenuTabs">
-							{ renderRibbonLinks(h, this.selectRibbon, this.selectedRibbon, ribbons) }
+							{ renderRibbonLinks(h, this.selectRibbon, this.selectedRibbon, this.menus) }
 						</div>
 						<div id="ribbonMenuStack">
 							{ getSelectedRibbonMenu(this.selectedRibbon, ribbons) }
