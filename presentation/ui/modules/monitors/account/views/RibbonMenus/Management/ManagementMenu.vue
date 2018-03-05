@@ -1,4 +1,6 @@
 <script>
+	import Vue from "vue";
+
 	import Ribbon from "Poptart/common/views/TopMenu/Ribbon";
 	import RibbonGroup from "Poptart/common/views/TopMenu/RibbonGroup";
 	import RibbonLink from "Poptart/common/views/TopMenu/RibbonLink";
@@ -8,7 +10,7 @@
 	import AccountDeleter from "./AccountDeleter";
 
 
-	export default {
+	const ManagementMenu = {
 		name: "Poptart-Monitor-Account-Management-Ribbon",
 		components:{
 			Ribbon,
@@ -34,4 +36,7 @@
 			)
 		}
 	}
+	Vue.component('management-menu', ManagementMenu);
+
+	export default ManagementMenu;
 </script>

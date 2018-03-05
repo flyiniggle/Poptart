@@ -29,6 +29,12 @@
 		)(ribbons);
 	}
 
+	const renderSelectedMenu = function(h, selectedRibbonName, ribbons) {
+		const selectedMenu = getSelectedMenu(selectedRibbonName, ribbons);
+
+		return selectedMenu ? selectedMenu(h) : null;
+	};
+
 	const getRibbonLinkData = curry(function(selectedRibbon, ribbons) {
 		return map(ribbon => (
 				{
@@ -44,7 +50,7 @@
 				menuComponent={ ribbon.name }
 				isSelected={ ribbon.isSelected }
 				onSelected={ selectHandler }>
-				{ ribbon.name }
+				{ ribbon.displayName }
 			</ribbon-link>
 		), (ribbons || []));
 	});
@@ -61,7 +67,7 @@
 		components: { Navigator, RibbonLink },
 		data: function() {
 			return {
-				selectedRibbon: this.startingSelectedRibbon,
+				selectedRibbon: this.startingSelectedRibbon.toLowerCase().replace(/\s/g, ''),
 				menus: map(nameMenu, this.menuSettings)
 			}
 		},
@@ -92,7 +98,7 @@
 							{ renderRibbonLinks(h, this.selectRibbon, this.selectedRibbon, this.menus) }
 						</div>
 						<div id="ribbonMenuStack">
-							{ getSelectedMenu(this.selectedRibbon, this.menus) }
+							{ renderSelectedMenu(h, this.selectedRibbon, this.menus) }
 						</div>
 					</div>
 				</div>

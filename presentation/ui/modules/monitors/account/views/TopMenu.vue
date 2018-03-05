@@ -12,7 +12,7 @@
 
 	const management = {
 		displayName: "Management",
-		ribbon: ManagementMenu
+		ribbon: (h) => <management-menu/>
 	}
 
 	export default {
@@ -25,11 +25,12 @@
 			Navigator,
 			AccountLauncher,
 			AccountDeleter,
-			AccountControls
+			AccountControls,
+			ManagementMenu
 		},
 		render: function(h) {
 			return (
-				<top-menu menus={[management]} startingSelectedRibbon="">
+				<top-menu menuSettings={ [management] } startingSelectedRibbon="Management">
 					<div slot="navigatorControls">
 						<a href="/">Dashboard</a>
 					</div>
