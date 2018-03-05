@@ -1,4 +1,4 @@
 {
-  "presets": ["env"],
+  "presets": ["env", "vue"],
   "plugins": ["transform-vue-jsx", "transform-object-rest-spread"]
 }

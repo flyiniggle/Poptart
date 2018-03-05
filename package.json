@@ -6,7 +6,7 @@
   "scripts": {
     "testClientIntegration": "mocha-webpack --webpack-config presentation/build/webpack.config.shared.js --require presentation/test/client/setup.js presentation/ui/**/*.spec.js",
     "testClientUnit": "mocha-webpack --webpack-config presentation/build/webpack.config.shared.js --require presentation/test/client/setup.js presentation/ui/**/*.test.js",
-    "testClient": "mocha-webpack --webpack-config presentation/build/webpack.config.shared.js --require presentation/test/client/setup.js presentation/ui/**/*.test.js presentation/ui/**/*.spec.js",
+    "testClient": "mocha-webpack --webpack-config presentation/build/webpack.config.shared.js --require presentation/test/client/setup.js presentation/ui/**/*.test.js presentation/ui/**/*.spec.js --watch",
     "test": "grunt test && npm run testClient"
   },
   "repository": {
@@ -36,6 +36,7 @@
     "babel-plugin-transform-vue-jsx": "3.5.1",
     "babel-preset-env": "1.6.1",
     "babel-preset-es2015": "6.24.1",
+    "babel-preset-vue": "2.0.1",
     "babel-register": "6.26.0",
     "chai": "3.5.0",
     "chai-jquery": "2.0.0",

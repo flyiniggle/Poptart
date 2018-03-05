@@ -52,7 +52,7 @@
 	// enable code point escapes
 	"globalReturn": false,
 	// allow return statements in the global scope
-	"jsx": false
+	"jsx": true
 	// enable JSX
   },
   "env": {
@@ -105,7 +105,7 @@
 	// disallow use of constant expressions in conditions
 	"no-control-regex": 0,
 	// disallow control characters in regular expressions
-	"no-debugger": 2,
+	"no-debugger": 1,
 	// disallow use of debugger
 	"no-dupe-args": 2,
 	// disallow duplicate arguments in functions
@@ -123,12 +123,11 @@
 	// disallow double-negation boolean casts in a boolean context
 	"no-extra-parens": 0,
 	// disallow unnecessary parentheses (off by default)
-	"no-extra-semi": 0,
+	"no-extra-semi": 2,
 	// disallow unnecessary semicolons
 	"no-func-assign": 2,
 	// disallow overwriting functions written as function declarations
 	"no-implicit-globals": 2,
-	//One day we will turn this on...
 	//disallow var and named function declarations in the global scope
 	"no-inner-declarations": 2,
 	// disallow function or variable declarations in nested blocks
@@ -176,7 +175,7 @@
 	// encourages use of dot notation whenever possible
 	"dot-location": 0,
 	// enforces consistent newlines before or after dots (off by default)
-	"eqeqeq": 1,
+	"eqeqeq": 2,
 	// require the use of === and !==
 	"guard-for-in": 1,
 	// make sure for-in loops have an if statement (off by default)
@@ -186,7 +185,7 @@
 	// disallow use of arguments.caller or arguments.callee
 	"no-div-regex": 0,
 	// disallow division operators explicitly at beginning of regular expression (off by default)
-	"no-else-return": 1,
+	"no-else-return": 0,
 	// disallow else after a return in an if (off by default)
 	"no-empty-label": 0,
 	// disallow use of labels for anything other then loops and switches
