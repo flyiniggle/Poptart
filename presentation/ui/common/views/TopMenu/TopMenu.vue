@@ -1,32 +1,39 @@
 <script>
-	import { curry, findIndex, map, pick, pipe, pluck } from "ramda";
+	import { curry, find, map, pick, pipe, prop } from "ramda";
 
 	import Navigator from "./Navigator";
 	import RibbonLink from "./RibbonLink";
 
-	const getVNodeProps = (VNode) => VNode.componentOptions.propsData;
-	const getRibbonMenuName = pluck("name");
-	const getNameFromVNode = pipe(getVNodeProps, getRibbonMenuName);
-	const isSelectedMenu = curry((selectedRibbon, componentName) => componentName === selectedRibbon);
-	const getIsSelected = curry(function(selectedRibbon, VNode) {
-		return isSelectedMenu(selectedRibbon, getNameFromVNode(VNode))
-	});
-
-	const getSelectedRibbonMenu = function(selectedRibbon, list = []) {
-		const ribbonMenuIndex = pipe(
-			map(getVNodeProps),
-			getRibbonMenuName,
-			findIndex(isSelectedMenu(selectedRibbon))
-		)(list);
-
-		return list[ribbonMenuIndex];
+	const nameMenu = function(menu) {
+		if(!menu.displayName) {
+			throw new Error("Ribbon menus must have a displayName provided.");
+		}
+		return {
+			name: menu.displayName.toLowerCase().replace(/\s/g, ''),
+			...menu
+		};
 	};
 
+	const isSelectedRibbon = curry((selectedRibbon, name) => name === selectedRibbon);
+	const getIsSelectedRibbon = curry(function(selectedRibbon, ribbon) {
+		return pipe(
+			prop("name"),
+			isSelectedRibbon(selectedRibbon)
+		)(ribbon);
+	});
+
+	const getSelectedMenu = function(selectedRibbonName, ribbons) {
+		return pipe(
+			find(getIsSelectedRibbon(selectedRibbonName)),
+			prop("ribbon")
+		)(ribbons);
+	}
+
 	const getRibbonLinkData = curry(function(selectedRibbon, ribbons) {
-		return map(ribbonName => (
+		return map(ribbon => (
 				{
-					isSelected: (ribbonName === selectedRibbon),
-					name: ribbonName
+					isSelected: getIsSelectedRibbon(selectedRibbon, ribbon),
+					...ribbon
 				}
 			), (ribbons || []));
 	});
@@ -47,18 +54,19 @@
 			getRibbonLinkData(selectedRibbon),
 			renderRibbonLink(h, selectHandler)
 		)(ribbons || []);
-	}
+	};
 
 	export default {
 		name: "TopMenu",
 		components: { Navigator, RibbonLink },
 		data: function() {
 			return {
-				selectedRibbon: this.startingSelectedRibbon
+				selectedRibbon: this.startingSelectedRibbon,
+				menus: map(nameMenu, this.menuSettings)
 			}
 		},
 		props: {
-			menus: {
+			menuSettings: {
 				type: Array,
 				default: () => []
 			},
@@ -73,7 +81,6 @@
 			}
 		},
 		render: function(h) {
-			const ribbons = (this.$slots.ribbons && this.$slots.ribbons.length) ? this.$slots.ribbons[0].children : [];
 
 			return (
 				<div class="controlsContainer">
@@ -85,7 +92,7 @@
 							{ renderRibbonLinks(h, this.selectRibbon, this.selectedRibbon, this.menus) }
 						</div>
 						<div id="ribbonMenuStack">
-							{ getSelectedRibbonMenu(this.selectedRibbon, ribbons) }
+							{ getSelectedMenu(this.selectedRibbon, this.menus) }
 						</div>
 					</div>
 				</div>
@@ -94,11 +101,10 @@
 	};
 
 	export {
-		getVNodeProps,
-		getNameFromVNode,
-		isSelectedMenu,
-		getIsSelected,
-		getSelectedRibbonMenu,
+		nameMenu,
+		isSelectedRibbon,
+		getIsSelectedRibbon,
+		getSelectedMenu,
 		getRibbonLinkData,
 		renderRibbonLink,
 		renderRibbonLinks

@@ -5,10 +5,15 @@
 	import RibbonLink from "Poptart/common/views/TopMenu/RibbonLink";
 	import TopMenu from "Poptart/common/views/TopMenu/TopMenu";
 
+	import ManagementMenu from "./RibbonMenus/Management/ManagementMenu";
 	import AccountLauncher from "./RibbonMenus/Management/AccountLauncher";
 	import AccountControls from "./RibbonMenus/Management/AccountControls";
 	import AccountDeleter from "./RibbonMenus/Management/AccountDeleter";
 
+	const management = {
+		displayName: "Management",
+		ribbon: ManagementMenu
+	}
 
 	export default {
 		name: "Poptart-Monitor-Account-TopMenu",
@@ -24,22 +29,9 @@
 		},
 		render: function(h) {
 			return (
-				<top-menu menus={["Management"]} startingSelectedRibbon="">
+				<top-menu menus={[management]} startingSelectedRibbon="">
 					<div slot="navigatorControls">
 						<a href="/">Dashboard</a>
-					</div>
-					<div slot="ribbons">
-						<ribbon name="Management">
-							<ribbon-group label="Launch Account">
-								<account-launcher/>
-							</ribbon-group>
-							<ribbon-group label="Delete Account">
-								<account-deleter/>
-							</ribbon-group>
-							<ribbon-group label="Controls">
-								<account-controls/>
-							</ribbon-group>
-						</ribbon>
 					</div>
 				</top-menu>
 			)
