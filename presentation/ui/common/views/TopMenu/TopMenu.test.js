@@ -254,7 +254,6 @@ describe("#Common #Views #TopMenu", function() {
 			}
 		};
 
-
 		it("should render three ribbon links.", function() {
 			const menu = mount(generateTestMenu(testMenuRibbons));
 
@@ -263,11 +262,11 @@ describe("#Common #Views #TopMenu", function() {
 
 		it("should show display names in ribbon links.", function() {
 			const menu = mount(generateTestMenu(testMenuRibbons));
-			const menuLinks = menu.findAll(RibbonLink).wrappers;
+			const menuLinks = menu.findAll(RibbonLink);
 
-			expect(menuLinks[0].element.innerHTML).to.equal("test1");
-			expect(menuLinks[1].element.innerHTML).to.equal("test2");
-			expect(menuLinks[2].element.innerHTML).to.equal("test3");
+			expect(menuLinks.at(0).element.innerHTML).to.equal("test1");
+			expect(menuLinks.at(1).element.innerHTML).to.equal("test2");
+			expect(menuLinks.at(2).element.innerHTML).to.equal("test3");
 		});
 
 		it("should not show a ribbon on load when no starting ribbon is specified.", function() {
@@ -286,6 +285,23 @@ describe("#Common #Views #TopMenu", function() {
 			const menu = mount(generateTestMenu(testMenuRibbons, "test2"));
 
 			expect(menu.findAll("#ribbon-test2").length).to.equal(1);
+		});
+
+		it("should show a ribbon menu after a ribbon link is clicked.", function() {
+			const menu = mount(generateTestMenu(testMenuRibbons));
+
+			menu.find(".ribbonMenuTab").trigger("click");// Click the first ribbon link
+			expect(menu.findAll("#ribbon-test1").length).to.equal(1);
+		});
+
+		it("should show a different ribbon menu after a ribbon link is clicked.", function() {
+			const menu = mount(generateTestMenu(testMenuRibbons, "test1"));
+
+			console.log(menu.findAll(".ribbonMenuTab"))
+			menu.findAll(".ribbonMenuTab").at(2).trigger("click");
+			expect(menu.findAll("#ribbon-test3").length).to.equal(1);
+			expect(menu.findAll("#ribbon-test1").length).to.equal(0);
+			expect(menu.findAll("#ribbon-test2").length).to.equal(0);
 		});
 	});
 });
