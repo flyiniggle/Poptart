@@ -297,7 +297,6 @@ describe("#Common #Views #TopMenu", function() {
 		it("should show a different ribbon menu after a ribbon link is clicked.", function() {
 			const menu = mount(generateTestMenu(testMenuRibbons, "test1"));
 
-			console.log(menu.findAll(".ribbonMenuTab"))
 			menu.findAll(".ribbonMenuTab").at(2).trigger("click");
 			expect(menu.findAll("#ribbon-test3").length).to.equal(1);
 			expect(menu.findAll("#ribbon-test1").length).to.equal(0);
