@@ -4,9 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "testClientIntegration": "mocha-webpack --webpack-config presentation/build/webpack.config.shared.js --require presentation/test/client/setup.js presentation/ui/**/*.spec.js",
-    "testClientUnit": "mocha-webpack --webpack-config presentation/build/webpack.config.shared.js --require presentation/test/client/setup.js presentation/ui/**/*.test.js",
-    "testClient": "mocha-webpack --webpack-config presentation/build/webpack.config.shared.js --require presentation/test/client/setup.js presentation/ui/**/*.test.js presentation/ui/**/*.spec.js",
+    "watchTestClient": "mocha-webpack --webpack-config presentation/build/webpack.config.shared.js --require presentation/test/client/setup.js presentation/ui/**/*.test.js --watch",
+    "testClient": "mocha-webpack --webpack-config presentation/build/webpack.config.shared.js --require presentation/test/client/setup.js presentation/ui/**/*.test.js",
     "test": "grunt test && npm run testClient"
   },
   "repository": {
