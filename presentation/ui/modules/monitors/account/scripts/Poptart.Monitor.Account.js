@@ -1,12 +1,12 @@
 // Poptart.Monitor.Account
-////////////////////////////////
+///////////////////////////////
 import Vue from "vue";
 import jQuery from "Lib/Poptart.jQuery";
 import "jqueryui";
 
 import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
 
-import * as CreateAccountModule from "Poptart/modules/monitors/account/scripts/Poptart.Monitor.Account.CreateAccount";
+import * as CreateAccountModule from "Poptart/modules/monitors/account/Create/CreateAccount";
 import TopMenu from "Poptart/modules/monitors/account/views/TopMenu";
 
 import { AccountsSummaryService } from "Poptart/common/services/Summary";
@@ -166,25 +166,24 @@ function launchAccount() {
 	jQuery("#am_accountLauncher").attr("action", "/account/" + pk).submit();
 }
 
-function setAccountList(al = []) {
-	accountList = al;
-}
-
 //Main
 (function() {
-	new Vue({
-		el: "#controlsContainer",
-		components: { TopMenu },
-		render: function (h) {
-			return (
-				<TopMenu/>
-			)
-		}
-	});
+	if(window.POPTART_MODULE === "poptart.monitors.account") {
+		accountList = window.POPTART_DATA.accountList;
+		new Vue({
+			el: "#controlsContainer",
+			components: {TopMenu},
+			render: function (h) {
+				return (
+					<TopMenu/>
+				)
+			}
+		});
 
-	AccountsSummaryService.get().then(showAlerts);
-	jQuery(init);
+		AccountsSummaryService.get().then(showAlerts);
+		jQuery(init);
+	}
 })();
 
-export { launchAccount, setAccountList };
+export { launchAccount };
 export let CreateAccount = CreateAccountModule;

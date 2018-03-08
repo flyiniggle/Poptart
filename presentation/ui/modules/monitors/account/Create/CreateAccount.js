@@ -1,10 +1,13 @@
 // Poptart.Monitor.Account.CreateAccount
-////////////////////////////////
+/////////////////////////////////////////////
+import Vue from "vue";
+
 import jQuery from "Lib/Poptart.jQuery";
 import ko from "Lib/Poptart.Knockout";
 import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
 
-import * as CreateAccountService from "Poptart/modules/monitors/account/scripts/Poptart.Monitor.Account.CreateAccount.Service";
+import * as CreateAccountService from "./Services/CreateAccount";
+import TopMenu from "./Views/TopMenu";
 
 import "Poptart/modules/monitors/account/css/styles.css";
 
@@ -333,9 +336,40 @@ function setComboEditorOptions() {
 
 //Public Methods
 //////////////////
+const submit = function() {
+	CreateAccountService.saveAccount(ko.toJS(viewModel), jQuery("#createAccountHoldings").igGrid("dataSourceObject")).then(launchNewAccount);
+};
 
-const init = function() {
-	var configInstance = Object.create(loaderConfig, {});
+//Private Functions
+//////////////////
+function launchNewAccount(account) {
+	window.location.href = "/account/" + account;
+}
+
+function calculateHoldingsModel() {
+	var rows = jQuery("#createAccountHoldings")
+		.igGrid("dataSourceObject")
+		.map(function(holding) {
+			return new HoldingModel(holding);
+		});
+
+	this.viewModel.holdings(rows);
+}
+
+//Main
+(function() {
+	if(window.POPTART_MODULE === "poptart.monitors.account.create")
+	new Vue({
+		el: "#controlsContainer",
+		components: { TopMenu },
+		render: function (h) {
+			return (
+				<TopMenu/>
+			)
+		}
+	});
+
+	const configInstance = Object.create(loaderConfig, {});
 
 	configInstance.resources = "igCombo,igEditors,igGrid.Updating.Adding,extensions/infragistics.datasource.knockoutjs.js,extensions/infragistics.ui.grid.knockout-extensions.js,extensions/infragistics.ui.combo.knockout-extensions.js,extensions/infragistics.ui.editors.knockout-extensions.js";
 	configInstance.ready = function() {
@@ -361,30 +395,8 @@ const init = function() {
 		jQuery("#submitCreateAccount").on("click", submit.bind(this));
 	};
 	loader(configInstance);
-};
-
-const submit = function() {
-	CreateAccountService.saveAccount(ko.toJS(viewModel), jQuery("#createAccountHoldings").igGrid("dataSourceObject")).then(launchNewAccount);
-};
-
-//Private Functions
-//////////////////
-
-function launchNewAccount(account) {
-	window.location.href = "/account/" + account;
-}
-
-function calculateHoldingsModel() {
-	var rows = jQuery("#createAccountHoldings")
-		.igGrid("dataSourceObject")
-		.map(function(holding) {
-			return new HoldingModel(holding);
-		});
-
-	this.viewModel.holdings(rows);
-}
+})();
 
 export {
-	init,
 	submit
 };

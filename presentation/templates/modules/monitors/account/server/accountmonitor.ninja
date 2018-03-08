@@ -56,10 +56,11 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/ui/modules/monitors/Account/scripts/main.js"></script>
 	<script type="text/javascript">
-		(function(){
-			Poptart.Monitor.Account.setAccountList({{accountList | safe}});
-		})();
+		window.POPTART_MODULE = "poptart.monitors.account";
+		window.POPTART_DATA = {
+			accountList: {{accountList | safe}}
+		};
 	</script>
+	<script type="text/javascript" src="/ui/modules/monitors/Account/scripts/main.js"></script>
 {% endblock %}

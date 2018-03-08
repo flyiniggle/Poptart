@@ -10,19 +10,7 @@
 	<a class="navigationLink" href="/monitors/account">Account Monitor</a>
 {% endblock %}
 
-{% block controls %}
-	<div class="ribbonMenuTab ribbonMenuTabUnselected" data-name="Actions">Actions</div>
-{% endblock %}
 
-{% block ribbonMenus %}
-	<div id="ribbonMenu_Management" class="ribbonMenu" data-name="Actions">
-		<div class="ribbonMenuGroup">
-			<span class="ribbonMenuGroupLabel">Controls: </span>
-			<span id="submitCreateAccount" class="ribbonMenuLink">Save</span>
-			<a class="ribbonMenuLink" href="/monitors/account/">Cancel</a>
-		</div>
-	</div>
-{% endblock %}
 
 {% block summary %}
 	<div>
@@ -112,10 +100,8 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/ui/modules/monitors/account/scripts/main.js"></script>
 	<script type="text/javascript">
-		(function() {
-			Poptart.Monitor.Account.CreateAccount.init();
-		})();
+		window.POPTART_MODULE = "poptart.monitors.account.create";
 	</script>
+	<script type="text/javascript" src="/ui/modules/monitors/account/scripts/main.js"></script>
 {% endblock %}
