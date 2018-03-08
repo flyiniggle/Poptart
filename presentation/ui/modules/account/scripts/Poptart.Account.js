@@ -7,15 +7,12 @@ import "jqueryui";
 import { loaderConfig, loader } from "Lib/Poptart.Ignite";
 import { SummaryService, SecuritiesService, HoldingsService, AlertsService } from "Poptart/modules/account/Services/Account";
 import AlertsList from "Poptart/common/views/AlertsList";
+import TopMenu from "Poptart/modules/account/Views/TopMenu";
 
 import "Poptart/css/main";
 
 
 var accountId;
-
-function setAccountId(acctId) {
-	accountId = parseInt(acctId);
-}
 
 function displayAccountSummary(data) {
 	jQuery("#accountName").html(data.account);
@@ -269,21 +266,6 @@ function saveAccount() {
 	HoldingsService.set(accountId, data);
 }
 
-const init = function() {
-	const configInstance = Object.create(loaderConfig, {});
-
-	configInstance.resources = "igGrid.Updating.Adding,igDataChart.Category,igDoughnutChart,igCombo";
-	configInstance.ready = function() {
-		Promise.all([HoldingsService.get(accountId), SecuritiesService.get()]).then(displayAccountHoldings);
-		HoldingsService.get(accountId).then(displayAccountHoldingsCharts);
-	};
-	loader(configInstance);
-	SummaryService.get(accountId).then(displayAccountSummary);
-	AlertsService.get(accountId).then(displayAccountAlerts);
-
-	jQuery("#saveAccount").on("click", saveAccount);
-};
-
 const updateHoldings = function() {
 	//Poptart.Account.Service.setAccountHoldings().then(update);
 };
@@ -292,9 +274,38 @@ const update = function() {
 
 };
 
+(function() {
+	if (window.POPTART_MODULE === "poptart.account") {
+		accountId = parseInt(window.POPTART_DATA.accountId);
+
+		new Vue({
+			el: "#controlsContainer",
+			components: {TopMenu},
+			render: function (h) {
+				return (
+					<TopMenu/>
+				)
+			}
+		});
+
+		const configInstance = Object.create(loaderConfig, {});
+
+		configInstance.resources = "igGrid.Updating.Adding,igDataChart.Category,igDoughnutChart,igCombo";
+		configInstance.ready = function() {
+			Promise.all([HoldingsService.get(accountId), SecuritiesService.get()]).then(displayAccountHoldings);
+			HoldingsService.get(accountId).then(displayAccountHoldingsCharts);
+		};
+		loader(configInstance);
+		SummaryService.get(accountId).then(displayAccountSummary);
+		AlertsService.get(accountId).then(displayAccountAlerts);
+
+		window.addEventListener("load", function() {
+			jQuery("#saveAccount").on("click", saveAccount);
+		});
+	}
+})();
+
 export {
-	init,
 	updateHoldings,
-	update,
-	setAccountId
+	update
 };

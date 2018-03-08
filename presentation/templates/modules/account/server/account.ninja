@@ -5,21 +5,6 @@
     <link href="/ui/modules/account/css/main.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
-{% block main_nav %}
-	{{ super() }}
-	<a class="navigationLink" href="/monitors/account">Account Monitor</a>
-{% endblock %}
-
-{% block ribbonMenus %}
-	<div id="ribbonMenu_Management" class="ribbonMenu" data-name="Actions">
-		<div class="ribbonMenuGroup">
-			<span class="ribbonMenuGroupLabel">Controls: </span>
-			<span id="saveAccount" class="ribbonMenuLink">Save</span>
-			<a class="ribbonMenuLink" href="/monitors/account/">Close</a>
-		</div>
-	</div>
-{% endblock %}
-
 {% block summary %}
 	<div>
 		<h4>Account: </h4><span id="accountName"></span>
@@ -60,13 +45,11 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/ui/modules/account/scripts/main.js"></script>
 	<script type="text/javascript">
-		(function() {
-			jQuery(function() {
-				Poptart.Account.setAccountId({{ id }});
-				Poptart.Account.init();
-			});
-		})();
+		window.POPTART_MODULE = "poptart.account";
+		window.POPTART_DATA = {
+			accountId: {{ id }}
+		};
 	</script>
+	<script type="text/javascript" src="/ui/modules/account/scripts/main.js"></script>
 {% endblock %}
