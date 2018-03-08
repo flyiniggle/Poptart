@@ -25,8 +25,7 @@
 				</ribbon>
 			)
 		}
-	}
-	Vue.component('actions-menu', ActionsMenu);
+	};
 
 	export default ActionsMenu;
 </script>
