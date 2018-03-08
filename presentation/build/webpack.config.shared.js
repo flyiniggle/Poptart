@@ -8,6 +8,7 @@ const sharedConfig = {
 	resolve: {
 		extensions: ['.js', '.vue', '.json'],
 		alias: {
+			"Com": __dirname + "/../ui/common",
 			"Poptart": __dirname + "/../ui/",
 			"Templates": "../presentation/templates",
 			"Lib": __dirname + "/../ui/lib"
