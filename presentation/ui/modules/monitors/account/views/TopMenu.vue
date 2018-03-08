@@ -12,6 +12,7 @@
 
 	const management = {
 		displayName: "Management",
+		components: [{ "ManagementMenu": ManagementMenu }],
 		ribbon: (h) => <management-menu/>
 	}
 

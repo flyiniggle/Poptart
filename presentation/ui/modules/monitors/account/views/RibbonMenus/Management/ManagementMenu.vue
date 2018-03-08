@@ -35,8 +35,7 @@
 				</ribbon>
 			)
 		}
-	}
-	Vue.component('management-menu', ManagementMenu);
+	};
 
 	export default ManagementMenu;
 </script>
