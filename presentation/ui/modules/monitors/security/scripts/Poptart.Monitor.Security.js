@@ -34,27 +34,25 @@ function init() {
 	loader(configInstance);
 };
 
-function setSecurities(securitiesList = []) {
-	securities = securitiesList;
-}
-
 //Main
 (function() {
-	new Vue({
-		el: "#controlsContainer",
-		components: { TopMenu },
-		render: function(h) {
-			return (
-				<TopMenu>
-					<div slot="navigatorControls">
-						<a href="/">Dashboard</a>
-					</div>
-				</TopMenu>
-			)
-		}
-	});
+	if(window.POPTART_MODULE === "poptart.monitors.security") {
+		securities = window.POPTART_DATA.securities
 
-	jQuery(init);
+		new Vue({
+			el: "#controlsContainer",
+			components: {TopMenu},
+			render: function (h) {
+				return (
+					<TopMenu>
+						<div slot="navigatorControls">
+							<a href="/">Dashboard</a>
+						</div>
+					</TopMenu>
+				)
+			}
+		});
+
+		jQuery(init);
+	}
 })();
-
-export { setSecurities };

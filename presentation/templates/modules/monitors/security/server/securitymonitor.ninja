@@ -18,10 +18,13 @@
 
 {% block js %}
 	{{ super() }}
-	<script type="text/javascript" src="/ui/modules/monitors/security/scripts/main.js"></script>
 	<script type="text/javascript">
 		(function() {
-			Poptart.Monitor.Security.setSecurities({{ securities | safe }});
+			window.POPTART_MODULE = "poptart.monitors.security";
+			window.POPTART_DATA = {
+				securities: {{securities | safe}}
+			};
 		})();
 	</script>
+	<script type="text/javascript" src="/ui/modules/monitors/security/scripts/main.js"></script>
 {% endblock %}
