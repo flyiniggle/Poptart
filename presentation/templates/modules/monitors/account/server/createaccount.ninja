@@ -5,13 +5,6 @@
 	<link href="/ui/modules/monitors/account/css/main.css" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
-{% block main_nav %}
-	{{ super() }}
-	<a class="navigationLink" href="/monitors/account">Account Monitor</a>
-{% endblock %}
-
-
-
 {% block summary %}
 	<div>
 		<span>Total holdings value: </span>
