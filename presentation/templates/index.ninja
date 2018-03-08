@@ -11,5 +11,8 @@
 
 {% block js %}
 	{{ super() }}
+	<script type="text/javascript">
+		window.POPTART_MODULE = "poptart.dashboard";
+	</script>
 	<script type="text/javascript" src="/ui/modules/Dashboard/scripts/main.js"></script>
 {% endblock %}

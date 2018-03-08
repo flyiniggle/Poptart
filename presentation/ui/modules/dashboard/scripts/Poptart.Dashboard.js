@@ -39,24 +39,25 @@ function showSummary(summaries) {
 
 //Main
 (function() {
-	new Vue({
-		el: "#controlsContainer",
-		components: { TopMenu },
-		render: function(h) {
-			return (
-				<TopMenu>
-					<div slot="navigatorControls">
-						<a href="/monitors/account">Account Monitor</a>
-						<a href="/monitors/security">Security Monitor</a>
-					</div>
-				</TopMenu>
-			)
-		}
-	});
+	if(window.POPTART_MODULE === "poptart.dashboard") {
 
-	Promise.all([AccountsSummaryService.get(), SecuritiesSummaryService.get()])
-		.then(showSummary)
-		.catch(alert);
+		new Vue({
+			el: "#controlsContainer",
+			components: { TopMenu },
+			render: function(h) {
+				return (
+					<TopMenu>
+						<div slot="navigatorControls">
+							<a href="/monitors/account">Account Monitor</a>
+							<a href="/monitors/security">Security Monitor</a>
+						</div>
+					</TopMenu>
+				)
+			}
+		});
+
+		Promise.all([AccountsSummaryService.get(), SecuritiesSummaryService.get()])
+			.then(showSummary)
+			.catch(alert);
+	}
 })();
-
-export { init };
