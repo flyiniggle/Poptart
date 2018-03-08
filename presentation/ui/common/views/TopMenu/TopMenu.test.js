@@ -216,6 +216,37 @@ describe("#Common #Views #TopMenu", function() {
 				assert.equal(results2.isSelected, expected2.isSelected);
 			});
 		});
+
+		describe("#registerRibbonChildComponents", function() {
+			it("should register sub-components", function() {
+				const parent = {
+					$options: {
+						components: {}
+					}
+				};
+				const fakeComponent1 = { name: "fakeComponent1" };
+				const fakeComponent2 = { name: "fakeComponent2" };
+				const fakeComponent3 = { name: "fakeComponent3" };
+				const settings = [
+					{
+						displayName: "fakeComponent1",
+						components: [{"fakeComponent1": fakeComponent1}]
+					},
+					{
+						displayName: "fakeComponent2",
+						components: [{"fakeComponent2": fakeComponent2}, {"fakeComponent3": fakeComponent3}]
+					}
+				];
+				const expectedComponents = {
+					fakeComponent1,
+					fakeComponent2,
+					fakeComponent3
+				}
+				TopMenuUtils.registerRibbonChildComponents(parent, settings);
+
+				assert.include(parent.$options.components, expectedComponents);
+			});
+		});
 	});
 
 	describe("#Integration", function() {

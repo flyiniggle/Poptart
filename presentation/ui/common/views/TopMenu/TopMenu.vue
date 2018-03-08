@@ -1,5 +1,7 @@
 <script>
-	import { curry, find, map, pick, pipe, prop } from "ramda";
+	import { concat, curry, find, forEach, map, pick, pipe, prop, reduce, toPairs } from "ramda";
+
+	import { registerLocalComponent } from "Com/views/Utils";
 
 	import Navigator from "./Navigator";
 	import RibbonLink from "./RibbonLink";
@@ -62,6 +64,14 @@
 		)(ribbons || []);
 	};
 
+	const registerRibbonChildComponents = function(parent, settings) {
+		pipe(
+			map(settings => settings.components || []),
+			reduce(concat, []),
+			forEach(registerLocalComponent(parent))
+		)(settings);
+	}
+
 	export default {
 		name: "TopMenu",
 		components: { Navigator, RibbonLink },
@@ -86,8 +96,10 @@
 				this.selectedRibbon = ribbonName;
 			}
 		},
+		created: function() {
+			registerRibbonChildComponents(this, this.menuSettings);
+		},
 		render: function(h) {
-
 			return (
 				<div class="controlsContainer">
 					<div id="controls">
@@ -113,7 +125,8 @@
 		getSelectedMenu,
 		getRibbonLinkData,
 		renderRibbonLink,
-		renderRibbonLinks
+		renderRibbonLinks,
+		registerRibbonChildComponents
 	};
 </script>
 
