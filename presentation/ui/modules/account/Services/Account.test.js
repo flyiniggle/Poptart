@@ -1,7 +1,7 @@
 import { assert } from "chai";
-import { HoldingsService, SecuritiesService } from "Poptart/modules/account/scripts/Poptart.Account.Service";
+import { HoldingsService, SecuritiesService } from "./Account";
 
-describe("#Poptart #Account #Service", function() {
+describe("#Poptart #Account #Services #Account", function() {
 	describe("#Holdings Service", function() {
 		it("should return a formatted object", function() {
 			let testData = {

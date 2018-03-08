@@ -5,7 +5,7 @@ import jQuery from "Lib/Poptart.jQuery";
 import "jqueryui";
 
 import { loaderConfig, loader } from "Lib/Poptart.Ignite";
-import { SummaryService, SecuritiesService, HoldingsService, AlertsService } from "Poptart/modules/account/scripts/Poptart.Account.Service";
+import { SummaryService, SecuritiesService, HoldingsService, AlertsService } from "Poptart/modules/account/Services/Account";
 import AlertsList from "Poptart/common/views/AlertsList";
 
 import "Poptart/css/main";
