@@ -47,5 +47,12 @@
 		{% block main %}
 		{% endblock %}
 	</div>
+
+	<!-- JS -->
+	{% block js_libraries %}
+	{% endblock %}
+
+	{%  block js %}
+	{% endblock %}
 </body>
 </html>
