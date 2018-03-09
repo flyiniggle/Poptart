@@ -20,11 +20,12 @@
 			AccountDeleter,
 			AccountControls
 		},
+		props: ["props"],
 		render: function(h) {
 			return (
 				<ribbon name="Management">
 					<ribbon-group label="Launch Account">
-						<account-launcher/>
+						<account-launcher accountList={ this.props.accountList }/>
 					</ribbon-group>
 					<ribbon-group label="Delete Account">
 						<account-deleter/>

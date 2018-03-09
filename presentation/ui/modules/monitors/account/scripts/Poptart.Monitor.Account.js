@@ -26,18 +26,8 @@ function init() {
 	configInstance.resources = "igGrid.GroupBy.Sorting.Paging, igCombo";
 	configInstance.ready = function() {
 		var testTable = jQuery("#am_testTable"),
-			accountLauncher = jQuery("#am_accountLauncherSelector"),
 			accountDeleter = jQuery("#am_accountDeleterSelector"),
 			dataSource;
-
-		accountLauncher.igCombo({
-			dataSource: accountList,
-			valueKey: "id",
-			textKey: "name",
-			placeHolder: "Go to account...",
-			autoComplete: true,
-			height: "20px"
-		});
 
 		accountDeleter.igCombo({
 			dataSource: accountList,
@@ -142,9 +132,6 @@ function init() {
 				}
 			]
 		});
-
-		//Events
-		jQuery("#am_accountLauncher").on("click", launchAccount.bind(accountLauncher));
 	};
 
 	loader(configInstance);
@@ -175,7 +162,7 @@ function launchAccount() {
 			components: {TopMenu},
 			render: function (h) {
 				return (
-					<TopMenu/>
+					<TopMenu props={ { accountList } }/>
 				)
 			}
 		});

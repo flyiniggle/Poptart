@@ -10,12 +10,6 @@
 	import AccountControls from "./RibbonMenus/Management/AccountControls";
 	import AccountDeleter from "./RibbonMenus/Management/AccountDeleter";
 
-	const management = {
-		displayName: "Management",
-		components: [{ "ManagementMenu": ManagementMenu }],
-		ribbon: (h) => <management-menu/>
-	}
-
 	export default {
 		name: "Poptart-Monitor-Account-TopMenu",
 		components: {
@@ -29,9 +23,19 @@
 			AccountControls,
 			ManagementMenu
 		},
+		props: ["props"],
+		computed: {
+			managementMenu: function() {
+				return {
+					displayName: "Management",
+					components: [{ "ManagementMenu": ManagementMenu }],
+					ribbon: (h) => <management-menu props={ this.props }/>
+				}
+			}
+		},
 		render: function(h) {
 			return (
-				<top-menu menuSettings={ [management] } startingSelectedRibbon="Management">
+				<top-menu menuSettings={ [this.managementMenu] } startingSelectedRibbon="Management">
 					<div slot="navigatorControls">
 						<a href="/">Dashboard</a>
 					</div>
