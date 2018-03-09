@@ -23,7 +23,6 @@
 		},
 		watch: {
 			accountList: function() {
-				console.log(this.accountList)
 				jQuery("#am_accountLauncherSelector").igCombo({dataSource: this.accountList});
 			}
 		},
