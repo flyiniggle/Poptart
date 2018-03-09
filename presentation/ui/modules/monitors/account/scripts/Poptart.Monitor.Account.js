@@ -4,8 +4,6 @@ import Vue from "vue";
 import jQuery from "Lib/Poptart.jQuery";
 import "jqueryui";
 import "@infragistics/ignite-ui-full/en/js/infragistics.core";
-//import "@infragistics/ignite-ui-full/en/js/infragistics.dv";
-//import "@infragistics/ignite-ui-full/en/js/infragistics.lob";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.datasource";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.framework";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.shared";
@@ -13,7 +11,7 @@ import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.paging";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.sorting";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.groupby";
 
-import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
+import { constants } from "Lib/Poptart.Ignite";
 
 import * as CreateAccountModule from "Poptart/modules/monitors/account/Create/CreateAccount";
 import TopMenu from "Poptart/modules/monitors/account/views/TopMenu";
@@ -30,11 +28,8 @@ var accountList;
 //Public Methods
 //////////////////
 function init() {
-	let configInstance = Object.create(loaderConfig, {});
-	var testTable = jQuery("#am_testTable"),
-		dataSource;
-
-	dataSource = new jQuery.ig.DataSource({
+	const testTable = jQuery("#am_testTable");
+	const dataSource = new jQuery.ig.DataSource({
 		dataSource: "/monitors/account/tabledata",
 		schema: new jQuery.ig.DataSchema("json", {
 			outputResultsName: "accounts_data",

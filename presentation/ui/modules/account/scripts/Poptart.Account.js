@@ -4,12 +4,14 @@ import Vue from "vue";
 import jQuery from "Lib/Poptart.jQuery";
 import "jqueryui";
 import "@infragistics/ignite-ui-full/en/js/infragistics.core";
-//import "@infragistics/ignite-ui-full/en/js/infragistics.dv";
-import "@infragistics/ignite-ui-full/en/js/infragistics.lob";
+import "@infragistics/ignite-ui-full/en/js/infragistics.dv";
+//import "@infragistics/ignite-ui-full/en/js/infragistics.lob";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.categorychart";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.datachart_category";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.datachart_categorycore";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.datachart_core";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.datasource";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.doughnutchart";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.basechart";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.chart";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.chartlegend";
@@ -294,7 +296,6 @@ const update = function() {
 };
 
 (function() {
-	console.log("huh?")
 	if (window.POPTART_MODULE === "poptart.account") {
 		accountId = parseInt(window.POPTART_DATA.accountId);
 
