@@ -28,7 +28,7 @@
 						<account-launcher accountList={ this.props.accountList }/>
 					</ribbon-group>
 					<ribbon-group label="Delete Account">
-						<account-deleter/>
+						<account-deleter accountList={ this.props.accountList }/>
 					</ribbon-group>
 					<ribbon-group label="Controls">
 						<account-controls/>

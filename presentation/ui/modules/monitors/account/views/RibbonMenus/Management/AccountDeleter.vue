@@ -8,23 +8,34 @@
 <script>
 	import jQuery from "Lib/Poptart.jQuery";
 	import "jqueryui";
+	import "@infragistics/ignite-ui-full/en/js/infragistics.core";
+	//import "@infragistics/ignite-ui-full/en/js/infragistics.dv";
+	//import "@infragistics/ignite-ui-full/en/js/infragistics.lob";
+	import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.combo";
 
-	import { Service as igService } from "Lib/Poptart.Ignite";
 
 	export default {
 		name: "AccountDeleter",
+		props: {
+			accountList: {
+				type: Array,
+				default: () => []
+			}
+		},
+		watch: {
+			accountList: function() {
+				jQuery("#am_accountDeleterSelector").igCombo({dataSource: this.accountList});
+			}
+		},
 		mounted: function() {
-			igService("igCombo")
-				.then(function() {
-					jQuery("#am_accountDeleter").igCombo({
-						dataSource: accountList,
-						valueKey: "id",
-						textKey: "name",
-						placeHolder: "Delete account...",
-						autoComplete: true,
-						height: "20px"
-					});
-				});
+			jQuery("#am_accountDeleterSelector").igCombo({
+				dataSource: this.accountList,
+				valueKey: "id",
+				textKey: "name",
+				placeHolder: "Delete account...",
+				autoComplete: true,
+				height: "20px"
+			});
 		}
 	}
 </script>

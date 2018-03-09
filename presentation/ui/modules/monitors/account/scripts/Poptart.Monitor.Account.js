@@ -26,17 +26,7 @@ function init() {
 	configInstance.resources = "igGrid.GroupBy.Sorting.Paging, igCombo";
 	configInstance.ready = function() {
 		var testTable = jQuery("#am_testTable"),
-			accountDeleter = jQuery("#am_accountDeleterSelector"),
 			dataSource;
-
-		accountDeleter.igCombo({
-			dataSource: accountList,
-			valueKey: "id",
-			textKey: "name",
-			placeHolder: "Delete account...",
-			autoComplete: true,
-			height: constants.INPUT_HEIGHT
-		});
 
 		dataSource = new jQuery.ig.DataSource({
 			dataSource: "/monitors/account/tabledata",
