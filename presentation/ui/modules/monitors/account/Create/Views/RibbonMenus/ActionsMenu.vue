@@ -10,7 +10,7 @@
 
 	const ActionsMenu = {
 		name: "Poptart-Monitor-Account-Create-Action-Ribbon",
-		components:{
+		components: {
 			Ribbon,
 			RibbonLink,
 			RibbonGroup,

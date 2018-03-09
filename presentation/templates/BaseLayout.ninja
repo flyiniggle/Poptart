@@ -47,15 +47,5 @@
 		{% block main %}
 		{% endblock %}
 	</div>
-
-	<!-- JS -->
-	{% block js_libraries %}
-		<script type="text/javascript" src="/ui/scripts/bluebird.js"></script>
-	{% endblock %}
-
-	{%  block js %}
-		<script type="text/javascript" src="/ui/templates/components/alerts/shared/alerts.js"></script>
-		<script type="text/javascript" src="/ui/templates/support/Poptart.Templates.Support.js"></script>
-	{% endblock %}
 </body>
 </html>

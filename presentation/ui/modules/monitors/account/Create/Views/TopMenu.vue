@@ -10,7 +10,7 @@
 
 	const actions = {
 		displayName: "Actions",
-		components: ["ActionsMenu", ActionsMenu],
+		components: [{"ActionsMenu": ActionsMenu}],
 		ribbon: (h) => <actions-menu/>
 	}
 

@@ -4,13 +4,31 @@ import Vue from "vue";
 
 import jQuery from "Lib/Poptart.jQuery";
 import ko from "Lib/Poptart.Knockout";
-import { loaderConfig, constants, loader } from "Lib/Poptart.Ignite";
+import "jqueryui";
+import "@infragistics/ignite-ui-full/en/js/infragistics.core";
+//import "@infragistics/ignite-ui-full/en/js/infragistics.dv";
+//import "@infragistics/ignite-ui-full/en/js/infragistics.lob";
+import "@infragistics/ignite-ui-full/en/js/extensions/infragistics.datasource.knockoutjs";
+import "@infragistics/ignite-ui-full/en/js/extensions/infragistics.ui.grid.knockout-extensions";
+import "@infragistics/ignite-ui-full/en/js/extensions/infragistics.ui.combo.knockout-extensions";
+import "@infragistics/ignite-ui-full/en/js/extensions/infragistics.ui.editors.knockout-extensions";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.combo";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.datasource";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.editors";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.framework";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.shared";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.paging";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.sorting";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.groupby";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.updating";
 
+import { constants } from "Lib/Poptart.Ignite";
+
+import "Poptart/components/Poptart.Ignite.Adding.js";
 import * as CreateAccountService from "./Services/CreateAccount";
 import TopMenu from "./Views/TopMenu";
 
 import "Poptart/modules/monitors/account/css/styles.css";
-
 
 var viewModel;
 
@@ -302,7 +320,7 @@ const setCurrencyEditorOptions = function() {
 
 const setPercentEditorOptions = function() {
 	this.minValue = 0;
-	this.maxDecimals = 12;
+	this.maxDecimals = 7;
 	this.height = constants.INPUT_HEIGHT;
 	this.width = "90%";
 
@@ -342,6 +360,29 @@ const submit = function() {
 
 //Private Functions
 //////////////////
+function init() {
+	viewModel = new AccountCreationViewModel();
+
+	//append ig component options
+	viewModel.expectedCashEditorOptions = setCurrencyEditorOptions.call({value: viewModel.expectedCash});
+	viewModel.startingCashEditorOptions = setCurrencyEditorOptions.call({value: viewModel.startingCash});
+	viewModel.maxCashDriftEditorOptions = setCurrencyEditorOptions.call({value: viewModel.maxCashDrift});
+	viewModel.maxPositionDriftEditorOptions = setCurrencyEditorOptions.call({value: viewModel.maxPositionDrift});
+	viewModel.maxTotalDriftEditorOptions = setCurrencyEditorOptions.call({value: viewModel.maxTotalDrift});
+	viewModel.maxCashDriftPercentEditorOptions = setPercentEditorOptions.call({value: viewModel.maxCashDriftPercent});
+
+	ko.applyBindings(viewModel);
+
+	jQuery("#createAccountHoldings").igGrid(setGridOptions.call({
+		primaryKey: "pk",
+		dataSource: [],
+		dataSourceType: "json",
+		viewModel: viewModel
+	}));
+
+	jQuery("#submitCreateAccount").on("click", submit.bind(this));
+}
+
 function launchNewAccount(account) {
 	window.location.href = "/account/" + account;
 }
@@ -361,40 +402,14 @@ function calculateHoldingsModel() {
 	if(window.POPTART_MODULE === "poptart.monitors.account.create") {
 		new Vue({
 			el: "#controlsContainer",
-			components: { TopMenu },
+			components: {TopMenu},
 			render: function (h) {
 				return (
 					<TopMenu/>
 				)
 			}
 		});
-
-		const configInstance = Object.create(loaderConfig, {});
-
-		configInstance.resources = "igCombo,igEditors,igGrid.Updating.Adding,extensions/infragistics.datasource.knockoutjs.js,extensions/infragistics.ui.grid.knockout-extensions.js,extensions/infragistics.ui.combo.knockout-extensions.js,extensions/infragistics.ui.editors.knockout-extensions.js";
-		configInstance.ready = function() {
-			viewModel = new AccountCreationViewModel();
-
-			//append ig component options
-			viewModel.expectedCashEditorOptions = setCurrencyEditorOptions.call({value: viewModel.expectedCash});
-			viewModel.startingCashEditorOptions = setCurrencyEditorOptions.call({value: viewModel.startingCash});
-			viewModel.maxCashDriftEditorOptions = setCurrencyEditorOptions.call({value: viewModel.maxCashDrift});
-			viewModel.maxPositionDriftEditorOptions = setCurrencyEditorOptions.call({value: viewModel.maxPositionDrift});
-			viewModel.maxTotalDriftEditorOptions = setCurrencyEditorOptions.call({value: viewModel.maxTotalDrift});
-			viewModel.maxCashDriftPercentEditorOptions = setPercentEditorOptions.call({value: viewModel.maxCashDriftPercent});
-
-			ko.applyBindings(viewModel);
-
-			jQuery("#createAccountHoldings").igGrid(setGridOptions.call({
-				primaryKey: "pk",
-				dataSource: [],
-				dataSourceType: "json",
-				viewModel: viewModel
-			}));
-
-			jQuery("#submitCreateAccount").on("click", submit.bind(this));
-		};
-		loader(configInstance);
+		jQuery(init);
 	}
 })();
 
