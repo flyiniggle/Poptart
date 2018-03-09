@@ -3,11 +3,30 @@
 import Vue from "vue";
 import jQuery from "Lib/Poptart.jQuery";
 import "jqueryui";
+import "@infragistics/ignite-ui-full/en/js/infragistics.core";
+//import "@infragistics/ignite-ui-full/en/js/infragistics.dv";
+import "@infragistics/ignite-ui-full/en/js/infragistics.lob";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.datachart_category";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.datachart_categorycore";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.datachart_core";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.datasource";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.basechart";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.chart";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.chartlegend";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.combo";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.doughnutchart";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.editors";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.framework";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.shared";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.paging";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.sorting";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.groupby";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.updating";
 
-import { loaderConfig, loader } from "Lib/Poptart.Ignite";
-import { SummaryService, SecuritiesService, HoldingsService, AlertsService } from "Poptart/modules/account/Services/Account";
 import AlertsList from "Poptart/common/views/AlertsList";
+import "Poptart/components/Poptart.Ignite.Adding.js";
 import TopMenu from "Poptart/modules/account/Views/TopMenu";
+import { SummaryService, SecuritiesService, HoldingsService, AlertsService } from "Poptart/modules/account/Services/Account";
 
 import "Poptart/css/main";
 
@@ -275,6 +294,7 @@ const update = function() {
 };
 
 (function() {
+	console.log("huh?")
 	if (window.POPTART_MODULE === "poptart.account") {
 		accountId = parseInt(window.POPTART_DATA.accountId);
 
@@ -288,14 +308,8 @@ const update = function() {
 			}
 		});
 
-		const configInstance = Object.create(loaderConfig, {});
-
-		configInstance.resources = "igGrid.Updating.Adding,igDataChart.Category,igDoughnutChart,igCombo";
-		configInstance.ready = function() {
-			Promise.all([HoldingsService.get(accountId), SecuritiesService.get()]).then(displayAccountHoldings);
-			HoldingsService.get(accountId).then(displayAccountHoldingsCharts);
-		};
-		loader(configInstance);
+		Promise.all([HoldingsService.get(accountId), SecuritiesService.get()]).then(displayAccountHoldings);
+		HoldingsService.get(accountId).then(displayAccountHoldingsCharts);
 		SummaryService.get(accountId).then(displayAccountSummary);
 		AlertsService.get(accountId).then(displayAccountAlerts);
 
