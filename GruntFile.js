@@ -98,47 +98,6 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		karma: {
-			options: {
-				configFile: 'karma.conf.js'
-			},
-			igUnit: {
-					options: {
-						files: [
-							{pattern: './static/ui/polyfills.js', noCache: true},
-							{pattern: './static/ui/scripts/bluebird.js', noCache: true},
-							{pattern: '../node_modules/jquery/dist/jquery.min.js', noCache: true},
-							{pattern: '../node_modules/jqueryui/jquery-ui.min.js', noCache: true},
-							{pattern: '../node_modules/nunjucks/browser/nunjucks.js', noCache: true},
-							{pattern: './ui/scripts/Ignite/*.js', noCache: true},
-							{pattern: './ui/scripts/Ignite/modules/*.js', noCache: true},
-							{pattern: './ui/components/Poptart.Ignite.Adding.js', noCache: true},
-							{pattern: './ui/**/*.ignitetest.js', noCache: true},
-							{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
-						],
-						browsers: ['ChromeHeadless'],
-						singleRun: true
-				}
-			},
-			igIntegration: {
-				options: {
-					files: [
-						{pattern: './static/ui/polyfills.js', noCache: true},
-						{pattern: './static/ui/scripts/bluebird.js', noCache: true},
-						{pattern: '../node_modules/jquery/dist/jquery.min.js', noCache: true},
-						{pattern: '../node_modules/jqueryui/jquery-ui.min.js', noCache: true},
-						{pattern: '../node_modules/nunjucks/browser/nunjucks.js', noCache: true},
-						{pattern: './ui/scripts/Ignite/*.js', noCache: true},
-						{pattern: './ui/scripts/Ignite/modules/*.js', noCache: true},
-						{pattern: './ui/components/Poptart.Ignite.Adding.js', noCache: true},
-						{pattern: './ui/**/*.ignitespec.js', noCache: true},
-						{pattern: '../node_modules/phantomjs-polyfill-find/find-polyfill.js', noCache: true}
-					],
-					browsers: ['ChromeHeadless'],
-					singleRun: true
-				}
-			}
-		},
 		mochaTest: {
 			unit: {
 				options: {
@@ -154,7 +113,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-webpack');
 
 	grunt.registerTask('default', ['build-static', 'test']);
-	grunt.registerTask('test-infragistics', ['karma:igUnit', 'karma:igIntegration'])
 	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'test-infragistics']);
 	grunt.registerTask('build-static', ['sync', 'webpack:build', 'nunjucks-precompile-mapping', 'nunjucks', 'cssmin']);
 	grunt.registerTask('dev', 'concurrent');

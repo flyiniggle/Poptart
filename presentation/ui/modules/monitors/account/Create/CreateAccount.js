@@ -12,8 +12,8 @@ import "@infragistics/ignite-ui-full/en/js/extensions/infragistics.datasource.kn
 import "@infragistics/ignite-ui-full/en/js/extensions/infragistics.ui.grid.knockout-extensions";
 import "@infragistics/ignite-ui-full/en/js/extensions/infragistics.ui.combo.knockout-extensions";
 import "@infragistics/ignite-ui-full/en/js/extensions/infragistics.ui.editors.knockout-extensions";
-import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.combo";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.datasource";
+import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.combo";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.editors";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.framework";
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.shared";
