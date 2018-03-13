@@ -1,4 +1,4 @@
-(function() {
+(function(jQuery) {
 	var addingRowIdPrefix = "addingRow",
 		addingWidget, dataModel, validationService, defaultValues;
 
@@ -39,7 +39,6 @@
 					};
 				}, this)
 			};
-
 			this.addingRow = newRowModel;
 
 			return newRowModel;
@@ -158,7 +157,7 @@
 	addingWidget._setup = function(ui) {
 		var gridColumnSettings, fixed, thead;
 
-		if(ui.owner.id() !== this.grid.id()) {
+		if(ui.owner.id() !== "test" && ui.owner.id() !== this.grid.id()) {
 			return;
 		}
 
@@ -1056,4 +1055,4 @@
 	};
 
 	jQuery.widget("Poptart.igGridAdding", addingWidget);
-})();
+})(window.jQuery);

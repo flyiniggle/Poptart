@@ -1,4 +1,6 @@
-import { assert } from "chai";
+import { assert, expect } from "chai";
+import sinon from "sinon";
+import "chai-jquery";
 import jQuery from "Lib/Poptart.jQuery";
 import "jqueryui";
 import { nunjucks, nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
@@ -29,11 +31,12 @@ describe("#infragistics", function() {
 				};
 
 				before(function () {
-					console.log(jQuery("body"))
 					tableEle = jQuery("<table id='test'></table>");
 					tableEle.appendTo(jQuery("body"));
+					console.log(tableEle)
 				});
 				beforeEach(function () {
+
 					tableEle.igGrid({
 						dataSource: [],
 						dataSourceType: "json",
@@ -105,8 +108,8 @@ describe("#infragistics", function() {
 							}
 						]
 					});
-
 					addingWidget = tableEle.data("Poptart-igGridAdding");
+					addingWidget._gridHandlers.rendered({}, {owner: {id: () => "test"}})
 				});
 
 				afterEach(function () {
