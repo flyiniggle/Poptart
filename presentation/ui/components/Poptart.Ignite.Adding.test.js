@@ -1,6 +1,5 @@
 import { assert, expect } from "chai";
 import sinon from "sinon";
-import "chai-jquery";
 import jQuery from "Lib/Poptart.jQuery";
 import "jqueryui";
 import { nunjucks, nunjucksEnvironment } from "Lib/Poptart.Nunjucks";
@@ -182,7 +181,7 @@ describe("#infragistics", function() {
 
 						addingWidget._startEdit(columModel);
 						assert.equal(addingWidget.activeEditor.cell.cell, columModel.cell, "Active editor was not in the correct cell.");
-						columModel.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
+						assert.lengthOf(columModel.cell.has(addingWidget.activeEditor.providerWrapper), 1);
 					});
 
 					it("should create a numeric editor for the number column.", function () {
@@ -191,7 +190,7 @@ describe("#infragistics", function() {
 
 						addingWidget._startEdit(columModel);
 						assert.equal(addingWidget.activeEditor.cell.cell, columModel.cell, "Active editor was not in the correct cell.");
-						columModel.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
+						assert.lengthOf(columModel.cell.has(addingWidget.activeEditor.providerWrapper), 1);
 					});
 
 					it("should create a checkbox editor for the boolean column.", function () {
@@ -200,7 +199,7 @@ describe("#infragistics", function() {
 
 						addingWidget._startEdit(columModel);
 						assert.equal(addingWidget.activeEditor.cell.cell, columModel.cell, "Active editor was not in the correct cell.");
-						columModel.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
+						assert.lengthOf(columModel.cell.has(addingWidget.activeEditor.providerWrapper), 1);
 					});
 
 					it("should create a combo editor for the object column.", function () {
@@ -209,7 +208,7 @@ describe("#infragistics", function() {
 
 						addingWidget._startEdit(columModel);
 						assert.equal(addingWidget.activeEditor.cell.cell, columModel.cell, "Active editor was not in the correct cell.");
-						columModel.cell.should.have.descendants(addingWidget.activeEditor.providerWrapper);
+						assert.lengthOf(columModel.cell.has(addingWidget.activeEditor.providerWrapper), 1);
 					});
 
 					it("should display a new text value.", function () {
@@ -221,7 +220,7 @@ describe("#infragistics", function() {
 						addingWidget._setColumnValue(columnKey, textVal);
 						addingWidget._updateUiCell(column);
 
-						column.cell.should.have.html(textVal);
+						assert.equal(column.cell.html(), textVal);
 					});
 
 					it("should display a new number value.", function () {
@@ -290,8 +289,8 @@ describe("#infragistics", function() {
 						addingWidget._commitRow();
 						column = addingWidget._getColumn(columnKey);
 
-						column.cell.should.have.class(addingWidget.css.invalidCell);
-						jQuery(".ui-grid-adding-failure-container[data-failure=" + columnKey + "]").should.be.visisble;
+						assert.isTrue(column.cell.hasClass(addingWidget.css.invalidCell));
+						assert.lengthOf(jQuery(".ui-grid-adding-failure-container[data-failure=" + columnKey + "]"), 1);
 
 						assert.equal(jQuery("." + addingWidget.css.addRowBarCellFailures).length, 1, "Adding row divider bar did not show failures");
 						assert.equal(tableEle.igGrid("allRows").length, 0, "A new row was added to the table but should not have been.");
@@ -439,8 +438,8 @@ describe("#infragistics", function() {
 
 							addingWidget._addingRowHandlers.mouseenter();
 
-							jQuery("#ui-iggrid-adding-add-row-button").should.exist;
-							addingWidget.addingRow.row.children("td").should.have.class("ui-state-hover");
+							assert.lengthOf(jQuery("#ui-iggrid-adding-add-row-button"), 1);
+							assert.isTrue(addingWidget.addingRow.row.children("td").hasClass("ui-state-hover"));
 							assert.isTrue(addingWidget._addAddingButton.calledOnce, "_addAddingButton was not called.");
 						});
 
@@ -449,8 +448,8 @@ describe("#infragistics", function() {
 
 							addingWidget._addingRowHandlers.mouseleave();
 
-							jQuery("#ui-iggrid-adding-add-row-button").should.not.be.visible;
-							addingWidget.addingRow.row.children("td").should.not.have.class("ui-state-hover");
+							assert.lengthOf(jQuery("#ui-iggrid-adding-add-row-button"), 0);
+							assert.isFalse(addingWidget.addingRow.row.children("td").hasClass("ui-state-hover"));
 							assert.isTrue(addingWidget._removeAddingButton.calledOnce, "_removeAddingButton was not called.");
 						});
 
