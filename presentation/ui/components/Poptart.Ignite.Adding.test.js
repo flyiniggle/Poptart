@@ -1,4 +1,5 @@
 import { assert, expect } from "chai";
+import { pipe } from "ramda";
 import sinon from "sinon";
 import jQuery from "Lib/Poptart.jQuery";
 import "jqueryui";
@@ -13,6 +14,16 @@ import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.framewor
 import "@infragistics/ignite-ui-full/en/js/modules/infragistics.ui.grid.shared";
 
 import "Poptart/components/Poptart.Ignite.Adding.js";
+
+function getAddingWidget(el) {
+	const addingWidget = el.data("Poptart-igGridAdding");
+
+	return addingWidget;
+}
+
+function mockAddingWidget(addingWidget) {
+	return addingWidget._gridHandlers.rendered({}, {owner: {id: () => "test"}});
+}
 
 describe("#infragistics", function() {
 	describe("#Adding", function() {
@@ -107,8 +118,8 @@ describe("#infragistics", function() {
 							}
 						]
 					});
-					addingWidget = tableEle.data("Poptart-igGridAdding");
-					addingWidget._gridHandlers.rendered({}, {owner: {id: () => "test"}})
+					addingWidget = getAddingWidget(tableEle);
+					mockAddingWidget(addingWidget);
 				});
 
 				afterEach(function () {
@@ -555,28 +566,28 @@ describe("#infragistics", function() {
 								html, cell;
 
 							html = addingWidget._createAddingRowHtml(rowId, columns, false);
-							html.should.have.data("rowId", rowId);
+							assert.equal(html.data("rowId"), rowId);
 							assert.equal(html.find("td").length, 4, "Did not find the expected number of cells.");
 
 							cell = html.children(":first-child");
-							cell.should.have.data("columnKey", columns[0].key);
-							cell.should.have.attr("id", rowId + "_" + columns[0].key);
-							cell.should.have.class("ui-iggrid-adding-row-cell");
+							assert.equal(cell.data("columnKey"), columns[0].key);
+							assert.equal(cell.attr("id"), rowId + "_" + columns[0].key);
+							assert.isTrue(cell.hasClass("ui-iggrid-adding-row-cell"));
 
 							cell = cell.next();
-							cell.should.have.data("columnKey", columns[1].key);
-							cell.should.have.attr("id", rowId + "_" + columns[1].key);
-							cell.should.have.class("ui-iggrid-adding-row-cell");
+							assert.equal(cell.data("columnKey"), columns[1].key);
+							assert.equal(cell.attr("id"), rowId + "_" + columns[1].key);
+							assert.isTrue(cell.hasClass("ui-iggrid-adding-row-cell"));
 
 							cell = cell.next();
-							cell.should.have.data("columnKey", columns[2].key);
-							cell.should.have.attr("id", rowId + "_" + columns[2].key);
-							cell.should.have.class("ui-iggrid-adding-row-cell");
+							assert.equal(cell.data("columnKey"), columns[2].key);
+							assert.equal(cell.attr("id"), rowId + "_" + columns[2].key);
+							assert.isTrue(cell.hasClass("ui-iggrid-adding-row-cell"));
 
 							cell = cell.next();
-							cell.should.have.data("columnKey", columns[3].key);
-							cell.should.have.attr("id", rowId + "_" + columns[3].key);
-							cell.should.have.class("ui-iggrid-adding-row-cell");
+							assert.equal(cell.data("columnKey"), columns[3].key);
+							assert.equal(cell.attr("id"), rowId + "_" + columns[3].key);
+							assert.isTrue(cell.hasClass("ui-iggrid-adding-row-cell"));
 						});
 					});
 				});
@@ -637,16 +648,29 @@ describe("#infragistics", function() {
 							var config = jQuery.extend(true, {}, baseTableConfiguration),
 								cell, foundCell;
 
-							config.rendered = function() {
-								cell = tableEle.igGridAdding("startEdit", "text");
-								foundCell = tableEle.find("#addingRow0_text");
+							config.rendered = (function() {
+								const mockTable = pipe(
+										getAddingWidget,
+										mockAddingWidget
+									);
 
-								foundCell.should.have.class("ui-iggrid-editingcell");
-								assert.equal(cell.key, "text", "Editor did not open in the correct column.");
-								assert.equal(foundCell[0], cell.cell[0], "Editor did not open in the correct column.");
-								done();
-							};
+								return function() {
+									mockTable(tableEle);
+									cell = tableEle.igGridAdding("startEdit", "text");
+									foundCell = tableEle.find("#addingRow0_text");
+
+									assert.isTrue(foundCell.hasClass("ui-iggrid-editingcell"));
+									assert.equal(cell.key, "text", "Editor did not open in the correct column.");
+									assert.equal(foundCell[0], cell.cell[0], "Editor did not open in the correct column.");
+									done();
+								}
+							})();
+
 							tableEle.igGrid(config);
+							pipe(
+								getAddingWidget,
+								mockAddingWidget
+							)(tableEle);
 						});
 
 						it("should start editing the first column of the adding row", function(done) {
@@ -656,13 +680,17 @@ describe("#infragistics", function() {
 							config.features.find(function(feature) { return feature.name === "Adding" }).rendered = function() {
 								cell = tableEle.igGridAdding("startEdit");
 								foundCell = tableEle.find("#addingRow0_number");
-								foundCell.should.have.class("ui-iggrid-editingcell");
+								assert.isTrue(foundCell.hasClass("ui-iggrid-editingcell"));
 								assert.equal(cell.key, "number", "Editor did not open in the correct column.");
 								assert.equal(foundCell[0], cell.cell[0], "Editor did not open in the correct column.");
 								done();
 							};
 
 							tableEle.igGrid(config);
+							pipe(
+								getAddingWidget,
+								mockAddingWidget
+							)(tableEle);
 						});
 					});
 
@@ -677,9 +705,7 @@ describe("#infragistics", function() {
 								addingWidget;
 
 							addingConfig.rendered = function() {
-								addingWidget = tableEle.data("Poptart-igGridAdding");
 								tableEle.igGridAdding("startEdit", column);
-
 								addingWidget.activeEditor.provider.setValue(newVal);
 								tableEle.igGridAdding("endEdit", true);
 							};
@@ -690,6 +716,8 @@ describe("#infragistics", function() {
 							};
 
 							tableEle.igGrid(config);
+							addingWidget = getAddingWidget(tableEle);
+							mockAddingWidget(addingWidget);
 						});
 
 						it("should close the editor and discard changes.", function(done) {
@@ -700,9 +728,7 @@ describe("#infragistics", function() {
 								addingWidget;
 
 							addingConfig.rendered = function() {
-								addingWidget = tableEle.data("Poptart-igGridAdding");
 								tableEle.igGridAdding("startEdit", column);
-
 								addingWidget.activeEditor.provider.setValue(newVal);
 								tableEle.igGridAdding("endEdit", false);
 							};
@@ -713,6 +739,8 @@ describe("#infragistics", function() {
 							};
 
 							tableEle.igGrid(config);
+							addingWidget = getAddingWidget(tableEle);
+							mockAddingWidget(addingWidget);
 						});
 					});
 				});
@@ -740,6 +768,10 @@ describe("#infragistics", function() {
 						addingConfig.rendering = spy;
 
 						tableEle.igGrid(config);
+						pipe(
+							getAddingWidget,
+							mockAddingWidget
+						)(tableEle);
 					});
 
 					it("should trigger the 'rendered' handler after rendering.", function(done) {
@@ -764,6 +796,10 @@ describe("#infragistics", function() {
 						addingConfig.rendered = spy;
 
 						tableEle.igGrid(config);
+						pipe(
+							getAddingWidget,
+							mockAddingWidget
+						)(tableEle);
 					});
 
 					it("should trigger the 'editStarting' handler before cell editing starts.", function(done) {
@@ -792,6 +828,10 @@ describe("#infragistics", function() {
 						};
 
 						tableEle.igGrid(config);
+						pipe(
+							getAddingWidget,
+							mockAddingWidget
+						)(tableEle);
 					});
 
 					it("should trigger the 'editStarted' handler after cell editing starts.", function(done) {
@@ -820,6 +860,10 @@ describe("#infragistics", function() {
 						};
 
 						tableEle.igGrid(config);
+						pipe(
+							getAddingWidget,
+							mockAddingWidget
+						)(tableEle);
 					});
 
 					it("should trigger the 'rowAdding' handler before commiting a row.", function(done) {
@@ -844,12 +888,13 @@ describe("#infragistics", function() {
 						addingConfig.rowAdding = spy;
 
 						addingConfig.rendered = function() {
-							addingWidget = tableEle.data("Poptart-igGridAdding");
 							addingWidget._startEdit();
 							addingWidget._commitFromKeyboard(new jQuery.Event("keypress"));
 						};
 
 						tableEle.igGrid(config);
+						addingWidget = getAddingWidget(tableEle);
+						mockAddingWidget(addingWidget);
 					});
 
 					it("should trigger the 'rowAdded' handler before commiting a row.", function(done) {
@@ -874,12 +919,13 @@ describe("#infragistics", function() {
 						addingConfig.rowAdded = spy;
 
 						addingConfig.rendered = function() {
-							addingWidget = tableEle.data("Poptart-igGridAdding");
 							addingWidget._startEdit();
 							addingWidget._commitFromKeyboard(new jQuery.Event("keypress"));
 						};
 
 						tableEle.igGrid(config);
+						addingWidget = getAddingWidget(tableEle);
+						mockAddingWidget(addingWidget);
 					});
 				});
 			});
