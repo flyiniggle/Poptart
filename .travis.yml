@@ -20,3 +20,4 @@ addons:
 before_install:
   - google-chrome-stable --headless --disable-gpu
   - echo "//packages.infragistics.com/npm/:_authToken=\${NPM_TOKEN}" > .npmrc
+  - npm config set @infragistics:registry https://packages.infragistics.com/npm/js-licensed/
