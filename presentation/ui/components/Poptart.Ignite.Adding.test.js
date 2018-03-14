@@ -243,7 +243,7 @@ describe("#infragistics", function() {
 						addingWidget._setColumnValue(columnKey, numVal);
 						addingWidget._updateUiCell(column);
 
-						column.cell.should.have.html(numVal.toString());
+						assert.equal(column.cell.html(), numVal.toString());
 					});
 
 					it("should display a new template value.", function () {
@@ -255,7 +255,7 @@ describe("#infragistics", function() {
 						column = addingWidget._getColumn(columnKey);
 						addingWidget._updateUiCell(column);
 
-						column.cell.should.have.html("A working template!");
+						assert.equal(column.cell.html(), "A working template!");
 					});
 
 					it("should display a new formula value.", function () {
@@ -268,7 +268,7 @@ describe("#infragistics", function() {
 						column = addingWidget._getColumn(columnKey);
 						addingWidget._updateUiCell(column);
 
-						column.cell.should.have.html(helperValue);
+						assert.equal(column.cell.html(), helperValue);
 					});
 
 					it("should display a new mapped value.", function () {
@@ -280,7 +280,7 @@ describe("#infragistics", function() {
 						addingWidget._setColumnValue(columnKey, objValue);
 						addingWidget._updateUiCell(column);
 
-						column.cell.should.have.html("test!");
+						assert.equal(column.cell.html(), "test!");
 					});
 
 					it("should display a default value.", function () {
@@ -289,7 +289,7 @@ describe("#infragistics", function() {
 
 						column = addingWidget._getColumn(columnKey);
 
-						column.cell.should.have.html("default text!");
+						assert.equal(column.cell.html(), "default text!");
 					});
 
 					it("display validation failures.", function () {
