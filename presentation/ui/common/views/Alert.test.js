@@ -1,4 +1,4 @@
-import { mount } from 'vue-test-utils';
+import { mount } from '@vue/test-utils';
 import { assert, expect } from "chai";
 import Alert from './Alert';
 

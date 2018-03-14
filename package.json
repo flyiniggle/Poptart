@@ -16,7 +16,7 @@
   "dependencies": {
     "body-parser": "1.15.2",
     "express": "4.13.3",
-    "ignite-ui": "17.2.66",
+    "@infragistics/ignite-ui-full": "latest",
     "jquery": "3.1.1",
     "jqueryui": "1.11.1",
     "knockout": "3.4.2",
@@ -26,6 +26,7 @@
     "winston": "2.2.0"
   },
   "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.12",
     "babel-core": "6.26.0",
     "babel-eslint": "8.0.3",
     "babel-helper-vue-jsx-merge-props": "2.0.3",
@@ -67,7 +68,6 @@
     "time-grunt": "1.4.0",
     "vue-loader": "14.1.1",
     "vue-template-compiler": "2.5.13",
-    "vue-test-utils": "1.0.0-beta.11",
     "webpack": "3.10.0"
   }
 }

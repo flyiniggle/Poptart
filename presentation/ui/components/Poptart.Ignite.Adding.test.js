@@ -43,7 +43,6 @@ describe("#infragistics", function() {
 				before(function () {
 					tableEle = jQuery("<table id='test'></table>");
 					tableEle.appendTo(jQuery("body"));
-					console.log(tableEle)
 				});
 				beforeEach(function () {
 

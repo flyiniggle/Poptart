@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { mount } from 'vue-test-utils';
+import { mount } from '@vue/test-utils';
 import { assert, expect } from "chai";
 
 import Ribbon from "./Ribbon";
