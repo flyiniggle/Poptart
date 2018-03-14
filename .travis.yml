@@ -21,3 +21,7 @@ before_install:
   - google-chrome-stable --headless --disable-gpu
   - echo "//packages.infragistics.com/npm/:_authToken=\${NPM_TOKEN}" > .npmrc
   - npm config set @infragistics:registry https://packages.infragistics.com/npm/js-licensed/
+  - echo "//packages.infragistics.com/npm/js-licensed/:username=dthompson!!vestmark.com" >> .npmrc
+  - echo "//packages.infragistics.com/npm/js-licensed/:email=dthompson@vestmark.com" >> .npmrc
+  - echo "//packages.infragistics.com/npm/js-licensed/:_password="\${NPM_PASSWORD}" >> .npmrc
+  - echo "//packages.infragistics.com/npm/js-licensed/:always-auth=true" >> .npmrc
