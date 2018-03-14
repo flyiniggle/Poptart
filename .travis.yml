@@ -19,3 +19,9 @@ addons:
   chrome: stable
 before_install:
   - google-chrome-stable --headless --disable-gpu
+  - |
+    npm adduser --registry=https://packages.infragistics.com/npm/js-licensed/ --scope=@infragistics --always-auth <<!
+    $igUser
+    $igPassword
+    !
+  - npm config set @infragistics:registry https://packages.infragistics.com/npm/js-licensed/
