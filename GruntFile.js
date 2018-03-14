@@ -113,12 +113,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-webpack');
 
 	grunt.registerTask('default', ['build-static', 'test']);
-	grunt.registerTask('test', ['shell:test', 'mochaTest:unit', 'test-infragistics']);
+	grunt.registerTask('test', ['shell:test', 'mochaTest:unit']);
 	grunt.registerTask('build-static', ['sync', 'webpack:build', 'nunjucks-precompile-mapping', 'nunjucks', 'cssmin']);
 	grunt.registerTask('dev', 'concurrent');
-
-	/*grunt.event.on('watch', function(action, filepath, target) {
-
-		leaving this here till we integrate test coverage
-	});*/
 };
